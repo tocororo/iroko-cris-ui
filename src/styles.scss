@@ -1,1 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use '@angular/material' as mat;
+@use './_theme-colors' as iroko-theme;
+
+// Include core styles
+@include mat.core();
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../public/fonts/Roboto-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../public/fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../public/fonts/Roboto-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../public/fonts/Roboto-Bold.ttf') format('truetype');
+}
+
+html {
+  color-scheme: light dark;
+  @include mat.theme((
+      color: (
+          primary: iroko-theme.$primary-palette,
+          tertiary: iroko-theme.$tertiary-palette,
+          theme-type: dark,
+        ),
+      typography: (
+        plain-family: Roboto,
+        brand-family: Open Sans,
+        bold-weight: 900,
+        medium-weight: 500,
+        regular-weight: 300,
+      ),
+      density: 0,
+    ));
+}
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Roboto", sans-serif; }

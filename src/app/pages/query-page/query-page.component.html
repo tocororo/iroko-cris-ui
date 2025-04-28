@@ -1,0 +1,13 @@
+<div class="query-page-container">
+  <h1>Iroko API Query Interface</h1>
+
+  <div class="query-section">
+    <app-query-executor (queryExecuted)="onQueryExecuted($event)"></app-query-executor>
+  </div>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <div class="results-section">
+    <app-results-display [queryResult]="queryResult" [error]="error"></app-results-display>
+  </div>
+</div>

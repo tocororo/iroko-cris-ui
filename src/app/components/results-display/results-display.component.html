@@ -1,0 +1,11 @@
+<div *ngIf="queryResult || error" class="results-container">
+  <div *ngIf="error" class="error-message">
+    <h3>Error</h3>
+    <pre>{{ error | json }}</pre>
+  </div>
+
+  <div *ngIf="queryResult" class="query-result">
+    <h3>Query Results</h3>
+    <ngx-json-viewer [json]="queryResult" [expanded]="false"></ngx-json-viewer>
+  </div>
+</div>
