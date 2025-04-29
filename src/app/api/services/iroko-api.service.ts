@@ -3,7 +3,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CypherQuery } from '../models/cypher-query.model';
-import { HTTPValidationError } from '../models/http-validation-error.model';
 
 @Injectable({
   providedIn: 'root',

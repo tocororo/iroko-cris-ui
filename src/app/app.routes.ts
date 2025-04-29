@@ -5,15 +5,15 @@ import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
   {
-    path: "query",
-    component: QueryPageComponent
-  },
-  {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
-    path: "**",
-    component: ErrorComponent
-  }
+    path: 'query',
+    component: QueryPageComponent,
+  },
+  {
+    path: '**',
+    component: ErrorComponent,
+  },
 ];

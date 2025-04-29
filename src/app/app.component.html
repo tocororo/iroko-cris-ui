@@ -1,7 +1,82 @@
-<mat-toolbar color="primary">
-  <span>Iroko</span>
-</mat-toolbar>
+<div class="main-container" [class.main-is-mobile]="isMobile()">
+  <mat-toolbar color="primary" class="header-toolbar">
+    <div class="toolbar-left">
+      <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1 class="app-name">
+        {{ config.title }}
+      </h1>
+    </div>
 
-<main>
-  <router-outlet />
-</main>
+    <div class="toolbar-center">
+      <mat-icon svgIcon="sceiba" class="center-logo"></mat-icon>
+    </div>
+
+    <div class="toolbar-right">
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+  <mat-sidenav-container class="main-sidenav-container">
+    <mat-sidenav
+      #snav
+      mode="side"
+      [mode]="isMobile() ? 'over' : 'side'"
+      [fixedInViewport]="isMobile()"
+      fixedTopGap="56"
+    >
+      @if (config.menu) {
+      <mat-nav-list>
+        @for (item of config.menu; track item) { @if (item.children) {
+        <div mat-subheader>
+          {{ item.label }}
+        </div>
+        @for (child of item.children; track child) {
+        <mat-list-item
+          [routerLink]="child.route"
+          routerLinkActive="active"
+          (click)="snav.toggle()"
+        >
+          <mat-icon matListIcon *ngIf="child.icon">{{ child.icon }}</mat-icon>
+          <div matListItemTitle>{{ child.label }}</div>
+          <div matListItemLine>{{ child.description }}</div>
+        </mat-list-item>
+
+        }
+        <mat-divider></mat-divider>
+        }@else {
+        <mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          (click)="snav.toggle()"
+        >
+          <mat-icon matListIcon *ngIf="item.icon">{{ item.icon }}</mat-icon>
+          <div matListItemTitle>{{ item.label }}</div>
+          <span matListItemLine>{{ item.description }}</span>
+        </mat-list-item>
+        } } </mat-nav-list
+      >}
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <footer>
+    <h2>FOOTER</h2>
+    <mat-icon svgIcon="sceiba" class="center-logo"></mat-icon>
+  </footer>
+</div>

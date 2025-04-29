@@ -1,0 +1,60 @@
+{
+  "title": "Sceiba",
+  "menu": [
+    {
+      "label": "Home",
+      "description": "Preview off all",
+      "icon": "home",
+      "route": "/"
+    },
+    {
+      "label": "Explore by ",
+      "icon": "favorite",
+      "children": [
+        {
+          "label": "All Sources",
+          "description": "Todas las pubicaciones cubanas",
+          "icon": "toggle_on",
+          "route": "/"
+        },
+        {
+          "label": "MES",
+          "description": "Revistas del Ministerio de educacion superior",
+          "icon": "view_timeline",
+          "route": "/"
+        },
+        {
+          "label": "Organizations",
+          "description": "Organizaciones cubanas",
+          "icon": "view_timeline",
+          "route": "/"
+        },
+        {
+          "label": "Persons",
+          "description": "Investigadores",
+          "icon": "view_timeline",
+          "route": "/"
+        },
+        {
+          "label": "Outputs",
+          "description": "Resultados de Investigacion.",
+          "icon": "view_timeline",
+          "route": "/"
+        },
+        {
+          "label": "Vocabularios",
+          "description": "Explora los vocabularios",
+          "icon": "view_timeline",
+          "route": "/"
+        }
+      ]
+    },
+
+    {
+      "label": "Query",
+      "description": "Query the neo4j graph using Cypher",
+      "icon": "code",
+      "route": "/query"
+    }
+  ]
+}

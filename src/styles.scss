@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
 @use '@angular/material' as mat;
-@use './_theme-colors' as iroko-theme;
+@use './styles_theme-iroko' as iroko-theme;
+
+@import 'material-icons/iconfont/material-icons.css';
+
 
 // Include core styles
 @include mat.core();
@@ -34,13 +37,17 @@
   src: url('../public/fonts/Roboto-Bold.ttf') format('truetype');
 }
 
-html {
-  color-scheme: light dark;
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 30px;
+  height: 100%;
+  color-scheme: light;
   @include mat.theme((
       color: (
           primary: iroko-theme.$primary-palette,
           tertiary: iroko-theme.$tertiary-palette,
-          theme-type: dark,
+          theme-type: light,
         ),
       typography: (
         plain-family: Roboto,
@@ -55,5 +62,5 @@ html {
 
 
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Roboto", sans-serif; }
+html { height: 100%; }
+
