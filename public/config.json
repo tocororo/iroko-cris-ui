@@ -15,37 +15,37 @@
           "label": "All Sources",
           "description": "Todas las pubicaciones cubanas",
           "icon": "toggle_on",
-          "route": "/"
+          "route": "/sources"
         },
         {
           "label": "MES",
           "description": "Revistas del Ministerio de educacion superior",
           "icon": "view_timeline",
-          "route": "/"
+          "route": "/mes"
         },
         {
           "label": "Organizations",
           "description": "Organizaciones cubanas",
           "icon": "view_timeline",
-          "route": "/"
+          "route": "/organizations"
         },
         {
           "label": "Persons",
           "description": "Investigadores",
           "icon": "view_timeline",
-          "route": "/"
+          "route": "/persons"
         },
         {
           "label": "Outputs",
           "description": "Resultados de Investigacion.",
           "icon": "view_timeline",
-          "route": "/"
+          "route": "/outputs"
         },
         {
           "label": "Vocabularios",
           "description": "Explora los vocabularios",
           "icon": "view_timeline",
-          "route": "/"
+          "route": "/vocabs"
         }
       ]
     },

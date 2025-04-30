@@ -1,19 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MetadataService } from '../../services/metadata.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-sources',
   imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './sources.component.html',
+  styleUrl: './sources.component.scss',
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class SourcesComponent {
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Home',
-      description: 'iroko-cris Home page',
+      title: 'Sources',
+      description: 'iroko-cris - Sources page',
       authors: [],
       subjects: [],
     });

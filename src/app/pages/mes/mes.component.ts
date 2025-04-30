@@ -1,19 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MetadataService } from '../../services/metadata.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-mes',
   imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './mes.component.html',
+  styleUrl: './mes.component.scss',
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class MesComponent {
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Home',
-      description: 'iroko-cris Home page',
+      title: 'Revistas MES',
+      description: 'iroko-cris - Revistas MES',
       authors: [],
       subjects: [],
     });
