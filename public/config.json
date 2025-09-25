@@ -56,5 +56,6 @@
       "icon": "code",
       "route": "/query"
     }
-  ]
+  ],
+  "relations-in-tab-count": 3
 }
