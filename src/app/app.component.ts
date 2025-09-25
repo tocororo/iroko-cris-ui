@@ -4,7 +4,7 @@ import { ConfigService, Config } from './services/config.service';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,9 +22,8 @@ import { MetadataService, PageMetadata } from './services/metadata.service';
     MatSidenavModule,
     MatListModule,
     RouterModule,
-    MatIconModule,
-    CommonModule,
-  ],
+    MatIconModule
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

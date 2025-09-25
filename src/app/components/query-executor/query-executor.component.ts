@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
@@ -17,9 +17,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatInputModule,
     FormsModule,
     MatIconModule,
-    CommonModule,
     MatCheckboxModule
-  ],
+],
 })
 export class QueryExecutorComponent {
   @Output() queryExecuted = new EventEmitter<CypherQuery>();

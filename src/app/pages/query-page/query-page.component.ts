@@ -4,7 +4,7 @@ import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
 import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { CommonModule } from '@angular/common';
+
 import { MetadataService } from '../../services/metadata.service';
 
 @Component({
@@ -14,9 +14,8 @@ import { MetadataService } from '../../services/metadata.service';
   imports: [
     QueryExecutorComponent,
     ResultsDisplayComponent,
-    MatProgressBarModule,
-    CommonModule,
-  ],
+    MatProgressBarModule
+],
 })
 export class QueryPageComponent {
   queryResult: any;

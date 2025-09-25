@@ -5,7 +5,9 @@
     <app-query-executor (queryExecuted)="onQueryExecuted($event)"></app-query-executor>
   </div>
 
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+  @if (isLoading) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
 
   <div class="results-section">
     <app-results-display [queryResult]="queryResult" [error]="error"></app-results-display>

@@ -7,9 +7,11 @@
       rows="5"
       placeholder="Example: MATCH (n) RETURN n LIMIT 10"
     ></textarea>
-    <mat-error *ngIf="queryForm.get('query')?.hasError('required')">
-      Query is required
-    </mat-error>
+    @if (queryForm.get('query')?.hasError('required')) {
+      <mat-error>
+        Query is required
+      </mat-error>
+    }
   </mat-form-field>
 
   <div class="parameters-section">
@@ -17,51 +19,51 @@
       {{ showParameters ? "Hide Parameters" : "Add Parameters" }}
     </button>
 
-    <div *ngIf="showParameters" class="parameters-list">
-      <div
-        *ngFor="let param of parameters; let i = index"
-        class="parameter-row"
-      >
-        <mat-form-field appearance="fill">
-          <mat-label>Key</mat-label>
-          <input
-            matInput
-            [(ngModel)]="param.key"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="key"
-          />
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-          <mat-label>Value</mat-label>
-          <input
-            matInput
-            [(ngModel)]="param.value"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="value"
-          />
-        </mat-form-field>
-
+    @if (showParameters) {
+      <div class="parameters-list">
+        @for (param of parameters; track param; let i = $index) {
+          <div
+            class="parameter-row"
+            >
+            <mat-form-field appearance="fill">
+              <mat-label>Key</mat-label>
+              <input
+                matInput
+                [(ngModel)]="param.key"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="key"
+                />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Value</mat-label>
+              <input
+                matInput
+                [(ngModel)]="param.value"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="value"
+                />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="removeParameter(i)"
+              type="button"
+              aria-label="Remove parameter"
+              >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
         <button
-          mat-icon-button
-          color="warn"
-          (click)="removeParameter(i)"
+          mat-button
           type="button"
-          aria-label="Remove parameter"
-        >
-          <mat-icon>delete</mat-icon>
+          aria-label="Add Parameter"
+          (click)="addParameter()"
+          >
+          <mat-icon>add</mat-icon> Add Parameter
         </button>
       </div>
-
-      <button
-        mat-button
-        type="button"
-        aria-label="Add Parameter"
-        (click)="addParameter()"
-      >
-        <mat-icon>add</mat-icon> Add Parameter
-      </button>
-    </div>
+    }
   </div>
 
   <mat-checkbox formControlName="readonly">Read-only</mat-checkbox>
@@ -72,7 +74,7 @@
       color="primary"
       type="submit"
       [disabled]="!queryForm.valid"
-    >
+      >
       Execute Query
     </button>
   </div>
