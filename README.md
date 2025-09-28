@@ -2,58 +2,24 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
 
-## Development server
+## Principales secciones
 
-To start a local development server, run:
+- Home
+- Revistas MES
+- Catalogo de Fuentes (Sources)
+- Organizaciones
+- Personas
+- Proyectos
+- Resultados de investigacion (Outputs)
 
-```bash
-ng serve
-```
+## Backend
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Base de datos de Neo4j, accesible a traves de un api de solo lectura a la que se le puede hacer consultas en cypher
 
-## Code scaffolding
+## Principales comoponentes:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- inicio: muestra resumen de las estadisticas generales, por cada seccion
 
-```bash
-ng generate component component-name
-```
+- listas: se utiliza para mostrar las listas de las entidades principales. Cada lista es posible filtrarla por los metadatos del nodo.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- node-viewer: muestra un nodo, con sus metadatos correspondientes y ademas las estadisticas de ese nodo. Por cada tipo de relacion que tiene un nodo existe un tab donde se muesta la lista de nodos que estan relacionados con el nodo que se esta visitando. Si se tienen los permisos adecuados, es posible editar los metadatos de un nodo y tambien sus relaciones.

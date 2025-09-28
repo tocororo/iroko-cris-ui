@@ -2,7 +2,7 @@
   <mat-toolbar
     color="primary"
     class="flex justify-between items-center px-4 fixed z-[2] main-is-mobile:header-toolbar"
-    >
+  >
     <div class="flex items-center flex-1">
       <button mat-icon-button (click)="snav.toggle()">
         <mat-icon>menu</mat-icon>
@@ -43,51 +43,51 @@
       [mode]="isMobile() ? 'over' : 'side'"
       [fixedInViewport]="isMobile()"
       fixedTopGap="56"
-      >
+    >
       @if (config.menu) {
-        <mat-nav-list class="p-4">
-          @for (item of config.menu; track item) { @if (item.children) {
-            <div mat-subheader>
-              {{ item.label }}
-            </div>
-            @for (child of item.children; track child) {
-              <mat-list-item
-                [routerLink]="child.route"
-                routerLinkActive="active"
-                (click)="snav.toggle()"
-                >
-                @if (child.icon) {
-                  <mat-icon matListIcon>{{ child.icon }}</mat-icon>
-                }
-                <div matListItemTitle>{{ child.label }}</div>
-                <div matListItemLine>{{ child.description }}</div>
-              </mat-list-item>
-            }
-            <mat-divider></mat-divider>
-            }@else {
-            <mat-list-item
-              [routerLink]="item.route"
-              routerLinkActive="active"
-              (click)="snav.toggle()"
-              >
-              @if (item.icon) {
-                <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-              }
-              <div matListItemTitle>{{ item.label }}</div>
-              <span matListItemLine>{{ item.description }}</span>
-            </mat-list-item>
-            } }
-          </mat-nav-list>
+      <mat-nav-list class="p-4">
+        @for (item of config.menu; track item) { @if (item.children) {
+        <div mat-subheader>
+          {{ item.label }}
+        </div>
+        @for (child of item.children; track child) {
+        <mat-list-item
+          [routerLink]="child.route"
+          routerLinkActive="active"
+          (click)="snav.toggle()"
+        >
+          @if (child.icon) {
+          <mat-icon matListIcon>{{ child.icon }}</mat-icon>
+          }
+          <div matListItemTitle>{{ child.label }}</div>
+          <div matListItemLine>{{ child.description }}</div>
+        </mat-list-item>
         }
-      </mat-sidenav>
+        <mat-divider></mat-divider>
+        }@else {
+        <mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          (click)="snav.toggle()"
+        >
+          @if (item.icon) {
+          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+          }
+          <div matListItemTitle>{{ item.label }}</div>
+          <span matListItemLine>{{ item.description }}</span>
+        </mat-list-item>
+        } }
+      </mat-nav-list>
+      }
+    </mat-sidenav>
 
-      <mat-sidenav-content class="p-8">
-        <router-outlet></router-outlet>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+    <mat-sidenav-content class="p-8 h-full">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 
-    <footer>
-      <h2>FOOTER</h2>
-      <mat-icon svgIcon="sceiba" class="center-logo"></mat-icon>
-    </footer>
-  </div>
+  <footer>
+    <h2>FOOTER</h2>
+    <mat-icon svgIcon="sceiba" class="center-logo"></mat-icon>
+  </footer>
+</div>
