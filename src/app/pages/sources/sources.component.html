@@ -1,1 +1,21 @@
-<p>sources works!</p>
+<!-- src/app/pages/sources/sources.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Data Sources</h1>
+    <p>
+      Explore scientific journals, data repositories, and information sources
+      across various domains
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Source"
+    [columns]="sourceColumns"
+    label="Sources"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>

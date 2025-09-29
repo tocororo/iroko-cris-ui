@@ -1,0 +1,79 @@
+<mat-card class="relationship-card">
+  <mat-card-header>
+    <div class="card-header-content">
+      <div class="node-title-section">
+        <mat-card-title class="node-title">
+          {{ getNodeDisplayName() }}
+        </mat-card-title>
+        <mat-card-subtitle class="node-type">
+          {{ getNodeType() }}
+        </mat-card-subtitle>
+      </div>
+      <div class="relationship-info">
+        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
+          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
+          {{ getDirectionLabel() }}
+        </mat-chip>
+        <mat-chip class="type-chip">
+          {{ relationshipType }}
+        </mat-chip>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Node Properties -->
+    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
+      <div class="properties-grid">
+        <div *ngFor="let prop of getNodeProperties()" class="property-item">
+          <strong class="property-label">{{ prop.key }}:</strong>
+          <div class="property-value-container">
+            @if (isArray(prop.value)) {
+            <div class="array-container">
+              @for (item of prop.value; track item; let last = $last) {
+              <span class="array-item">
+                {{ item }}@if (!last) {<span class="array-separator">, </span>}
+              </span>
+              }
+            </div>
+            } @else if (isObject(prop.value)) {
+            <div class="json-container">
+              <ngx-json-viewer
+                [json]="prop.value"
+                [expanded]="false"
+                class="json-viewer"
+              >
+              </ngx-json-viewer>
+            </div>
+            } @else {
+            <span class="property-value" [title]="prop.value">
+              {{ formatPropertyValue(prop.value) }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Properties Message -->
+    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
+      <mat-icon>info</mat-icon>
+      <span>No properties available</span>
+    </div>
+  </mat-card-content>
+
+  <!-- View Details Action (only for allowed node types) -->
+  @if (shouldShowViewDetails()) {
+  <mat-card-actions align="end">
+    <button
+      mat-button
+      color="primary"
+      (click)="onViewDetails($event)"
+      class="view-details-btn"
+    >
+      <mat-icon>arrow_forward</mat-icon>
+      View Details
+    </button>
+  </mat-card-actions>
+  }
+</mat-card>

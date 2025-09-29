@@ -1,67 +1,253 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.scss - updated */
+@use "@angular/material" as mat;
+@use "./styles_theme-iroko" as iroko-theme;
 
-@use '@angular/material' as mat;
-@use './styles_theme-iroko' as iroko-theme;
-
-@import 'material-icons/iconfont/material-icons.css';
-
+@import "material-icons/iconfont/material-icons.css";
 
 // Include core styles
 @include mat.elevation-classes();
 @include mat.app-background();
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 300;
-  src: url('../public/fonts/Roboto-Light.ttf') format('truetype');
+  src: url("../public/fonts/Roboto-Light.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  src: url('../public/fonts/Roboto-Regular.ttf') format('truetype');
+  src: url("../public/fonts/Roboto-Regular.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  src: url('../public/fonts/Roboto-Medium.ttf') format('truetype');
+  src: url("../public/fonts/Roboto-Medium.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  src: url('../public/fonts/Roboto-Bold.ttf') format('truetype');
+  src: url("../public/fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
   margin: 0;
-  padding: 30px;
+  padding: 0;
   height: 100%;
   color-scheme: light;
-  @include mat.theme((
+  background-color: #f8f9fa;
+  @include mat.theme(
+    (
       color: (
-          primary: iroko-theme.$primary-palette,
-          tertiary: iroko-theme.$tertiary-palette,
-          theme-type: light,
-        ),
+        primary: iroko-theme.$primary-palette,
+        tertiary: iroko-theme.$tertiary-palette,
+        theme-type: light,
+      ),
       typography: (
         plain-family: Roboto,
-        brand-family: Open Sans,
-        bold-weight: 900,
+        brand-family: "Open Sans",
+        bold-weight: 700,
         medium-weight: 500,
-        regular-weight: 300,
+        regular-weight: 400,
       ),
       density: 0,
-    ));
+    )
+  );
 }
 
+html {
+  height: 100%;
+}
 
+// Utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
 
-html { height: 100%; }
+// Loading states
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
 
+// Error states
+.error-snackbar {
+  background-color: #f44336;
+  color: white;
+}
+
+// Type chips
+.type-chip {
+  &.organization {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+  &.person {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+  }
+  &.source {
+    background-color: #e8f5e8;
+    color: #388e3c;
+  }
+  &.output {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+  &.project {
+    background-color: #fce4ec;
+    color: #c2185b;
+  }
+  &.term {
+    background-color: #e8eaf6;
+    color: #303f9f;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+// Card hover effects
+.result-card,
+.stat-card,
+.action-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+}
+
+// Search page styles
+.search-results-page {
+  min-height: 60vh;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+
+  .no-results-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+
+  h2 {
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+// Material overrides
+.mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.mat-sidenav-container {
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* src/app/pages/_page-styles.scss */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+
+  @media (max-width: 768px) {
+    padding: 16px 8px;
+  }
+}
+
+.page-header {
+  margin-bottom: 32px;
+  text-align: center;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      padding: 0 16px;
+    }
+  }
+}
+
+/* Import this in each page component's SCSS file */

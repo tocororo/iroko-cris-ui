@@ -1,0 +1,24 @@
+<!-- src/app/pages/node-view/node-view.component.html -->
+<div class="node-view-page">
+  <div class="page-header">
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      Back to {{ getBreadcrumbLabel() }} List
+    </button>
+
+    <h1>{{ getBreadcrumbLabel() }} Details</h1>
+    <p>
+      Exploring detailed information about this
+      {{ getBreadcrumbLabel().toLowerCase() }}
+    </p>
+  </div>
+
+  <div class="node-viewer-container">
+    <app-enhanced-node-viewer
+      [nodeId]="nodeId"
+      [nodeType]="nodeType"
+      (nodeSelected)="onRelatedNodeSelect($event)"
+    >
+    </app-enhanced-node-viewer>
+  </div>
+</div>

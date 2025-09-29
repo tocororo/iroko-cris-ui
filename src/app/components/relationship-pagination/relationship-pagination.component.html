@@ -1,0 +1,49 @@
+<div class="pagination-container">
+  <div class="pagination-info" *ngIf="totalItems > 0">
+    <span class="info-text">{{ getDisplayedRange() }}</span>
+  </div>
+
+  <div class="pagination-controls" *ngIf="totalPages > 1">
+    <div class="pagination-buttons">
+      <!-- Previous Button -->
+      <button
+        mat-icon-button
+        [disabled]="currentPage === 0 || isLoading"
+        (click)="previousPage()"
+        class="nav-button"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <!-- Page Numbers -->
+      <button
+        *ngFor="let page of pages"
+        mat-button
+        [class.active]="page === currentPage"
+        [disabled]="isLoading"
+        (click)="goToPage(page)"
+        class="page-button"
+      >
+        {{ page + 1 }}
+      </button>
+
+      <!-- Next Button -->
+      <button
+        mat-icon-button
+        [disabled]="currentPage === totalPages - 1 || isLoading"
+        (click)="nextPage()"
+        class="nav-button"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" *ngIf="isLoading">
+    <mat-progress-spinner
+      diameter="24"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+</div>

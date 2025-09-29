@@ -1,0 +1,105 @@
+@if (loading) {
+<div class="loading-spinner">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+} @else if (node) {
+<div class="node-viewer">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ node.name || node.title || node.id }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ nodeType }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-tab-group [(selectedIndex)]="activeTab">
+        <!-- Properties Tab -->
+        <mat-tab label="Properties">
+          <div class="properties-grid">
+            @for (prop of getNodeProperties(); track prop.key) {
+            <div class="property-item">
+              <strong class="property-label">{{ prop.key }}:</strong>
+              <div class="property-value-container">
+                @if (isArray(prop.value)) {
+                <div class="array-container">
+                  <ul class="array-list">
+                    @for (item of prop.value; track item) {
+                    <li class="array-list-item">
+                      <span class="array-item-content">{{ item }}</span>
+                    </li>
+                    }
+                  </ul>
+                </div>
+                } @else if (isObject(prop.value)) {
+                <div class="json-container">
+                  <ngx-json-viewer
+                    [json]="prop.value"
+                    [expanded]="false"
+                  ></ngx-json-viewer>
+                </div>
+                } @else {
+                <span class="property-value" [title]="prop.value">
+                  {{ prop.value }}
+                </span>
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Relationships Tabs -->
+        @for (group of relationshipGroups; track group.type; let i = $index) {
+        <mat-tab [label]="getTabLabel(group)">
+          <div class="relationships-tab-content">
+            @if (group.isLoading) {
+            <div class="relationships-loading">
+              <mat-progress-spinner
+                diameter="40"
+                mode="indeterminate"
+              ></mat-progress-spinner>
+              <p>Loading relationships...</p>
+            </div>
+            } @else if (group.relationships.length === 0) {
+            <div class="no-relationships">
+              <mat-icon>link_off</mat-icon>
+              <p>No {{ group.type.toLowerCase() }} relationships found</p>
+            </div>
+            } @else {
+            <div class="relationships-grid">
+              @for (rel of getDisplayedRelationships(group); track rel.node.id)
+              {
+              <app-relationship-card
+                [node]="rel.node"
+                [relationship]="rel.relationship"
+                [nodeLabels]="rel.nodeLabels"
+                [relationshipType]="group.type"
+                [direction]="group.direction"
+                (nodeSelected)="onRelatedNodeSelect($event)"
+              ></app-relationship-card>
+              }
+            </div>
+
+            @if (shouldShowPagination(group)) {
+            <app-relationship-pagination
+              [currentPage]="group.currentPage"
+              [pageSize]="group.pageSize"
+              [totalItems]="group.totalCount"
+              [isLoading]="group.isLoading"
+              (pageChange)="loadRelationshipPage(group, $event)"
+            ></app-relationship-pagination>
+            } }
+          </div>
+        </mat-tab>
+        }
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+} @else {
+<div class="no-data">
+  <mat-icon>error_outline</mat-icon>
+  <p>Node not found</p>
+</div>
+}

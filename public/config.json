@@ -1,61 +1,65 @@
 {
-  "title": "Sceiba",
+  "title": "Sceiba Knowledge Graph",
   "menu": [
     {
       "label": "Home",
-      "description": "Preview off all",
+      "description": "System overview and statistics",
       "icon": "home",
       "route": "/"
     },
     {
-      "label": "Explore by ",
-      "icon": "favorite",
+      "label": "Explore",
+      "icon": "explore",
       "children": [
         {
-          "label": "All Sources",
-          "description": "Todas las pubicaciones cubanas",
-          "icon": "toggle_on",
+          "label": "Sources",
+          "description": "Journals, repositories, and data sources",
+          "icon": "source",
           "route": "/sources"
         },
         {
-          "label": "MES",
-          "description": "Revistas del Ministerio de educacion superior",
-          "icon": "view_timeline",
-          "route": "/mes"
-        },
-        {
           "label": "Organizations",
-          "description": "Organizaciones cubanas",
-          "icon": "view_timeline",
+          "description": "Research organizations and institutions",
+          "icon": "corporate_fare",
           "route": "/organizations"
         },
         {
           "label": "Persons",
-          "description": "Investigadores",
-          "icon": "view_timeline",
+          "description": "Researchers and contributors",
+          "icon": "people",
           "route": "/persons"
         },
         {
+          "label": "Projects",
+          "description": "Research projects and initiatives",
+          "icon": "folder",
+          "route": "/projects"
+        },
+        {
           "label": "Outputs",
-          "description": "Resultados de Investigacion.",
-          "icon": "view_timeline",
+          "description": "Research outputs and publications",
+          "icon": "article",
           "route": "/outputs"
         },
         {
-          "label": "Vocabularios",
-          "description": "Explora los vocabularios",
-          "icon": "view_timeline",
-          "route": "/vocabs"
+          "label": "Vocabularies",
+          "description": "Controlled vocabularies and terms",
+          "icon": "tag",
+          "route": "/vocabularies"
         }
       ]
     },
-
     {
       "label": "Query",
-      "description": "Query the neo4j graph using Cypher",
+      "description": "Advanced Cypher query interface",
       "icon": "code",
       "route": "/query"
+    },
+    {
+      "label": "About",
+      "description": "About this application",
+      "icon": "info",
+      "route": "/about"
     }
-  ],
-  "relations-in-tab-count": 3
+  ]
 }

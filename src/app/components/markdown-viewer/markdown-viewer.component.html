@@ -1,0 +1,8 @@
+<!-- src/app/components/markdown-viewer/markdown-viewer.component.html -->
+<div class="markdown-container">
+  @if (src) {
+  <markdown [src]="src"></markdown>
+  } @else {
+  <markdown [data]="content"></markdown>
+  }
+</div>

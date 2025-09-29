@@ -1,1 +1,21 @@
-<p>vocabularies works!</p>
+<!-- src/app/pages/vocabularies/vocabularies.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Vocabularies & Terms</h1>
+    <p>
+      Explore controlled vocabularies, taxonomies, and classification systems
+      used across research domains
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Term"
+    [columns]="vocabularyColumns"
+    label="Vocabulary Terms"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>

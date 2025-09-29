@@ -1,1 +1,21 @@
-<p>mes works!</p>
+<!-- src/app/pages/mes/mes.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>MES Scientific Journals</h1>
+    <p>
+      Explore scientific journals and publications from the Cuban Ministry of
+      Higher Education
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Source"
+    [columns]="mesColumns"
+    label="MES Journals"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>

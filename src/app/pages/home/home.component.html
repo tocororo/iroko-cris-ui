@@ -1,1 +1,109 @@
-<p>home works!</p>
+<!-- src/app/pages/home/home.component.html -->
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Iroko Knowledge Graph Explorer</h1>
+      <p class="hero-subtitle">
+        Discover research data, organizations, and publications across the Cuban
+        research ecosystem
+      </p>
+      <div class="hero-actions">
+        <button mat-raised-button color="primary" routerLink="/search">
+          <mat-icon>search</mat-icon>
+          Start Exploring
+        </button>
+        <button mat-stroked-button color="primary" routerLink="/query">
+          <mat-icon>code</mat-icon>
+          Advanced Query
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="stats-section">
+    <h2 class="section-title">Knowledge Graph Overview</h2>
+    <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
+      <mat-grid-tile *ngFor="let stat of stats" [colspan]="1" [rowspan]="1">
+        <mat-card
+          class="stat-card"
+          [class]="stat.color"
+          [routerLink]="stat.route"
+        >
+          <mat-card-content>
+            <div class="stat-content">
+              <div class="stat-icon">
+                <mat-icon>{{ stat.icon }}</mat-icon>
+              </div>
+              <div class="stat-info">
+                <div class="stat-count">{{ stat.count }}</div>
+                <div class="stat-label">{{ stat.label }}</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="actions-section">
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="actions-grid">
+      <mat-card
+        *ngFor="let action of quickActions"
+        class="action-card"
+        [routerLink]="action.route"
+      >
+        <mat-card-content>
+          <div class="action-content">
+            <mat-icon class="action-icon">{{ action.icon }}</mat-icon>
+            <div class="action-text">
+              <h3>{{ action.label }}</h3>
+              <p>{{ action.description }}</p>
+            </div>
+            <mat-icon class="action-arrow">arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Explore Research Data</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <mat-icon>account_tree</mat-icon>
+        <h3>Graph Navigation</h3>
+        <p>
+          Navigate through relationships between researchers, organizations, and
+          publications
+        </p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>search</mat-icon>
+        <h3>Advanced Search</h3>
+        <p>
+          Search across all entities with filters and full-text search
+          capabilities
+        </p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>schema</mat-icon>
+        <h3>Cypher Queries</h3>
+        <p>
+          Run custom graph queries to explore complex relationships and patterns
+        </p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>download</mat-icon>
+        <h3>Data Export</h3>
+        <p>
+          Export search results and entity data in multiple formats for analysis
+        </p>
+      </div>
+    </div>
+  </section>
+</div>

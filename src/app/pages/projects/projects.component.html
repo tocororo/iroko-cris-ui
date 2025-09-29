@@ -1,1 +1,21 @@
-<p>projects works!</p>
+<!-- src/app/pages/projects/projects.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Research Projects</h1>
+    <p>
+      Explore research projects, grants, and scientific initiatives across
+      various domains
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Project"
+    [columns]="projectColumns"
+    label="Projects"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
