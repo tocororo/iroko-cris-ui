@@ -16,6 +16,8 @@ import {
 } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
+import { provideMarkdown } from 'ngx-markdown';
+
 import { IrokoApiService } from './api/services/iroko-api.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { cachingInterceptor } from './interceptors/caching.interceptor';
@@ -30,6 +32,7 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
+    provideMarkdown(), // Add this line
     IrokoApiService,
     {
       provide: ErrorHandler,

@@ -1,81 +1,97 @@
-<form [formGroup]="queryForm" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="fill" class="full-width">
+<form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="query-form">
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Cypher Query</mat-label>
     <textarea
+      #queryTextarea
       matInput
       formControlName="query"
-      rows="5"
+      rows="12"
       placeholder="Example: MATCH (n) RETURN n LIMIT 10"
+      class="query-textarea"
     ></textarea>
     @if (queryForm.get('query')?.hasError('required')) {
-      <mat-error>
-        Query is required
-      </mat-error>
+    <mat-error> Query is required </mat-error>
     }
   </mat-form-field>
 
-  <div class="parameters-section">
-    <button mat-button type="button" (click)="showParameters = !showParameters">
-      {{ showParameters ? "Hide Parameters" : "Add Parameters" }}
-    </button>
+  <div class="form-actions">
+    <div class="form-controls">
+      <mat-checkbox formControlName="readonly" color="primary">
+        Read-only mode
+      </mat-checkbox>
 
-    @if (showParameters) {
-      <div class="parameters-list">
-        @for (param of parameters; track param; let i = $index) {
-          <div
-            class="parameter-row"
-            >
-            <mat-form-field appearance="fill">
-              <mat-label>Key</mat-label>
-              <input
-                matInput
-                [(ngModel)]="param.key"
-                [ngModelOptions]="{ standalone: true }"
-                placeholder="key"
-                />
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-              <mat-label>Value</mat-label>
-              <input
-                matInput
-                [(ngModel)]="param.value"
-                [ngModelOptions]="{ standalone: true }"
-                placeholder="value"
-                />
-            </mat-form-field>
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="removeParameter(i)"
-              type="button"
-              aria-label="Remove parameter"
-              >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        }
-        <button
-          mat-button
-          type="button"
-          aria-label="Add Parameter"
-          (click)="addParameter()"
-          >
-          <mat-icon>add</mat-icon> Add Parameter
-        </button>
-      </div>
-    }
-  </div>
+      <button
+        mat-button
+        type="button"
+        (click)="showParameters = !showParameters"
+        class="parameters-toggle"
+      >
+        <mat-icon>{{
+          showParameters ? "keyboard_arrow_up" : "keyboard_arrow_down"
+        }}</mat-icon>
+        Parameters
+      </button>
+    </div>
 
-  <mat-checkbox formControlName="readonly">Read-only</mat-checkbox>
-
-  <div class="submit-button">
     <button
       mat-raised-button
       color="primary"
       type="submit"
       [disabled]="!queryForm.valid"
-      >
+      class="execute-btn"
+    >
+      <mat-icon>play_arrow</mat-icon>
       Execute Query
     </button>
   </div>
+
+  @if (showParameters) {
+  <div class="parameters-section">
+    <h4>Query Parameters</h4>
+    <div class="parameters-list">
+      @for (param of parameters; track param; let i = $index) {
+      <div class="parameter-row">
+        <mat-form-field appearance="outline" class="parameter-field">
+          <mat-label>Key</mat-label>
+          <input
+            matInput
+            [(ngModel)]="param.key"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="parameter_name"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="parameter-field">
+          <mat-label>Value</mat-label>
+          <input
+            matInput
+            [(ngModel)]="param.value"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="value"
+          />
+        </mat-form-field>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="removeParameter(i)"
+          type="button"
+          aria-label="Remove parameter"
+          class="remove-param-btn"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      }
+      <button
+        mat-stroked-button
+        type="button"
+        aria-label="Add Parameter"
+        (click)="addParameter()"
+        class="add-param-btn"
+      >
+        <mat-icon>add</mat-icon>
+        Add Parameter
+      </button>
+    </div>
+  </div>
+  }
 </form>

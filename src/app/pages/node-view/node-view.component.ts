@@ -89,7 +89,7 @@ export class NodeViewComponent implements OnInit {
       Source: '/sources',
       Project: '/projects',
       Output: '/outputs',
-      Term: '/vocabs',
+      Term: '/vocabularies',
     };
 
     return routeMap[this.nodeType] || '/';

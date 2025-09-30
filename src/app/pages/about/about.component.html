@@ -1,0 +1,41 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>About Iroko</h1>
+    <p>Learn about our knowledge graph platform and features</p>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      @if (isLoading) {
+      <div class="loading-container">
+        <mat-progress-spinner
+          diameter="40"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <p>Loading about content...</p>
+      </div>
+      } @if (loadError) {
+      <div class="error-container">
+        <mat-icon color="warn">error_outline</mat-icon>
+        <h3>Unable to load content</h3>
+        <p>
+          {{
+            errorMessage || "There was an error loading the about page content."
+          }}
+        </p>
+        <button mat-button color="primary" (click)="ngOnInit()">
+          <mat-icon>refresh</mat-icon>
+          Retry
+        </button>
+      </div>
+      }
+
+      <app-markdown-viewer
+        src="md/about.md"
+        (load)="onMarkdownLoad()"
+        (error)="onMarkdownError($event)"
+      >
+      </app-markdown-viewer>
+    </mat-card-content>
+  </mat-card>
+</div>

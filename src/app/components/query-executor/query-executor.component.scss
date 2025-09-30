@@ -1,0 +1,173 @@
+.query-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .full-width {
+    width: 100%;
+    flex: 1;
+
+    .query-textarea {
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      resize: vertical;
+      min-height: 200px;
+    }
+
+    ::ng-deep {
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .form-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .parameters-toggle {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #666;
+      }
+    }
+
+    .execute-btn {
+      min-width: 140px;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .parameters-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background: #fafafa;
+
+    h4 {
+      margin: 0 0 16px 0;
+      color: #333;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .parameters-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .parameter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+
+        .parameter-field {
+          flex: 1;
+
+          ::ng-deep {
+            .mat-mdc-form-field-subscript-wrapper {
+              display: none;
+            }
+          }
+        }
+
+        .remove-param-btn {
+          margin-top: 4px;
+          flex-shrink: 0;
+        }
+      }
+
+      .add-param-btn {
+        align-self: flex-start;
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Mobile Responsive Design
+@media (max-width: 768px) {
+  .query-form {
+    gap: 16px;
+
+    .full-width {
+      .query-textarea {
+        min-height: 150px;
+        font-size: 0.85rem;
+      }
+    }
+
+    .form-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+
+      .form-controls {
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .execute-btn {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+
+    .parameters-section {
+      padding: 16px;
+
+      h4 {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+      }
+
+      .parameters-list {
+        gap: 10px;
+
+        .parameter-row {
+          flex-direction: column;
+          gap: 8px;
+
+          .remove-param-btn {
+            align-self: flex-end;
+            margin-top: 0;
+          }
+        }
+
+        .add-param-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .query-form {
+    .form-actions {
+      .form-controls {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+    }
+  }
+}

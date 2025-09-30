@@ -144,4 +144,10 @@ export class AppComponent implements OnInit {
   ngOnDestroy(): void {
     this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
+
+  getMainContainerClass(): string {
+    return this.isMobile()
+      ? 'main-is-mobile flex flex-col min-h-screen'
+      : 'flex flex-col min-h-screen';
+  }
 }

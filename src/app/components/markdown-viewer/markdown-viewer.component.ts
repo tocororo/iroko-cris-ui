@@ -1,7 +1,11 @@
-// src/app/components/markdown-viewer/markdown-viewer.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
+
+export interface MarkdownError {
+  message: string;
+  originalError?: any;
+}
 
 @Component({
   selector: 'app-markdown-viewer',
@@ -12,4 +16,21 @@ import { MarkdownModule } from 'ngx-markdown';
 export class MarkdownViewerComponent {
   @Input() content: string = '';
   @Input() src?: string;
+  @Output() load = new EventEmitter<void>();
+  @Output() error = new EventEmitter<MarkdownError>();
+
+  onMarkdownLoad() {
+    this.load.emit();
+  }
+
+  onMarkdownError(error: any) {
+    const markdownError: MarkdownError = {
+      message:
+        typeof error === 'string'
+          ? error
+          : error?.message || 'Unknown error loading markdown',
+      originalError: error,
+    };
+    this.error.emit(markdownError);
+  }
 }

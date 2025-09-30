@@ -1,0 +1,664 @@
+.query-page-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: #f8f9fa;
+
+  .page-header {
+    background: linear-gradient(135deg, #006d33 0%, #00461e 100%);
+    color: white;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+
+    .header-content {
+      flex: 1;
+
+      h1 {
+        margin: 0 0 8px 0;
+        color: white;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0;
+        color: white;
+        opacity: 0.9;
+        font-size: 1.1rem;
+        max-width: 600px;
+      }
+    }
+
+    .header-actions {
+      .clear-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .query-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    height: calc(100vh - 140px);
+    overflow: hidden;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      height: auto;
+      min-height: calc(100vh - 140px);
+    }
+  }
+
+  .query-input-section {
+    background: white;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+
+    @media (max-width: 1200px) {
+      height: auto;
+      max-height: 70vh;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .query-card {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid #e0e0e0;
+      flex: 1;
+
+      @media (max-width: 1200px) {
+        flex: none;
+      }
+
+      ::ng-deep {
+        .mat-mdc-card-header {
+          padding: 24px 24px 16px;
+          background: #fafafa;
+          border-bottom: 1px solid #e0e0e0;
+
+          .mat-mdc-card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 600;
+
+            mat-icon {
+              color: #006d33;
+            }
+          }
+
+          .mat-mdc-card-subtitle {
+            color: #666;
+          }
+        }
+
+        .mat-mdc-card-content {
+          padding: 24px;
+          height: calc(100% - 80px);
+
+          @media (max-width: 1200px) {
+            height: auto;
+            min-height: 300px;
+          }
+        }
+      }
+    }
+
+    .examples-panel {
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      border-bottom: 1px solid #e0e0e0;
+
+      // Make sure expansion panel is always visible on mobile
+      @media (max-width: 768px) {
+        .mat-expansion-panel {
+          border: none !important;
+        }
+      }
+
+      ::ng-deep {
+        .mat-expansion-panel-header {
+          padding: 16px 24px;
+          background: #fafafa;
+          height: auto !important;
+          min-height: 64px;
+
+          .mat-content {
+            align-items: center;
+            gap: 12px;
+          }
+
+          .mat-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin: 0;
+            font-size: 1rem;
+
+            mat-icon {
+              color: #006d33;
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+          }
+
+          .mat-panel-description {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+          }
+        }
+
+        .mat-expansion-panel-body {
+          padding: 0 !important;
+          max-height: 300px;
+          overflow-y: auto;
+        }
+      }
+
+      .examples-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1px;
+        background: #f0f0f0;
+
+        .example-item {
+          background: white;
+          padding: 16px 20px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          border-bottom: 1px solid #f0f0f0;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:hover {
+            background: #f8f9fa;
+            transform: translateX(4px);
+          }
+
+          &:active {
+            background: #e8f5e8;
+          }
+
+          mat-icon {
+            color: #006d33;
+            flex-shrink: 0;
+            margin-top: 2px;
+          }
+
+          .example-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            strong {
+              font-weight: 600;
+              color: #333;
+              font-size: 0.95rem;
+              line-height: 1.3;
+            }
+
+            span {
+              font-size: 0.8rem;
+              color: #666;
+              font-family: "Courier New", monospace;
+              background: #f8f9fa;
+              padding: 6px 8px;
+              border-radius: 4px;
+              border-left: 3px solid #006d33;
+              line-height: 1.4;
+              word-break: break-word;
+              overflow-wrap: break-word;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .results-section {
+    background: #f8f9fa;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+
+    @media (max-width: 1200px) {
+      height: auto;
+      min-height: 40vh;
+    }
+
+    &.has-results {
+      background: white;
+    }
+
+    .loading-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .mat-progress-bar {
+        flex-shrink: 0;
+      }
+
+      .loading-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 40px;
+
+        mat-icon {
+          font-size: 64px;
+          width: 64px;
+          height: 64px;
+          margin-bottom: 20px;
+          color: #006d33;
+          opacity: 0.7;
+        }
+
+        h3 {
+          margin: 0 0 12px 0;
+          color: #333;
+          font-size: 1.5rem;
+        }
+
+        p {
+          margin: 0;
+          color: #666;
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .results-header {
+      background: white;
+      padding: 24px 32px;
+      border-bottom: 1px solid #e0e0e0;
+
+      .results-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 1.5rem;
+          color: #2e7d32;
+
+          mat-icon {
+            color: #2e7d32;
+          }
+        }
+
+        .results-stats {
+          display: flex;
+          gap: 20px;
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 0.9rem;
+
+            mat-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+          }
+        }
+      }
+    }
+
+    .results-card {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      height: calc(100% - 120px);
+
+      @media (max-width: 1200px) {
+        height: auto;
+        min-height: 300px;
+      }
+
+      ::ng-deep {
+        .mat-mdc-card-content {
+          padding: 0;
+          height: 100%;
+        }
+      }
+    }
+
+    .error-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .error-header {
+        background: #ffebee;
+        padding: 24px 32px;
+        border-bottom: 1px solid #ffcdd2;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        h2 {
+          margin: 0;
+          color: #c62828;
+          font-size: 1.5rem;
+        }
+
+        mat-icon {
+          color: #c62828;
+        }
+      }
+
+      .error-card {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        flex: 1;
+
+        ::ng-deep {
+          .mat-mdc-card-content {
+            padding: 0;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    .empty-state {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+
+      .empty-content {
+        text-align: center;
+        max-width: 400px;
+
+        mat-icon {
+          font-size: 80px;
+          width: 80px;
+          height: 80px;
+          margin-bottom: 20px;
+          color: #ccc;
+        }
+
+        h3 {
+          margin: 0 0 12px 0;
+          color: #666;
+          font-size: 1.5rem;
+        }
+
+        p {
+          margin: 0 0 8px 0;
+          color: #999;
+          line-height: 1.5;
+        }
+
+        .hint {
+          font-size: 0.9rem;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Mobile Responsive Design
+@media (max-width: 768px) {
+  .query-page-container {
+    .page-header {
+      padding: 20px 16px;
+      flex-direction: column;
+      gap: 16px;
+
+      .header-content {
+        h1 {
+          font-size: 1.5rem;
+          text-align: center;
+        }
+
+        p {
+          font-size: 0.9rem;
+          text-align: center;
+        }
+      }
+
+      .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .query-layout {
+      height: auto;
+      min-height: calc(100vh - 120px);
+    }
+
+    .query-input-section {
+      max-height: none;
+      height: auto;
+
+      .query-card {
+        ::ng-deep {
+          .mat-mdc-card-header {
+            padding: 16px;
+
+            .mat-mdc-card-title {
+              font-size: 1.1rem;
+            }
+
+            .mat-mdc-card-subtitle {
+              font-size: 0.8rem;
+            }
+          }
+
+          .mat-mdc-card-content {
+            padding: 16px;
+            min-height: 250px;
+          }
+        }
+      }
+
+      .examples-panel {
+        ::ng-deep {
+          .mat-expansion-panel-header {
+            padding: 12px 16px;
+            min-height: 56px;
+
+            .mat-panel-title {
+              font-size: 0.9rem;
+
+              mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+              }
+            }
+
+            .mat-panel-description {
+              font-size: 0.8rem;
+            }
+          }
+
+          .mat-expansion-panel-body {
+            max-height: 250px;
+          }
+        }
+
+        .examples-grid {
+          .example-item {
+            padding: 12px 16px;
+            gap: 12px;
+
+            mat-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+
+            .example-content {
+              strong {
+                font-size: 0.9rem;
+              }
+
+              span {
+                font-size: 0.75rem;
+                padding: 4px 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .results-section {
+      .results-header {
+        padding: 16px;
+
+        .results-info {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+
+          h2 {
+            font-size: 1.25rem;
+          }
+
+          .results-stats {
+            width: 100%;
+            justify-content: space-between;
+            gap: 12px;
+
+            .stat-item {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+
+      .loading-state {
+        .loading-content {
+          padding: 40px 20px;
+
+          mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+          }
+
+          h3 {
+            font-size: 1.25rem;
+          }
+
+          p {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .empty-state {
+        padding: 20px;
+
+        .empty-content {
+          mat-icon {
+            font-size: 60px;
+            width: 60px;
+            height: 60px;
+          }
+
+          h3 {
+            font-size: 1.25rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Extra small devices
+@media (max-width: 480px) {
+  .query-page-container {
+    .query-input-section {
+      .examples-panel {
+        .examples-grid {
+          .example-item {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+
+            mat-icon {
+              align-self: center;
+            }
+
+            .example-content {
+              span {
+                font-size: 0.7rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Ensure expansion panel is always properly styled
+::ng-deep {
+  .mat-expansion-panel:not([class*="mat-elevation-z"]) {
+    box-shadow: none !important;
+  }
+
+  .mat-expansion-panel-header:hover {
+    background: #f0f0f0 !important;
+  }
+}

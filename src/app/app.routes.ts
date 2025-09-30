@@ -1,4 +1,3 @@
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { QueryPageComponent } from './pages/query-page/query-page.component';
 import { ErrorComponent } from './pages/error/error.component';
@@ -12,6 +11,7 @@ import { OutputsComponent } from './pages/outputs/outputs.component';
 import { VocabulariesComponent } from './pages/vocabularies/vocabularies.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { NodeViewComponent } from './pages/node-view/node-view.component';
+import { AboutComponent } from './pages/about/about.component'; // Add this import
 
 export const routes: Routes = [
   {
@@ -50,7 +50,7 @@ export const routes: Routes = [
     data: { title: 'Research Outputs' },
   },
   {
-    path: 'vocabs',
+    path: 'vocabularies',
     component: VocabulariesComponent,
     data: { title: 'Vocabularies' },
   },
@@ -68,6 +68,11 @@ export const routes: Routes = [
     path: 'view/:type/:id',
     component: NodeViewComponent,
     data: { title: 'Node Details' },
+  },
+  {
+    path: 'about', // Add this route
+    component: AboutComponent,
+    data: { title: 'About' },
   },
   {
     path: '**',

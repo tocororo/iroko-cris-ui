@@ -1,26 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IrokoApiService } from '../../api/services/iroko-api.service';
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
 import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
 import { MetadataService } from '../../services/metadata.service';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-query-page',
   templateUrl: './query-page.component.html',
   styleUrls: ['./query-page.component.scss'],
   imports: [
+    CommonModule,
     QueryExecutorComponent,
     ResultsDisplayComponent,
-    MatProgressBarModule
-],
+    MatProgressBarModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
+  ],
 })
 export class QueryPageComponent {
+  @ViewChild(QueryExecutorComponent) queryExecutor!: QueryExecutorComponent;
+
   queryResult: any;
   error: any;
   isLoading = false;
+  hasResults = false;
+  queryTime?: number;
+  resultCount?: number;
+
+  // Quick examples data
+  quickExamples = [
+    {
+      id: 'organizations',
+      title: 'List Organizations',
+      description: 'MATCH (n:Organization) RETURN n LIMIT 10',
+      icon: 'corporate_fare',
+    },
+    {
+      id: 'researchers',
+      title: 'Find Researchers',
+      description: 'MATCH (n:Person) RETURN n LIMIT 10',
+      icon: 'people',
+    },
+    {
+      id: 'publications',
+      title: 'Recent Publications',
+      description:
+        'MATCH (n:Output) RETURN n ORDER BY n.publication_date DESC LIMIT 10',
+      icon: 'article',
+    },
+    {
+      id: 'relationships',
+      title: 'Organization Relationships',
+      description:
+        'MATCH (o:Organization)-[r]-(related) RETURN o, r, related LIMIT 15',
+      icon: 'account_tree',
+    },
+  ];
 
   constructor(
     private apiService: IrokoApiService,
@@ -39,20 +81,53 @@ export class QueryPageComponent {
   ngOnDestroy() {
     this.metadataService.resetMetadata();
   }
+
   onQueryExecuted(queryData: CypherQuery) {
     this.isLoading = true;
     this.queryResult = null;
     this.error = null;
+    this.hasResults = false;
+    this.queryTime = undefined;
+    this.resultCount = undefined;
+
+    const startTime = performance.now();
 
     this.apiService.executeQuery(queryData).subscribe({
       next: (result) => {
+        const endTime = performance.now();
+        this.queryTime = endTime - startTime;
         this.queryResult = result;
+        this.resultCount = this.calculateResultCount(result);
+        this.hasResults = true;
         this.isLoading = false;
       },
       error: (err) => {
         this.error = err;
         this.isLoading = false;
+        this.hasResults = false;
       },
     });
+  }
+
+  private calculateResultCount(result: any): number {
+    if (!result) return 0;
+    if (Array.isArray(result)) return result.length;
+    if (typeof result === 'object') return Object.keys(result).length;
+    return 1;
+  }
+
+  clearResults() {
+    this.queryResult = null;
+    this.error = null;
+    this.hasResults = false;
+    this.queryTime = undefined;
+    this.resultCount = undefined;
+  }
+
+  // Method to load examples
+  loadExample(exampleId: string) {
+    if (this.queryExecutor) {
+      this.queryExecutor.loadExample(exampleId);
+    }
   }
 }
