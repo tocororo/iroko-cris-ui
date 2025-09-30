@@ -88,6 +88,6 @@ export class RelationshipPaginationComponent implements OnChanges {
       (this.currentPage + 1) * this.pageSize,
       this.totalItems
     );
-    return `Showing ${start}-${end} of ${this.totalItems}`;
+    return `Mostrando ${start}-${end} de ${this.totalItems}`;
   }
 }

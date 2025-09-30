@@ -1,63 +1,69 @@
 {
-  "title": "Sceiba Knowledge Graph",
+  "title": "Grafo de Conocimiento Sceiba",
   "menu": [
     {
-      "label": "Home",
-      "description": "System overview and statistics",
+      "label": "Inicio",
+      "description": "Resumen del sistema y estadísticas",
       "icon": "home",
       "route": "/"
     },
     {
-      "label": "Explore",
+      "label": "Explorar",
       "icon": "explore",
       "children": [
         {
-          "label": "Sources",
-          "description": "Journals, repositories, and data sources",
+          "label": "Revistas MES",
+          "description": "Revistas científicas del MES",
           "icon": "source",
-          "route": "/sources"
+          "route": "/mes"
         },
         {
-          "label": "Organizations",
-          "description": "Research organizations and institutions",
+          "label": "Organizaciones",
+          "description": "Organizaciones e instituciones de investigación",
           "icon": "corporate_fare",
           "route": "/organizations"
         },
         {
-          "label": "Persons",
-          "description": "Researchers and contributors",
+          "label": "Personas",
+          "description": "Investigadores y colaboradores",
           "icon": "people",
           "route": "/persons"
         },
         {
-          "label": "Projects",
-          "description": "Research projects and initiatives",
+          "label": "Proyectos",
+          "description": "Proyectos e iniciativas de investigación",
           "icon": "folder",
           "route": "/projects"
         },
         {
-          "label": "Outputs",
-          "description": "Research outputs and publications",
+          "label": "Resultados",
+          "description": "Resultados de investigación y publicaciones",
           "icon": "article",
           "route": "/outputs"
         },
         {
-          "label": "Vocabularies",
-          "description": "Controlled vocabularies and terms",
+          "label": "Fuentes",
+          "description": "Revistas, repositorios y fuentes de datos",
+          "icon": "source",
+          "route": "/sources"
+        },
+        {
+          "label": "Vocabularios",
+          "description": "Vocabularios controlados y términos",
           "icon": "tag",
           "route": "/vocabularies"
         }
       ]
     },
     {
-      "label": "Query",
-      "description": "Advanced Cypher query interface",
+      "label": "Consulta",
+      "description": "Interfaz avanzada de consultas Cypher",
       "icon": "code",
       "route": "/query"
     },
     {
-      "label": "About",
-      "description": "About this application",
+      "label": "Acerca de",
+      "description": "Acerca de esta aplicación",
       "icon": "info",
       "route": "/about"
     }

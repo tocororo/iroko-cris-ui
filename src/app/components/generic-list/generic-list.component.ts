@@ -346,7 +346,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   getSortTooltip(): string {
-    return this.sortBy.direction === 'ASC' ? 'Ascending' : 'Descending';
+    return this.sortBy.direction === 'ASC' ? 'Ascendente' : 'Descendente';
   }
 
   getPaginationInfo(): string {
@@ -358,9 +358,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
     const endIdx = Math.min(startIdx + this.nodes.length - 1, this.totalCount);
     const totalPages = this.totalPages;
 
-    return `Showing ${startIdx}–${endIdx} of ${this.totalCount} items — Page ${
-      this.currentPage + 1
-    } of ${totalPages}`;
+    return `Mostrando ${startIdx}–${endIdx} de ${
+      this.totalCount
+    } elementos — Página ${this.currentPage + 1} de ${totalPages}`;
   }
 
   onPageChange(page: number) {
