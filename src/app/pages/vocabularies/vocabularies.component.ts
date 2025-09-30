@@ -25,42 +25,42 @@ export class VocabulariesComponent {
     },
     {
       name: 'name',
-      label: 'Term',
+      label: 'Término',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'description',
-      label: 'Description',
+      label: 'Descripción',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'vocabulary',
-      label: 'Vocabulary',
+      label: 'Vocabulario',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'broader_terms',
-      label: 'Broader Terms',
+      label: 'Términos Más Generales',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'narrower_terms',
-      label: 'Narrower Terms',
+      label: 'Términos Más Específicos',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'related_terms',
-      label: 'Related Terms',
+      label: 'Términos Relacionados',
       sortable: false,
       filterable: true,
       type: 'array',
@@ -71,7 +71,7 @@ export class VocabulariesComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Vocabularies & Terms',
+      title: 'Vocabularios & Terms',
       description:
         'Explore controlled vocabularies, taxonomies, and classification terms',
       authors: [],
@@ -80,7 +80,7 @@ export class VocabulariesComponent {
   }
 
   onNodeSelected(node: any) {
-    console.log('Vocabulary term selected:', node);
+    console.log('Vocabulario term selected:', node);
     // Navigate to term detail or show dialog
   }
 }

@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-header">
-    <h1>About Iroko</h1>
+    <h1>Acerca de Iroko</h1>
     <p>Learn about our knowledge graph platform and features</p>
   </div>
 
@@ -12,20 +12,21 @@
           diameter="40"
           mode="indeterminate"
         ></mat-progress-spinner>
-        <p>Loading about content...</p>
+        <p>Cargando contenido de "Acerca de"...</p>
       </div>
       } @if (loadError) {
       <div class="error-container">
         <mat-icon color="warn">error_outline</mat-icon>
-        <h3>Unable to load content</h3>
+        <h3>No se pudo cargar el contenido</h3>
         <p>
           {{
-            errorMessage || "There was an error loading the about page content."
+            errorMessage ||
+              "Hubo un error al cargar el contenido de la página 'Acerca de'."
           }}
         </p>
         <button mat-button color="primary" (click)="ngOnInit()">
           <mat-icon>refresh</mat-icon>
-          Retry
+          Reintentar
         </button>
       </div>
       }

@@ -74,7 +74,7 @@ export class GlobalSearchComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Search error:', error);
+          console.error('Buscar error:', error);
           this.isLoading = false;
         },
       });

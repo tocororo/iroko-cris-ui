@@ -32,28 +32,28 @@ export class OrganizationsComponent {
     },
     {
       name: 'types',
-      label: 'Types',
+      label: 'Tipos',
       sortable: true,
       filterable: true,
       type: 'array',
     },
     {
       name: 'status',
-      label: 'Status',
+      label: 'Estado',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'acronyms',
-      label: 'Acronyms',
+      label: 'Siglas',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'established',
-      label: 'Established',
+      label: 'Fundado',
       sortable: true,
       filterable: false,
       type: 'date',
@@ -64,7 +64,7 @@ export class OrganizationsComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Organizations',
+      title: 'Organizaciones',
       description: 'Explore organizations in the knowledge graph',
       authors: [],
       subjects: [],

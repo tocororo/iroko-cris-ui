@@ -38,13 +38,13 @@ export class QueryPageComponent {
   quickExamples = [
     {
       id: 'organizations',
-      title: 'List Organizations',
+      title: 'Lista Organizaciones',
       description: 'MATCH (n:Organization) RETURN n LIMIT 10',
       icon: 'corporate_fare',
     },
     {
       id: 'researchers',
-      title: 'Find Researchers',
+      title: 'Find Investigadores',
       description: 'MATCH (n:Person) RETURN n LIMIT 10',
       icon: 'people',
     },
@@ -71,8 +71,8 @@ export class QueryPageComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Cypher Query',
-      description: 'iroko-cris - Cypher Query',
+      title: 'Consulta Cypher',
+      description: 'iroko-cris - Consulta Cypher',
       authors: [],
       subjects: [],
     });

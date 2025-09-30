@@ -17,12 +17,12 @@ export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    data: { title: 'Home' },
+    data: { title: 'Inicio' },
   },
   {
     path: 'sources',
     component: SourcesComponent,
-    data: { title: 'Data Sources' },
+    data: { title: 'Fuentes de Datos' },
   },
   {
     path: 'mes',
@@ -32,51 +32,51 @@ export const routes: Routes = [
   {
     path: 'organizations',
     component: OrganizationsComponent,
-    data: { title: 'Organizations' },
+    data: { title: 'Organizaciones' },
   },
   {
     path: 'persons',
     component: PersonsComponent,
-    data: { title: 'Researchers' },
+    data: { title: 'Investigadores' },
   },
   {
     path: 'projects',
     component: ProjectsComponent,
-    data: { title: 'Research Projects' },
+    data: { title: 'Proyectos de Investigación' },
   },
   {
     path: 'outputs',
     component: OutputsComponent,
-    data: { title: 'Research Outputs' },
+    data: { title: 'Resultados de Investigación' },
   },
   {
     path: 'vocabularies',
     component: VocabulariesComponent,
-    data: { title: 'Vocabularies' },
+    data: { title: 'Vocabularios' },
   },
   {
     path: 'query',
     component: QueryPageComponent,
-    data: { title: 'Cypher Query' },
+    data: { title: 'Consulta Cypher' },
   },
   {
     path: 'search',
     component: SearchResultsComponent,
-    data: { title: 'Search Results' },
+    data: { title: 'Resultados de Búsqueda' },
   },
   {
     path: 'view/:type/:id',
     component: NodeViewComponent,
-    data: { title: 'Node Details' },
+    data: { title: 'Detalles del Nodo' },
   },
   {
     path: 'about', // Add this route
     component: AboutComponent,
-    data: { title: 'About' },
+    data: { title: 'Acerca de' },
   },
   {
     path: '**',
     component: ErrorComponent,
-    data: { title: 'Page Not Found' },
+    data: { title: 'Página No Encontrada' },
   },
 ];

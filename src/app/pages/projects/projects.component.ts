@@ -25,35 +25,35 @@ export class ProjectsComponent {
     },
     {
       name: 'title',
-      label: 'Title',
+      label: 'Título',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'creator',
-      label: 'Principal Investigator',
+      label: 'Investigador Principal',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'fundingReference',
-      label: 'Funding',
+      label: 'Financiamiento',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'language',
-      label: 'Languages',
+      label: 'Idiomas',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'publisher',
-      label: 'Publisher',
+      label: 'Editor',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -64,7 +64,7 @@ export class ProjectsComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Research Projects',
+      title: 'Proyectos de Investigación',
       description:
         'Explore research projects and initiatives in the knowledge graph',
       authors: [],

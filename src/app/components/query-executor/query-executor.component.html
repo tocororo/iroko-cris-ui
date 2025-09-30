@@ -1,6 +1,6 @@
 <form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="query-form">
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Cypher Query</mat-label>
+    <mat-label>Consulta Cypher</mat-label>
     <textarea
       #queryTextarea
       matInput
@@ -17,7 +17,7 @@
   <div class="form-actions">
     <div class="form-controls">
       <mat-checkbox formControlName="readonly" color="primary">
-        Read-only mode
+        Modo de solo lectura
       </mat-checkbox>
 
       <button
@@ -29,7 +29,7 @@
         <mat-icon>{{
           showParameters ? "keyboard_arrow_up" : "keyboard_arrow_down"
         }}</mat-icon>
-        Parameters
+        Parámetros
       </button>
     </div>
 
@@ -41,18 +41,18 @@
       class="execute-btn"
     >
       <mat-icon>play_arrow</mat-icon>
-      Execute Query
+      Ejecutar Consulta
     </button>
   </div>
 
   @if (showParameters) {
   <div class="parameters-section">
-    <h4>Query Parameters</h4>
+    <h4>Query Parámetros</h4>
     <div class="parameters-list">
       @for (param of parameters; track param; let i = $index) {
       <div class="parameter-row">
         <mat-form-field appearance="outline" class="parameter-field">
-          <mat-label>Key</mat-label>
+          <mat-label>Clave</mat-label>
           <input
             matInput
             [(ngModel)]="param.key"
@@ -61,7 +61,7 @@
           />
         </mat-form-field>
         <mat-form-field appearance="outline" class="parameter-field">
-          <mat-label>Value</mat-label>
+          <mat-label>Valor</mat-label>
           <input
             matInput
             [(ngModel)]="param.value"
@@ -84,12 +84,12 @@
       <button
         mat-stroked-button
         type="button"
-        aria-label="Add Parameter"
+        aria-label="Agregar Parámetro"
         (click)="addParameter()"
         class="add-param-btn"
       >
         <mat-icon>add</mat-icon>
-        Add Parameter
+        Agregar Parámetro
       </button>
     </div>
   </div>

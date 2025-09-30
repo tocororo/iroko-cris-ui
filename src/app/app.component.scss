@@ -154,7 +154,7 @@ mat-toolbar {
 }
 
 .menu-item {
-  border-radius: 6px;
+  // border-radius: 6px;
   margin: 2px 0;
   transition: all 0.2s ease;
   height: 80px !important;
@@ -185,12 +185,12 @@ mat-toolbar {
       content: "";
       position: absolute;
       left: 0;
-      top: 50%;
+      // top: 50%;
       transform: translateY(-50%);
       width: 4px;
       height: 80px;
       background-color: #006d33;
-      border-radius: 0 2px 2px 0;
+      // border-radius: 0 2px 2px 0;
     }
   }
 }

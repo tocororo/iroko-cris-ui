@@ -53,8 +53,8 @@ export class SearchResultsComponent implements OnInit {
     this.hasSearched = true;
 
     this.metadataService.updateMetadata({
-      title: `Search: ${this.searchTerm}`,
-      description: `Search results for "${this.searchTerm}" in the knowledge graph`,
+      title: `Buscar: ${this.searchTerm}`,
+      description: `Buscar results for "${this.searchTerm}" in the knowledge graph`,
     });
 
     this.searchService.globalSearch(this.searchTerm).subscribe({
@@ -73,7 +73,7 @@ export class SearchResultsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Search error:', error);
+        console.error('Buscar error:', error);
         this.isLoading = false;
       },
     });

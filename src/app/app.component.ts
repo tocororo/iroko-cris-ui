@@ -127,15 +127,15 @@ export class AppComponent implements OnInit {
     if (!path) return 'Iroko';
 
     const titleMap: { [key: string]: string } = {
-      '': 'Home',
+      '': 'Inicio',
       sources: 'Sources',
-      organizations: 'Organizations',
+      organizations: 'Organizaciones',
       persons: 'People',
       projects: 'Projects',
-      outputs: 'Research Outputs',
-      vocabs: 'Vocabularies',
-      query: 'Cypher Query',
-      search: 'Search Results',
+      outputs: 'Resultados de Investigación',
+      vocabs: 'Vocabularios',
+      query: 'Consulta Cypher',
+      search: 'Resultados de Búsqueda',
     };
 
     return titleMap[path] || 'Iroko';

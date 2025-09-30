@@ -26,7 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class HomeComponent implements OnInit, OnDestroy {
   stats = [
     {
-      label: 'Organizations',
+      label: 'Organizaciones',
       count: 0,
       icon: 'corporate_fare',
       route: '/organizations',
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Organization',
     },
     {
-      label: 'Researchers',
+      label: 'Investigadores',
       count: 0,
       icon: 'people',
       route: '/persons',
@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Person',
     },
     {
-      label: 'Research Outputs',
+      label: 'Resultados de Investigación',
       count: 0,
       icon: 'article',
       route: '/outputs',
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Project',
     },
     {
-      label: 'Data Sources',
+      label: 'Fuentes de Datos',
       count: 0,
       icon: 'source',
       route: '/sources',
@@ -66,24 +66,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Source',
     },
     {
-      label: 'Vocabularies',
+      label: 'Vocabularios',
       count: 0,
       icon: 'tag',
       route: '/vocabularies',
       color: 'warn',
-      type: 'Term',
+      type: 'Término',
     },
   ];
 
   quickActions = [
     {
-      label: 'Advanced Search',
-      description: 'Search across all entities',
+      label: 'Búsqueda Avanzada',
+      description: 'Buscar across all entities',
       icon: 'search',
       route: '/search',
     },
     {
-      label: 'Cypher Query',
+      label: 'Consulta Cypher',
       description: 'Run custom graph queries',
       icon: 'code',
       route: '/query',
@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Iroko Knowledge Graph Explorer',
+      title: 'Explorador del Grafo de Conocimiento Iroko',
       description:
         'Explore research data, organizations, and publications in the Cuban research ecosystem',
       authors: [],

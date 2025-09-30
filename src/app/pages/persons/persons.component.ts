@@ -25,49 +25,49 @@ export class PersonsComponent {
     },
     {
       name: 'name',
-      label: 'Full Name',
+      label: 'Nombre Completo',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'last_name',
-      label: 'Last Name',
+      label: 'Apellido',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'email_addresses',
-      label: 'Email Addresses',
+      label: 'Direcciones de Correo',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'research_interests',
-      label: 'Research Interests',
+      label: 'Intereses de Investigación',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'academic_titles',
-      label: 'Academic Titles',
+      label: 'Títulos Académicos',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'affiliations',
-      label: 'Affiliations',
+      label: 'Afiliaciones',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'gender',
-      label: 'Gender',
+      label: 'Género',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -78,7 +78,7 @@ export class PersonsComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Researchers',
+      title: 'Investigadores',
       description:
         'Explore researchers, scientists, and contributors in the knowledge graph',
       authors: [],

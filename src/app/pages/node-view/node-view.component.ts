@@ -37,7 +37,7 @@ export class NodeViewComponent implements OnInit {
     source: 'Source',
     project: 'Project',
     output: 'Output',
-    term: 'Term',
+    term: 'Término',
   };
 
   // Map entity types to display names
@@ -47,7 +47,7 @@ export class NodeViewComponent implements OnInit {
     Source: 'Data Source',
     Project: 'Research Project',
     Output: 'Research Output',
-    Term: 'Vocabulary Term',
+    Término: 'Vocabulario Término',
   };
 
   constructor(
@@ -89,7 +89,7 @@ export class NodeViewComponent implements OnInit {
       Source: '/sources',
       Project: '/projects',
       Output: '/outputs',
-      Term: '/vocabularies',
+      Término: '/vocabularies',
     };
 
     return routeMap[this.nodeType] || '/';

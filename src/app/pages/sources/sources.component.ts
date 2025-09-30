@@ -25,7 +25,7 @@ export class SourcesComponent {
     },
     {
       name: 'title',
-      label: 'Title',
+      label: 'Título',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -39,21 +39,21 @@ export class SourcesComponent {
     },
     {
       name: 'source_type',
-      label: 'Source Type',
+      label: 'Tipo de Fuente',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'source_status',
-      label: 'Status',
+      label: 'Estado',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'repository_status',
-      label: 'Repository Status',
+      label: 'Estado del Repositorio',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -67,21 +67,21 @@ export class SourcesComponent {
     },
     {
       name: 'start_year',
-      label: 'Start Year',
+      label: 'Año de Inicio',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'end_year',
-      label: 'End Year',
+      label: 'Año de Finalización',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
       name: 'frequency',
-      label: 'Frequency',
+      label: 'Frecuencia',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -92,7 +92,7 @@ export class SourcesComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Data Sources',
+      title: 'Fuentes de Datos',
       description:
         'Explore journals, repositories, and data sources in the knowledge graph',
       authors: [],

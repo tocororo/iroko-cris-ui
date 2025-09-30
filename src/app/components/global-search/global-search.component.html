@@ -1,7 +1,7 @@
 <!-- src/app/components/global-search/global-search.component.html -->
 <div class="search-container">
   <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Search knowledge graph...</mat-label>
+    <mat-label>Buscar en el grafo de conocimiento...</mat-label>
     <input
       #searchInput
       matInput
@@ -11,7 +11,7 @@
       (focus)="onFocus()"
       (blur)="onBlur()"
       (keyup.enter)="onSearchSubmit()"
-      placeholder="Search organizations, people, publications..."
+      placeholder="Buscar organizations, people, publications..."
     />
 
     <button
@@ -43,7 +43,7 @@
 
   <div class="search-results" *ngIf="showResults && searchResults.length > 0">
     <div class="results-header">
-      <span>Search Results</span>
+      <span>Resultados de Búsqueda</span>
       <small>{{ searchResults.length }} found</small>
     </div>
 

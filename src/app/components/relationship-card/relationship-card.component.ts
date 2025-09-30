@@ -38,7 +38,7 @@ export class RelationshipCardComponent {
     'Person',
     'Project',
     'Output',
-    'Term',
+    'Término',
   ];
 
   getNodeProperties(): { key: string; value: any }[] {

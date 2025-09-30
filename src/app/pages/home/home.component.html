@@ -2,7 +2,7 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
-      <h1 class="hero-title">Iroko Knowledge Graph Explorer</h1>
+      <h1 class="hero-title">Explorador del Grafo de Conocimiento Iroko</h1>
       <p class="hero-subtitle">
         Discover research data, organizations, and publications across the Cuban
         research ecosystem
@@ -10,11 +10,11 @@
       <div class="hero-actions">
         <button mat-raised-button color="primary" routerLink="/search">
           <mat-icon>search</mat-icon>
-          Start Exploring
+          Comenzar a Explorar
         </button>
         <button mat-stroked-button color="primary" routerLink="/query">
           <mat-icon>code</mat-icon>
-          Advanced Query
+          Consulta Avanzada
         </button>
       </div>
     </div>
@@ -22,7 +22,7 @@
 
   <!-- Statistics Section -->
   <section class="stats-section">
-    <h2 class="section-title">Knowledge Graph Overview</h2>
+    <h2 class="section-title">Resumen del Grafo de Conocimiento</h2>
 
     @if (isLoading) {
     <div class="loading-container">
@@ -30,7 +30,7 @@
         diameter="40"
         mode="indeterminate"
       ></mat-progress-spinner>
-      <p>Loading statistics...</p>
+      <p>Cargando estadísticas...</p>
     </div>
     } @else {
     <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
@@ -57,9 +57,9 @@
     }
   </section>
 
-  <!-- Quick Actions -->
+  <!-- Acciones Rápidas -->
   <section class="actions-section">
-    <h2 class="section-title">Quick Actions</h2>
+    <h2 class="section-title">Acciones Rápidas</h2>
     <div class="actions-grid">
       <mat-card
         *ngFor="let action of quickActions"
@@ -82,11 +82,11 @@
 
   <!-- Features Section -->
   <section class="features-section">
-    <h2 class="section-title">Explore Research Data</h2>
+    <h2 class="section-title">Explorar Datos de Investigación</h2>
     <div class="features-grid">
       <div class="feature-item">
         <mat-icon>account_tree</mat-icon>
-        <h3>Graph Navigation</h3>
+        <h3>Navegación en Grafo</h3>
         <p>
           Navigate through relationships between researchers, organizations, and
           publications
@@ -94,9 +94,9 @@
       </div>
       <div class="feature-item">
         <mat-icon>search</mat-icon>
-        <h3>Advanced Search</h3>
+        <h3>Búsqueda Avanzada</h3>
         <p>
-          Search across all entities with filters and full-text search
+          Buscar across all entities with filters and full-text search
           capabilities
         </p>
       </div>
@@ -104,14 +104,14 @@
         <mat-icon>schema</mat-icon>
         <h3>Cypher Queries</h3>
         <p>
-          Run custom graph queries to explore complex relationships and patterns
+          Ejecute consultas personalizadas en el grafo para explorar relaciones y patrones complejos
         </p>
       </div>
       <div class="feature-item">
         <mat-icon>download</mat-icon>
-        <h3>Data Export</h3>
+        <h3>Exportar Datos</h3>
         <p>
-          Export search results and entity data in multiple formats for analysis
+          Exporte resultados de búsqueda y datos de entidades en múltiples formatos para análisis
         </p>
       </div>
     </div>

@@ -1,110 +1,110 @@
-# About Iroko Knowledge Graph Explorer
+# Acerca del Explorador del Grafo de Conocimiento Iroko
 
-Iroko is a comprehensive knowledge graph platform designed to explore and analyze research data from the Cuban scientific ecosystem.
+Iroko es una plataforma integral de grafo de conocimiento diseñada para explorar y analizar datos de investigación del ecosistema científico cubano.
 
-## Features
+## Características
 
-- **Graph Database Backend**: Powered by Neo4j for efficient relationship queries
-- **Advanced Search**: Full-text search across all entities and properties
-- **Relationship Visualization**: Explore connections between researchers, organizations, and publications
-- **Cypher Query Interface**: Run custom graph queries for advanced analysis
-- **Progressive Web App**: Works offline and provides app-like experience
-- **Responsive Design**: Optimized for both desktop and mobile devices
+- **Backend de Base de Datos en Grafo**: Impulsado por Neo4j para consultas eficientes de relaciones
+- **Búsqueda Avanzada**: Búsqueda de texto completo en todas las entidades y propiedades
+- **Visualización de Relaciones**: Explora conexiones entre investigadores, organizaciones y publicaciones
+- **Interfaz de Consultas Cypher**: Ejecuta consultas personalizadas en grafo para análisis avanzado
+- **Aplicación Web Progresiva (PWA)**: Funciona sin conexión y ofrece una experiencia similar a una aplicación nativa
+- **Diseño Responsivo**: Optimizado tanto para dispositivos móviles como de escritorio
 
-## Data Sources
+## Fuentes de Datos
 
-Iroko integrates data from multiple sources:
+Iroko integra datos de múltiples fuentes:
 
-- Scientific journals and publications
-- Research organization databases
-- Researcher profiles and collaborations
-- Project funding information
-- Vocabulary and classification systems
-- MES (Ministry of Higher Education) journals
+- Revistas científicas y publicaciones
+- Bases de datos de organizaciones de investigación
+- Perfiles de investigadores y sus colaboraciones
+- Información sobre financiamiento de proyectos
+- Sistemas de vocabularios y clasificación
+- Revistas del MES (Ministerio de Educación Superior)
 
-## Entity Types
+## Tipos de Entidades
 
-The knowledge graph includes the following main entity types:
+El grafo de conocimiento incluye los siguientes tipos principales de entidades:
 
-### Organizations
+### Organizaciones
 
-Research institutions, universities, and scientific organizations with detailed metadata including locations, types, and relationships.
+Instituciones de investigación, universidades y organizaciones científicas con metadatos detallados que incluyen ubicaciones, tipos y relaciones.
 
-### Researchers
+### Investigadores
 
-Scientists, academics, and research contributors with information about their affiliations, research interests, and publications.
+Científicos, académicos y colaboradores en investigación con información sobre sus afiliaciones, intereses de investigación y publicaciones.
 
-### Research Projects
+### Proyectos de Investigación
 
-Scientific projects and grants with details about funding, participants, and outcomes.
+Proyectos científicos y becas con detalles sobre financiamiento, participantes y resultados.
 
-### Research Outputs
+### Resultados de Investigación
 
-Publications, articles, datasets, and other research results with comprehensive metadata.
+Publicaciones, artículos, conjuntos de datos y otros resultados de investigación con metadatos completos.
 
-### Data Sources
+### Fuentes de Datos
 
-Journals, repositories, and information sources that contribute to the knowledge graph.
+Revistas, repositorios y fuentes de información que contribuyen al grafo de conocimiento.
 
-### Vocabularies
+### Vocabularios
 
-Controlled vocabularies, taxonomies, and classification terms for standardized categorization.
+Vocabularios controlados, taxonomías y términos de clasificación para una categorización estandarizada.
 
-## Technology Stack
+## Pila Tecnológica
 
 ### Frontend
 
-- **Angular 17+**: Modern web framework with TypeScript
-- **Angular Material**: Material Design components
-- **Tailwind CSS**: Utility-first CSS framework
-- **PWA**: Service workers for offline functionality
+- **Angular 17+**: Framework web moderno con TypeScript
+- **Angular Material**: Componentes de Material Design
+- **Tailwind CSS**: Framework CSS basado en utilidades
+- **PWA**: Service workers para funcionalidad sin conexión
 
 ### Backend
 
-- **Neo4j**: Graph database for relationship management
-- **RESTful API**: Cypher query execution endpoint
-- **Python/FastAPI**: API server (backend service)
+- **Neo4j**: Base de datos en grafo para gestión de relaciones
+- **API RESTful**: Punto de acceso para ejecución de consultas Cypher
+- **Python/FastAPI**: Servidor de API (servicio backend)
 
-### Features
+### Funcionalidades Adicionales
 
-- **Full-text Search**: Integrated search across all entities
-- **Graph Navigation**: Visual exploration of relationships
-- **Data Export**: CSV and JSON export capabilities
-- **Responsive Design**: Mobile-first approach
+- **Búsqueda de Texto Completo**: Búsqueda integrada en todas las entidades
+- **Navegación en Grafo**: Exploración visual de relaciones
+- **Exportación de Datos**: Capacidad de exportar en formatos CSV y JSON
+- **Diseño Responsivo**: Enfoque orientado a dispositivos móviles
 
-## Open Science Commitment
+## Compromiso con la Ciencia Abierta
 
-Iroko is built on principles of open science and aims to:
+Iroko se construye sobre principios de ciencia abierta y tiene como objetivos:
 
-- Promote transparency in research
-- Facilitate collaboration among researchers
-- Provide open access to research information
-- Support the Cuban scientific community
+- Promover la transparencia en la investigación
+- Facilitar la colaboración entre investigadores
+- Proporcionar acceso abierto a la información de investigación
+- Apoyar a la comunidad científica cubana
 
-## Data Privacy
+## Privacidad de Datos
 
-We are committed to protecting user privacy and complying with data protection regulations. All personal data is handled according to our privacy policy.
+Estamos comprometidos con la protección de la privacidad de los usuarios y el cumplimiento de las regulaciones de protección de datos. Todos los datos personales se manejan conforme a nuestra política de privacidad.
 
-## Contributing
+## Contribuciones
 
-Iroko is an open-source project. We welcome contributions from the community:
+Iroko es un proyecto de código abierto. Agradecemos las contribuciones de la comunidad:
 
-- Code contributions
-- Documentation improvements
-- Bug reports and feature requests
-- Data quality enhancements
+- Contribuciones de código
+- Mejoras en la documentación
+- Reportes de errores y solicitudes de nuevas funcionalidades
+- Mejoras en la calidad de los datos
 
-## Support
+## Soporte
 
-For technical support or questions about the platform:
+Para soporte técnico o preguntas sobre la plataforma:
 
-- Check our documentation
-- Open an issue on our GitHub repository
-- Contact the development team
+- Consulte nuestra documentación
+- Abra un reporte en nuestro repositorio de GitHub
+- Contacte al equipo de desarrollo
 
 ---
 
-_Powered by Sceiba and the Cuban scientific community_
+_Impulsado por Sceiba y la comunidad científica cubana_
 
-**Version**: 1.0.0  
-**Last Updated**: ${new Date().toLocaleDateString()}
+**Versión**: 1.0.0  
+**Última actualización**: ${new Date().toLocaleDateString()}

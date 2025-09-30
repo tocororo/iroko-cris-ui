@@ -89,7 +89,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   hasError = false;
   errorMessage = '';
 
-  // Search and sort state
+  // Buscar and sort state
   searchTerm = '';
   sortBy: SortOption = { attribute: '', direction: 'ASC' };
 
@@ -351,7 +351,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   getPaginationInfo(): string {
     if (this.totalCount === 0) {
-      return 'No results found.';
+      return 'No se encontraron resultados.';
     }
 
     const startIdx = this.currentPage * this.pageSize + 1;

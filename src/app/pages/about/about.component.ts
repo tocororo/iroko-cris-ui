@@ -32,8 +32,8 @@ export class AboutComponent implements OnInit {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'About Iroko',
-      description: 'Learn about the Iroko Knowledge Graph Explorer platform',
+      title: 'Acerca de Iroko',
+      description: 'Learn about the Explorador del Grafo de Conocimiento Iroko platform',
       authors: [],
       subjects: [],
     });
