@@ -42,12 +42,12 @@ export class NodeViewComponent implements OnInit {
 
   // Map entity types to display names
   private typeDisplayNames: { [key: string]: string } = {
-    Organization: 'Organization',
-    Person: 'Researcher',
-    Source: 'Data Source',
-    Project: 'Research Project',
-    Output: 'Research Output',
-    Término: 'Vocabulario Término',
+    Organization: 'Organización',
+    Person: 'Investigador',
+    Source: 'Fuente',
+    Project: 'Proyecto',
+    Output: 'Resultado de Investigación',
+    Term: 'Término',
   };
 
   constructor(
@@ -60,12 +60,11 @@ export class NodeViewComponent implements OnInit {
     this.routeSub = this.route.params.subscribe((params) => {
       this.nodeType = this.nodeTypes[params['type']];
       this.nodeId = params['id'];
-      console.log(this.nodeId, 'AAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
       const displayName = this.typeDisplayNames[this.nodeType] || this.nodeType;
       this.metadataService.updateMetadata({
-        title: `${displayName} Details`,
-        description: `View details for ${displayName.toLowerCase()}`,
+        title: `Detalles de ${displayName}`,
+        description: `Ver detalles de ${displayName.toLowerCase()}`,
       });
     });
   }
@@ -97,6 +96,16 @@ export class NodeViewComponent implements OnInit {
 
   getBreadcrumbLabel(): string {
     return this.typeDisplayNames[this.nodeType] || this.nodeType;
+  }
+
+  onNodeLoaded(node: any): void {
+    console.log(node);
+
+    const displayName = node.name || node.title || node.id;
+    this.metadataService.updateMetadata({
+      title: `Detalles de ${displayName}`,
+      description: `Información sobre el nodo ${displayName} de tipo ${this.nodeType}`,
+    });
   }
 
   onRelatedNodeSelect(nodeData: any): void {

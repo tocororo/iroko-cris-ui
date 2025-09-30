@@ -94,7 +94,7 @@ export class SourcesComponent {
     this.metadataService.updateMetadata({
       title: 'Fuentes de Datos',
       description:
-        'Explore journals, repositories, and data sources in the knowledge graph',
+        'Explora revistas, repositorios y fuentes de datos en el grafos de conocimiento',
       authors: [],
       subjects: [],
     });

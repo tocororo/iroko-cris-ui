@@ -1,22 +1,24 @@
 <!-- src/app/pages/node-view/node-view.component.html -->
 <div class="node-view-page">
-  <div class="page-header">
+  <!-- <div class="page-header">
     <button mat-button (click)="goBack()" class="back-button">
       <mat-icon>arrow_back</mat-icon>
       Volver a {{ getBreadcrumbLabel() }} Lista
     </button>
 
-    <h1>{{ getBreadcrumbLabel() }} Details</h1>
+    <h1>Detalles de {{ getBreadcrumbLabel() }}</h1>
     <p>
-      Exploring detailed information about this
-      {{ getBreadcrumbLabel().toLowerCase() }}
+      Explorando información detallada sobre este
+      {{ getBreadc  rumbLabel().toLowerCase() }}
     </p>
-  </div>
+
+  </div> -->
 
   <div class="node-viewer-container">
     <app-enhanced-node-viewer
       [nodeId]="nodeId"
       [nodeType]="nodeType"
+      (nodeLoaded)="onNodeLoaded($event)"
       (nodeSelected)="onRelatedNodeSelect($event)"
     >
     </app-enhanced-node-viewer>

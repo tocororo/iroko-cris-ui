@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import {
+  AdvancedQueryOptions,
   GenericListComponent,
   ListColumn,
 } from '../../components/generic-list/generic-list.component';
@@ -88,13 +89,17 @@ export class MesComponent {
     },
   ];
 
+  mesAdvancedQuery: AdvancedQueryOptions = {
+    customWhereClause:
+      "EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))",
+  };
+
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'MES Journals',
-      description:
-        'Explore scientific journals from the Cuban Ministry of Higher Education',
+      title: 'Revistas MES',
+      description: 'Revistas científicas del Ministerio de Educación Superior',
       authors: [],
       subjects: [],
     });

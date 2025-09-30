@@ -58,8 +58,8 @@ interface RelationshipData {
 export class EnhancedNodeViewerComponent implements OnInit {
   @Input() nodeId!: string;
   @Input() nodeType!: string;
+  @Output() nodeLoaded = new EventEmitter<any>();
   @Output() nodeSelected = new EventEmitter<any>();
-
   node: any;
   relationshipGroups: RelationshipGroup[] = [];
   loading = false;
@@ -111,6 +111,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
       next: (result) => {
         if (result && result.length > 0) {
           this.node = result[0].n;
+          this.nodeLoaded.emit(this.node);
 
           this.processAllRelationships(result);
         } else {
@@ -253,6 +254,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
       const primaryType = nodeLabels.length > 0 ? nodeLabels[0] : 'node';
 
       // Emit the node data with type information
+
       this.nodeSelected.emit({
         node: nodeData,
         type: primaryType,
@@ -268,6 +270,8 @@ export class EnhancedNodeViewerComponent implements OnInit {
   }
 
   getTabLabel(group: RelationshipGroup): string {
-    return `${group.type} (${group.totalCount})`;
+    const dicon =
+      group.direction === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
+    return `<mat-icon class="direction-icon">${dicon} </mat-icon> ${group.type} (${group.totalCount})`;
   }
 }

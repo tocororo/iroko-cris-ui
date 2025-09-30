@@ -56,6 +56,111 @@
           </button>
           }
         </div>
+        <!-- Advanced Query Controls -->
+        <div class="advanced-query-section">
+          <!-- <button
+            mat-button
+            color="primary"
+            (click)="showAdvancedQuery = !showAdvancedQuery"
+            class="advanced-query-toggle"
+          >
+            <mat-icon>code</mat-icon>
+            Consulta Avanzada @if (hasAdvancedQuery()) {
+            <mat-chip class="active-chip">Activa</mat-chip>
+            }
+          </button> -->
+
+          @if (showAdvancedQuery) {
+          <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>tune</mat-icon>
+                Consulta Cypher Personalizada
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="advanced-query-content">
+              <!-- Custom WHERE Clause -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Cláusula WHERE Personalizada</mat-label>
+                <textarea
+                  matInput
+                  [(ngModel)]="customWhereClause"
+                  placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
+                  rows="3"
+                ></textarea>
+                <mat-hint>
+                  Usa 'n' como alias del nodo principal. Ejemplos:
+                  <code>n.source_type = 'journal'</code>,
+                  <code>EXISTS((n)-[:RELATED_TO]->(:Organization))</code>
+                </mat-hint>
+              </mat-form-field>
+
+              <!-- Custom Parameters -->
+              <div class="parameters-section">
+                <div class="parameters-header">
+                  <h4>Parámetros Personalizados</h4>
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="addCustomParameter()"
+                  >
+                    <mat-icon>add</mat-icon>
+                    Agregar Parámetro
+                  </button>
+                </div>
+
+                @for (param of customParameters; track param; let i = $index) {
+                <div class="parameter-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Key</mat-label>
+                    <input
+                      matInput
+                      [(ngModel)]="param.key"
+                      placeholder="nombreParametro"
+                    />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Valor</mat-label>
+                    <input
+                      matInput
+                      [(ngModel)]="param.value"
+                      placeholder="valor"
+                    />
+                  </mat-form-field>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeCustomParameter(i)"
+                    class="remove-param-btn"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                }
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="advanced-query-actions">
+                <button mat-button (click)="clearAdvancedQuery()">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar
+                </button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="applyAdvancedQuery()"
+                >
+                  <mat-icon>play_arrow</mat-icon>
+                  Aplicar Consulta
+                </button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          }
+        </div>
       </div>
     </mat-card-content>
   </mat-card>
@@ -102,7 +207,8 @@
         <mat-icon>search_off</mat-icon>
         <h3>No hay datos disponibles</h3>
         <p>
-          No se encontraron {{ label.toLowerCase() || "elementos" }} que coincidan con sus criterios.
+          No se encontraron {{ label.toLowerCase() || "elementos" }} que
+          coincidan con sus criterios.
         </p>
       </mat-card-content>
     </mat-card>

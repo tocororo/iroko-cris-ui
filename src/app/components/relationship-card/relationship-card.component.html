@@ -6,10 +6,12 @@
           {{ getNodeDisplayName() }}
         </mat-card-title>
         <mat-card-subtitle class="node-type">
-          {{ getNodeType() }}
+          <mat-chip class="entity-type-chip">
+            {{ getNodeType() }}
+          </mat-chip>
         </mat-card-subtitle>
       </div>
-      <div class="relationship-info">
+      <!-- <div class="relationship-info">
         <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
           <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
           {{ getDirectionLabel() }}
@@ -17,7 +19,7 @@
         <mat-chip class="type-chip">
           {{ relationshipType }}
         </mat-chip>
-      </div>
+      </div> -->
     </div>
   </mat-card-header>
 

@@ -9,7 +9,12 @@
       <mat-card-title>
         {{ node.name || node.title || node.id }}
       </mat-card-title>
-      <mat-card-subtitle>{{ nodeType }}</mat-card-subtitle>
+
+      <mat-card-subtitle
+        ><mat-chip class="entity-type-chip">{{
+          nodeType
+        }}</mat-chip></mat-card-subtitle
+      >
     </mat-card-header>
 
     <mat-card-content>
@@ -51,7 +56,15 @@
 
         <!-- Relationships Tabs -->
         @for (group of relationshipGroups; track group.type; let i = $index) {
-        <mat-tab [label]="getTabLabel(group)">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="direction-icon">
+              {{
+                group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
+              }}
+            </mat-icon>
+            {{ group.type }} ({{ group.totalCount }})
+          </ng-template>
           <div class="relationships-tab-content">
             @if (group.isLoading) {
             <div class="relationships-loading">

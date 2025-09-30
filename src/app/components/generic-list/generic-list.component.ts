@@ -1,4 +1,3 @@
-// src/app/components/generic-list/generic-list.component.ts
 import {
   Component,
   Input,
@@ -6,6 +5,8 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -30,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { IrokoApiService } from '../../api/services/iroko-api.service';
 import {
@@ -52,6 +54,35 @@ export interface SortOption {
   direction: 'ASC' | 'DESC';
 }
 
+// EJEMPLOS
+// {
+//   customWhereClause: "EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))";
+// }
+// {
+//   customWhereClause: "n.source_type = $type AND n.start_year > $minYear",
+//   customParameters: {
+//     type: 'journal',
+//     minYear: 2000
+//   }
+// }
+// {
+//   relationships: [
+//     { type: 'PUBLISHED_BY', direction: 'OUT', targetLabel: 'Organization' },
+//     { type: 'CLASSIFIED_BY', direction: 'OUT', targetLabel: 'Term' }
+//   ]
+// }
+export interface AdvancedQueryOptions {
+  customWhereClause?: string;
+  customParameters?: { [key: string]: any };
+  relationships?: {
+    type: string;
+    direction?: 'IN' | 'OUT';
+    targetLabel?: string;
+    alias?: string;
+  }[];
+  customReturn?: string;
+}
+
 @Component({
   selector: 'app-generic-list',
   templateUrl: './generic-list.component.html',
@@ -70,15 +101,18 @@ export interface SortOption {
     MatChipsModule,
     MatDividerModule,
     MatTooltipModule,
+    MatExpansionModule,
   ],
 })
-export class GenericListComponent implements OnInit, OnDestroy {
+export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() entityType!: string;
   @Input() columns: ListColumn[] = [];
   @Input() label: string = '';
   @Input() pageSize: number = 10;
   @Input() defaultSort?: string;
   @Input() defaultSortOrder: 'ASC' | 'DESC' = 'ASC';
+  @Input() advancedQueryOptions?: AdvancedQueryOptions;
+  @Input() fixedFilters: QueryFilter[] = [];
   @Output() nodeSelected = new EventEmitter<any>();
 
   // Data state
@@ -89,15 +123,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
   hasError = false;
   errorMessage = '';
 
-  // Buscar and sort state
+  // Search and sort state
   searchTerm = '';
   sortBy: SortOption = { attribute: '', direction: 'ASC' };
 
-  // Node viewer state
-  selectedNode: any = null;
-  showNodeViewer = false;
+  // Advanced query state
+  showAdvancedQuery = false;
+  customWhereClause = '';
+  customParameters: { key: string; value: any }[] = [];
 
-  // UI state - use FormControl with proper typing
+  // UI state
   searchControl: FormControl<string | null>;
   sortControl: FormControl<string | null>;
   showSortOrder = false;
@@ -123,15 +158,36 @@ export class GenericListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initializeSorting();
     this.setupSearchDebounce();
+    this.initializeAdvancedQuery();
     this.loadPage(0);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['advancedQueryOptions'] || changes['fixedFilters']) {
+      this.initializeAdvancedQuery();
+      this.loadPage(0);
+    }
   }
 
   ngOnDestroy() {
     this.searchSubscription?.unsubscribe();
   }
 
+  private initializeAdvancedQuery() {
+    if (this.advancedQueryOptions) {
+      this.customWhereClause =
+        this.advancedQueryOptions.customWhereClause || '';
+
+      // Initialize parameters from advanced query options
+      if (this.advancedQueryOptions.customParameters) {
+        this.customParameters = Object.entries(
+          this.advancedQueryOptions.customParameters
+        ).map(([key, value]) => ({ key, value }));
+      }
+    }
+  }
+
   private initializeSorting() {
-    // Set default sort
     const sortableColumns = this.columns
       .filter((col) => col.sortable)
       .map((col) => col.name);
@@ -196,18 +252,18 @@ export class GenericListComponent implements OnInit, OnDestroy {
       })
       .toPromise();
 
-    // Handle the nested structure: result is array of objects with count property
     return result?.[0]?.count || 0;
   }
 
   private async fetchNodes(offset: number, limit: number): Promise<any[]> {
     const whereClause = this.buildWhereClause();
     const orderClause = this.buildOrderClause();
+    const returnClause = this.buildReturnClause();
 
     const query = `
       MATCH (n:${this.entityType})
       ${whereClause}
-      RETURN n
+      ${returnClause}
       ${orderClause}
       SKIP $offset
       LIMIT $limit
@@ -227,58 +283,86 @@ export class GenericListComponent implements OnInit, OnDestroy {
       })
       .toPromise();
 
-    // Extract the actual node data from the nested structure
-    // Result is array of objects like: [{n: {id: '...', name: '...'}}, ...]
-    return (result || []).map((item: { n: any }) =>
+    return (result || []).map((item: any) =>
       this.extractNodeData(item.n || item)
     );
   }
 
-  private extractNodeData(nodeWrapper: any): any {
-    // If the node data is nested under properties, extract it
-    if (nodeWrapper && nodeWrapper.properties) {
-      return {
-        id: nodeWrapper.elementId || nodeWrapper.properties.id,
-        ...nodeWrapper.properties,
-      };
-    }
+  private buildWhereClause(): string {
+    const conditions: string[] = [];
 
-    // If it's already a flat object with an id, return as is
-    if (nodeWrapper && nodeWrapper.id) {
-      return nodeWrapper;
-    }
+    // Search condition
+    if (this.searchTerm) {
+      const searchableColumns = this.columns
+        .filter((col) => col.filterable !== false)
+        .map((col) => col.name);
 
-    // Otherwise, try to extract meaningful data from the wrapper
-    const nodeData: any = { id: nodeWrapper.elementId };
-
-    // Copy all properties from the wrapper that aren't metadata
-    Object.keys(nodeWrapper).forEach((key) => {
-      if (!['elementId', 'labels', 'identity'].includes(key)) {
-        nodeData[key] = nodeWrapper[key];
+      if (searchableColumns.length > 0) {
+        const searchConditions = searchableColumns
+          .map(
+            (col) =>
+              `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`
+          )
+          .join(' OR ');
+        conditions.push(`(${searchConditions})`);
       }
-    });
+    }
 
-    return nodeData;
+    // Fixed filters
+    if (this.fixedFilters.length > 0) {
+      this.fixedFilters.forEach((filter, index) => {
+        const paramName = `fixedFilter${index}`;
+        switch (filter.operator) {
+          case 'CONTAINS':
+            conditions.push(
+              `toLower(n.${filter.property}) CONTAINS toLower($${paramName})`
+            );
+            break;
+          case 'STARTS WITH':
+            conditions.push(
+              `toLower(n.${filter.property}) STARTS WITH toLower($${paramName})`
+            );
+            break;
+          case 'ENDS WITH':
+            conditions.push(
+              `toLower(n.${filter.property}) ENDS WITH toLower($${paramName})`
+            );
+            break;
+          default:
+            conditions.push(
+              `n.${filter.property} ${filter.operator} $${paramName}`
+            );
+        }
+      });
+    }
+
+    // Custom WHERE clause from advanced query
+    if (this.customWhereClause) {
+      conditions.push(`(${this.customWhereClause})`);
+    }
+
+    // Relationships from advanced query options
+    if (this.advancedQueryOptions?.relationships) {
+      this.advancedQueryOptions.relationships.forEach((rel, index) => {
+        const alias = rel.alias || `related${index}`;
+        const direction = rel.direction === 'IN' ? '<' : '';
+        const arrow = rel.direction === 'OUT' ? '>' : '';
+        const targetLabel = rel.targetLabel ? `:${rel.targetLabel}` : '';
+
+        conditions.push(
+          `EXISTS((n)${direction}-[:${rel.type}]-${arrow}(${alias}${targetLabel}))`
+        );
+      });
+    }
+
+    return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   }
 
-  private buildWhereClause(): string {
-    if (!this.searchTerm) return '';
-
-    const searchableColumns = this.columns
-      .filter((col) => col.filterable !== false)
-      .map((col) => col.name);
-
-    if (searchableColumns.length === 0) return '';
-
-    // Build a search across multiple properties
-    const searchConditions = searchableColumns
-      .map(
-        (col) =>
-          `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`
-      )
-      .join(' OR ');
-
-    return `WHERE ${searchConditions}`;
+  private buildReturnClause(): string {
+    if (this.advancedQueryOptions?.customReturn) {
+      return this.advancedQueryOptions.customReturn;
+    }
+    return 'RETURN n';
   }
 
   private buildOrderClause(): string {
@@ -288,16 +372,56 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   private buildParameters(): any {
     const params: any = {};
+
+    // Search parameter
     if (this.searchTerm) {
       params.searchTerm = this.searchTerm;
     }
+
+    // Fixed filter parameters
+    this.fixedFilters.forEach((filter, index) => {
+      params[`fixedFilter${index}`] = filter.value;
+    });
+
+    // Custom parameters
+    this.customParameters.forEach((param) => {
+      if (param.key) {
+        params[param.key] = param.value;
+      }
+    });
+
+    // Advanced query parameters
+    if (this.advancedQueryOptions?.customParameters) {
+      Object.assign(params, this.advancedQueryOptions.customParameters);
+    }
+
     return params;
+  }
+
+  private extractNodeData(nodeWrapper: any): any {
+    if (nodeWrapper && nodeWrapper.properties) {
+      return {
+        id: nodeWrapper.elementId || nodeWrapper.properties.id,
+        ...nodeWrapper.properties,
+      };
+    }
+
+    if (nodeWrapper && nodeWrapper.id) {
+      return nodeWrapper;
+    }
+
+    const nodeData: any = { id: nodeWrapper.elementId };
+    Object.keys(nodeWrapper).forEach((key) => {
+      if (!['elementId', 'labels', 'identity'].includes(key)) {
+        nodeData[key] = nodeWrapper[key];
+      }
+    });
+
+    return nodeData;
   }
 
   private updatePagination() {
     this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
-
-    // Calculate pagination range (show max 5 pages)
     const startPage = Math.max(0, this.currentPage - 2);
     const endPage = Math.min(this.totalPages, startPage + 5);
 
@@ -305,6 +429,27 @@ export class GenericListComponent implements OnInit, OnDestroy {
     for (let i = startPage; i < endPage; i++) {
       this.paginationRange.push(i);
     }
+  }
+
+  // Advanced Query Methods
+  addCustomParameter() {
+    this.customParameters.push({ key: '', value: '' });
+  }
+
+  removeCustomParameter(index: number) {
+    this.customParameters.splice(index, 1);
+  }
+
+  applyAdvancedQuery() {
+    this.showAdvancedQuery = false;
+    this.loadPage(0);
+  }
+
+  clearAdvancedQuery() {
+    this.customWhereClause = '';
+    this.customParameters = [];
+    this.showAdvancedQuery = false;
+    this.loadPage(0);
   }
 
   // UI Event Handlers
@@ -325,7 +470,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
       this.sortBy = { attribute: '', direction: 'ASC' };
       this.showSortOrder = false;
     } else {
-      // If sorting by the same attribute, toggle direction
       if (this.sortBy.attribute === newAttribute) {
         this.toggleSortOrder();
       } else {
@@ -368,14 +512,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   onNodeSelect(node: any) {
-    // Navigate to the node view route
     this.router.navigate(['/view', this.entityType.toLowerCase(), node.id]);
     this.nodeSelected.emit(node);
-  }
-
-  onBackToList() {
-    this.selectedNode = null;
-    this.showNodeViewer = false;
   }
 
   formatPropertyValue(value: any, type?: string): string {
@@ -413,5 +551,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   getNodeDisplayName(node: any): string {
     return node.name || node.title || node.label || node.id || 'Unnamed';
+  }
+
+  hasAdvancedQuery(): boolean {
+    return !!this.customWhereClause || this.customParameters.length > 0;
   }
 }

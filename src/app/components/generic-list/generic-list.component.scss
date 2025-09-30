@@ -302,3 +302,86 @@
     align-self: flex-start;
   }
 }
+
+/* Advanced Query Styles */
+.advanced-query-section {
+  margin: 16px 0;
+}
+
+.advanced-query-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.active-chip {
+  font-size: 0.7em;
+  height: 20px;
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.advanced-query-panel {
+  margin-top: 8px;
+
+  .mat-expansion-panel-header {
+    background-color: #f5f5f5;
+  }
+}
+
+.advanced-query-content {
+  padding: 16px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.parameters-section {
+  margin: 16px 0;
+
+  .parameters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h4 {
+      margin: 0;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+}
+
+.parameter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.remove-param-btn {
+  margin-bottom: 16px;
+}
+
+.advanced-query-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Code styling in hints */
+code {
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+}
