@@ -1,40 +1,24 @@
-<!-- src/app/app.component.html (updated) -->
+<!-- src/app/app.component.html -->
 <div [class]="getMainContainerClass()">
   <mat-toolbar
     color="primary"
     class="flex justify-between items-center px-4 fixed z-[2] main-is-mobile:header-toolbar"
   >
-    <div class="flex items-center flex-1">
-      <button mat-icon-button (click)="snav.toggle()">
+    <!-- Left Section: Drawer Toggle -->
+    <div class="flex items-center flex-none">
+      <button mat-icon-button (click)="snav.toggle()" class="drawer-toggle">
         <mat-icon>menu</mat-icon>
       </button>
-      <h1 class="ml-2 hidden md:block">
-        {{ config.title }}
-      </h1>
     </div>
 
-    <div class="flex flex-col items-center flex-1 mx-4">
-      <h1 class="m-0 text-base leading-none text-center">
-        {{ currentPageTitle }}
-      </h1>
-    </div>
-
-    <div class="flex items-center justify-end flex-1 gap-2">
-      <!-- Global Search -->
-      <app-global-search class="hidden md:block"></app-global-search>
-
-      <!-- Mobile Search Toggle -->
-      <button
-        mat-icon-button
-        class="md:hidden"
-        [matMenuTriggerFor]="mobileMenu"
-      >
-        <mat-icon>search</mat-icon>
-      </button>
-
-      <button mat-icon-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
-      </button>
+    <!-- Center Section: App Logo & Title -->
+    <div class="app-branding flex items-center justify-center flex-1">
+      <div class="flex items-center gap-3 app-branding">
+        <mat-icon svgIcon="sceiba" class="app-logo"></mat-icon>
+        <h1 class="app-title m-0 text-xl font-semibold">
+          {{ config.title }}
+        </h1>
+      </div>
     </div>
 
     <mat-menu #userMenu="matMenu">
@@ -60,40 +44,49 @@
       #snav
       mode="side"
       [mode]="isMobile() ? 'over' : 'side'"
+      [opened]="!isMobile()"
       [fixedInViewport]="isMobile()"
       fixedTopGap="56"
     >
       @if (config.menu) {
       <mat-nav-list class="p-4">
         @for (item of config.menu; track item) { @if (item.children) {
-        <div mat-subheader>
+        <div mat-subheader class="menu-subheader">
           {{ item.label }}
         </div>
         @for (child of item.children; track child) {
         <mat-list-item
           [routerLink]="child.route"
           routerLinkActive="active"
-          (click)="snav.toggle()"
+          [routerLinkActiveOptions]="{ exact: child.route === '/' }"
+          (click)="isMobile() && snav.toggle()"
+          class="menu-item"
         >
           @if (child.icon) {
-          <mat-icon matListIcon>{{ child.icon }}</mat-icon>
+          <mat-icon matListIcon class="menu-icon">{{ child.icon }}</mat-icon>
           }
-          <div matListItemTitle>{{ child.label }}</div>
-          <div matListItemLine>{{ child.description }}</div>
+          <div matListItemTitle class="menu-label">{{ child.label }}</div>
+          <div matListItemLine class="menu-description">
+            {{ child.description }}
+          </div>
         </mat-list-item>
         }
-        <mat-divider></mat-divider>
-        }@else {
+        <mat-divider class="menu-divider"></mat-divider>
+        } @else {
         <mat-list-item
           [routerLink]="item.route"
           routerLinkActive="active"
-          (click)="snav.toggle()"
+          [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+          (click)="isMobile() && snav.toggle()"
+          class="menu-item"
         >
           @if (item.icon) {
-          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+          <mat-icon matListIcon class="menu-icon">{{ item.icon }}</mat-icon>
           }
-          <div matListItemTitle>{{ item.label }}</div>
-          <span matListItemLine>{{ item.description }}</span>
+          <div matListItemTitle class="menu-label">{{ item.label }}</div>
+          <span matListItemLine class="menu-description">{{
+            item.description
+          }}</span>
         </mat-list-item>
         } }
       </mat-nav-list>

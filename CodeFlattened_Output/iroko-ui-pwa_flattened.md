@@ -1,9 +1,9 @@
 Repository Summary:
-Files analyzed: 105
-Directories scanned: 3944
-Total size: 230.92 KB (236466 bytes)
-Estimated tokens: 59116
-Processing time: 6.31 seconds
+Files analyzed: 109
+Directories scanned: 3990
+Total size: 268.08 KB (274512 bytes)
+Estimated tokens: 68628
+Processing time: 2.28 seconds
 
 
 ## Table of Contents
@@ -24,32 +24,33 @@ Processing time: 6.31 seconds
       - [output-v1.0.0.json](#output-v1_0_0_json) - 10.0 KB
       - [package.json](#package_json) - 1.3 KB
       - [and 6 more Configuration files...]
-    - Documentation (1 files):
+    - Documentation (2 files):
+      - [about.md](#about_md) - 3.3 KB
       - [README.md](#README_md) - 1011 bytes
-    - JavaScript/TypeScript (38 files):
-      - [app.component.ts](#app_component_ts) - 4.2 KB
-      - [app.config.ts](#app_config_ts) - 1.1 KB
-      - [app.routes.ts](#app_routes_ts) - 2.1 KB
+    - JavaScript/TypeScript (39 files):
+      - [about.component.ts](#about_component_ts) - 1.4 KB
+      - [app.component.ts](#app_component_ts) - 4.6 KB
+      - [app.config.ts](#app_config_ts) - 1.2 KB
+      - [app.routes.ts](#app_routes_ts) - 2.3 KB
       - [cache.service.ts](#cache_service_ts) - 1.7 KB
       - [caching.interceptor.ts](#caching_interceptor_ts) - 846 bytes
       - [config.service.ts](#config_service_ts) - 608 bytes
       - [cypher-builder.service.ts](#cypher-builder_service_ts) - 6.2 KB
       - [cypher-query.model.ts](#cypher-query_model_ts) - 118 bytes
       - [enhanced-node-viewer.component.ts](#enhanced-node-viewer_component_ts) - 7.6 KB
-      - [error-handler.service.ts](#error-handler_service_ts) - 1.9 KB
-      - [and 28 more JavaScript/TypeScript files...]
-    - Web (50 files):
-      - [_page-styles.scss](#_page-styles_scss) - 677 bytes
-      - [app.component.html](#app_component_html) - 3.6 KB
-      - [app.component.scss](#app_component_scss) - 2.6 KB
+      - [and 29 more JavaScript/TypeScript files...]
+    - Web (52 files):
+      - [_page-styles.scss](#_page-styles_scss) - 761 bytes
+      - [about.component.html](#about_component_html) - 1.1 KB
+      - [about.component.scss](#about_component_scss) - 698 bytes
+      - [app.component.html](#app_component_html) - 3.7 KB
+      - [app.component.scss](#app_component_scss) - 6.5 KB
       - [enhanced-node-viewer.component.html](#enhanced-node-viewer_component_html) - 3.6 KB
       - [enhanced-node-viewer.component.scss](#enhanced-node-viewer_component_scss) - 3.4 KB
       - [error.component.html](#error_component_html) - 20 bytes
       - [error.component.scss](#error_component_scss) - 0 bytes
       - [generic-list.component.html](#generic-list_component_html) - 5.4 KB
-      - [generic-list.component.scss](#generic-list_component_scss) - 4.4 KB
-      - [global-search.component.html](#global-search_component_html) - 1.9 KB
-      - [and 40 more Web files...]
+      - [and 42 more Web files...]
 - [Architecture and Relationships](#architecture-and-relationships)
   - [File Dependencies](#file-dependencies)
   - [Class Relationships](#class-relationships)
@@ -58,7 +59,7 @@ Processing time: 6.31 seconds
 ## Project Summary <a id="project-summary"></a>
 
 # Project Digest: iroko-ui-pwa
-Generated on: Mon Sep 29 2025 16:44:36 GMT-0400 (hora de verano de Cuba)
+Generated on: Mon Sep 29 2025 23:22:16 GMT-0400 (hora de verano de Cuba)
 Source: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 
@@ -86,6 +87,8 @@ Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
     [DIR] fonts
     [DIR] icons
     [DIR] img
+    [DIR] md
+      [FILE] about.md
   [DIR] src
     [DIR] app
       [DIR] api
@@ -145,6 +148,10 @@ Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
         [FILE] caching.interceptor.ts
       [DIR] pages
         [FILE] _page-styles.scss
+        [DIR] about
+          [FILE] about.component.html
+          [FILE] about.component.scss
+          [FILE] about.component.ts
         [DIR] error
           [FILE] error.component.html
           [FILE] error.component.scss
@@ -382,9 +389,522 @@ export class AppComponent implements OnInit {
   ngOnDestroy(): void {
     this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
+
+  getMainContainerClass(): string {
+    return this.isMobile()
+      ? 'main-is-mobile flex flex-col min-h-screen'
+      : 'flex flex-col min-h-screen';
+  }
+  // Add this method to the AppComponent class in app.component.ts
+  getSidenavOpenedState(): boolean {
+    // Expanded by default on desktop, collapsed on mobile
+    return !this.isMobile();
+  }
 }
 
-## package.json <a id="package_json"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/app.component.scss <a id="app_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
+
+/* src/app/app.component.scss */
+.app-footer {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  padding: 20px 0;
+  margin-top: auto;
+  width: 100%;
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .footer-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    @media (max-width: 768px) {
+      justify-content: center;
+    }
+  }
+
+  .footer-logo {
+    width: 20px;
+    height: 20px;
+    color: white;
+  }
+
+  .footer-text {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .footer-copyright {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  .footer-link {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  }
+}
+// Ensure the toolbar itself is styled consistently
+mat-toolbar {
+  // Use Angular Material's theme colors
+  // background: mat.get-color-from-palette(#{your-theme}, primary, 700); // Or primary default
+  // color: white; // Or use a text color from the palette
+  height: 64px; // Standard height
+  z-index: 1000; // Ensure it stays on top
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Add subtle shadow
+
+  // Ensure content aligns correctly within the toolbar
+  display: flex;
+  align-items: center;
+  padding: 0 16px; // Add horizontal padding
+
+  // Remove any fixed positioning if it's causing layout issues elsewhere
+  // position: fixed; // Consider if this is needed globally or just for overlay effect
+  // top: 0;
+  // left: 0;
+  // right: 0;
+}
+
+// Right Section (Search & User Menu)
+.toolbar-right-section {
+  // Add this class to the right div in HTML if needed for specificity
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; // Handled by Tailwind 'justify-end'
+  gap: 12px; // Consistent spacing between right items
+  flex: none; // Handled by Tailwind 'flex-none'
+}
+// Search Container Styling (ensure it fits in toolbar)
+.search-container {
+  // The class applied to the app-global-search component
+  // Tailwind: hidden md:block
+  // Max width might need adjustment based on design
+  max-width: 400px; // Or adjust as needed
+  flex-shrink: 1; // Allow it to shrink if necessary
+  // Ensure internal input fits
+  // Styles for the internal input field might be needed in global-search.component.scss
+  // or via view encapsulation piercing here (less ideal)
+  // Example: .mat-form-field { width: 100%; }
+}
+
+// User Menu Button
+.user-menu-button {
+  // Add this class to the user menu button in HTML if needed
+  color: inherit; // Inherits white from mat-toolbar
+  // Add specific styles if needed
+  // Angular Material button styles usually handle focus/hover well
+}
+
+// Center Section (Logo & Title)
+.app-branding {
+  // Tailwind classes from HTML: flex items-center justify-center flex-1
+  // These are good. Maybe add specific alignment if needed
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1; // Ensure it takes available space
+  gap: 8px; // Space between logo and title
+  // Prevent shrinking if side content is large
+  flex-shrink: 0;
+}
+
+/* App Bar Enhancements */
+.app-logo {
+  width: 32px;
+  height: 32px;
+  color: white;
+  margin-right: 1em;
+}
+
+.app-title {
+  color: #006d33; // This seems specific, consider using a theme color
+  // color: mat.get-color-from-palette(#{your-theme}, primary, contrast); // Alternative
+  font-weight: 600; // Already present
+  font-size: 1.25rem; // Or use a theme-defined typography level
+  white-space: nowrap; // Prevents title breaking
+  overflow: hidden; // In case title is very long
+  text-overflow: ellipsis; // Show ellipsis if truncated
+}
+
+/* Menu Enhancements */
+.menu-subheader {
+  color: #666;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-left: 16px;
+}
+
+.menu-item {
+  border-radius: 6px;
+  margin: 2px 0;
+  transition: all 0.2s ease;
+  height: 80px !important;
+  min-height: 80px !important;
+
+  &:hover {
+    background-color: rgba(0, 109, 51, 0.08);
+  }
+
+  &.active {
+    background-color: rgba(0, 109, 51, 0.12) !important;
+    color: #006d33;
+
+    .menu-icon {
+      color: #006d33 !important;
+    }
+
+    .menu-label {
+      color: #006d33 !important;
+      font-weight: 600;
+    }
+
+    .menu-description {
+      color: rgba(0, 109, 51, 0.8) !important;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background-color: #006d33;
+      border-radius: 0 2px 2px 0;
+    }
+  }
+}
+
+.menu-icon {
+  color: #666;
+  transition: color 0.2s ease;
+  margin-right: 12px !important;
+}
+
+.menu-label {
+  font-weight: 500;
+  color: #333;
+  transition: color 0.2s ease;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.menu-description {
+  color: #666;
+  font-size: 0.7rem;
+  transition: color 0.2s ease;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+.menu-divider {
+  margin: 8px 0;
+}
+
+/* Ensure the main layout uses flexbox properly */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .main-is-mobile {
+    .header-toolbar {
+      padding: 0 8px;
+    }
+  }
+
+  .menu-item {
+    height: 80px !important;
+    min-height: 80px !important;
+
+    .menu-label {
+      font-size: 0.85rem;
+    }
+
+    .menu-description {
+      font-size: 0.65rem;
+    }
+  }
+}
+
+/* Sidenav improvements */
+mat-sidenav {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  border-right: none;
+
+  @media (max-width: 768px) {
+    width: 280px;
+  }
+
+  @media (min-width: 769px) {
+    width: 300px;
+  }
+}
+
+mat-sidenav-content {
+  background-color: #f8f9fa;
+  transition: margin 0.3s ease;
+}
+
+/* Global search in mobile menu */
+.mobile-search-menu {
+  .mat-menu-content {
+    padding: 0 !important;
+
+    .search-container {
+      padding: 16px;
+      width: 300px;
+    }
+  }
+}
+
+/* Fix mat-list-item default padding */
+::ng-deep {
+  .mat-mdc-list-item {
+    --mdc-list-list-item-container-shape: 6px;
+
+    .mdc-list-item__content {
+      padding: 0 8px !important;
+    }
+  }
+
+  /* Remove default active background from Angular Material */
+  .mat-mdc-list-item.mat-mdc-list-item-interactive.mat-mdc-list-item-single-line.mdc-list-item--with-one-line {
+    &.active {
+      --mdc-list-list-item-container-color: transparent !important;
+    }
+  }
+}
+
+## .gitignore <a id="gitignore"></a>
+
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
+## README.md <a id="README_md"></a>
+
+# IrokoUiPwa
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
+
+## Principales secciones
+
+- Home
+- Revistas MES
+- Catalogo de Fuentes (Sources)
+- Organizaciones
+- Personas
+- Proyectos
+- Resultados de investigacion (Outputs)
+
+## Backend
+
+Base de datos de Neo4j, accesible a traves de un api de solo lectura a la que se le puede hacer consultas en cypher
+
+## Principales comoponentes:
+
+- inicio: muestra resumen de las estadisticas generales, por cada seccion
+
+- listas: se utiliza para mostrar las listas de las entidades principales. Cada lista es posible filtrarla por los metadatos del nodo.
+
+- node-viewer: muestra un nodo, con sus metadatos correspondientes y ademas las estadisticas de ese nodo. Por cada tipo de relacion que tiene un nodo existe un tab donde se muesta la lista de nodos que estan relacionados con el nodo que se esta visitando. Si se tienen los permisos adecuados, es posible editar los metadatos de un nodo y tambien sus relaciones.
+
+## src/app/app.component.html <a id="app_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
+
+<!-- src/app/app.component.html -->
+<div [class]="getMainContainerClass()">
+  <mat-toolbar
+    color="primary"
+    class="flex justify-between items-center px-4 fixed z-[2] main-is-mobile:header-toolbar"
+  >
+    <!-- Left Section: Drawer Toggle -->
+    <div class="flex items-center flex-none">
+      <button mat-icon-button (click)="snav.toggle()" class="drawer-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <!-- Center Section: App Logo & Title -->
+    <div class="app-branding flex items-center justify-center flex-1">
+      <div class="flex items-center gap-3 app-branding">
+        <mat-icon svgIcon="sceiba" class="app-logo"></mat-icon>
+        <h1 class="app-title m-0 text-xl font-semibold">
+          {{ config.title }}
+        </h1>
+      </div>
+    </div>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #mobileMenu="matMenu" class="mobile-search-menu">
+      <div class="p-4">
+        <app-global-search></app-global-search>
+      </div>
+    </mat-menu>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="flex-1 main-is-mobile:flex-[1_0_auto]">
+    <mat-sidenav
+      #snav
+      mode="side"
+      [mode]="isMobile() ? 'over' : 'side'"
+      [opened]="!isMobile()"
+      [fixedInViewport]="isMobile()"
+      fixedTopGap="56"
+    >
+      @if (config.menu) {
+      <mat-nav-list class="p-4">
+        @for (item of config.menu; track item) { @if (item.children) {
+        <div mat-subheader class="menu-subheader">
+          {{ item.label }}
+        </div>
+        @for (child of item.children; track child) {
+        <mat-list-item
+          [routerLink]="child.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: child.route === '/' }"
+          (click)="isMobile() && snav.toggle()"
+          class="menu-item"
+        >
+          @if (child.icon) {
+          <mat-icon matListIcon class="menu-icon">{{ child.icon }}</mat-icon>
+          }
+          <div matListItemTitle class="menu-label">{{ child.label }}</div>
+          <div matListItemLine class="menu-description">
+            {{ child.description }}
+          </div>
+        </mat-list-item>
+        }
+        <mat-divider class="menu-divider"></mat-divider>
+        } @else {
+        <mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+          (click)="isMobile() && snav.toggle()"
+          class="menu-item"
+        >
+          @if (item.icon) {
+          <mat-icon matListIcon class="menu-icon">{{ item.icon }}</mat-icon>
+          }
+          <div matListItemTitle class="menu-label">{{ item.label }}</div>
+          <span matListItemLine class="menu-description">{{
+            item.description
+          }}</span>
+        </mat-list-item>
+        } }
+      </mat-nav-list>
+      }
+    </mat-sidenav>
+
+    <mat-sidenav-content class="p-4 md:p-8 h-full">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <mat-icon svgIcon="sceiba" class="footer-logo"></mat-icon>
+        <span class="footer-text">Iroko Knowledge Graph Explorer</span>
+      </div>
+      <div class="footer-section">
+        <span class="footer-copyright">
+          &copy; 2025 Sceiba. Powered by Neo4j.
+        </span>
+      </div>
+      <div class="footer-section">
+        <a routerLink="/about" class="footer-link">About</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+## package.json <a id="package_json"></a>
 
 {
   "name": "iroko-ui-pwa",
@@ -436,7 +956,216 @@ export class AppComponent implements OnInit {
   }
 }
 
-## src/app/app.routes.ts <a id="app_routes_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## tsconfig.json <a id="tsconfig_json"></a>
+
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
+
+## src/main.ts <a id="main_ts"></a>
+
+### Dependencies
+
+- `@angular/platform-browser`
+- `./app/app.config`
+- `./app/app.component`
+
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch((err) => console.error(err));
+
+## src/app/app.config.ts <a id="app_config_ts"></a>
+
+### Dependencies
+
+- `@angular/router`
+- `./app.routes`
+- `@angular/service-worker`
+- `@angular/platform-browser/animations`
+- `ngx-markdown`
+- `./api/services/iroko-api.service`
+- `./services/error-handler.service`
+- `./interceptors/caching.interceptor`
+
+// src/app/app.config.ts
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  isDevMode,
+  ErrorHandler,
+} from '@angular/core';
+import { provideRouter } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideServiceWorker } from '@angular/service-worker';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+import { provideMarkdown } from 'ngx-markdown';
+
+import { IrokoApiService } from './api/services/iroko-api.service';
+import { ErrorHandlerService } from './services/error-handler.service';
+import { cachingInterceptor } from './interceptors/caching.interceptor';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideAnimations(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
+    provideMarkdown(), // Add this line
+    IrokoApiService,
+    {
+      provide: ErrorHandler,
+      useClass: ErrorHandlerService,
+    },
+  ],
+};
+
+## src/app/pages/about/about.component.ts <a id="about_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+- `@angular/material/card`
+- `@angular/material/progress-spinner`
+- `@angular/material/icon`
+
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  MarkdownViewerComponent,
+  MarkdownError,
+} from '../../components/markdown-viewer/markdown-viewer.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-about',
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MarkdownViewerComponent,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIcon,
+  ],
+})
+export class AboutComponent implements OnInit {
+  isLoading = true;
+  loadError = false;
+  errorMessage = '';
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'About Iroko',
+      description: 'Learn about the Iroko Knowledge Graph Explorer platform',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onMarkdownLoad() {
+    this.isLoading = false;
+    this.loadError = false;
+  }
+
+  onMarkdownError(error: MarkdownError) {
+    this.isLoading = false;
+    this.loadError = true;
+    this.errorMessage = error.message;
+  }
+}
+
+## src/app/interceptors/caching.interceptor.ts <a id="caching_interceptor_ts"></a>
+
+### Dependencies
+
+- `rxjs`
+- `rxjs/operators`
+
+// src/app/interceptors/caching.interceptor.ts
+import {
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpHandlerFn,
+  HttpEvent,
+  HttpResponse,
+} from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+const cache = new Map<string, any>();
+
+export const cachingInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  // Only cache GET requests to the API
+  if (req.method !== 'GET' || !req.url.includes('/api/')) {
+    return next(req);
+  }
+
+  const cachedResponse = cache.get(req.urlWithParams);
+  if (cachedResponse) {
+    return of(cachedResponse.clone());
+  }
+
+  return next(req).pipe(
+    tap((event) => {
+      if (event instanceof HttpResponse) {
+        cache.set(req.urlWithParams, event.clone());
+      }
+    })
+  );
+};
+
+## src/app/app.routes.ts <a id="app_routes_ts"></a>
 
 ### Dependencies
 
@@ -453,8 +1182,8 @@ export class AppComponent implements OnInit {
 - `./pages/vocabularies/vocabularies.component`
 - `./pages/search-results/search-results.component`
 - `./pages/node-view/node-view.component`
+- `./pages/about/about.component`
 
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { QueryPageComponent } from './pages/query-page/query-page.component';
 import { ErrorComponent } from './pages/error/error.component';
@@ -468,6 +1197,7 @@ import { OutputsComponent } from './pages/outputs/outputs.component';
 import { VocabulariesComponent } from './pages/vocabularies/vocabularies.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { NodeViewComponent } from './pages/node-view/node-view.component';
+import { AboutComponent } from './pages/about/about.component'; // Add this import
 
 export const routes: Routes = [
   {
@@ -506,7 +1236,7 @@ export const routes: Routes = [
     data: { title: 'Research Outputs' },
   },
   {
-    path: 'vocabs',
+    path: 'vocabularies',
     component: VocabulariesComponent,
     data: { title: 'Vocabularies' },
   },
@@ -526,13 +1256,146 @@ export const routes: Routes = [
     data: { title: 'Node Details' },
   },
   {
+    path: 'about', // Add this route
+    component: AboutComponent,
+    data: { title: 'About' },
+  },
+  {
     path: '**',
     component: ErrorComponent,
     data: { title: 'Page Not Found' },
   },
 ];
 
-## src/app/services/cypher-builder.service.ts <a id="cypher-builder_service_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/services/cache.service.ts <a id="cache_service_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `rxjs`
+
+// src/app/services/cache.service.ts
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+interface CacheItem {
+  data: any;
+  timestamp: number;
+  ttl: number; // Time to live in milliseconds
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CacheService {
+  private cache = new Map<string, CacheItem>();
+  private defaultTTL = 5 * 60 * 1000; // 5 minutes
+
+  constructor() {
+    // Clean up expired cache items every minute
+    setInterval(() => this.cleanup(), 60 * 1000);
+  }
+
+  set(key: string, data: any, ttl: number = this.defaultTTL): void {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl,
+    });
+  }
+
+  get(key: string): any | null {
+    const item = this.cache.get(key);
+    if (!item) return null;
+
+    if (Date.now() - item.timestamp > item.ttl) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return item.data;
+  }
+
+  getOrFetch<T>(
+    key: string,
+    fetchFn: () => Observable<T>,
+    ttl: number = this.defaultTTL
+  ): Observable<T> {
+    const cached = this.get(key);
+    if (cached !== null) {
+      return of(cached);
+    }
+
+    return new Observable<T>((observer) => {
+      fetchFn().subscribe({
+        next: (data) => {
+          this.set(key, data, ttl);
+          observer.next(data);
+          observer.complete();
+        },
+        error: (err) => observer.error(err),
+      });
+    });
+  }
+
+  delete(key: string): boolean {
+    return this.cache.delete(key);
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+
+  private cleanup(): void {
+    const now = Date.now();
+    this.cache.forEach((item, key) => {
+      if (now - item.timestamp > item.ttl) {
+        this.cache.delete(key);
+      }
+    });
+  }
+}
+
+## src/app/services/config.service.ts <a id="config_service_ts"></a>
+
+### Dependencies
+
+- `@angular/common/http`
+- `@angular/core`
+- `@angular/material/menu`
+- `rxjs`
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MatMenuItem } from '@angular/material/menu';
+import { Observable } from 'rxjs';
+
+export interface MenuItem {
+  label: string;
+  description: string;
+  icon?: string;
+  route?: string;
+  children?: MenuItem[];
+  expanded?: boolean;
+}
+
+export interface Config {
+  title: string;
+  menu: MenuItem[];
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ConfigService {
+  constructor(private http: HttpClient) {}
+
+  getConfig(): Observable<Config> {
+    return this.http.get<Config>('/config.json');
+  }
+}
+
+## src/app/services/cypher-builder.service.ts <a id="cypher-builder_service_ts"></a>
 
 ### Dependencies
 
@@ -789,7 +1652,15 @@ export class CypherBuilderService {
   }
 }
 
-## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.ts <a id="enhanced-node-viewer_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/api/models/cypher-query.model.ts <a id="cypher-query_model_ts"></a>
+
+export interface CypherQuery {
+  query: string;
+  parameters?: { [key: string]: any } | null;
+  readonly?: boolean;
+}
+
+## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.ts <a id="enhanced-node-viewer_component_ts"></a>
 
 ### Dependencies
 
@@ -1081,139 +1952,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
   }
 }
 
-## src/app/services/cache.service.ts <a id="cache_service_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `@angular/core`
-- `rxjs`
-
-// src/app/services/cache.service.ts
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-
-interface CacheItem {
-  data: any;
-  timestamp: number;
-  ttl: number; // Time to live in milliseconds
-}
-
-@Injectable({
-  providedIn: 'root',
-})
-export class CacheService {
-  private cache = new Map<string, CacheItem>();
-  private defaultTTL = 5 * 60 * 1000; // 5 minutes
-
-  constructor() {
-    // Clean up expired cache items every minute
-    setInterval(() => this.cleanup(), 60 * 1000);
-  }
-
-  set(key: string, data: any, ttl: number = this.defaultTTL): void {
-    this.cache.set(key, {
-      data,
-      timestamp: Date.now(),
-      ttl,
-    });
-  }
-
-  get(key: string): any | null {
-    const item = this.cache.get(key);
-    if (!item) return null;
-
-    if (Date.now() - item.timestamp > item.ttl) {
-      this.cache.delete(key);
-      return null;
-    }
-
-    return item.data;
-  }
-
-  getOrFetch<T>(
-    key: string,
-    fetchFn: () => Observable<T>,
-    ttl: number = this.defaultTTL
-  ): Observable<T> {
-    const cached = this.get(key);
-    if (cached !== null) {
-      return of(cached);
-    }
-
-    return new Observable<T>((observer) => {
-      fetchFn().subscribe({
-        next: (data) => {
-          this.set(key, data, ttl);
-          observer.next(data);
-          observer.complete();
-        },
-        error: (err) => observer.error(err),
-      });
-    });
-  }
-
-  delete(key: string): boolean {
-    return this.cache.delete(key);
-  }
-
-  clear(): void {
-    this.cache.clear();
-  }
-
-  private cleanup(): void {
-    const now = Date.now();
-    this.cache.forEach((item, key) => {
-      if (now - item.timestamp > item.ttl) {
-        this.cache.delete(key);
-      }
-    });
-  }
-}
-
-## src/app/interceptors/caching.interceptor.ts <a id="caching_interceptor_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `rxjs`
-- `rxjs/operators`
-
-// src/app/interceptors/caching.interceptor.ts
-import {
-  HttpInterceptorFn,
-  HttpRequest,
-  HttpHandlerFn,
-  HttpEvent,
-  HttpResponse,
-} from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
-const cache = new Map<string, any>();
-
-export const cachingInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> => {
-  // Only cache GET requests to the API
-  if (req.method !== 'GET' || !req.url.includes('/api/')) {
-    return next(req);
-  }
-
-  const cachedResponse = cache.get(req.urlWithParams);
-  if (cachedResponse) {
-    return of(cachedResponse.clone());
-  }
-
-  return next(req).pipe(
-    tap((event) => {
-      if (event instanceof HttpResponse) {
-        cache.set(req.urlWithParams, event.clone());
-      }
-    })
-  );
-};
-
-## src/app/services/error-handler.service.ts <a id="error-handler_service_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/services/error-handler.service.ts <a id="error-handler_service_ts"></a>
 
 ### Dependencies
 
@@ -1284,59 +2023,25 @@ export class ErrorHandlerService implements ErrorHandler {
   }
 }
 
-## src/app/app.config.ts <a id="app_config_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/error/error.component.ts <a id="error_component_ts"></a>
 
 ### Dependencies
 
-- `@angular/router`
-- `./app.routes`
-- `@angular/service-worker`
-- `@angular/platform-browser/animations`
-- `./api/services/iroko-api.service`
-- `./services/error-handler.service`
-- `./interceptors/caching.interceptor`
+- `@angular/core`
 
-// src/app/app.config.ts
-import {
-  ApplicationConfig,
-  provideZoneChangeDetection,
-  isDevMode,
-  ErrorHandler,
-} from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { Component } from '@angular/core';
 
-import { routes } from './app.routes';
-import { provideServiceWorker } from '@angular/service-worker';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+@Component({
+  selector: 'app-error',
+  imports: [],
+  templateUrl: './error.component.html',
+  styleUrl: './error.component.scss'
+})
+export class ErrorComponent {
 
-import { IrokoApiService } from './api/services/iroko-api.service';
-import { ErrorHandlerService } from './services/error-handler.service';
-import { cachingInterceptor } from './interceptors/caching.interceptor';
+}
 
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideAnimations(),
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
-    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
-    IrokoApiService,
-    {
-      provide: ErrorHandler,
-      useClass: ErrorHandlerService,
-    },
-  ],
-};
-
-## src/app/services/export.service.ts <a id="export_service_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/services/export.service.ts <a id="export_service_ts"></a>
 
 ### Dependencies
 
@@ -1415,7 +2120,7 @@ export class ExportService {
   }
 }
 
-## src/app/components/generic-list/generic-list.component.ts <a id="generic-list_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/components/generic-list/generic-list.component.ts <a id="generic-list_component_ts"></a>
 
 ### Dependencies
 
@@ -1852,274 +2557,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 }
 
-## src/app/pages/home/home.component.ts <a id="home_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-- `@angular/material/card`
-- `@angular/material/button`
-- `@angular/material/icon`
-- `@angular/material/grid-list`
-
-// src/app/pages/home/home.component.ts
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatGridListModule } from '@angular/material/grid-list';
-
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatGridListModule,
-  ],
-})
-export class HomeComponent implements OnInit, OnDestroy {
-  stats = [
-    {
-      label: 'Organizations',
-      count: '1,234',
-      icon: 'corporate_fare',
-      route: '/organizations',
-      color: 'primary',
-    },
-    {
-      label: 'Researchers',
-      count: '8,765',
-      icon: 'people',
-      route: '/persons',
-      color: 'accent',
-    },
-    {
-      label: 'Research Outputs',
-      count: '45,678',
-      icon: 'article',
-      route: '/outputs',
-      color: 'warn',
-    },
-    {
-      label: 'Projects',
-      count: '2,345',
-      icon: 'folder',
-      route: '/projects',
-      color: 'primary',
-    },
-    {
-      label: 'Data Sources',
-      count: '567',
-      icon: 'source',
-      route: '/sources',
-      color: 'accent',
-    },
-    {
-      label: 'Vocabularies',
-      count: '89',
-      icon: 'tag',
-      route: '/vocabs',
-      color: 'warn',
-    },
-  ];
-
-  quickActions = [
-    {
-      label: 'Advanced Search',
-      description: 'Search across all entities',
-      icon: 'search',
-      route: '/search',
-    },
-    {
-      label: 'Cypher Query',
-      description: 'Run custom graph queries',
-      icon: 'code',
-      route: '/query',
-    },
-    {
-      label: 'Browse Catalog',
-      description: 'Explore by categories',
-      icon: 'explore',
-      route: '/sources',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Iroko Knowledge Graph Explorer',
-      description:
-        'Explore research data, organizations, and publications in the Cuban research ecosystem',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  ngOnDestroy() {
-    this.metadataService.resetMetadata();
-  }
-}
-
-## src/app/pages/node-view/node-view.component.ts <a id="node-view_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `@angular/material/card`
-- `@angular/material/button`
-- `@angular/material/icon`
-- `@angular/material/progress-spinner`
-- `../../services/metadata.service`
-- `../../components/enhanced-node-viewer/enhanced-node-viewer.component`
-- `rxjs`
-
-// src/app/pages/node-view/node-view.component.ts
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-import { MetadataService } from '../../services/metadata.service';
-import { EnhancedNodeViewerComponent } from '../../components/enhanced-node-viewer/enhanced-node-viewer.component';
-import { Subscription } from 'rxjs';
-
-@Component({
-  selector: 'app-node-view',
-  templateUrl: './node-view.component.html',
-  styleUrls: ['./node-view.component.scss'],
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    EnhancedNodeViewerComponent,
-  ],
-})
-export class NodeViewComponent implements OnInit {
-  nodeType: string = '';
-  nodeId: string = '';
-  private routeSub!: Subscription;
-
-  // Map entity types to display names
-  private nodeTypes: { [key: string]: string } = {
-    organization: 'Organization',
-    person: 'Person',
-    source: 'Source',
-    project: 'Project',
-    output: 'Output',
-    term: 'Term',
-  };
-
-  // Map entity types to display names
-  private typeDisplayNames: { [key: string]: string } = {
-    Organization: 'Organization',
-    Person: 'Researcher',
-    Source: 'Data Source',
-    Project: 'Research Project',
-    Output: 'Research Output',
-    Term: 'Vocabulary Term',
-  };
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private metadataService: MetadataService
-  ) {}
-
-  ngOnInit() {
-    this.routeSub = this.route.params.subscribe((params) => {
-      this.nodeType = this.nodeTypes[params['type']];
-      this.nodeId = params['id'];
-      console.log(this.nodeId, 'AAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
-      const displayName = this.typeDisplayNames[this.nodeType] || this.nodeType;
-      this.metadataService.updateMetadata({
-        title: `${displayName} Details`,
-        description: `View details for ${displayName.toLowerCase()}`,
-      });
-    });
-  }
-  ngOnDestroy() {
-    // Clean up subscription to prevent memory leaks
-    if (this.routeSub) {
-      this.routeSub.unsubscribe();
-    }
-  }
-
-  goBack() {
-    // Navigate back to the previous page or the list page
-    const listRoute = this.getListRoute();
-    this.router.navigate([listRoute]);
-  }
-
-  private getListRoute(): string {
-    const routeMap: { [key: string]: string } = {
-      Organization: '/organizations',
-      Person: '/persons',
-      Source: '/sources',
-      Project: '/projects',
-      Output: '/outputs',
-      Term: '/vocabs',
-    };
-
-    return routeMap[this.nodeType] || '/';
-  }
-
-  getBreadcrumbLabel(): string {
-    return this.typeDisplayNames[this.nodeType] || this.nodeType;
-  }
-
-  onRelatedNodeSelect(nodeData: any): void {
-    console.log('NodeViewComponent - Related node selected:', nodeData);
-    // If you want to handle navigation to related nodes from within the node view
-    // You can implement this based on your requirements
-  }
-}
-
-## src/app/components/markdown-viewer/markdown-viewer.component.ts <a id="markdown-viewer_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `ngx-markdown`
-
-// src/app/components/markdown-viewer/markdown-viewer.component.ts
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MarkdownModule } from 'ngx-markdown';
-
-@Component({
-  selector: 'app-markdown-viewer',
-  templateUrl: './markdown-viewer.component.html',
-  styleUrls: ['./markdown-viewer.component.scss'],
-  imports: [CommonModule, MarkdownModule],
-})
-export class MarkdownViewerComponent {
-  @Input() content: string = '';
-  @Input() src?: string;
-}
-
-## src/app/components/global-search/global-search.component.ts <a id="global-search_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/components/global-search/global-search.component.ts <a id="global-search_component_ts"></a>
 
 ### Dependencies
 
@@ -2261,7 +2699,7 @@ export class GlobalSearchComponent implements OnInit {
   }
 }
 
-## src/app/pages/outputs/outputs.component.ts <a id="outputs_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/home/home.component.ts <a id="home_component_ts"></a>
 
 ### Dependencies
 
@@ -2269,204 +2707,275 @@ export class GlobalSearchComponent implements OnInit {
 - `@angular/common`
 - `@angular/router`
 - `../../services/metadata.service`
+- `../../api/services/iroko-api.service`
+- `@angular/material/card`
+- `@angular/material/button`
+- `@angular/material/icon`
+- `@angular/material/grid-list`
+- `@angular/material/progress-spinner`
 
-// src/app/pages/outputs/outputs.component.ts
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
+import { IrokoApiService } from '../../api/services/iroko-api.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-outputs',
-  templateUrl: './outputs.component.html',
-  styleUrls: ['./outputs.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
+  ],
 })
-export class OutputsComponent {
-  outputColumns: ListColumn[] = [
+export class HomeComponent implements OnInit, OnDestroy {
+  stats = [
     {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
+      label: 'Organizations',
+      count: 0,
+      icon: 'corporate_fare',
+      route: '/organizations',
+      color: 'primary',
+      type: 'Organization',
     },
     {
-      name: 'title',
-      label: 'Title',
-      sortable: true,
-      filterable: true,
-      type: 'string',
+      label: 'Researchers',
+      count: 0,
+      icon: 'people',
+      route: '/persons',
+      color: 'accent',
+      type: 'Person',
     },
     {
-      name: 'creators',
-      label: 'Authors',
-      sortable: false,
-      filterable: true,
-      type: 'array',
+      label: 'Research Outputs',
+      count: 0,
+      icon: 'article',
+      route: '/outputs',
+      color: 'warn',
+      type: 'Output',
     },
     {
-      name: 'description',
-      label: 'Abstract',
-      sortable: false,
-      filterable: true,
-      type: 'string',
+      label: 'Projects',
+      count: 0,
+      icon: 'folder',
+      route: '/projects',
+      color: 'primary',
+      type: 'Project',
     },
     {
-      name: 'publication_date',
-      label: 'Publication Date',
-      sortable: true,
-      filterable: true,
-      type: 'date',
+      label: 'Data Sources',
+      count: 0,
+      icon: 'source',
+      route: '/sources',
+      color: 'accent',
+      type: 'Source',
     },
     {
-      name: 'publisher',
-      label: 'Publisher',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'types',
-      label: 'Document Types',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'language',
-      label: 'Language',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'keywords',
-      label: 'Keywords',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'source_repo',
-      label: 'Source Repository',
-      sortable: true,
-      filterable: true,
-      type: 'string',
+      label: 'Vocabularies',
+      count: 0,
+      icon: 'tag',
+      route: '/vocabularies',
+      color: 'warn',
+      type: 'Term',
     },
   ];
 
-  constructor(private metadataService: MetadataService) {}
+  quickActions = [
+    {
+      label: 'Advanced Search',
+      description: 'Search across all entities',
+      icon: 'search',
+      route: '/search',
+    },
+    {
+      label: 'Cypher Query',
+      description: 'Run custom graph queries',
+      icon: 'code',
+      route: '/query',
+    },
+    {
+      label: 'Browse Catalog',
+      description: 'Explore by categories',
+      icon: 'explore',
+      route: '/sources',
+    },
+  ];
+
+  isLoading = true;
+
+  constructor(
+    private metadataService: MetadataService,
+    private irokoApiService: IrokoApiService
+  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Research Outputs',
+      title: 'Iroko Knowledge Graph Explorer',
       description:
-        'Explore research publications, articles, and scientific outputs in the knowledge graph',
+        'Explore research data, organizations, and publications in the Cuban research ecosystem',
       authors: [],
       subjects: [],
     });
+
+    this.loadStatistics();
   }
 
-  onNodeSelected(node: any) {
-    console.log('Output selected:', node);
-    // Navigate to output detail or show dialog
+  ngOnDestroy() {
+    this.metadataService.resetMetadata();
+  }
+
+  private loadStatistics() {
+    const queries = this.stats.map((stat) =>
+      this.irokoApiService.executeQuery({
+        query: `MATCH (n:${stat.type}) RETURN count(n) AS count`,
+        parameters: {},
+        readonly: true,
+      })
+    );
+
+    // Execute all queries in parallel
+    Promise.all(queries.map((q) => q.toPromise()))
+      .then((results) => {
+        results.forEach((result, index) => {
+          if (result && result.length > 0) {
+            this.stats[index].count = result[0].count || 0;
+          }
+        });
+        this.isLoading = false;
+      })
+      .catch((error) => {
+        console.error('Error loading statistics:', error);
+        this.isLoading = false;
+      });
+  }
+
+  formatCount(count: number): string {
+    if (count >= 1000000) {
+      return (count / 1000000).toFixed(1) + 'M';
+    } else if (count >= 1000) {
+      return (count / 1000).toFixed(1) + 'K';
+    }
+    return count.toString();
   }
 }
 
-## src/app/pages/organizations/organizations.component.ts <a id="organizations_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/api/models/http-validation-error.model.ts <a id="http-validation-error_model_ts"></a>
+
+### Dependencies
+
+- `./validation-error.model`
+
+import { ValidationError } from './validation-error.model';
+
+export interface HTTPValidationError {
+  detail?: ValidationError[];
+}
+
+## src/app/api/services/iroko-api.service.ts <a id="iroko-api_service_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common/http`
+- `rxjs`
+- `rxjs/operators`
+- `../models/cypher-query.model`
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { CypherQuery } from '../models/cypher-query.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class IrokoApiService {
+  private apiUrl = '/api/v1';
+
+  constructor(private http: HttpClient) {}
+
+  executeQuery(queryData: CypherQuery): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/query`, queryData)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // Client-side or network error
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code
+      console.error(
+        `Backend returned code ${error.status}, ` +
+          `body was: ${JSON.stringify(error.error)}`
+      );
+    }
+    // Return an observable with a user-facing error message
+    return throwError(
+      () => new Error('Something bad happened; please try again later.')
+    );
+  }
+}
+
+## src/app/components/markdown-viewer/markdown-viewer.component.ts <a id="markdown-viewer_component_ts"></a>
 
 ### Dependencies
 
 - `@angular/core`
 - `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
+- `ngx-markdown`
 
-// src/app/pages/organizations/organizations.component.ts
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
+import { MarkdownModule } from 'ngx-markdown';
+
+export interface MarkdownError {
+  message: string;
+  originalError?: any;
+}
 
 @Component({
-  selector: 'app-organizations',
-  templateUrl: './organizations.component.html',
-  styleUrls: ['./organizations.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  selector: 'app-markdown-viewer',
+  templateUrl: './markdown-viewer.component.html',
+  styleUrls: ['./markdown-viewer.component.scss'],
+  imports: [CommonModule, MarkdownModule],
 })
-export class OrganizationsComponent {
-  organizationColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Name',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'types',
-      label: 'Types',
-      sortable: true,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'status',
-      label: 'Status',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'acronyms',
-      label: 'Acronyms',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'established',
-      label: 'Established',
-      sortable: true,
-      filterable: false,
-      type: 'date',
-    },
-  ];
+export class MarkdownViewerComponent {
+  @Input() content: string = '';
+  @Input() src?: string;
+  @Output() load = new EventEmitter<void>();
+  @Output() error = new EventEmitter<MarkdownError>();
 
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Organizations',
-      description: 'Explore organizations in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
+  onMarkdownLoad() {
+    this.load.emit();
   }
 
-  onNodeSelected(node: any) {
-    console.log('Organization selected:', node);
-    // You can navigate to a detail view or show a dialog here
+  onMarkdownError(error: any) {
+    const markdownError: MarkdownError = {
+      message:
+        typeof error === 'string'
+          ? error
+          : error?.message || 'Unknown error loading markdown',
+      originalError: error,
+    };
+    this.error.emit(markdownError);
   }
 }
 
-## src/app/pages/mes/mes.component.ts <a id="mes_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/mes/mes.component.ts <a id="mes_component_ts"></a>
 
 ### Dependencies
 
@@ -2583,7 +3092,210 @@ export class MesComponent {
   }
 }
 
-## src/app/pages/projects/projects.component.ts <a id="projects_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/services/metadata.service.ts <a id="metadata_service_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `rxjs`
+- `@angular/platform-browser`
+
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Meta, Title } from '@angular/platform-browser';
+
+export interface PageMetadata {
+  title: string;
+  abstract?: string;
+  description?: string;
+  keywords?: string[];
+  subjects?: string[];
+  authors?: string[];
+  // Add any other metadata fields you need
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MetadataService {
+  private defaultMetadata: PageMetadata = {
+    title: '',
+    abstract: '',
+    description: '',
+    keywords: [],
+    subjects: [],
+  };
+
+  private metadataSource = new BehaviorSubject<PageMetadata>(
+    this.defaultMetadata
+  );
+  currentMetadata = this.metadataSource.asObservable();
+
+  constructor(private meta: Meta, private title: Title) {}
+
+  resetMetadata() {
+    this.metadataSource.next(this.defaultMetadata);
+  }
+
+  private updateMetaTags(metadata: PageMetadata) {
+    this.title.setTitle(metadata.title);
+
+    this.meta.updateTag({
+      name: 'description',
+      content: metadata.description || '',
+    });
+    this.meta.updateTag({
+      name: 'keywords',
+      content: metadata.keywords?.join(', ') || '',
+    });
+
+    // OpenGraph/Facebook meta tags
+    this.meta.updateTag({ property: 'og:title', content: metadata.title });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: metadata.description || '',
+    });
+
+    // Twitter meta tags
+    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: metadata.description || '',
+    });
+  }
+
+  updateMetadata(metadata: Partial<PageMetadata>) {
+    const current = this.metadataSource.getValue();
+    const newMetadata = { ...current, ...metadata };
+    this.metadataSource.next(newMetadata);
+    this.updateMetaTags(newMetadata);
+  }
+}
+
+## src/app/pages/node-view/node-view.component.ts <a id="node-view_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `@angular/material/card`
+- `@angular/material/button`
+- `@angular/material/icon`
+- `@angular/material/progress-spinner`
+- `../../services/metadata.service`
+- `../../components/enhanced-node-viewer/enhanced-node-viewer.component`
+- `rxjs`
+
+// src/app/pages/node-view/node-view.component.ts
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { MetadataService } from '../../services/metadata.service';
+import { EnhancedNodeViewerComponent } from '../../components/enhanced-node-viewer/enhanced-node-viewer.component';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-node-view',
+  templateUrl: './node-view.component.html',
+  styleUrls: ['./node-view.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    EnhancedNodeViewerComponent,
+  ],
+})
+export class NodeViewComponent implements OnInit {
+  nodeType: string = '';
+  nodeId: string = '';
+  private routeSub!: Subscription;
+
+  // Map entity types to display names
+  private nodeTypes: { [key: string]: string } = {
+    organization: 'Organization',
+    person: 'Person',
+    source: 'Source',
+    project: 'Project',
+    output: 'Output',
+    term: 'Term',
+  };
+
+  // Map entity types to display names
+  private typeDisplayNames: { [key: string]: string } = {
+    Organization: 'Organization',
+    Person: 'Researcher',
+    Source: 'Data Source',
+    Project: 'Research Project',
+    Output: 'Research Output',
+    Term: 'Vocabulary Term',
+  };
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private metadataService: MetadataService
+  ) {}
+
+  ngOnInit() {
+    this.routeSub = this.route.params.subscribe((params) => {
+      this.nodeType = this.nodeTypes[params['type']];
+      this.nodeId = params['id'];
+      console.log(this.nodeId, 'AAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+      const displayName = this.typeDisplayNames[this.nodeType] || this.nodeType;
+      this.metadataService.updateMetadata({
+        title: `${displayName} Details`,
+        description: `View details for ${displayName.toLowerCase()}`,
+      });
+    });
+  }
+  ngOnDestroy() {
+    // Clean up subscription to prevent memory leaks
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
+  }
+
+  goBack() {
+    // Navigate back to the previous page or the list page
+    const listRoute = this.getListRoute();
+    this.router.navigate([listRoute]);
+  }
+
+  private getListRoute(): string {
+    const routeMap: { [key: string]: string } = {
+      Organization: '/organizations',
+      Person: '/persons',
+      Source: '/sources',
+      Project: '/projects',
+      Output: '/outputs',
+      Term: '/vocabularies',
+    };
+
+    return routeMap[this.nodeType] || '/';
+  }
+
+  getBreadcrumbLabel(): string {
+    return this.typeDisplayNames[this.nodeType] || this.nodeType;
+  }
+
+  onRelatedNodeSelect(nodeData: any): void {
+    console.log('NodeViewComponent - Related node selected:', nodeData);
+    // If you want to handle navigation to related nodes from within the node view
+    // You can implement this based on your requirements
+  }
+}
+
+## src/app/pages/outputs/outputs.component.ts <a id="outputs_component_ts"></a>
 
 ### Dependencies
 
@@ -2592,7 +3304,7 @@ export class MesComponent {
 - `@angular/router`
 - `../../services/metadata.service`
 
-// src/app/pages/projects/projects.component.ts
+// src/app/pages/outputs/outputs.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -2603,13 +3315,13 @@ import {
 } from '../../components/generic-list/generic-list.component';
 
 @Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
+  selector: 'app-outputs',
+  templateUrl: './outputs.component.html',
+  styleUrls: ['./outputs.component.scss'],
   imports: [CommonModule, GenericListComponent, RouterModule],
 })
-export class ProjectsComponent {
-  projectColumns: ListColumn[] = [
+export class OutputsComponent {
+  outputColumns: ListColumn[] = [
     {
       name: 'id',
       label: 'ID',
@@ -2625,29 +3337,57 @@ export class ProjectsComponent {
       type: 'string',
     },
     {
-      name: 'creator',
-      label: 'Principal Investigator',
+      name: 'creators',
+      label: 'Authors',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'description',
+      label: 'Abstract',
+      sortable: false,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'publication_date',
+      label: 'Publication Date',
+      sortable: true,
+      filterable: true,
+      type: 'date',
+    },
+    {
+      name: 'publisher',
+      label: 'Publisher',
       sortable: true,
       filterable: true,
       type: 'string',
     },
     {
-      name: 'fundingReference',
-      label: 'Funding',
+      name: 'types',
+      label: 'Document Types',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
       name: 'language',
-      label: 'Languages',
+      label: 'Language',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'keywords',
+      label: 'Keywords',
       sortable: false,
       filterable: true,
       type: 'array',
     },
     {
-      name: 'publisher',
-      label: 'Publisher',
+      name: 'source_repo',
+      label: 'Source Repository',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -2658,21 +3398,21 @@ export class ProjectsComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Research Projects',
+      title: 'Research Outputs',
       description:
-        'Explore research projects and initiatives in the knowledge graph',
+        'Explore research publications, articles, and scientific outputs in the knowledge graph',
       authors: [],
       subjects: [],
     });
   }
 
   onNodeSelected(node: any) {
-    console.log('Project selected:', node);
-    // Navigate to project detail or show dialog
+    console.log('Output selected:', node);
+    // Navigate to output detail or show dialog
   }
 }
 
-## src/app/pages/persons/persons.component.ts <a id="persons_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/persons/persons.component.ts <a id="persons_component_ts"></a>
 
 ### Dependencies
 
@@ -2775,7 +3515,551 @@ export class PersonsComponent {
   }
 }
 
-## src/app/components/relationship-card/relationship-card.component.ts <a id="relationship-card_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/projects/projects.component.ts <a id="projects_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/projects/projects.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class ProjectsComponent {
+  projectColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'title',
+      label: 'Title',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'creator',
+      label: 'Principal Investigator',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'fundingReference',
+      label: 'Funding',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'language',
+      label: 'Languages',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'publisher',
+      label: 'Publisher',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Research Projects',
+      description:
+        'Explore research projects and initiatives in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Project selected:', node);
+    // Navigate to project detail or show dialog
+  }
+}
+
+## src/app/pages/organizations/organizations.component.ts <a id="organizations_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/organizations/organizations.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-organizations',
+  templateUrl: './organizations.component.html',
+  styleUrls: ['./organizations.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class OrganizationsComponent {
+  organizationColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'types',
+      label: 'Types',
+      sortable: true,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'acronyms',
+      label: 'Acronyms',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'established',
+      label: 'Established',
+      sortable: true,
+      filterable: false,
+      type: 'date',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Organizations',
+      description: 'Explore organizations in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Organization selected:', node);
+    // You can navigate to a detail view or show a dialog here
+  }
+}
+
+## src/app/pages/query-page/query-page.component.ts <a id="query-page_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `../../api/services/iroko-api.service`
+- `../../api/models/cypher-query.model`
+- `../../components/query-executor/query-executor.component`
+- `../../components/results-display/results-display.component`
+- `@angular/material/progress-bar`
+- `../../services/metadata.service`
+- `@angular/common`
+- `@angular/material/card`
+- `@angular/material/expansion`
+- `@angular/material/icon`
+
+import { Component, ViewChild } from '@angular/core';
+import { IrokoApiService } from '../../api/services/iroko-api.service';
+import { CypherQuery } from '../../api/models/cypher-query.model';
+import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
+import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MetadataService } from '../../services/metadata.service';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'app-query-page',
+  templateUrl: './query-page.component.html',
+  styleUrls: ['./query-page.component.scss'],
+  imports: [
+    CommonModule,
+    QueryExecutorComponent,
+    ResultsDisplayComponent,
+    MatProgressBarModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
+  ],
+})
+export class QueryPageComponent {
+  @ViewChild(QueryExecutorComponent) queryExecutor!: QueryExecutorComponent;
+
+  queryResult: any;
+  error: any;
+  isLoading = false;
+  hasResults = false;
+  queryTime?: number;
+  resultCount?: number;
+
+  // Quick examples data
+  quickExamples = [
+    {
+      id: 'organizations',
+      title: 'List Organizations',
+      description: 'MATCH (n:Organization) RETURN n LIMIT 10',
+      icon: 'corporate_fare',
+    },
+    {
+      id: 'researchers',
+      title: 'Find Researchers',
+      description: 'MATCH (n:Person) RETURN n LIMIT 10',
+      icon: 'people',
+    },
+    {
+      id: 'publications',
+      title: 'Recent Publications',
+      description:
+        'MATCH (n:Output) RETURN n ORDER BY n.publication_date DESC LIMIT 10',
+      icon: 'article',
+    },
+    {
+      id: 'relationships',
+      title: 'Organization Relationships',
+      description:
+        'MATCH (o:Organization)-[r]-(related) RETURN o, r, related LIMIT 15',
+      icon: 'account_tree',
+    },
+  ];
+
+  constructor(
+    private apiService: IrokoApiService,
+    private metadataService: MetadataService
+  ) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Cypher Query',
+      description: 'iroko-cris - Cypher Query',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  ngOnDestroy() {
+    this.metadataService.resetMetadata();
+  }
+
+  onQueryExecuted(queryData: CypherQuery) {
+    this.isLoading = true;
+    this.queryResult = null;
+    this.error = null;
+    this.hasResults = false;
+    this.queryTime = undefined;
+    this.resultCount = undefined;
+
+    const startTime = performance.now();
+
+    this.apiService.executeQuery(queryData).subscribe({
+      next: (result) => {
+        const endTime = performance.now();
+        this.queryTime = endTime - startTime;
+        this.queryResult = result;
+        this.resultCount = this.calculateResultCount(result);
+        this.hasResults = true;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = err;
+        this.isLoading = false;
+        this.hasResults = false;
+      },
+    });
+  }
+
+  private calculateResultCount(result: any): number {
+    if (!result) return 0;
+    if (Array.isArray(result)) return result.length;
+    if (typeof result === 'object') return Object.keys(result).length;
+    return 1;
+  }
+
+  clearResults() {
+    this.queryResult = null;
+    this.error = null;
+    this.hasResults = false;
+    this.queryTime = undefined;
+    this.resultCount = undefined;
+  }
+
+  // Method to load examples
+  loadExample(exampleId: string) {
+    if (this.queryExecutor) {
+      this.queryExecutor.loadExample(exampleId);
+    }
+  }
+}
+
+## src/app/components/query-executor/query-executor.component.ts <a id="query-executor_component_ts"></a>
+
+### Dependencies
+
+- `../../api/models/cypher-query.model`
+- `@angular/material/form-field`
+- `@angular/material/icon`
+- `@angular/material/input`
+- `@angular/material/checkbox`
+- `@angular/material/button`
+
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CypherQuery } from '../../api/models/cypher-query.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+
+@Component({
+  selector: 'app-query-executor',
+  templateUrl: './query-executor.component.html',
+  styleUrls: ['./query-executor.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatButtonModule,
+  ],
+})
+export class QueryExecutorComponent {
+  @Output() queryExecuted = new EventEmitter<CypherQuery>();
+  @ViewChild('queryTextarea') queryTextarea!: ElementRef;
+
+  queryForm: FormGroup;
+  parameters: { key: string; value: any }[] = [];
+  showParameters = false;
+
+  constructor(private fb: FormBuilder) {
+    this.queryForm = this.fb.group({
+      query: ['', Validators.required],
+      readonly: [true],
+    });
+  }
+
+  addParameter() {
+    this.parameters.push({ key: "[REDACTED]", value: '' });
+  }
+
+  removeParameter(index: number) {
+    this.parameters.splice(index, 1);
+  }
+
+  onSubmit() {
+    if (this.queryForm.valid) {
+      const formValue = this.queryForm.value;
+      const parametersObj = this.parameters.reduce((acc, param) => {
+        if (param.key) {
+          acc[param.key] = param.value;
+        }
+        return acc;
+      }, {} as { [key: string]: any });
+
+      const queryData: CypherQuery = {
+        query: formValue.query,
+        parameters:
+          Object.keys(parametersObj).length > 0 ? parametersObj : null,
+        readonly: formValue.readonly,
+      };
+
+      this.queryExecuted.emit(queryData);
+    }
+  }
+
+  // Method to load examples
+  loadExample(type: string) {
+    const examples: { [key: string]: string } = {
+      organizations: 'MATCH (n:Organization) RETURN n LIMIT 10',
+      researchers: 'MATCH (n:Person) RETURN n LIMIT 10',
+      publications:
+        'MATCH (n:Output) RETURN n ORDER BY n.publication_date DESC LIMIT 10',
+      relationships:
+        'MATCH (o:Organization)-[r]-(related) RETURN o, r, related LIMIT 15',
+    };
+
+    if (examples[type]) {
+      this.queryForm.patchValue({
+        query: examples[type],
+      });
+
+      // Focus the textarea
+      if (this.queryTextarea) {
+        this.queryTextarea.nativeElement.focus();
+      }
+    }
+  }
+}
+
+## src/app/components/relationship-pagination/relationship-pagination.component.ts <a id="relationship-pagination_component_ts"></a>
+
+### Dependencies
+
+- `@angular/common`
+- `@angular/material/button`
+- `@angular/material/icon`
+- `@angular/material/progress-spinner`
+
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+@Component({
+  selector: 'app-relationship-pagination',
+  templateUrl: './relationship-pagination.component.html',
+  styleUrls: ['./relationship-pagination.component.scss'],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+  ],
+})
+export class RelationshipPaginationComponent implements OnChanges {
+  @Input() currentPage: number = 0;
+  @Input() pageSize: number = 10;
+  @Input() totalItems: number = 0;
+  @Input() isLoading: boolean = false;
+  @Output() pageChange = new EventEmitter<number>();
+
+  totalPages: number = 0;
+  pages: number[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['totalItems'] || changes['pageSize']) {
+      this.updatePagination();
+    }
+  }
+
+  private updatePagination(): void {
+    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+    this.pages = this.generatePageNumbers();
+  }
+
+  private generatePageNumbers(): number[] {
+    const maxVisiblePages = 5;
+    const pages: number[] = [];
+
+    let startPage = Math.max(
+      0,
+      this.currentPage - Math.floor(maxVisiblePages / 2)
+    );
+    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages);
+
+    if (endPage - startPage < maxVisiblePages) {
+      startPage = Math.max(0, endPage - maxVisiblePages);
+    }
+
+    for (let i = startPage; i < endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages && page !== this.currentPage) {
+      this.pageChange.emit(page);
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  getDisplayedRange(): string {
+    const start = this.currentPage * this.pageSize + 1;
+    const end = Math.min(
+      (this.currentPage + 1) * this.pageSize,
+      this.totalItems
+    );
+    return `Showing ${start}-${end} of ${this.totalItems}`;
+  }
+}
+
+## src/app/components/relationship-card/relationship-card.component.ts <a id="relationship-card_component_ts"></a>
 
 ### Dependencies
 
@@ -2947,323 +4231,30 @@ export class RelationshipCardComponent {
   }
 }
 
-## src/app/components/relationship-pagination/relationship-pagination.component.ts <a id="relationship-pagination_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/components/results-display/results-display.component.ts <a id="results-display_component_ts"></a>
 
 ### Dependencies
 
 - `@angular/common`
-- `@angular/material/button`
-- `@angular/material/icon`
-- `@angular/material/progress-spinner`
-
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-@Component({
-  selector: 'app-relationship-pagination',
-  templateUrl: './relationship-pagination.component.html',
-  styleUrls: ['./relationship-pagination.component.scss'],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-  ],
-})
-export class RelationshipPaginationComponent implements OnChanges {
-  @Input() currentPage: number = 0;
-  @Input() pageSize: number = 10;
-  @Input() totalItems: number = 0;
-  @Input() isLoading: boolean = false;
-  @Output() pageChange = new EventEmitter<number>();
-
-  totalPages: number = 0;
-  pages: number[] = [];
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['totalItems'] || changes['pageSize']) {
-      this.updatePagination();
-    }
-  }
-
-  private updatePagination(): void {
-    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-    this.pages = this.generatePageNumbers();
-  }
-
-  private generatePageNumbers(): number[] {
-    const maxVisiblePages = 5;
-    const pages: number[] = [];
-
-    let startPage = Math.max(
-      0,
-      this.currentPage - Math.floor(maxVisiblePages / 2)
-    );
-    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages);
-
-    if (endPage - startPage < maxVisiblePages) {
-      startPage = Math.max(0, endPage - maxVisiblePages);
-    }
-
-    for (let i = startPage; i < endPage; i++) {
-      pages.push(i);
-    }
-
-    return pages;
-  }
-
-  goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages && page !== this.currentPage) {
-      this.pageChange.emit(page);
-    }
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.totalPages - 1) {
-      this.goToPage(this.currentPage + 1);
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 0) {
-      this.goToPage(this.currentPage - 1);
-    }
-  }
-
-  getDisplayedRange(): string {
-    const start = this.currentPage * this.pageSize + 1;
-    const end = Math.min(
-      (this.currentPage + 1) * this.pageSize,
-      this.totalItems
-    );
-    return `Showing ${start}-${end} of ${this.totalItems}`;
-  }
-}
-
-## src/app/pages/sources/sources.component.ts <a id="sources_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
 - `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
+- `ngx-json-viewer`
 
-// src/app/pages/sources/sources.component.ts
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
+import { Component, Input } from '@angular/core';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
-  selector: 'app-sources',
-  templateUrl: './sources.component.html',
-  styleUrls: ['./sources.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  selector: 'app-results-display',
+  templateUrl: './results-display.component.html',
+  styleUrls: ['./results-display.component.scss'],
+  imports: [NgxJsonViewerModule, CommonModule],
 })
-export class SourcesComponent {
-  sourceColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'title',
-      label: 'Title',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Name',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'source_type',
-      label: 'Source Type',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'source_status',
-      label: 'Status',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'repository_status',
-      label: 'Repository Status',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'url',
-      label: 'URLs',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'start_year',
-      label: 'Start Year',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'end_year',
-      label: 'End Year',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'frequency',
-      label: 'Frequency',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Data Sources',
-      description:
-        'Explore journals, repositories, and data sources in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Source selected:', node);
-    // Navigate to source detail or show dialog
-  }
+export class ResultsDisplayComponent {
+  @Input() queryResult: any;
+  @Input() error: any;
 }
 
-## src/app/pages/vocabularies/vocabularies.component.ts <a id="vocabularies_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-
-// src/app/pages/vocabularies/vocabularies.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
-
-@Component({
-  selector: 'app-vocabularies',
-  templateUrl: './vocabularies.component.html',
-  styleUrls: ['./vocabularies.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
-})
-export class VocabulariesComponent {
-  vocabularyColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Term',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'description',
-      label: 'Description',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'vocabulary',
-      label: 'Vocabulary',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'broader_terms',
-      label: 'Broader Terms',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'narrower_terms',
-      label: 'Narrower Terms',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'related_terms',
-      label: 'Related Terms',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Vocabularies & Terms',
-      description:
-        'Explore controlled vocabularies, taxonomies, and classification terms',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Vocabulary term selected:', node);
-    // Navigate to term detail or show dialog
-  }
-}
-
-## src/app/services/search.service.ts <a id="search_service_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/services/search.service.ts <a id="search_service_ts"></a>
 
 ### Dependencies
 
@@ -3426,7 +4417,124 @@ export class SearchService {
   }
 }
 
-## src/app/pages/search-results/search-results.component.ts <a id="search-results_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/sources/sources.component.ts <a id="sources_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/sources/sources.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-sources',
+  templateUrl: './sources.component.html',
+  styleUrls: ['./sources.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class SourcesComponent {
+  sourceColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'title',
+      label: 'Title',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'source_type',
+      label: 'Source Type',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'source_status',
+      label: 'Status',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'repository_status',
+      label: 'Repository Status',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'url',
+      label: 'URLs',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'start_year',
+      label: 'Start Year',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'end_year',
+      label: 'End Year',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'frequency',
+      label: 'Frequency',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Data Sources',
+      description:
+        'Explore journals, repositories, and data sources in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Source selected:', node);
+    // Navigate to source detail or show dialog
+  }
+}
+
+## src/app/pages/search-results/search-results.component.ts <a id="search-results_component_ts"></a>
 
 ### Dependencies
 
@@ -3535,7 +4643,287 @@ export class SearchResultsComponent implements OnInit {
   }
 }
 
-## src/app/pages/_page-styles.scss <a id="page-styles_scss"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/api/models/validation-error.model.ts <a id="validation-error_model_ts"></a>
+
+export interface ValidationError {
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+}
+
+## src/app/components/view-instance/view-instance.component.ts <a id="view-instance_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+
+import { Component, Input } from '@angular/core';
+
+/**
+ * Visualizar una instancia significa:
+ * - mostrar las propiedades simples y complejas de la instancia
+ * - mostrar las relaciones de esta instancia con otras, que pueden ser con:
+ * - una instancia individual o
+ * - una coleccion de instancias de una misma clase
+ * - muestra instancias similares de la misma clase
+ * 
+ * 
+ * tiene un tab principal, que muestra las propiedades simples y complejas y las relaciones conjuntos
+ * pequennos de instancias de una misma clase
+ * hay un tab por cada conjunto m
+ * /
+
+@Component({
+  selector: 'app-view-instance',
+  imports: [],
+  templateUrl: './view-instance.component.html',
+  styleUrl: './view-instance.component.scss',
+})
+export class ViewInstanceComponent {
+  @Input() instancePID: string = '';
+
+  // las collecciones de instancias relacionadas que sean mayor que este numero,
+  // aparecen en un tab nuevo a partir de esta candidad.
+  @Input() relationsCountInMain: number = 3;
+}
+
+## src/app/components/view-class/view-class.component.ts <a id="view-class_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+
+import { Component, Input } from '@angular/core';
+
+/**
+ * Visualizar una clase significa:
+ * - mostrar las propiedades y relaciones de la clase
+ * - visualizar un "resumen" de los datos que existen en el grafo sobre esa clase (averiguar...)
+ * - explorar la colleccion de instancias de esa clase.
+ * - explorar el grafo a partir de la clase y sus instancias.
+ * 
+ * 
+ * /
+@Component({
+  selector: 'app-view-class',
+  imports: [],
+  templateUrl: './view-class.component.html',
+  styleUrl: './view-class.component.scss',
+})
+export class ViewClassComponent {
+  @Input() className: string = '';
+}
+
+## src/app/pages/vocabularies/vocabularies.component.ts <a id="vocabularies_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/vocabularies/vocabularies.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-vocabularies',
+  templateUrl: './vocabularies.component.html',
+  styleUrls: ['./vocabularies.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class VocabulariesComponent {
+  vocabularyColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'name',
+      label: 'Term',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'vocabulary',
+      label: 'Vocabulary',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'broader_terms',
+      label: 'Broader Terms',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'narrower_terms',
+      label: 'Narrower Terms',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'related_terms',
+      label: 'Related Terms',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Vocabularies & Terms',
+      description:
+        'Explore controlled vocabularies, taxonomies, and classification terms',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Vocabulary term selected:', node);
+    // Navigate to term detail or show dialog
+  }
+}
+
+## public/md/about.md <a id="about_md"></a>
+
+# About Iroko Knowledge Graph Explorer
+
+Iroko is a comprehensive knowledge graph platform designed to explore and analyze research data from the Cuban scientific ecosystem.
+
+## Features
+
+- **Graph Database Backend**: Powered by Neo4j for efficient relationship queries
+- **Advanced Search**: Full-text search across all entities and properties
+- **Relationship Visualization**: Explore connections between researchers, organizations, and publications
+- **Cypher Query Interface**: Run custom graph queries for advanced analysis
+- **Progressive Web App**: Works offline and provides app-like experience
+- **Responsive Design**: Optimized for both desktop and mobile devices
+
+## Data Sources
+
+Iroko integrates data from multiple sources:
+
+- Scientific journals and publications
+- Research organization databases
+- Researcher profiles and collaborations
+- Project funding information
+- Vocabulary and classification systems
+- MES (Ministry of Higher Education) journals
+
+## Entity Types
+
+The knowledge graph includes the following main entity types:
+
+### Organizations
+
+Research institutions, universities, and scientific organizations with detailed metadata including locations, types, and relationships.
+
+### Researchers
+
+Scientists, academics, and research contributors with information about their affiliations, research interests, and publications.
+
+### Research Projects
+
+Scientific projects and grants with details about funding, participants, and outcomes.
+
+### Research Outputs
+
+Publications, articles, datasets, and other research results with comprehensive metadata.
+
+### Data Sources
+
+Journals, repositories, and information sources that contribute to the knowledge graph.
+
+### Vocabularies
+
+Controlled vocabularies, taxonomies, and classification terms for standardized categorization.
+
+## Technology Stack
+
+### Frontend
+
+- **Angular 17+**: Modern web framework with TypeScript
+- **Angular Material**: Material Design components
+- **Tailwind CSS**: Utility-first CSS framework
+- **PWA**: Service workers for offline functionality
+
+### Backend
+
+- **Neo4j**: Graph database for relationship management
+- **RESTful API**: Cypher query execution endpoint
+- **Python/FastAPI**: API server (backend service)
+
+### Features
+
+- **Full-text Search**: Integrated search across all entities
+- **Graph Navigation**: Visual exploration of relationships
+- **Data Export**: CSV and JSON export capabilities
+- **Responsive Design**: Mobile-first approach
+
+## Open Science Commitment
+
+Iroko is built on principles of open science and aims to:
+
+- Promote transparency in research
+- Facilitate collaboration among researchers
+- Provide open access to research information
+- Support the Cuban scientific community
+
+## Data Privacy
+
+We are committed to protecting user privacy and complying with data protection regulations. All personal data is handled according to our privacy policy.
+
+## Contributing
+
+Iroko is an open-source project. We welcome contributions from the community:
+
+- Code contributions
+- Documentation improvements
+- Bug reports and feature requests
+- Data quality enhancements
+
+## Support
+
+For technical support or questions about the platform:
+
+- Check our documentation
+- Open an issue on our GitHub repository
+- Contact the development team
+
+---
+
+_Powered by Sceiba and the Cuban scientific community_
+
+**Version**: 1.0.0
+**Last Updated**: ${new Date().toLocaleDateString()}
+
+## src/app/pages/_page-styles.scss <a id="page-styles_scss"></a>
 
 /* src/app/pages/_page-styles.scss */
 .page-container {
@@ -3552,11 +4940,14 @@ export class SearchResultsComponent implements OnInit {
   margin-bottom: 32px;
   text-align: center;
 
+  background: linear-gradient(135deg, #006d33 0%, #00461e 100%);
+  color: white;
+
   h1 {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #333;
+    color: white;
     line-height: 1.2;
 
     @media (max-width: 768px) {
@@ -3566,7 +4957,7 @@ export class SearchResultsComponent implements OnInit {
 
   p {
     font-size: 1.1rem;
-    color: #666;
+    color: white;
     max-width: 800px;
     margin: 0 auto;
     line-height: 1.6;
@@ -3580,364 +4971,253 @@ export class SearchResultsComponent implements OnInit {
 
 /* Import this in each page component's SCSS file */
 
-## src/app/app.component.scss <a id="app_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
+## .postcssrc.json <a id="postcssrc_json"></a>
 
-/* src/app/app.component.scss */
-.flex {
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+
+## src/app/pages/about/about.component.scss <a id="about_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
+:host {
+  display: block;
+  flex: 1;
+}
+
+.loading-container {
   display: flex;
-}
-
-.flex-col {
   flex-direction: column;
-}
-
-.absolute {
-  position: absolute;
-}
-
-.inset-0 {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.items-center {
   align-items: center;
-}
-
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.fixed {
-  position: fixed;
-}
-
-.z-\[2\] {
-  z-index: 2;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
-}
-
-.m-0 {
-  margin: 0;
-}
-
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-.leading-none {
-  line-height: 1;
-}
-
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
-
-.text-center {
+  justify-content: center;
+  padding: 60px 20px;
   text-align: center;
-}
 
-.gap-2 {
-  gap: 0.5rem;
-}
-
-.hidden {
-  display: none;
-}
-
-.p-4 {
-  padding: 1rem;
-}
-
-.h-full {
-  height: 100%;
-}
-
-.bg-gray-100 {
-  background-color: #f3f4f6;
-}
-
-.border-t {
-  border-top-width: 1px;
-}
-
-.container {
-  width: 100%;
-}
-
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.flex-row {
-  flex-direction: row;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.text-gray-600 {
-  color: #4b5563;
-}
-
-.text-gray-500 {
-  color: #6b7280;
-}
-
-/* Mobile styles */
-.main-is-mobile {
-  &.header-toolbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-  }
-
-  .flex-\[1_0_auto\] {
-    flex: 1 0 auto;
+  p {
+    margin-top: 16px;
+    color: rgba(0, 0, 0, 0.6);
   }
 }
 
-/* Sidenav styles */
-mat-sidenav {
-  width: 280px;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-}
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
 
-mat-nav-list {
-  .mat-list-item {
-    border-radius: 8px;
-    margin-bottom: 4px;
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
 
-    &.active {
-      background-color: rgba(0, 109, 51, 0.1);
-      color: #006d33;
+  h3 {
+    margin: 0 0 8px 0;
+    color: rgba(0, 0, 0, 0.8);
+  }
 
-      .mat-icon {
-        color: #006d33;
-      }
-    }
-
-    &:hover:not(.active) {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
+  p {
+    margin: 0 0 16px 0;
+    max-width: 400px;
   }
 }
 
-/* Toolbar styles */
-mat-toolbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+## angular.json <a id="angular_json"></a>
 
-/* Sidenav content */
-mat-sidenav-content {
-  background-color: #f8f9fa;
-  margin-top: 64px; /* Account for fixed toolbar */
-  min-height: calc(100vh - 64px);
-}
-
-/* Footer styles */
-footer {
-  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  color: white;
-  padding: 32px 0;
-  margin-top: auto;
-
-  .center-logo {
-    width: 24px;
-    height: 24px;
-    color: white;
-  }
-}
-
-/* Responsive design */
-@media (min-width: 768px) {
-  .md\:block {
-    display: block;
-  }
-
-  .md\:flex-row {
-    flex-direction: row;
-  }
-
-  .md\:mb-0 {
-    margin-bottom: 0;
-  }
-
-  .md\:p-8 {
-    padding: 2rem;
-  }
-
-  .hidden.md\:block {
-    display: block;
-  }
-}
-
-@media (max-width: 767px) {
-  .md\:hidden {
-    display: none;
-  }
-
-  mat-sidenav-content {
-    padding: 1rem;
-  }
-
-  .main-is-mobile .header-toolbar {
-    position: fixed;
-  }
-}
-
-## src/app/app.component.html <a id="app_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/app.component.html (updated) -->
-<div class="flex flex-col absolute inset-0" [class.main-is-mobile]="isMobile()">
-  <mat-toolbar
-    color="primary"
-    class="flex justify-between items-center px-4 fixed z-[2] main-is-mobile:header-toolbar"
-  >
-    <div class="flex items-center flex-1">
-      <button mat-icon-button (click)="snav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <h1 class="ml-2 hidden md:block">
-        {{ config.title }}
-      </h1>
-    </div>
-
-    <div class="flex flex-col items-center flex-1 mx-4">
-      <h1 class="m-0 text-base leading-none text-center">
-        {{ currentPageTitle }}
-      </h1>
-    </div>
-
-    <div class="flex items-center justify-end flex-1 gap-2">
-      <!-- Global Search -->
-      <app-global-search class="hidden md:block"></app-global-search>
-
-      <!-- Mobile Search Toggle -->
-      <button
-        mat-icon-button
-        class="md:hidden"
-        [matMenuTriggerFor]="mobileMenu"
-      >
-        <mat-icon>search</mat-icon>
-      </button>
-
-      <button mat-icon-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-    </div>
-
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>settings</mat-icon>
-        <span>Settings</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
-      </button>
-    </mat-menu>
-
-    <mat-menu #mobileMenu="matMenu" class="mobile-search-menu">
-      <div class="p-4">
-        <app-global-search></app-global-search>
-      </div>
-    </mat-menu>
-  </mat-toolbar>
-
-  <mat-sidenav-container class="flex-1 main-is-mobile:flex-[1_0_auto]">
-    <mat-sidenav
-      #snav
-      mode="side"
-      [mode]="isMobile() ? 'over' : 'side'"
-      [fixedInViewport]="isMobile()"
-      fixedTopGap="56"
-    >
-      @if (config.menu) {
-      <mat-nav-list class="p-4">
-        @for (item of config.menu; track item) { @if (item.children) {
-        <div mat-subheader>
-          {{ item.label }}
-        </div>
-        @for (child of item.children; track child) {
-        <mat-list-item
-          [routerLink]="child.route"
-          routerLinkActive="active"
-          (click)="snav.toggle()"
-        >
-          @if (child.icon) {
-          <mat-icon matListIcon>{{ child.icon }}</mat-icon>
-          }
-          <div matListItemTitle>{{ child.label }}</div>
-          <div matListItemLine>{{ child.description }}</div>
-        </mat-list-item>
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "iroko-ui-pwa": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
         }
-        <mat-divider></mat-divider>
-        }@else {
-        <mat-list-item
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          (click)="snav.toggle()"
-        >
-          @if (item.icon) {
-          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/iroko-ui-pwa",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "@angular/material/prebuilt-themes/rose-red.css",
+              "src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "iroko-ui-pwa:build:production"
+            },
+            "development": {
+              "buildTarget": "iroko-ui-pwa:build:development"
+            }
+          },
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "@angular/material/icon/_icon-theme.css",
+              "src/styles.scss"
+            ],
+            "scripts": []
           }
-          <div matListItemTitle>{{ item.label }}</div>
-          <span matListItemLine>{{ item.description }}</span>
-        </mat-list-item>
-        } }
-      </mat-nav-list>
+        }
       }
-    </mat-sidenav>
+    }
+  },
+  "cli": {
+    "analytics": "ba16d7c5-9cc7-423f-8bd1-84d5c23b4739"
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
+  }
+}
 
-    <mat-sidenav-content class="p-4 md:p-8 h-full">
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+## src/app/pages/about/about.component.html <a id="about_component_html"></a>
 
-  <footer class="bg-gray-100 p-4 border-t">
-    <div
-      class="container mx-auto flex flex-col md:flex-row justify-between items-center"
-    >
-      <div class="flex items-center mb-4 md:mb-0">
-        <mat-icon svgIcon="sceiba" class="center-logo mr-2"></mat-icon>
-        <span class="text-sm text-gray-600"
-          >Iroko Knowledge Graph Explorer</span
-        >
+<div class="page-container">
+  <div class="page-header">
+    <h1>About Iroko</h1>
+    <p>Learn about our knowledge graph platform and features</p>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      @if (isLoading) {
+      <div class="loading-container">
+        <mat-progress-spinner
+          diameter="40"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <p>Loading about content...</p>
       </div>
-      <div class="text-sm text-gray-500">
-        &copy; 2025 Sceiba. Powered by Neo4j.
+      } @if (loadError) {
+      <div class="error-container">
+        <mat-icon color="warn">error_outline</mat-icon>
+        <h3>Unable to load content</h3>
+        <p>
+          {{
+            errorMessage || "There was an error loading the about page content."
+          }}
+        </p>
+        <button mat-button color="primary" (click)="ngOnInit()">
+          <mat-icon>refresh</mat-icon>
+          Retry
+        </button>
       </div>
-    </div>
-  </footer>
+      }
+
+      <app-markdown-viewer
+        src="md/about.md"
+        (load)="onMarkdownLoad()"
+        (error)="onMarkdownError($event)"
+      >
+      </app-markdown-viewer>
+    </mat-card-content>
+  </mat-card>
 </div>
 
-## public/config.json <a id="config_json"></a> 🔄 **[RECENTLY MODIFIED]**
+## public/config.json <a id="config_json"></a>
 
 {
   "title": "Sceiba Knowledge Graph",
@@ -4005,7 +5285,115 @@ footer {
   ]
 }
 
-## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.scss <a id="enhanced-node-viewer_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.html <a id="enhanced-node-viewer_component_html"></a>
+
+@if (loading) {
+<div class="loading-spinner">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+} @else if (node) {
+<div class="node-viewer">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ node.name || node.title || node.id }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ nodeType }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-tab-group [(selectedIndex)]="activeTab">
+        <!-- Properties Tab -->
+        <mat-tab label="Properties">
+          <div class="properties-grid">
+            @for (prop of getNodeProperties(); track prop.key) {
+            <div class="property-item">
+              <strong class="property-label">{{ prop.key }}:</strong>
+              <div class="property-value-container">
+                @if (isArray(prop.value)) {
+                <div class="array-container">
+                  <ul class="array-list">
+                    @for (item of prop.value; track item) {
+                    <li class="array-list-item">
+                      <span class="array-item-content">{{ item }}</span>
+                    </li>
+                    }
+                  </ul>
+                </div>
+                } @else if (isObject(prop.value)) {
+                <div class="json-container">
+                  <ngx-json-viewer
+                    [json]="prop.value"
+                    [expanded]="false"
+                  ></ngx-json-viewer>
+                </div>
+                } @else {
+                <span class="property-value" [title]="prop.value">
+                  {{ prop.value }}
+                </span>
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Relationships Tabs -->
+        @for (group of relationshipGroups; track group.type; let i = $index) {
+        <mat-tab [label]="getTabLabel(group)">
+          <div class="relationships-tab-content">
+            @if (group.isLoading) {
+            <div class="relationships-loading">
+              <mat-progress-spinner
+                diameter="40"
+                mode="indeterminate"
+              ></mat-progress-spinner>
+              <p>Loading relationships...</p>
+            </div>
+            } @else if (group.relationships.length === 0) {
+            <div class="no-relationships">
+              <mat-icon>link_off</mat-icon>
+              <p>No {{ group.type.toLowerCase() }} relationships found</p>
+            </div>
+            } @else {
+            <div class="relationships-grid">
+              @for (rel of getDisplayedRelationships(group); track rel.node.id)
+              {
+              <app-relationship-card
+                [node]="rel.node"
+                [relationship]="rel.relationship"
+                [nodeLabels]="rel.nodeLabels"
+                [relationshipType]="group.type"
+                [direction]="group.direction"
+                (nodeSelected)="onRelatedNodeSelect($event)"
+              ></app-relationship-card>
+              }
+            </div>
+
+            @if (shouldShowPagination(group)) {
+            <app-relationship-pagination
+              [currentPage]="group.currentPage"
+              [pageSize]="group.pageSize"
+              [totalItems]="group.totalCount"
+              [isLoading]="group.isLoading"
+              (pageChange)="loadRelationshipPage(group, $event)"
+            ></app-relationship-pagination>
+            } }
+          </div>
+        </mat-tab>
+        }
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+} @else {
+<div class="no-data">
+  <mat-icon>error_outline</mat-icon>
+  <p>Node not found</p>
+</div>
+}
+
+## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.scss <a id="enhanced-node-viewer_component_scss"></a>
 
 .loading-spinner {
   display: flex;
@@ -4204,7 +5592,14 @@ footer {
   }
 }
 
-## src/app/components/generic-list/generic-list.component.html <a id="generic-list_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/error/error.component.html <a id="error_component_html"></a>
+
+<p>error works!</p>
+
+## src/app/pages/error/error.component.scss <a id="error_component_scss"></a>
+
+
+## src/app/components/generic-list/generic-list.component.html <a id="generic-list_component_html"></a>
 
 <!-- src/app/components/generic-list/generic-list.component.html -->
 <div class="generic-list-container">
@@ -4403,356 +5798,7 @@ footer {
   }
 </div>
 
-## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.html <a id="enhanced-node-viewer_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-@if (loading) {
-<div class="loading-spinner">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-</div>
-} @else if (node) {
-<div class="node-viewer">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{ node.name || node.title || node.id }}
-      </mat-card-title>
-      <mat-card-subtitle>{{ nodeType }}</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-tab-group [(selectedIndex)]="activeTab">
-        <!-- Properties Tab -->
-        <mat-tab label="Properties">
-          <div class="properties-grid">
-            @for (prop of getNodeProperties(); track prop.key) {
-            <div class="property-item">
-              <strong class="property-label">{{ prop.key }}:</strong>
-              <div class="property-value-container">
-                @if (isArray(prop.value)) {
-                <div class="array-container">
-                  <ul class="array-list">
-                    @for (item of prop.value; track item) {
-                    <li class="array-list-item">
-                      <span class="array-item-content">{{ item }}</span>
-                    </li>
-                    }
-                  </ul>
-                </div>
-                } @else if (isObject(prop.value)) {
-                <div class="json-container">
-                  <ngx-json-viewer
-                    [json]="prop.value"
-                    [expanded]="false"
-                  ></ngx-json-viewer>
-                </div>
-                } @else {
-                <span class="property-value" [title]="prop.value">
-                  {{ prop.value }}
-                </span>
-                }
-              </div>
-            </div>
-            }
-          </div>
-        </mat-tab>
-
-        <!-- Relationships Tabs -->
-        @for (group of relationshipGroups; track group.type; let i = $index) {
-        <mat-tab [label]="getTabLabel(group)">
-          <div class="relationships-tab-content">
-            @if (group.isLoading) {
-            <div class="relationships-loading">
-              <mat-progress-spinner
-                diameter="40"
-                mode="indeterminate"
-              ></mat-progress-spinner>
-              <p>Loading relationships...</p>
-            </div>
-            } @else if (group.relationships.length === 0) {
-            <div class="no-relationships">
-              <mat-icon>link_off</mat-icon>
-              <p>No {{ group.type.toLowerCase() }} relationships found</p>
-            </div>
-            } @else {
-            <div class="relationships-grid">
-              @for (rel of getDisplayedRelationships(group); track rel.node.id)
-              {
-              <app-relationship-card
-                [node]="rel.node"
-                [relationship]="rel.relationship"
-                [nodeLabels]="rel.nodeLabels"
-                [relationshipType]="group.type"
-                [direction]="group.direction"
-                (nodeSelected)="onRelatedNodeSelect($event)"
-              ></app-relationship-card>
-              }
-            </div>
-
-            @if (shouldShowPagination(group)) {
-            <app-relationship-pagination
-              [currentPage]="group.currentPage"
-              [pageSize]="group.pageSize"
-              [totalItems]="group.totalCount"
-              [isLoading]="group.isLoading"
-              (pageChange)="loadRelationshipPage(group, $event)"
-            ></app-relationship-pagination>
-            } }
-          </div>
-        </mat-tab>
-        }
-      </mat-tab-group>
-    </mat-card-content>
-  </mat-card>
-</div>
-} @else {
-<div class="no-data">
-  <mat-icon>error_outline</mat-icon>
-  <p>Node not found</p>
-</div>
-}
-
-## src/app/components/global-search/global-search.component.scss <a id="global-search_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-/* src/app/components/global-search/global-search.component.scss */
-.search-container {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-}
-
-.search-field {
-  width: 100%;
-
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
-  }
-
-  .mat-form-field-outline {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 24px;
-  }
-
-  .mat-form-field-outline-thick {
-    opacity: 0.8;
-  }
-}
-
-.search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  max-height: 400px;
-  overflow-y: auto;
-  margin-top: 8px;
-}
-
-.results-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fafafa;
-  font-weight: 500;
-  font-size: 0.875rem;
-
-  small {
-    color: #666;
-    font-weight: normal;
-  }
-}
-
-.result-list {
-  padding: 8px 0;
-}
-
-.result-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  cursor: pointer;
-  border-bottom: 1px solid #f5f5f5;
-  transition: background-color 0.2s;
-  gap: 12px;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.type-chip {
-  font-size: 0.7em;
-  height: 20px;
-  min-width: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.organization {
-    background-color: #e3f2fd;
-    color: #1976d2;
-  }
-  &.person {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
-  }
-  &.source {
-    background-color: #e8f5e8;
-    color: #388e3c;
-  }
-  &.output {
-    background-color: #fff3e0;
-    color: #f57c00;
-  }
-  &.project {
-    background-color: #fce4ec;
-    color: #c2185b;
-  }
-  &.term {
-    background-color: #e8eaf6;
-    color: #303f9f;
-  }
-}
-
-.result-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.result-title {
-  font-weight: 500;
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.9rem;
-}
-
-.result-description {
-  font-size: 0.8rem;
-  color: #666;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.result-arrow {
-  color: #999;
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
-
-/* Mobile search menu */
-.mobile-search-menu {
-  .mat-menu-content {
-    padding: 16px !important;
-
-    .search-container {
-      max-width: none;
-    }
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .search-container {
-    max-width: none;
-  }
-
-  .search-field .mat-form-field {
-    width: 100%;
-  }
-}
-
-## src/app/components/global-search/global-search.component.html <a id="global-search_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/components/global-search/global-search.component.html -->
-<div class="search-container">
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Search knowledge graph...</mat-label>
-    <input
-      #searchInput
-      matInput
-      type="text"
-      [(ngModel)]="searchTerm"
-      (input)="onSearchInput($event)"
-      (focus)="onFocus()"
-      (blur)="onBlur()"
-      (keyup.enter)="onSearchSubmit()"
-      placeholder="Search organizations, people, publications..."
-    />
-
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="searchTerm"
-      (click)="clearSearch()"
-    >
-      <mat-icon>clear</mat-icon>
-    </button>
-
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="!searchTerm"
-      (click)="searchInput.focus()"
-    >
-      <mat-icon>search</mat-icon>
-    </button>
-
-    <mat-progress-spinner
-      *ngIf="isLoading"
-      matSuffix
-      diameter="20"
-      mode="indeterminate"
-    >
-    </mat-progress-spinner>
-  </mat-form-field>
-
-  <div class="search-results" *ngIf="showResults && searchResults.length > 0">
-    <div class="results-header">
-      <span>Search Results</span>
-      <small>{{ searchResults.length }} found</small>
-    </div>
-
-    <div class="result-list">
-      <div
-        *ngFor="let result of searchResults"
-        class="result-item"
-        (click)="onResultSelect(result)"
-      >
-        <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
-          {{ result.type }}
-        </mat-chip>
-
-        <div class="result-content">
-          <div class="result-title">{{ result.label }}</div>
-          <div *ngIf="result.description" class="result-description">
-            {{ result.description | slice : 0 : 100
-            }}{{ result.description.length > 100 ? "..." : "" }}
-          </div>
-        </div>
-
-        <mat-icon class="result-arrow">arrow_forward</mat-icon>
-      </div>
-    </div>
-  </div>
-</div>
-
-## src/app/components/generic-list/generic-list.component.scss <a id="generic-list_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/components/generic-list/generic-list.component.scss <a id="generic-list_component_scss"></a>
 
 /* src/app/components/generic-list/generic-list.component.scss */
 .generic-list-container {
@@ -5059,9 +6105,249 @@ footer {
   }
 }
 
-## src/app/pages/home/home.component.html <a id="home_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/components/global-search/global-search.component.html <a id="global-search_component_html"></a>
 
-<!-- src/app/pages/home/home.component.html -->
+<!-- src/app/components/global-search/global-search.component.html -->
+<div class="search-container">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search knowledge graph...</mat-label>
+    <input
+      #searchInput
+      matInput
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keyup.enter)="onSearchSubmit()"
+      placeholder="Search organizations, people, publications..."
+    />
+
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="searchTerm"
+      (click)="clearSearch()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="!searchTerm"
+      (click)="searchInput.focus()"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <mat-progress-spinner
+      *ngIf="isLoading"
+      matSuffix
+      diameter="20"
+      mode="indeterminate"
+    >
+    </mat-progress-spinner>
+  </mat-form-field>
+
+  <div class="search-results" *ngIf="showResults && searchResults.length > 0">
+    <div class="results-header">
+      <span>Search Results</span>
+      <small>{{ searchResults.length }} found</small>
+    </div>
+
+    <div class="result-list">
+      <div
+        *ngFor="let result of searchResults"
+        class="result-item"
+        (click)="onResultSelect(result)"
+      >
+        <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
+          {{ result.type }}
+        </mat-chip>
+
+        <div class="result-content">
+          <div class="result-title">{{ result.label }}</div>
+          <div *ngIf="result.description" class="result-description">
+            {{ result.description | slice : 0 : 100
+            }}{{ result.description.length > 100 ? "..." : "" }}
+          </div>
+        </div>
+
+        <mat-icon class="result-arrow">arrow_forward</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>
+
+## src/app/components/global-search/global-search.component.scss <a id="global-search_component_scss"></a>
+
+/* src/app/components/global-search/global-search.component.scss */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-field {
+  width: 100%;
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  .mat-form-field-outline {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+  }
+
+  .mat-form-field-outline-thick {
+    opacity: 0.8;
+  }
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+
+.results-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  font-weight: 500;
+  font-size: 0.875rem;
+
+  small {
+    color: #666;
+    font-weight: normal;
+  }
+}
+
+.result-list {
+  padding: 8px 0;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background-color 0.2s;
+  gap: 12px;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.type-chip {
+  font-size: 0.7em;
+  height: 20px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.organization {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+  &.person {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+  }
+  &.source {
+    background-color: #e8f5e8;
+    color: #388e3c;
+  }
+  &.output {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+  &.project {
+    background-color: #fce4ec;
+    color: #c2185b;
+  }
+  &.term {
+    background-color: #e8eaf6;
+    color: #303f9f;
+  }
+}
+
+.result-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+
+.result-description {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-arrow {
+  color: #999;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Mobile search menu */
+.mobile-search-menu {
+  .mat-menu-content {
+    padding: 16px !important;
+
+    .search-container {
+      max-width: none;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-container {
+    max-width: none;
+  }
+
+  .search-field .mat-form-field {
+    width: 100%;
+  }
+}
+
+## src/app/pages/home/home.component.html <a id="home_component_html"></a>
+
 <div class="home-container">
   <!-- Hero Section -->
   <section class="hero-section">
@@ -5087,6 +6373,16 @@ footer {
   <!-- Statistics Section -->
   <section class="stats-section">
     <h2 class="section-title">Knowledge Graph Overview</h2>
+
+    @if (isLoading) {
+    <div class="loading-container">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <p>Loading statistics...</p>
+    </div>
+    } @else {
     <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
       <mat-grid-tile *ngFor="let stat of stats" [colspan]="1" [rowspan]="1">
         <mat-card
@@ -5100,7 +6396,7 @@ footer {
                 <mat-icon>{{ stat.icon }}</mat-icon>
               </div>
               <div class="stat-info">
-                <div class="stat-count">{{ stat.count }}</div>
+                <div class="stat-count">{{ formatCount(stat.count) }}</div>
                 <div class="stat-label">{{ stat.label }}</div>
               </div>
             </div>
@@ -5108,6 +6404,7 @@ footer {
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
+    }
   </section>
 
   <!-- Quick Actions -->
@@ -5171,7 +6468,7 @@ footer {
   </section>
 </div>
 
-## src/app/pages/home/home.component.scss <a id="home_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
+## src/app/pages/home/home.component.scss <a id="home_component_scss"></a>
 
 /* src/app/pages/home/home.component.scss */
 .home-container {
@@ -5412,1879 +6709,6 @@ footer {
   }
 }
 
-## src/app/components/markdown-viewer/markdown-viewer.component.scss <a id="markdown-viewer_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-
-## src/app/pages/mes/mes.component.html <a id="mes_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/mes/mes.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>MES Scientific Journals</h1>
-    <p>
-      Explore scientific journals and publications from the Cuban Ministry of
-      Higher Education
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Source"
-    [columns]="mesColumns"
-    label="MES Journals"
-    [defaultSort]="'title'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/pages/mes/mes.component.scss <a id="mes_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/pages/node-view/node-view.component.html <a id="node-view_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/node-view/node-view.component.html -->
-<div class="node-view-page">
-  <div class="page-header">
-    <button mat-button (click)="goBack()" class="back-button">
-      <mat-icon>arrow_back</mat-icon>
-      Back to {{ getBreadcrumbLabel() }} List
-    </button>
-
-    <h1>{{ getBreadcrumbLabel() }} Details</h1>
-    <p>
-      Exploring detailed information about this
-      {{ getBreadcrumbLabel().toLowerCase() }}
-    </p>
-  </div>
-
-  <div class="node-viewer-container">
-    <app-enhanced-node-viewer
-      [nodeId]="nodeId"
-      [nodeType]="nodeType"
-      (nodeSelected)="onRelatedNodeSelect($event)"
-    >
-    </app-enhanced-node-viewer>
-  </div>
-</div>
-
-## src/app/components/markdown-viewer/markdown-viewer.component.html <a id="markdown-viewer_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/components/markdown-viewer/markdown-viewer.component.html -->
-<div class="markdown-container">
-  @if (src) {
-  <markdown [src]="src"></markdown>
-  } @else {
-  <markdown [data]="content"></markdown>
-  }
-</div>
-
-## src/app/pages/organizations/organizations.component.html <a id="organizations_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/organizations/organizations.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Organizations</h1>
-    <p>
-      Explore research organizations and institutions in the knowledge graph
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Organization"
-    [columns]="organizationColumns"
-    label="Organizations"
-    [defaultSort]="'name'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/pages/outputs/outputs.component.html <a id="outputs_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/outputs/outputs.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Research Outputs</h1>
-    <p>
-      Explore scientific publications, research articles, datasets, and other
-      research outputs
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Output"
-    [columns]="outputColumns"
-    label="Research Outputs"
-    [defaultSort]="'publication_date'"
-    [defaultSortOrder]="'DESC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/pages/organizations/organizations.component.scss <a id="organizations_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/pages/node-view/node-view.component.scss <a id="node-view_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-/* src/app/pages/node-view/node-view.component.scss */
-.node-view-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 16px;
-
-  @media (max-width: 768px) {
-    padding: 16px 8px;
-  }
-}
-
-.page-header {
-  margin-bottom: 24px;
-
-  .back-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    color: #666;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-  }
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #333;
-
-    @media (max-width: 768px) {
-      font-size: 1.75rem;
-    }
-  }
-
-  p {
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0;
-  }
-}
-
-.node-viewer-container {
-  margin-top: 16px;
-}
-
-## src/app/pages/outputs/outputs.component.scss <a id="outputs_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/pages/persons/persons.component.scss <a id="persons_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/pages/projects/projects.component.html <a id="projects_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/projects/projects.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Research Projects</h1>
-    <p>
-      Explore research projects, grants, and scientific initiatives across
-      various domains
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Project"
-    [columns]="projectColumns"
-    label="Projects"
-    [defaultSort]="'title'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/components/relationship-card/relationship-card.component.scss <a id="relationship-card_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-.relationship-card {
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.card-header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  gap: 12px;
-}
-
-.node-title-section {
-  flex: 1;
-  min-width: 0;
-
-  .node-title {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.3;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .node-type {
-    margin: 4px 0 0 0;
-    font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.6);
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-}
-
-.relationship-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex-shrink: 0;
-
-  .direction-chip,
-  .type-chip {
-    font-size: 0.7rem;
-    height: 20px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-
-    .direction-icon {
-      font-size: 14px;
-      width: 14px;
-      height: 14px;
-      margin-right: 4px;
-    }
-  }
-
-  .direction-chip {
-    &.incoming {
-      background-color: #e3f2fd;
-      color: #1976d2;
-    }
-
-    &.outgoing {
-      background-color: #e8f5e8;
-      color: #388e3c;
-    }
-  }
-
-  .type-chip {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
-  }
-}
-
-.properties-section {
-  margin-bottom: 16px;
-  flex: 1;
-}
-
-.properties-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.property-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  .property-label {
-    font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.7);
-    font-weight: 600;
-    flex-shrink: 0;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-
-  .property-value-container {
-    flex: 1;
-    min-width: 0;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-
-  .property-value {
-    font-size: 0.9rem;
-    color: rgba(0, 0, 0, 0.9);
-    word-break: break-word;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    line-height: 1.4;
-    display: block;
-  }
-}
-
-// Array container styles
-.array-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  line-height: 1.4;
-}
-
-.array-item {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.9);
-  word-break: break-word;
-  overflow-wrap: break-word;
-  display: inline;
-}
-
-.array-separator {
-  color: rgba(0, 0, 0, 0.6);
-  margin: 0 2px;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-.json-container {
-  max-height: 150px;
-  overflow: auto;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 4px;
-  word-break: break-word;
-  overflow-wrap: break-word;
-
-  .json-viewer {
-    font-size: 0.8rem;
-    word-break: break-word;
-    overflow-wrap: break-word;
-
-    ::ng-deep {
-      .ngx-json-viewer {
-        word-break: break-word;
-        overflow-wrap: break-word;
-
-        .segment {
-          word-break: break-word;
-          overflow-wrap: break-word;
-          white-space: pre-wrap;
-        }
-      }
-    }
-  }
-}
-
-.no-properties {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 20px;
-  color: rgba(0, 0, 0, 0.5);
-  word-break: break-word;
-  overflow-wrap: break-word;
-
-  mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-  }
-
-  span {
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-}
-
-.view-details-btn {
-  margin-top: auto;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-    margin-left: 4px;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .card-header-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .relationship-info {
-    flex-direction: row;
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .property-item {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .node-title {
-    font-size: 1rem;
-  }
-
-  .property-item {
-    .property-label {
-      font-size: 0.75rem;
-    }
-
-    .property-value {
-      font-size: 0.85rem;
-    }
-  }
-
-  .array-item {
-    font-size: 0.85rem;
-  }
-}
-
-// Ensure all text elements have proper wrapping
-:host {
-  * {
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-}
-
-## src/app/components/relationship-pagination/relationship-pagination.component.html <a id="relationship-pagination_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<div class="pagination-container">
-  <div class="pagination-info" *ngIf="totalItems > 0">
-    <span class="info-text">{{ getDisplayedRange() }}</span>
-  </div>
-
-  <div class="pagination-controls" *ngIf="totalPages > 1">
-    <div class="pagination-buttons">
-      <!-- Previous Button -->
-      <button
-        mat-icon-button
-        [disabled]="currentPage === 0 || isLoading"
-        (click)="previousPage()"
-        class="nav-button"
-      >
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-
-      <!-- Page Numbers -->
-      <button
-        *ngFor="let page of pages"
-        mat-button
-        [class.active]="page === currentPage"
-        [disabled]="isLoading"
-        (click)="goToPage(page)"
-        class="page-button"
-      >
-        {{ page + 1 }}
-      </button>
-
-      <!-- Next Button -->
-      <button
-        mat-icon-button
-        [disabled]="currentPage === totalPages - 1 || isLoading"
-        (click)="nextPage()"
-        class="nav-button"
-      >
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
-  </div>
-
-  <!-- Loading Spinner -->
-  <div class="loading-spinner" *ngIf="isLoading">
-    <mat-progress-spinner
-      diameter="24"
-      mode="indeterminate"
-    ></mat-progress-spinner>
-  </div>
-</div>
-
-## src/app/pages/projects/projects.component.scss <a id="projects_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/components/relationship-card/relationship-card.component.html <a id="relationship-card_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<mat-card class="relationship-card">
-  <mat-card-header>
-    <div class="card-header-content">
-      <div class="node-title-section">
-        <mat-card-title class="node-title">
-          {{ getNodeDisplayName() }}
-        </mat-card-title>
-        <mat-card-subtitle class="node-type">
-          {{ getNodeType() }}
-        </mat-card-subtitle>
-      </div>
-      <div class="relationship-info">
-        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
-          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
-          {{ getDirectionLabel() }}
-        </mat-chip>
-        <mat-chip class="type-chip">
-          {{ relationshipType }}
-        </mat-chip>
-      </div>
-    </div>
-  </mat-card-header>
-
-  <mat-card-content>
-    <!-- Node Properties -->
-    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
-      <div class="properties-grid">
-        <div *ngFor="let prop of getNodeProperties()" class="property-item">
-          <strong class="property-label">{{ prop.key }}:</strong>
-          <div class="property-value-container">
-            @if (isArray(prop.value)) {
-            <div class="array-container">
-              @for (item of prop.value; track item; let last = $last) {
-              <span class="array-item">
-                {{ item }}@if (!last) {<span class="array-separator">, </span>}
-              </span>
-              }
-            </div>
-            } @else if (isObject(prop.value)) {
-            <div class="json-container">
-              <ngx-json-viewer
-                [json]="prop.value"
-                [expanded]="false"
-                class="json-viewer"
-              >
-              </ngx-json-viewer>
-            </div>
-            } @else {
-            <span class="property-value" [title]="prop.value">
-              {{ formatPropertyValue(prop.value) }}
-            </span>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- No Properties Message -->
-    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
-      <mat-icon>info</mat-icon>
-      <span>No properties available</span>
-    </div>
-  </mat-card-content>
-
-  <!-- View Details Action (only for allowed node types) -->
-  @if (shouldShowViewDetails()) {
-  <mat-card-actions align="end">
-    <button
-      mat-button
-      color="primary"
-      (click)="onViewDetails($event)"
-      class="view-details-btn"
-    >
-      <mat-icon>arrow_forward</mat-icon>
-      View Details
-    </button>
-  </mat-card-actions>
-  }
-</mat-card>
-
-## src/app/pages/persons/persons.component.html <a id="persons_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/persons/persons.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Researchers & Contributors</h1>
-    <p>
-      Explore researchers, scientists, and contributors across various
-      institutions and disciplines
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Person"
-    [columns]="personColumns"
-    label="Researchers"
-    [defaultSort]="'name'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/components/relationship-pagination/relationship-pagination.component.scss <a id="relationship-pagination_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-.pagination-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.pagination-info {
-  .info-text {
-    font-size: 0.875rem;
-    color: rgba(0, 0, 0, 0.6);
-  }
-}
-
-.pagination-controls {
-  .pagination-buttons {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-
-    .nav-button,
-    .page-button {
-      min-width: 40px;
-      height: 40px;
-    }
-
-    .page-button {
-      &.active {
-        background-color: #006d33;
-        color: white;
-      }
-
-      &:not(.active):hover {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
-    }
-
-    .nav-button {
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 4px;
-    }
-  }
-}
-
-.loading-spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .pagination-container {
-    padding: 12px 8px;
-  }
-
-  .pagination-buttons {
-    .nav-button,
-    .page-button {
-      min-width: 36px;
-      height: 36px;
-    }
-  }
-}
-
-## src/app/pages/search-results/search-results.component.html <a id="search-results_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/search-results/search-results.component.html (fixed) -->
-<div class="search-results-page">
-  <div class="container mx-auto p-4">
-    <!-- Search Header -->
-    <div class="search-header mb-6">
-      <h1 class="text-2xl font-bold mb-2">Search Results</h1>
-      <p class="text-gray-600" *ngIf="searchTerm">
-        Showing results for: <strong>"{{ searchTerm }}"</strong>
-      </p>
-    </div>
-
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-progress-spinner
-        diameter="40"
-        mode="indeterminate"
-      ></mat-progress-spinner>
-      <p class="mt-4">Searching...</p>
-    </div>
-
-    <!-- No Results -->
-    <div
-      *ngIf="!isLoading && hasSearched && results.length === 0"
-      class="no-results"
-    >
-      <mat-icon class="no-results-icon">search_off</mat-icon>
-      <h2>No results found</h2>
-      <p>Try adjusting your search terms or try a different search.</p>
-    </div>
-
-    <!-- Results -->
-    <div *ngIf="!isLoading && results.length > 0" class="results-container">
-      <!-- Results Summary -->
-      <div class="results-summary mb-6">
-        <p class="text-sm text-gray-600">
-          Found {{ results.length }} result{{ results.length === 1 ? "" : "s" }}
-          <span *ngIf="getUniqueTypes().length > 0">
-            across {{ getUniqueTypes().length }} type{{
-              getUniqueTypes().length === 1 ? "" : "s"
-            }}
-          </span>
-        </p>
-
-        <!-- Type Filters -->
-        <div class="type-filters mt-2">
-          <mat-chip
-            *ngFor="let type of getUniqueTypes()"
-            [class]="type.toLowerCase()"
-            class="mr-2 mb-2"
-          >
-            {{ type }} ({{ getResultCountByType(type) }})
-          </mat-chip>
-        </div>
-      </div>
-
-      <!-- Results List -->
-      <div class="results-grid">
-        <mat-card *ngFor="let result of results" class="result-card">
-          <mat-card-header>
-            <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
-              {{ result.type }}
-            </mat-chip>
-            <mat-card-title class="result-title">
-              {{ result.label }}
-            </mat-card-title>
-            <mat-card-subtitle *ngIf="result.score" class="score">
-              Relevance: {{ (result.score * 100).toFixed(1) }}%
-            </mat-card-subtitle>
-          </mat-card-header>
-
-          <mat-card-content *ngIf="result.description">
-            <p class="result-description">
-              {{ result.description | slice : 0 : 200
-              }}{{ result.description.length > 200 ? "..." : "" }}
-            </p>
-          </mat-card-content>
-
-          <mat-card-actions align="end">
-            <button
-              mat-button
-              color="primary"
-              (click)="navigateToResult(result)"
-            >
-              View Details
-              <mat-icon>arrow_forward</mat-icon>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </div>
-  </div>
-</div>
-
-## src/app/pages/sources/sources.component.html <a id="sources_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/sources/sources.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Data Sources</h1>
-    <p>
-      Explore scientific journals, data repositories, and information sources
-      across various domains
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Source"
-    [columns]="sourceColumns"
-    label="Sources"
-    [defaultSort]="'title'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/pages/search-results/search-results.component.scss <a id="search-results_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-
-## src/app/pages/sources/sources.component.scss <a id="sources_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/pages/vocabularies/vocabularies.component.scss <a id="vocabularies_component_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/pages/vocabularies/vocabularies.component.html <a id="vocabularies_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
-
-<!-- src/app/pages/vocabularies/vocabularies.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Vocabularies & Terms</h1>
-    <p>
-      Explore controlled vocabularies, taxonomies, and classification systems
-      used across research domains
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Term"
-    [columns]="vocabularyColumns"
-    label="Vocabulary Terms"
-    [defaultSort]="'name'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/styles.scss <a id="styles_scss"></a> 🔄 **[RECENTLY MODIFIED]**
-
-### Dependencies
-
-- `material-icons/iconfont/material-icons.css`
-- `@angular/material`
-- `./styles_theme-iroko`
-- `../public/fonts/Roboto-Light.ttf`
-- `../public/fonts/Roboto-Regular.ttf`
-- `../public/fonts/Roboto-Medium.ttf`
-- `../public/fonts/Roboto-Bold.ttf`
-
-/* src/styles.scss - updated */
-@use "@angular/material" as mat;
-@use "./styles_theme-iroko" as iroko-theme;
-
-@import "material-icons/iconfont/material-icons.css";
-
-// Include core styles
-@include mat.elevation-classes();
-@include mat.app-background();
-
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 300;
-  src: url("../public/fonts/Roboto-Light.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  src: url("../public/fonts/Roboto-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  src: url("../public/fonts/Roboto-Medium.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 700;
-  src: url("../public/fonts/Roboto-Bold.ttf") format("truetype");
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Roboto", "Helvetica Neue", sans-serif;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  color-scheme: light;
-  background-color: #f8f9fa;
-  @include mat.theme(
-    (
-      color: (
-        primary: iroko-theme.$primary-palette,
-        tertiary: iroko-theme.$tertiary-palette,
-        theme-type: light,
-      ),
-      typography: (
-        plain-family: Roboto,
-        brand-family: "Open Sans",
-        bold-weight: 700,
-        medium-weight: 500,
-        regular-weight: 400,
-      ),
-      density: 0,
-    )
-  );
-}
-
-html {
-  height: 100%;
-}
-
-// Utility classes
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-// Loading states
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  text-align: center;
-}
-
-// Error states
-.error-snackbar {
-  background-color: #f44336;
-  color: white;
-}
-
-// Type chips
-.type-chip {
-  &.organization {
-    background-color: #e3f2fd;
-    color: #1976d2;
-  }
-  &.person {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
-  }
-  &.source {
-    background-color: #e8f5e8;
-    color: #388e3c;
-  }
-  &.output {
-    background-color: #fff3e0;
-    color: #f57c00;
-  }
-  &.project {
-    background-color: #fce4ec;
-    color: #c2185b;
-  }
-  &.term {
-    background-color: #e8eaf6;
-    color: #303f9f;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
-}
-
-// Card hover effects
-.result-card,
-.stat-card,
-.action-card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    cursor: pointer;
-  }
-}
-
-// Search page styles
-.search-results-page {
-  min-height: 60vh;
-}
-
-.no-results {
-  text-align: center;
-  padding: 60px 20px;
-  color: #666;
-
-  .no-results-icon {
-    font-size: 64px;
-    width: 64px;
-    height: 64px;
-    margin-bottom: 16px;
-    color: #ccc;
-  }
-
-  h2 {
-    margin-bottom: 8px;
-    color: #333;
-    font-size: 1.5rem;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1rem;
-  }
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
-}
-
-// Material overrides
-.mat-toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-
-.mat-sidenav-container {
-  margin-top: 64px;
-  min-height: calc(100vh - 64px);
-}
-
-// Custom scrollbar
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* src/app/pages/_page-styles.scss */
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 16px;
-
-  @media (max-width: 768px) {
-    padding: 16px 8px;
-  }
-}
-
-.page-header {
-  margin-bottom: 32px;
-  text-align: center;
-
-  h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #333;
-    line-height: 1.2;
-
-    @media (max-width: 768px) {
-      font-size: 2rem;
-    }
-  }
-
-  p {
-    font-size: 1.1rem;
-    color: #666;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
-      padding: 0 16px;
-    }
-  }
-}
-
-/* Import this in each page component's SCSS file */
-
-## .gitignore <a id="gitignore"></a>
-
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
-
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
-.DS_Store
-Thumbs.db
-
-## src/main.ts <a id="main_ts"></a>
-
-### Dependencies
-
-- `@angular/platform-browser`
-- `./app/app.config`
-- `./app/app.component`
-
-import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
-
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
-
-## tsconfig.json <a id="tsconfig_json"></a>
-
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
-{
-  "compileOnSave": false,
-  "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "bundler",
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022"
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
-}
-
-## README.md <a id="README_md"></a>
-
-# IrokoUiPwa
-
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
-
-## Principales secciones
-
-- Home
-- Revistas MES
-- Catalogo de Fuentes (Sources)
-- Organizaciones
-- Personas
-- Proyectos
-- Resultados de investigacion (Outputs)
-
-## Backend
-
-Base de datos de Neo4j, accesible a traves de un api de solo lectura a la que se le puede hacer consultas en cypher
-
-## Principales comoponentes:
-
-- inicio: muestra resumen de las estadisticas generales, por cada seccion
-
-- listas: se utiliza para mostrar las listas de las entidades principales. Cada lista es posible filtrarla por los metadatos del nodo.
-
-- node-viewer: muestra un nodo, con sus metadatos correspondientes y ademas las estadisticas de ese nodo. Por cada tipo de relacion que tiene un nodo existe un tab donde se muesta la lista de nodos que estan relacionados con el nodo que se esta visitando. Si se tienen los permisos adecuados, es posible editar los metadatos de un nodo y tambien sus relaciones.
-
-## src/app/api/models/cypher-query.model.ts <a id="cypher-query_model_ts"></a>
-
-export interface CypherQuery {
-  query: string;
-  parameters?: { [key: string]: any } | null;
-  readonly?: boolean;
-}
-
-## src/app/services/metadata.service.ts <a id="metadata_service_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `rxjs`
-- `@angular/platform-browser`
-
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Meta, Title } from '@angular/platform-browser';
-
-export interface PageMetadata {
-  title: string;
-  abstract?: string;
-  description?: string;
-  keywords?: string[];
-  subjects?: string[];
-  authors?: string[];
-  // Add any other metadata fields you need
-}
-
-@Injectable({
-  providedIn: 'root',
-})
-export class MetadataService {
-  private defaultMetadata: PageMetadata = {
-    title: '',
-    abstract: '',
-    description: '',
-    keywords: [],
-    subjects: [],
-  };
-
-  private metadataSource = new BehaviorSubject<PageMetadata>(
-    this.defaultMetadata
-  );
-  currentMetadata = this.metadataSource.asObservable();
-
-  constructor(private meta: Meta, private title: Title) {}
-
-  resetMetadata() {
-    this.metadataSource.next(this.defaultMetadata);
-  }
-
-  private updateMetaTags(metadata: PageMetadata) {
-    this.title.setTitle(metadata.title);
-
-    this.meta.updateTag({
-      name: 'description',
-      content: metadata.description || '',
-    });
-    this.meta.updateTag({
-      name: 'keywords',
-      content: metadata.keywords?.join(', ') || '',
-    });
-
-    // OpenGraph/Facebook meta tags
-    this.meta.updateTag({ property: 'og:title', content: metadata.title });
-    this.meta.updateTag({
-      property: 'og:description',
-      content: metadata.description || '',
-    });
-
-    // Twitter meta tags
-    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
-    this.meta.updateTag({
-      name: 'twitter:description',
-      content: metadata.description || '',
-    });
-  }
-
-  updateMetadata(metadata: Partial<PageMetadata>) {
-    const current = this.metadataSource.getValue();
-    const newMetadata = { ...current, ...metadata };
-    this.metadataSource.next(newMetadata);
-    this.updateMetaTags(newMetadata);
-  }
-}
-
-## src/app/pages/error/error.component.ts <a id="error_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-error',
-  imports: [],
-  templateUrl: './error.component.html',
-  styleUrl: './error.component.scss'
-})
-export class ErrorComponent {
-
-}
-
-## src/app/api/models/http-validation-error.model.ts <a id="http-validation-error_model_ts"></a>
-
-### Dependencies
-
-- `./validation-error.model`
-
-import { ValidationError } from './validation-error.model';
-
-export interface HTTPValidationError {
-  detail?: ValidationError[];
-}
-
-## src/app/api/services/iroko-api.service.ts <a id="iroko-api_service_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common/http`
-- `rxjs`
-- `rxjs/operators`
-- `../models/cypher-query.model`
-
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { CypherQuery } from '../models/cypher-query.model';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class IrokoApiService {
-  private apiUrl = '/api/v1';
-
-  constructor(private http: HttpClient) {}
-
-  executeQuery(queryData: CypherQuery): Observable<any> {
-    return this.http
-      .post(`${this.apiUrl}/query`, queryData)
-      .pipe(catchError(this.handleError));
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code
-      console.error(
-        `Backend returned code ${error.status}, ` +
-          `body was: ${JSON.stringify(error.error)}`
-      );
-    }
-    // Return an observable with a user-facing error message
-    return throwError(
-      () => new Error('Something bad happened; please try again later.')
-    );
-  }
-}
-
-## src/app/services/config.service.ts <a id="config_service_ts"></a>
-
-### Dependencies
-
-- `@angular/common/http`
-- `@angular/core`
-- `@angular/material/menu`
-- `rxjs`
-
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { MatMenuItem } from '@angular/material/menu';
-import { Observable } from 'rxjs';
-
-export interface MenuItem {
-  label: string;
-  description: string;
-  icon?: string;
-  route?: string;
-  children?: MenuItem[];
-  expanded?: boolean;
-}
-
-export interface Config {
-  title: string;
-  menu: MenuItem[];
-}
-
-@Injectable({
-  providedIn: 'root',
-})
-export class ConfigService {
-  constructor(private http: HttpClient) {}
-
-  getConfig(): Observable<Config> {
-    return this.http.get<Config>('/config.json');
-  }
-}
-
-## src/app/components/query-executor/query-executor.component.ts <a id="query-executor_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/forms`
-- `../../api/models/cypher-query.model`
-- `@angular/material/form-field`
-- `@angular/material/icon`
-- `@angular/material/input`
-- `@angular/material/checkbox`
-
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CypherQuery } from '../../api/models/cypher-query.model';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-
-@Component({
-  selector: 'app-query-executor',
-  templateUrl: './query-executor.component.html',
-  styleUrls: ['./query-executor.component.scss'],
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatIconModule,
-    MatCheckboxModule
-],
-})
-export class QueryExecutorComponent {
-  @Output() queryExecuted = new EventEmitter<CypherQuery>();
-
-  queryForm: FormGroup;
-  parameters: { key: string; value: any }[] = [];
-  showParameters = false;
-
-  constructor(private fb: FormBuilder) {
-    this.queryForm = this.fb.group({
-      query: ['', Validators.required],
-      readonly: [true],
-    });
-  }
-
-  addParameter() {
-    this.parameters.push({ key: "[REDACTED]", value: '' });
-  }
-
-  removeParameter(index: number) {
-    this.parameters.splice(index, 1);
-  }
-
-  onSubmit() {
-    if (this.queryForm.valid) {
-      const formValue = this.queryForm.value;
-      const parametersObj = this.parameters.reduce((acc, param) => {
-        if (param.key) {
-          acc[param.key] = param.value;
-        }
-        return acc;
-      }, {} as { [key: string]: any });
-
-      const queryData: CypherQuery = {
-        query: formValue.query,
-        parameters:
-          Object.keys(parametersObj).length > 0 ? parametersObj : null,
-        readonly: formValue.readonly,
-      };
-
-      this.queryExecuted.emit(queryData);
-    }
-  }
-}
-
-## src/app/pages/query-page/query-page.component.ts <a id="query-page_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `../../api/services/iroko-api.service`
-- `../../api/models/cypher-query.model`
-- `../../components/query-executor/query-executor.component`
-- `../../components/results-display/results-display.component`
-- `@angular/material/progress-bar`
-- `../../services/metadata.service`
-
-import { Component } from '@angular/core';
-import { IrokoApiService } from '../../api/services/iroko-api.service';
-import { CypherQuery } from '../../api/models/cypher-query.model';
-import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
-import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-
-import { MetadataService } from '../../services/metadata.service';
-
-@Component({
-  selector: 'app-query-page',
-  templateUrl: './query-page.component.html',
-  styleUrls: ['./query-page.component.scss'],
-  imports: [
-    QueryExecutorComponent,
-    ResultsDisplayComponent,
-    MatProgressBarModule
-],
-})
-export class QueryPageComponent {
-  queryResult: any;
-  error: any;
-  isLoading = false;
-
-  constructor(
-    private apiService: IrokoApiService,
-    private metadataService: MetadataService
-  ) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Cypher Query',
-      description: 'iroko-cris - Cypher Query',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  ngOnDestroy() {
-    this.metadataService.resetMetadata();
-  }
-  onQueryExecuted(queryData: CypherQuery) {
-    this.isLoading = true;
-    this.queryResult = null;
-    this.error = null;
-
-    this.apiService.executeQuery(queryData).subscribe({
-      next: (result) => {
-        this.queryResult = result;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.error = err;
-        this.isLoading = false;
-      },
-    });
-  }
-}
-
-## src/app/components/results-display/results-display.component.ts <a id="results-display_component_ts"></a>
-
-### Dependencies
-
-- `@angular/common`
-- `@angular/core`
-- `ngx-json-viewer`
-
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
-
-@Component({
-  selector: 'app-results-display',
-  templateUrl: './results-display.component.html',
-  styleUrls: ['./results-display.component.scss'],
-  imports: [NgxJsonViewerModule, CommonModule],
-})
-export class ResultsDisplayComponent {
-  @Input() queryResult: any;
-  @Input() error: any;
-}
-
-## src/app/components/view-instance/view-instance.component.ts <a id="view-instance_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-
-import { Component, Input } from '@angular/core';
-
-/**
- * Visualizar una instancia significa:
- * - mostrar las propiedades simples y complejas de la instancia
- * - mostrar las relaciones de esta instancia con otras, que pueden ser con:
- * - una instancia individual o
- * - una coleccion de instancias de una misma clase
- * - muestra instancias similares de la misma clase
- * 
- * 
- * tiene un tab principal, que muestra las propiedades simples y complejas y las relaciones conjuntos
- * pequennos de instancias de una misma clase
- * hay un tab por cada conjunto m
- * /
-
-@Component({
-  selector: 'app-view-instance',
-  imports: [],
-  templateUrl: './view-instance.component.html',
-  styleUrl: './view-instance.component.scss',
-})
-export class ViewInstanceComponent {
-  @Input() instancePID: string = '';
-
-  // las collecciones de instancias relacionadas que sean mayor que este numero,
-  // aparecen en un tab nuevo a partir de esta candidad.
-  @Input() relationsCountInMain: number = 3;
-}
-
-## src/app/components/view-class/view-class.component.ts <a id="view-class_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-
-import { Component, Input } from '@angular/core';
-
-/**
- * Visualizar una clase significa:
- * - mostrar las propiedades y relaciones de la clase
- * - visualizar un "resumen" de los datos que existen en el grafo sobre esa clase (averiguar...)
- * - explorar la colleccion de instancias de esa clase.
- * - explorar el grafo a partir de la clase y sus instancias.
- * 
- * 
- * /
-@Component({
-  selector: 'app-view-class',
-  imports: [],
-  templateUrl: './view-class.component.html',
-  styleUrl: './view-class.component.scss',
-})
-export class ViewClassComponent {
-  @Input() className: string = '';
-}
-
-## src/app/api/models/validation-error.model.ts <a id="validation-error_model_ts"></a>
-
-export interface ValidationError {
-  loc: (string | number)[];
-  msg: string;
-  type: string;
-}
-
-## .postcssrc.json <a id="postcssrc_json"></a>
-
-{
-  "plugins": {
-    "@tailwindcss/postcss": {}
-  }
-}
-
-## angular.json <a id="angular_json"></a>
-
-{
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "iroko-ui-pwa": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:application",
-          "options": {
-            "outputPath": "dist/iroko-ui-pwa",
-            "index": "src/index.html",
-            "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
-            "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "@angular/material/prebuilt-themes/rose-red.css",
-              "src/styles.scss"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
-              "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "iroko-ui-pwa:build:production"
-            },
-            "development": {
-              "buildTarget": "iroko-ui-pwa:build:development"
-            }
-          },
-          "options": {
-            "proxyConfig": "proxy.conf.json"
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "@angular/material/icon/_icon-theme.css",
-              "src/styles.scss"
-            ],
-            "scripts": []
-          }
-        }
-      }
-    }
-  },
-  "cli": {
-    "analytics": "ba16d7c5-9cc7-423f-8bd1-84d5c23b4739"
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "type": "component"
-    },
-    "@schematics/angular:directive": {
-      "type": "directive"
-    },
-    "@schematics/angular:service": {
-      "type": "service"
-    },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
-      "typeSeparator": "."
-    }
-  }
-}
-
-## src/app/pages/error/error.component.scss <a id="error_component_scss"></a>
-
-
-## src/app/pages/error/error.component.html <a id="error_component_html"></a>
-
-<p>error works!</p>
-
 ## src/index.html <a id="index_html"></a>
 
 <!doctype html>
@@ -7374,93 +6798,127 @@ export interface ValidationError {
 </body>
 </html>
 
-## src/app/services/openapi.json <a id="openapi_json"></a>
+## src/app/components/markdown-viewer/markdown-viewer.component.html <a id="markdown-viewer_component_html"></a>
 
-{
-  "openapi": "3.1.0",
-  "info": { "title": "Iroko API", "version": "0.1.0" },
-  "paths": {
-    "/api/v1/query": {
-      "post": {
-        "summary": "Execute a read-only Cypher query",
-        "description": "Execute a safe Cypher query with parameters.\n\n- **query**: Valid Cypher read-only query\n- **parameters**: Optional query parameters\n- **readonly**: Enforce read-only mode (default: True)",
-        "operationId": "execute_cypher_api_v1_query_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/CypherQuery" }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": { "application/json": { "schema": {} } }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
-              }
-            }
-          }
-        }
+<div class="markdown-container">
+  @if (src) {
+  <markdown
+    [src]="src"
+    (load)="onMarkdownLoad()"
+    (error)="onMarkdownError($event)"
+  >
+  </markdown>
+  } @else {
+  <markdown
+    [data]="content"
+    (load)="onMarkdownLoad()"
+    (error)="onMarkdownError($event)"
+  >
+  </markdown>
+  }
+</div>
+
+## src/app/components/markdown-viewer/markdown-viewer.component.scss <a id="markdown-viewer_component_scss"></a>
+
+.markdown-container {
+  padding: 16px;
+
+  // Style markdown content
+  ::ng-deep {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    code {
+      background-color: #f6f8fa;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: #f6f8fa;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+
+      code {
+        background: none;
+        padding: 0;
       }
     }
-  },
-  "components": {
-    "schemas": {
-      "CypherQuery": {
-        "properties": {
-          "query": { "type": "string", "title": "Query" },
-          "parameters": {
-            "anyOf": [
-              { "additionalProperties": true, "type": "object" },
-              { "type": "null" }
-            ],
-            "title": "Parameters"
-          },
-          "readonly": {
-            "type": "boolean",
-            "title": "Readonly",
-            "default": true
-          }
-        },
-        "type": "object",
-        "required": ["query"],
-        "title": "CypherQuery",
-        "example": {
-          "parameters": { "name": "Alice" },
-          "query": "MATCH (n:Person) WHERE n.name = $name RETURN n LIMIT 10",
-          "readonly": true
-        }
-      },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": { "$ref": "#/components/schemas/ValidationError" },
-            "type": "array",
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "title": "HTTPValidationError"
-      },
-      "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": { "type": "string", "title": "Message" },
-          "type": { "type": "string", "title": "Error Type" }
-        },
-        "type": "object",
-        "required": ["loc", "msg", "type"],
-        "title": "ValidationError"
+
+    blockquote {
+      border-left: 4px solid #dfe2e5;
+      padding-left: 16px;
+      margin-left: 0;
+      color: #6a737d;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 16px;
+
+      th,
+      td {
+        border: 1px solid #dfe2e5;
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f6f8fa;
+        font-weight: 600;
+      }
+    }
+
+    a {
+      color: #0366d6;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
@@ -7946,402 +7404,37 @@ export interface ValidationError {
   ]
 }
 
-## src/app/schemas/output-v1.0.0.json <a id="output-v1_0_0_json"></a>
+## src/app/pages/mes/mes.component.html <a id="mes_component_html"></a>
 
-{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "local://iroko/record-v1.0.0.json",
-  "additionalProperties": true,
-  "title": "iroko v1.0.0",
-  "type": "object",
-  "properties": {
-    "id": {
-      "description": "Iroko UUID, pid_type = irouid",
-      "type": "string"
-    },
-    "identifiers": {
-      "description": "identificadores del record",
-      "items": {
-        "additionalProperties": false,
-        "type": "object",
-        "properties": {
-          "idtype": {
-            "description": "el tipo de identificador",
-            "type": "string",
-            "enum": [
-              "ark",
-              "arxiv",
-              "doi",
-              "bibcode",
-              "ean8",
-              "ean13",
-              "eissn",
-              "handle",
-              "isbn",
-              "issn",
-              "istc",
-              "lissn",
-              "lsid",
-              "pmid",
-              "pmcid",
-              "purl",
-              "upc",
-              "url",
-              "urn",
-              "orcid",
-              "gnd",
-              "ads",
-              "oai",
-              "irouid"
-            ]
-          },
-          "value": {
-            "type": "string"
-          }
-        }
-      },
-      "type": "array"
-    },
-    "source_repo": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "uuid": {
-          "description": "Source UUID from which the document was harvest",
-          "type": "string"
-        },
-        "name": {
-          "description": "Source Name from which the document was harvest",
-          "type": "string"
-        }
-      }
-    },
-    "spec": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "code": {
-          "description": "setSpec element from Dublin Core, the code",
-          "type": "string"
-        },
-        "name": {
-          "description": "setSpec Name from Dublin Core, the full name",
-          "type": "string"
-        }
-      }
-    },
-    "title": {
-      "description": "Document title.",
-      "type": "string"
-    },
-    "creators": {
-      "description": "Contributors in order of importance.",
-      "minItems": 0,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "ids": {
-            "description": "List of IDs related with the person.",
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "additionalProperties": false,
-              "type": "object",
-              "properties": {
-                "source": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "name": {
-            "description": "Full name of person or organisation. Personal name format: family, given.",
-            "type": "string"
-          },
-          "affiliations": {
-            "description": "Affiliation(s) for the purpose of this specific document.",
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string"
-            }
-          },
-          "email": {
-            "type": "string",
-            "description": "Contact email for the purpose of this specific document.",
-            "format": "email"
-          },
-          "roles": {
-            "description": "",
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "Author",
-                "ContactPerson",
-                "DataCollector",
-                "DataCurator",
-                "DataManager",
-                "Distributor",
-                "Editor",
-                "JournalManager",
-                "Funder",
-                "HostingInstitution",
-                "Other",
-                "Producer",
-                "ProjectLeader",
-                "ProjectManager",
-                "ProjectMember",
-                "RegistrationAgency",
-                "RegistrationAuthority",
-                "RelatedPerson",
-                "ResearchGroup",
-                "RightsHolder",
-                "Researcher",
-                "Sponsor",
-                "Supervisor",
-                "WorkPackageLeader"
-              ]
-            }
-          }
-        },
-        "required": [
-          "name"
-        ]
-      }
-    },
-    "keywords": {
-      "description": "Free text keywords.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "description": {
-      "description": "Description/abstract for document.",
-      "type": "string"
-    },
-    "publisher": {
-      "description": "Publisher name",
-      "type": "string"
-    },
-    "sources": {
-      "description": "Free text keywords.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "rights": {
-      "description": "Rights.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "types": {
-      "description": "Types. Eg: info:eu-repo/semantics/article, or Artículo revisado por pares",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "formats": {
-      "description": "formats. Eg: application/pdf",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "language": {
-      "description": "ISO 639-3 language code.",
-      "type": "string"
-    },
-    "publication_date": {
-      "description": "When the document is published",
-      "type": "string",
-      "format": "date-time"
-    },
-    "dates": {
-      "description": "dates related to the record",
-      "type": "array",
-      "items": {
-        "additionalProperties": false,
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "info": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "contributors": {
-      "description": "Contributors in order of importance.",
-      "minItems": 0,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "ids": {
-            "description": "List of IDs related with the person.",
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "additionalProperties": false,
-              "type": "object",
-              "properties": {
-                "source": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "name": {
-            "description": "Full name of person or organisation. Personal name format: family, given.",
-            "type": "string"
-          },
-          "affiliations": {
-            "description": "Affiliation(s) for the purpose of this specific document.",
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string"
-            }
-          },
-          "email": {
-            "type": "string",
-            "description": "Contact email for the purpose of this specific document.",
-            "format": "email"
-          },
-          "roles": {
-            "description": "",
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "Author",
-                "ContactPerson",
-                "DataCollector",
-                "DataCurator",
-                "DataManager",
-                "Distributor",
-                "Editor",
-                "JournalManager",
-                "Funder",
-                "HostingInstitution",
-                "Other",
-                "Producer",
-                "ProjectLeader",
-                "ProjectManager",
-                "ProjectMember",
-                "RegistrationAgency",
-                "RegistrationAuthority",
-                "RelatedPerson",
-                "ResearchGroup",
-                "RightsHolder",
-                "Researcher",
-                "Sponsor",
-                "Supervisor",
-                "WorkPackageLeader"
-              ]
-            }
-          }
-        },
-        "required": [
-          "name"
-        ]
-      }
-    },
-    "references": {
-      "description": "Raw textual references",
-      "items": {
-        "additionalProperties": true,
-        "properties": {
-          "raw_reference": {
-            "type": "string"
-          }
-        },
-        "title": "Reference",
-        "type": "object"
-      },
-      "type": "array"
-    },
-    "organizations": {
-      "description": "list of organizations of related to this source",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "identifier of the ORG"
-          },
-          "name": {
-            "type": "string",
-            "description": "the name of the ORG"
-          },
-          "role": {
-            "type": "string",
-            "description": "the role of the organization"
-          }
-        }
-      }
-    },
-    "classifications": {
-      "description": "list of terms of related to this source",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "identifier the term related to this source"
-          },
-          "description": {
-            "type": "string",
-            "description": "the name of the term related to this source"
-          },
-          "vocabulary": {
-            "type": "string",
-            "description": "the vocabulary of the classification"
-          }
-        }
-      }
-    },
-    "terms": {
-      "description": "UUID of related iroko terms",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "status": {
-      "type": "string"
-    }
-  },
-  "required": [
-    "id",
-    "source_repo",
-    "title"
-  ]
-}
+<!-- src/app/pages/mes/mes.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>MES Scientific Journals</h1>
+    <p>
+      Explore scientific journals and publications from the Cuban Ministry of
+      Higher Education
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Source"
+    [columns]="mesColumns"
+    label="MES Journals"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/mes/mes.component.scss <a id="mes_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
 
 ## ngsw-config.json <a id="ngsw-config_json"></a>
 
@@ -8376,272 +7469,174 @@ export interface ValidationError {
   ]
 }
 
-## src/app/schemas/person-v1.0.0.json <a id="person-v1_0_0_json"></a>
+## src/app/pages/node-view/node-view.component.html <a id="node-view_component_html"></a>
+
+<!-- src/app/pages/node-view/node-view.component.html -->
+<div class="node-view-page">
+  <div class="page-header">
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      Back to {{ getBreadcrumbLabel() }} List
+    </button>
+
+    <h1>{{ getBreadcrumbLabel() }} Details</h1>
+    <p>
+      Exploring detailed information about this
+      {{ getBreadcrumbLabel().toLowerCase() }}
+    </p>
+  </div>
+
+  <div class="node-viewer-container">
+    <app-enhanced-node-viewer
+      [nodeId]="nodeId"
+      [nodeType]="nodeType"
+      (nodeSelected)="onRelatedNodeSelect($event)"
+    >
+    </app-enhanced-node-viewer>
+  </div>
+</div>
+
+## src/app/pages/node-view/node-view.component.scss <a id="node-view_component_scss"></a>
+
+/* src/app/pages/node-view/node-view.component.scss */
+.node-view-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+
+  @media (max-width: 768px) {
+    padding: 16px 8px;
+  }
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  .back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: #666;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #333;
+
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.node-viewer-container {
+  margin-top: 16px;
+}
+
+## src/app/services/openapi.json <a id="openapi_json"></a>
 
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "local://iroko/person-v1.0.0.json",
-  "title": "Person Schema, using orcid as a base(...?)",
-  "type": "object",
-  "additionalProperties": true,
-  "required": [
-    "identifiers",
-    "id",
-    "name"
-  ],
-  "properties": {
-    "id": {
-      "type": "string",
-      "description": "Iroko UUID, pid_type = perid"
-    },
-    "identifiers": {
-      "type": "array",
-      "description": "Person Identifiers",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "idtype": {
-            "description": "identifier type",
-            "type": "string"
+  "openapi": "3.1.0",
+  "info": { "title": "Iroko API", "version": "0.1.0" },
+  "paths": {
+    "/api/v1/query": {
+      "post": {
+        "summary": "Execute a read-only Cypher query",
+        "description": "Execute a safe Cypher query with parameters.\n\n- **query**: Valid Cypher read-only query\n- **parameters**: Optional query parameters\n- **readonly**: Enforce read-only mode (default: True)",
+        "operationId": "execute_cypher_api_v1_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CypherQuery" }
+            }
           },
-          "value": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "name": {
-      "type": "string",
-      "description": "The name typically used to refer to the institute."
-    },
-    "last_name": {
-      "type": "string",
-      "description": "The name typically used to refer to the institute."
-    },
-    "public": {
-      "type": "boolean",
-      "description": "Si el perfil del usuario es publico"
-    },
-    "active": {
-      "type": "boolean",
-      "description": "Si este usuario está activo o no el sistema, si no está activo es como si no existiera pero a los efectos de los usuario administrativos sí existe."
-    },
-    "gender": {
-      "type": "string",
-      "description": "any string describing gender"
-    },
-    "country": {
-      "type": "object",
-      "description": "Country",
-      "properties": {
-        "code": {
-          "type": "string",
-          "description": "The ISO 3166-1 alpha-2 code of the country"
+          "required": true
         },
-        "name": {
-          "type": "string",
-          "description": "The name of the country"
-        }
-      }
-    },
-    "email_addresses": {
-      "type": "array",
-      "description": "A list of email addresses",
-      "items": {
-        "type": "string"
-      }
-    },
-    "aliases": {
-      "type": "array",
-      "description": "A list of other names the person is known as",
-      "items": {
-        "type": "string"
-      }
-    },
-    "research_interests": {
-      "type": "array",
-      "description": "Vocabulario UNESCO (Por defecto sería el de la UNESCO pero debe ofrecerse cambiar vocabulario a uno de los especializados de la lista que tenemos)",
-      "items": {
-        "type": "string"
-      }
-    },
-    "key_words": {
-      "type": "array",
-      "description": "Palabras claves, es libre lo que ponga el usuario, es como la especialización dentro de los intereses de investigación. si fuese controlado deberí ser el de la UNESCO",
-      "items": {
-        "type": "string"
-      }
-    },
-    "academic_titles": {
-      "type": "array",
-      "description": "Academic Titles",
-      "items": {
-        "type": "string"
-      }
-    },
-    "affiliations": {
-      "description": "Affiliations of the person",
-      "minItems": 0,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Iroko Organization UUID"
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
           },
-          "identifiers": {
-            "type": "array",
-            "description": "Organization Identifiers",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "idtype": {
-                  "description": "identifier type",
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
               }
-            }
-          },
-          "start_date": {
-            "description": "Start date of the affiliation",
-            "type": "string",
-            "format": "date-time"
-          },
-          "end_date": {
-            "description": "End date of the affiliation. None means to this date.",
-            "type": "string",
-            "format": "date-time"
-          },
-          "label": {
-            "type": "string",
-            "description": "The name of the related institute"
-          },
-          "roles": {
-            "type": "array",
-            "description": "Roles within the organization",
-            "items": {
-              "type": "string",
-              "description": "Role (use controlled vocabulary)"
-            }
-          }
-        }
-      }
-    },
-    "roles_sceiba": {
-      "type": "array",
-      "description": "Roles within the organization",
-      "items": {
-        "type": "string",
-        "description": "Role (use controlled vocabulary)"
-      }
-    },
-    "publications": {
-      "description": "Publications (papers, thesis, etc) of the person",
-      "minItems": 0,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "identifiers": {
-            "type": "array",
-            "description": "Publication Identifiers",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "idtype": {
-                  "description": "identifier type",
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "id": {
-            "type": "string",
-            "description": "Iroko UUID"
-          },
-          "title": {
-            "type": "string",
-            "description": "Title of the publication"
-          },
-          "roles": {
-            "type": "array",
-            "description": "role in the article",
-            "items": {
-              "type": "string",
-              "description": "Role (use controlled vocabulary)"
-            }
-          },
-          "status": {
-            "type": "string",
-            "description": "the status of the relation of the person with the publication (is confirmed by the person or not )",
-            "enum": [
-              "inferred",
-              "confirmed",
-              "rejected"
-            ]
-          }
-        }
-      }
-    },
-    "sources": {
-      "description": "Sources the person is related (journal, repository)",
-      "minItems": 0,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "identifiers": {
-            "type": "array",
-            "description": "Publication Identifiers",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "idtype": {
-                  "description": "identifier type",
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "id": {
-            "type": "string",
-            "description": "Iroko UUID"
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the source"
-          },
-          "roles": {
-            "type": "array",
-            "description": "role in the source (editor, reviewer)",
-            "items": {
-              "type": "string",
-              "description": "Role (use controlled vocabulary)"
             }
           }
         }
       }
     }
+  },
+  "components": {
+    "schemas": {
+      "CypherQuery": {
+        "properties": {
+          "query": { "type": "string", "title": "Query" },
+          "parameters": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Parameters"
+          },
+          "readonly": {
+            "type": "boolean",
+            "title": "Readonly",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": ["query"],
+        "title": "CypherQuery",
+        "example": {
+          "parameters": { "name": "Alice" },
+          "query": "MATCH (n:Person) WHERE n.name = $name RETURN n LIMIT 10",
+          "readonly": true
+        }
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
   }
 }
-
 
 ## src/app/schemas/organization-v1.0.0.json <a id="organization-v1_0_0_json"></a>
 
@@ -9043,123 +8038,764 @@ export interface ValidationError {
 }
 
 
-## src/app/components/query-executor/query-executor.component.scss <a id="query-executor_component_scss"></a>
+## src/app/pages/organizations/organizations.component.html <a id="organizations_component_html"></a>
 
-
-## src/app/components/query-executor/query-executor.component.html <a id="query-executor_component_html"></a>
-
-<form [formGroup]="queryForm" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Cypher Query</mat-label>
-    <textarea
-      matInput
-      formControlName="query"
-      rows="5"
-      placeholder="Example: MATCH (n) RETURN n LIMIT 10"
-    ></textarea>
-    @if (queryForm.get('query')?.hasError('required')) {
-      <mat-error>
-        Query is required
-      </mat-error>
-    }
-  </mat-form-field>
-
-  <div class="parameters-section">
-    <button mat-button type="button" (click)="showParameters = !showParameters">
-      {{ showParameters ? "Hide Parameters" : "Add Parameters" }}
-    </button>
-
-    @if (showParameters) {
-      <div class="parameters-list">
-        @for (param of parameters; track param; let i = $index) {
-          <div
-            class="parameter-row"
-            >
-            <mat-form-field appearance="fill">
-              <mat-label>Key</mat-label>
-              <input
-                matInput
-                [(ngModel)]="param.key"
-                [ngModelOptions]="{ standalone: true }"
-                placeholder="key"
-                />
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-              <mat-label>Value</mat-label>
-              <input
-                matInput
-                [(ngModel)]="param.value"
-                [ngModelOptions]="{ standalone: true }"
-                placeholder="value"
-                />
-            </mat-form-field>
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="removeParameter(i)"
-              type="button"
-              aria-label="Remove parameter"
-              >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        }
-        <button
-          mat-button
-          type="button"
-          aria-label="Add Parameter"
-          (click)="addParameter()"
-          >
-          <mat-icon>add</mat-icon> Add Parameter
-        </button>
-      </div>
-    }
+<!-- src/app/pages/organizations/organizations.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Organizations</h1>
+    <p>
+      Explore research organizations and institutions in the knowledge graph
+    </p>
   </div>
 
-  <mat-checkbox formControlName="readonly">Read-only</mat-checkbox>
-
-  <div class="submit-button">
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!queryForm.valid"
-      >
-      Execute Query
-    </button>
-  </div>
-</form>
-
-## src/app/pages/query-page/query-page.component.html <a id="query-page_component_html"></a>
-
-<div class="query-page-container">
-  <h1>Iroko API Query Interface</h1>
-
-  <div class="query-section">
-    <app-query-executor (queryExecuted)="onQueryExecuted($event)"></app-query-executor>
-  </div>
-
-  @if (isLoading) {
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-  }
-
-  <div class="results-section">
-    <app-results-display [queryResult]="queryResult" [error]="error"></app-results-display>
-  </div>
+  <app-generic-list
+    entityType="Organization"
+    [columns]="organizationColumns"
+    label="Organizations"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
 </div>
 
-## src/app/pages/query-page/query-page.component.scss <a id="query-page_component_scss"></a>
+## src/app/pages/organizations/organizations.component.scss <a id="organizations_component_scss"></a>
 
+### Dependencies
 
-## proxy.conf.json <a id="proxy_conf_json"></a>
+- `../page-styles`
+
+@use "../page-styles";
+
+## src/app/schemas/output-v1.0.0.json <a id="output-v1_0_0_json"></a>
 
 {
-  "/api": {
-    "target": "http://localhost:8000",
-    "secure": false,
-    "changeOrigin": true
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "local://iroko/record-v1.0.0.json",
+  "additionalProperties": true,
+  "title": "iroko v1.0.0",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Iroko UUID, pid_type = irouid",
+      "type": "string"
+    },
+    "identifiers": {
+      "description": "identificadores del record",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "idtype": {
+            "description": "el tipo de identificador",
+            "type": "string",
+            "enum": [
+              "ark",
+              "arxiv",
+              "doi",
+              "bibcode",
+              "ean8",
+              "ean13",
+              "eissn",
+              "handle",
+              "isbn",
+              "issn",
+              "istc",
+              "lissn",
+              "lsid",
+              "pmid",
+              "pmcid",
+              "purl",
+              "upc",
+              "url",
+              "urn",
+              "orcid",
+              "gnd",
+              "ads",
+              "oai",
+              "irouid"
+            ]
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "array"
+    },
+    "source_repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "description": "Source UUID from which the document was harvest",
+          "type": "string"
+        },
+        "name": {
+          "description": "Source Name from which the document was harvest",
+          "type": "string"
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "description": "setSpec element from Dublin Core, the code",
+          "type": "string"
+        },
+        "name": {
+          "description": "setSpec Name from Dublin Core, the full name",
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "description": "Document title.",
+      "type": "string"
+    },
+    "creators": {
+      "description": "Contributors in order of importance.",
+      "minItems": 0,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "description": "List of IDs related with the person.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "name": {
+            "description": "Full name of person or organisation. Personal name format: family, given.",
+            "type": "string"
+          },
+          "affiliations": {
+            "description": "Affiliation(s) for the purpose of this specific document.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email for the purpose of this specific document.",
+            "format": "email"
+          },
+          "roles": {
+            "description": "",
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Author",
+                "ContactPerson",
+                "DataCollector",
+                "DataCurator",
+                "DataManager",
+                "Distributor",
+                "Editor",
+                "JournalManager",
+                "Funder",
+                "HostingInstitution",
+                "Other",
+                "Producer",
+                "ProjectLeader",
+                "ProjectManager",
+                "ProjectMember",
+                "RegistrationAgency",
+                "RegistrationAuthority",
+                "RelatedPerson",
+                "ResearchGroup",
+                "RightsHolder",
+                "Researcher",
+                "Sponsor",
+                "Supervisor",
+                "WorkPackageLeader"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    "keywords": {
+      "description": "Free text keywords.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "description": {
+      "description": "Description/abstract for document.",
+      "type": "string"
+    },
+    "publisher": {
+      "description": "Publisher name",
+      "type": "string"
+    },
+    "sources": {
+      "description": "Free text keywords.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "rights": {
+      "description": "Rights.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "types": {
+      "description": "Types. Eg: info:eu-repo/semantics/article, or Artículo revisado por pares",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "formats": {
+      "description": "formats. Eg: application/pdf",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "language": {
+      "description": "ISO 639-3 language code.",
+      "type": "string"
+    },
+    "publication_date": {
+      "description": "When the document is published",
+      "type": "string",
+      "format": "date-time"
+    },
+    "dates": {
+      "description": "dates related to the record",
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "info": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contributors": {
+      "description": "Contributors in order of importance.",
+      "minItems": 0,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "description": "List of IDs related with the person.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "name": {
+            "description": "Full name of person or organisation. Personal name format: family, given.",
+            "type": "string"
+          },
+          "affiliations": {
+            "description": "Affiliation(s) for the purpose of this specific document.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email for the purpose of this specific document.",
+            "format": "email"
+          },
+          "roles": {
+            "description": "",
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Author",
+                "ContactPerson",
+                "DataCollector",
+                "DataCurator",
+                "DataManager",
+                "Distributor",
+                "Editor",
+                "JournalManager",
+                "Funder",
+                "HostingInstitution",
+                "Other",
+                "Producer",
+                "ProjectLeader",
+                "ProjectManager",
+                "ProjectMember",
+                "RegistrationAgency",
+                "RegistrationAuthority",
+                "RelatedPerson",
+                "ResearchGroup",
+                "RightsHolder",
+                "Researcher",
+                "Sponsor",
+                "Supervisor",
+                "WorkPackageLeader"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    "references": {
+      "description": "Raw textual references",
+      "items": {
+        "additionalProperties": true,
+        "properties": {
+          "raw_reference": {
+            "type": "string"
+          }
+        },
+        "title": "Reference",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "organizations": {
+      "description": "list of organizations of related to this source",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "identifier of the ORG"
+          },
+          "name": {
+            "type": "string",
+            "description": "the name of the ORG"
+          },
+          "role": {
+            "type": "string",
+            "description": "the role of the organization"
+          }
+        }
+      }
+    },
+    "classifications": {
+      "description": "list of terms of related to this source",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "identifier the term related to this source"
+          },
+          "description": {
+            "type": "string",
+            "description": "the name of the term related to this source"
+          },
+          "vocabulary": {
+            "type": "string",
+            "description": "the vocabulary of the classification"
+          }
+        }
+      }
+    },
+    "terms": {
+      "description": "UUID of related iroko terms",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "source_repo",
+    "title"
+  ]
+}
+
+## src/app/pages/outputs/outputs.component.html <a id="outputs_component_html"></a>
+
+<!-- src/app/pages/outputs/outputs.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Research Outputs</h1>
+    <p>
+      Explore scientific publications, research articles, datasets, and other
+      research outputs
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Output"
+    [columns]="outputColumns"
+    label="Research Outputs"
+    [defaultSort]="'publication_date'"
+    [defaultSortOrder]="'DESC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/outputs/outputs.component.scss <a id="outputs_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
+## src/app/pages/persons/persons.component.html <a id="persons_component_html"></a>
+
+<!-- src/app/pages/persons/persons.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Researchers & Contributors</h1>
+    <p>
+      Explore researchers, scientists, and contributors across various
+      institutions and disciplines
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Person"
+    [columns]="personColumns"
+    label="Researchers"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/persons/persons.component.scss <a id="persons_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
+## src/app/schemas/person-v1.0.0.json <a id="person-v1_0_0_json"></a>
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "local://iroko/person-v1.0.0.json",
+  "title": "Person Schema, using orcid as a base(...?)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "identifiers",
+    "id",
+    "name"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Iroko UUID, pid_type = perid"
+    },
+    "identifiers": {
+      "type": "array",
+      "description": "Person Identifiers",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idtype": {
+            "description": "identifier type",
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "The name typically used to refer to the institute."
+    },
+    "last_name": {
+      "type": "string",
+      "description": "The name typically used to refer to the institute."
+    },
+    "public": {
+      "type": "boolean",
+      "description": "Si el perfil del usuario es publico"
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Si este usuario está activo o no el sistema, si no está activo es como si no existiera pero a los efectos de los usuario administrativos sí existe."
+    },
+    "gender": {
+      "type": "string",
+      "description": "any string describing gender"
+    },
+    "country": {
+      "type": "object",
+      "description": "Country",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The ISO 3166-1 alpha-2 code of the country"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the country"
+        }
+      }
+    },
+    "email_addresses": {
+      "type": "array",
+      "description": "A list of email addresses",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "description": "A list of other names the person is known as",
+      "items": {
+        "type": "string"
+      }
+    },
+    "research_interests": {
+      "type": "array",
+      "description": "Vocabulario UNESCO (Por defecto sería el de la UNESCO pero debe ofrecerse cambiar vocabulario a uno de los especializados de la lista que tenemos)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "key_words": {
+      "type": "array",
+      "description": "Palabras claves, es libre lo que ponga el usuario, es como la especialización dentro de los intereses de investigación. si fuese controlado deberí ser el de la UNESCO",
+      "items": {
+        "type": "string"
+      }
+    },
+    "academic_titles": {
+      "type": "array",
+      "description": "Academic Titles",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affiliations": {
+      "description": "Affiliations of the person",
+      "minItems": 0,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Iroko Organization UUID"
+          },
+          "identifiers": {
+            "type": "array",
+            "description": "Organization Identifiers",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "idtype": {
+                  "description": "identifier type",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "start_date": {
+            "description": "Start date of the affiliation",
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_date": {
+            "description": "End date of the affiliation. None means to this date.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "label": {
+            "type": "string",
+            "description": "The name of the related institute"
+          },
+          "roles": {
+            "type": "array",
+            "description": "Roles within the organization",
+            "items": {
+              "type": "string",
+              "description": "Role (use controlled vocabulary)"
+            }
+          }
+        }
+      }
+    },
+    "roles_sceiba": {
+      "type": "array",
+      "description": "Roles within the organization",
+      "items": {
+        "type": "string",
+        "description": "Role (use controlled vocabulary)"
+      }
+    },
+    "publications": {
+      "description": "Publications (papers, thesis, etc) of the person",
+      "minItems": 0,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "identifiers": {
+            "type": "array",
+            "description": "Publication Identifiers",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "idtype": {
+                  "description": "identifier type",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "Iroko UUID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the publication"
+          },
+          "roles": {
+            "type": "array",
+            "description": "role in the article",
+            "items": {
+              "type": "string",
+              "description": "Role (use controlled vocabulary)"
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "the status of the relation of the person with the publication (is confirmed by the person or not )",
+            "enum": [
+              "inferred",
+              "confirmed",
+              "rejected"
+            ]
+          }
+        }
+      }
+    },
+    "sources": {
+      "description": "Sources the person is related (journal, repository)",
+      "minItems": 0,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "identifiers": {
+            "type": "array",
+            "description": "Publication Identifiers",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "idtype": {
+                  "description": "identifier type",
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "Iroko UUID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the source"
+          },
+          "roles": {
+            "type": "array",
+            "description": "role in the source (editor, reviewer)",
+            "items": {
+              "type": "string",
+              "description": "Role (use controlled vocabulary)"
+            }
+          }
+        }
+      }
+    }
   }
 }
+
 
 ## src/app/schemas/project-v1.0.0.json <a id="project-v1_0_0_json"></a>
 
@@ -9679,8 +9315,1613 @@ export interface ValidationError {
   }
 }
 
-## src/app/components/results-display/results-display.component.scss <a id="results-display_component_scss"></a>
+## src/app/pages/projects/projects.component.html <a id="projects_component_html"></a>
 
+<!-- src/app/pages/projects/projects.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Research Projects</h1>
+    <p>
+      Explore research projects, grants, and scientific initiatives across
+      various domains
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Project"
+    [columns]="projectColumns"
+    label="Projects"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## proxy.conf.json <a id="proxy_conf_json"></a>
+
+{
+  "/api": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
+
+## src/app/pages/projects/projects.component.scss <a id="projects_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
+## src/app/components/query-executor/query-executor.component.html <a id="query-executor_component_html"></a>
+
+<form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="query-form">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Cypher Query</mat-label>
+    <textarea
+      #queryTextarea
+      matInput
+      formControlName="query"
+      rows="12"
+      placeholder="Example: MATCH (n) RETURN n LIMIT 10"
+      class="query-textarea"
+    ></textarea>
+    @if (queryForm.get('query')?.hasError('required')) {
+    <mat-error> Query is required </mat-error>
+    }
+  </mat-form-field>
+
+  <div class="form-actions">
+    <div class="form-controls">
+      <mat-checkbox formControlName="readonly" color="primary">
+        Read-only mode
+      </mat-checkbox>
+
+      <button
+        mat-button
+        type="button"
+        (click)="showParameters = !showParameters"
+        class="parameters-toggle"
+      >
+        <mat-icon>{{
+          showParameters ? "keyboard_arrow_up" : "keyboard_arrow_down"
+        }}</mat-icon>
+        Parameters
+      </button>
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!queryForm.valid"
+      class="execute-btn"
+    >
+      <mat-icon>play_arrow</mat-icon>
+      Execute Query
+    </button>
+  </div>
+
+  @if (showParameters) {
+  <div class="parameters-section">
+    <h4>Query Parameters</h4>
+    <div class="parameters-list">
+      @for (param of parameters; track param; let i = $index) {
+      <div class="parameter-row">
+        <mat-form-field appearance="outline" class="parameter-field">
+          <mat-label>Key</mat-label>
+          <input
+            matInput
+            [(ngModel)]="param.key"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="parameter_name"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="parameter-field">
+          <mat-label>Value</mat-label>
+          <input
+            matInput
+            [(ngModel)]="param.value"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="value"
+          />
+        </mat-form-field>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="removeParameter(i)"
+          type="button"
+          aria-label="Remove parameter"
+          class="remove-param-btn"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      }
+      <button
+        mat-stroked-button
+        type="button"
+        aria-label="Add Parameter"
+        (click)="addParameter()"
+        class="add-param-btn"
+      >
+        <mat-icon>add</mat-icon>
+        Add Parameter
+      </button>
+    </div>
+  </div>
+  }
+</form>
+
+## src/app/components/query-executor/query-executor.component.scss <a id="query-executor_component_scss"></a>
+
+.query-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .full-width {
+    width: 100%;
+    flex: 1;
+
+    .query-textarea {
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      resize: vertical;
+      min-height: 200px;
+    }
+
+    ::ng-deep {
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .form-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .parameters-toggle {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #666;
+      }
+    }
+
+    .execute-btn {
+      min-width: 140px;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .parameters-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background: #fafafa;
+
+    h4 {
+      margin: 0 0 16px 0;
+      color: #333;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .parameters-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .parameter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+
+        .parameter-field {
+          flex: 1;
+
+          ::ng-deep {
+            .mat-mdc-form-field-subscript-wrapper {
+              display: none;
+            }
+          }
+        }
+
+        .remove-param-btn {
+          margin-top: 4px;
+          flex-shrink: 0;
+        }
+      }
+
+      .add-param-btn {
+        align-self: flex-start;
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Mobile Responsive Design
+@media (max-width: 768px) {
+  .query-form {
+    gap: 16px;
+
+    .full-width {
+      .query-textarea {
+        min-height: 150px;
+        font-size: 0.85rem;
+      }
+    }
+
+    .form-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+
+      .form-controls {
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .execute-btn {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+
+    .parameters-section {
+      padding: 16px;
+
+      h4 {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+      }
+
+      .parameters-list {
+        gap: 10px;
+
+        .parameter-row {
+          flex-direction: column;
+          gap: 8px;
+
+          .remove-param-btn {
+            align-self: flex-end;
+            margin-top: 0;
+          }
+        }
+
+        .add-param-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .query-form {
+    .form-actions {
+      .form-controls {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+    }
+  }
+}
+
+## src/app/pages/query-page/query-page.component.html <a id="query-page_component_html"></a>
+
+<div class="query-page-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Cypher Query Interface</h1>
+      <p>Execute custom Cypher queries to explore the knowledge graph</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="query-layout">
+    <!-- Query Input Section -->
+    <div class="query-input-section">
+      <mat-card class="query-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>code</mat-icon>
+            Query Editor
+          </mat-card-title>
+          <mat-card-subtitle
+            >Write and execute Cypher queries</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <app-query-executor
+            (queryExecuted)="onQueryExecuted($event)"
+            #queryExecutor
+          >
+          </app-query-executor>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Quick Examples -->
+      <mat-expansion-panel class="examples-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>playlist_add_check</mat-icon>
+            Quick Examples
+          </mat-panel-title>
+          <mat-panel-description>
+            Sample queries to get started
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="examples-grid">
+          <div
+            *ngFor="let example of quickExamples"
+            class="example-item"
+            (click)="loadExample(example.id)"
+          >
+            <mat-icon>{{ example.icon }}</mat-icon>
+            <div class="example-content">
+              <strong>{{ example.title }}</strong>
+              <span>{{ example.description }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" [class.has-results]="hasResults || error">
+      <!-- Loading State -->
+      @if (isLoading) {
+      <div class="loading-state">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <div class="loading-content">
+          <mat-icon>query_stats</mat-icon>
+          <h3>Executing Query</h3>
+          <p>Please wait while we process your query...</p>
+        </div>
+      </div>
+      }
+
+      <!-- Results -->
+      @if (hasResults && !isLoading) {
+      <div class="results-header">
+        <div class="results-info">
+          <h2>
+            <mat-icon>check_circle</mat-icon>
+            Query Results
+          </h2>
+          <div class="results-stats">
+            <span class="stat-item">
+              <mat-icon>schedule</mat-icon>
+              {{ queryTime?.toFixed(0) }} ms
+            </span>
+            <span class="stat-item">
+              <mat-icon>list_alt</mat-icon>
+              {{ resultCount }} result{{ resultCount !== 1 ? "s" : "" }}
+            </span>
+          </div>
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="clearResults()"
+            [disabled]="!hasResults && !error"
+            class="clear-btn"
+          >
+            <mat-icon>clear_all</mat-icon>
+            Clear Results
+          </button>
+        </div>
+      </div>
+
+      <mat-card class="results-card">
+        <mat-card-content>
+          <app-results-display [queryResult]="queryResult" [error]="error">
+          </app-results-display>
+        </mat-card-content>
+      </mat-card>
+      }
+
+      <!-- Error State -->
+      @if (error && !isLoading) {
+      <div class="error-state">
+        <div class="error-header">
+          <mat-icon color="warn">error_outline</mat-icon>
+          <h2>Query Error</h2>
+        </div>
+        <mat-card class="error-card">
+          <mat-card-content>
+            <app-results-display [queryResult]="queryResult" [error]="error">
+            </app-results-display>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      }
+
+      <!-- Empty State -->
+      @if (!hasResults && !error && !isLoading) {
+      <div class="empty-state">
+        <div class="empty-content">
+          <mat-icon>code_off</mat-icon>
+          <h3>No Query Executed</h3>
+          <p>
+            Write a Cypher query in the editor and click "Execute Query" to see
+            results here.
+          </p>
+          <p class="hint">Try one of the quick examples to get started!</p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+## src/app/pages/query-page/query-page.component.scss <a id="query-page_component_scss"></a>
+
+.query-page-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: #f8f9fa;
+
+  .page-header {
+    background: linear-gradient(135deg, #006d33 0%, #00461e 100%);
+    color: white;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+
+    .header-content {
+      flex: 1;
+
+      h1 {
+        margin: 0 0 8px 0;
+        color: white;
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0;
+        color: white;
+        opacity: 0.9;
+        font-size: 1.1rem;
+        max-width: 600px;
+      }
+    }
+
+    .header-actions {
+      .clear-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .query-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    height: calc(100vh - 140px);
+    overflow: hidden;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      height: auto;
+      min-height: calc(100vh - 140px);
+    }
+  }
+
+  .query-input-section {
+    background: white;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+
+    @media (max-width: 1200px) {
+      height: auto;
+      max-height: 70vh;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .query-card {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid #e0e0e0;
+      flex: 1;
+
+      @media (max-width: 1200px) {
+        flex: none;
+      }
+
+      ::ng-deep {
+        .mat-mdc-card-header {
+          padding: 24px 24px 16px;
+          background: #fafafa;
+          border-bottom: 1px solid #e0e0e0;
+
+          .mat-mdc-card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 600;
+
+            mat-icon {
+              color: #006d33;
+            }
+          }
+
+          .mat-mdc-card-subtitle {
+            color: #666;
+          }
+        }
+
+        .mat-mdc-card-content {
+          padding: 24px;
+          height: calc(100% - 80px);
+
+          @media (max-width: 1200px) {
+            height: auto;
+            min-height: 300px;
+          }
+        }
+      }
+    }
+
+    .examples-panel {
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      border-bottom: 1px solid #e0e0e0;
+
+      // Make sure expansion panel is always visible on mobile
+      @media (max-width: 768px) {
+        .mat-expansion-panel {
+          border: none !important;
+        }
+      }
+
+      ::ng-deep {
+        .mat-expansion-panel-header {
+          padding: 16px 24px;
+          background: #fafafa;
+          height: auto !important;
+          min-height: 64px;
+
+          .mat-content {
+            align-items: center;
+            gap: 12px;
+          }
+
+          .mat-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin: 0;
+            font-size: 1rem;
+
+            mat-icon {
+              color: #006d33;
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+          }
+
+          .mat-panel-description {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+          }
+        }
+
+        .mat-expansion-panel-body {
+          padding: 0 !important;
+          max-height: 300px;
+          overflow-y: auto;
+        }
+      }
+
+      .examples-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1px;
+        background: #f0f0f0;
+
+        .example-item {
+          background: white;
+          padding: 16px 20px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          border-bottom: 1px solid #f0f0f0;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:hover {
+            background: #f8f9fa;
+            transform: translateX(4px);
+          }
+
+          &:active {
+            background: #e8f5e8;
+          }
+
+          mat-icon {
+            color: #006d33;
+            flex-shrink: 0;
+            margin-top: 2px;
+          }
+
+          .example-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            strong {
+              font-weight: 600;
+              color: #333;
+              font-size: 0.95rem;
+              line-height: 1.3;
+            }
+
+            span {
+              font-size: 0.8rem;
+              color: #666;
+              font-family: "Courier New", monospace;
+              background: #f8f9fa;
+              padding: 6px 8px;
+              border-radius: 4px;
+              border-left: 3px solid #006d33;
+              line-height: 1.4;
+              word-break: break-word;
+              overflow-wrap: break-word;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .results-section {
+    background: #f8f9fa;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+
+    @media (max-width: 1200px) {
+      height: auto;
+      min-height: 40vh;
+    }
+
+    &.has-results {
+      background: white;
+    }
+
+    .loading-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .mat-progress-bar {
+        flex-shrink: 0;
+      }
+
+      .loading-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 40px;
+
+        mat-icon {
+          font-size: 64px;
+          width: 64px;
+          height: 64px;
+          margin-bottom: 20px;
+          color: #006d33;
+          opacity: 0.7;
+        }
+
+        h3 {
+          margin: 0 0 12px 0;
+          color: #333;
+          font-size: 1.5rem;
+        }
+
+        p {
+          margin: 0;
+          color: #666;
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .results-header {
+      background: white;
+      padding: 24px 32px;
+      border-bottom: 1px solid #e0e0e0;
+
+      .results-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 1.5rem;
+          color: #2e7d32;
+
+          mat-icon {
+            color: #2e7d32;
+          }
+        }
+
+        .results-stats {
+          display: flex;
+          gap: 20px;
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 0.9rem;
+
+            mat-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+          }
+        }
+      }
+    }
+
+    .results-card {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      height: calc(100% - 120px);
+
+      @media (max-width: 1200px) {
+        height: auto;
+        min-height: 300px;
+      }
+
+      ::ng-deep {
+        .mat-mdc-card-content {
+          padding: 0;
+          height: 100%;
+        }
+      }
+    }
+
+    .error-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .error-header {
+        background: #ffebee;
+        padding: 24px 32px;
+        border-bottom: 1px solid #ffcdd2;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        h2 {
+          margin: 0;
+          color: #c62828;
+          font-size: 1.5rem;
+        }
+
+        mat-icon {
+          color: #c62828;
+        }
+      }
+
+      .error-card {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        flex: 1;
+
+        ::ng-deep {
+          .mat-mdc-card-content {
+            padding: 0;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    .empty-state {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+
+      .empty-content {
+        text-align: center;
+        max-width: 400px;
+
+        mat-icon {
+          font-size: 80px;
+          width: 80px;
+          height: 80px;
+          margin-bottom: 20px;
+          color: #ccc;
+        }
+
+        h3 {
+          margin: 0 0 12px 0;
+          color: #666;
+          font-size: 1.5rem;
+        }
+
+        p {
+          margin: 0 0 8px 0;
+          color: #999;
+          line-height: 1.5;
+        }
+
+        .hint {
+          font-size: 0.9rem;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Mobile Responsive Design
+@media (max-width: 768px) {
+  .query-page-container {
+    .page-header {
+      padding: 20px 16px;
+      flex-direction: column;
+      gap: 16px;
+
+      .header-content {
+        h1 {
+          font-size: 1.5rem;
+          text-align: center;
+        }
+
+        p {
+          font-size: 0.9rem;
+          text-align: center;
+        }
+      }
+
+      .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .query-layout {
+      height: auto;
+      min-height: calc(100vh - 120px);
+    }
+
+    .query-input-section {
+      max-height: none;
+      height: auto;
+
+      .query-card {
+        ::ng-deep {
+          .mat-mdc-card-header {
+            padding: 16px;
+
+            .mat-mdc-card-title {
+              font-size: 1.1rem;
+            }
+
+            .mat-mdc-card-subtitle {
+              font-size: 0.8rem;
+            }
+          }
+
+          .mat-mdc-card-content {
+            padding: 16px;
+            min-height: 250px;
+          }
+        }
+      }
+
+      .examples-panel {
+        ::ng-deep {
+          .mat-expansion-panel-header {
+            padding: 12px 16px;
+            min-height: 56px;
+
+            .mat-panel-title {
+              font-size: 0.9rem;
+
+              mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+              }
+            }
+
+            .mat-panel-description {
+              font-size: 0.8rem;
+            }
+          }
+
+          .mat-expansion-panel-body {
+            max-height: 250px;
+          }
+        }
+
+        .examples-grid {
+          .example-item {
+            padding: 12px 16px;
+            gap: 12px;
+
+            mat-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+
+            .example-content {
+              strong {
+                font-size: 0.9rem;
+              }
+
+              span {
+                font-size: 0.75rem;
+                padding: 4px 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .results-section {
+      .results-header {
+        padding: 16px;
+
+        .results-info {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+
+          h2 {
+            font-size: 1.25rem;
+          }
+
+          .results-stats {
+            width: 100%;
+            justify-content: space-between;
+            gap: 12px;
+
+            .stat-item {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+
+      .loading-state {
+        .loading-content {
+          padding: 40px 20px;
+
+          mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+          }
+
+          h3 {
+            font-size: 1.25rem;
+          }
+
+          p {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .empty-state {
+        padding: 20px;
+
+        .empty-content {
+          mat-icon {
+            font-size: 60px;
+            width: 60px;
+            height: 60px;
+          }
+
+          h3 {
+            font-size: 1.25rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Extra small devices
+@media (max-width: 480px) {
+  .query-page-container {
+    .query-input-section {
+      .examples-panel {
+        .examples-grid {
+          .example-item {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+
+            mat-icon {
+              align-self: center;
+            }
+
+            .example-content {
+              span {
+                font-size: 0.7rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Ensure expansion panel is always properly styled
+::ng-deep {
+  .mat-expansion-panel:not([class*="mat-elevation-z"]) {
+    box-shadow: none !important;
+  }
+
+  .mat-expansion-panel-header:hover {
+    background: #f0f0f0 !important;
+  }
+}
+
+## src/app/components/relationship-card/relationship-card.component.html <a id="relationship-card_component_html"></a>
+
+<mat-card class="relationship-card">
+  <mat-card-header>
+    <div class="card-header-content">
+      <div class="node-title-section">
+        <mat-card-title class="node-title">
+          {{ getNodeDisplayName() }}
+        </mat-card-title>
+        <mat-card-subtitle class="node-type">
+          {{ getNodeType() }}
+        </mat-card-subtitle>
+      </div>
+      <div class="relationship-info">
+        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
+          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
+          {{ getDirectionLabel() }}
+        </mat-chip>
+        <mat-chip class="type-chip">
+          {{ relationshipType }}
+        </mat-chip>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Node Properties -->
+    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
+      <div class="properties-grid">
+        <div *ngFor="let prop of getNodeProperties()" class="property-item">
+          <strong class="property-label">{{ prop.key }}:</strong>
+          <div class="property-value-container">
+            @if (isArray(prop.value)) {
+            <div class="array-container">
+              @for (item of prop.value; track item; let last = $last) {
+              <span class="array-item">
+                {{ item }}@if (!last) {<span class="array-separator">, </span>}
+              </span>
+              }
+            </div>
+            } @else if (isObject(prop.value)) {
+            <div class="json-container">
+              <ngx-json-viewer
+                [json]="prop.value"
+                [expanded]="false"
+                class="json-viewer"
+              >
+              </ngx-json-viewer>
+            </div>
+            } @else {
+            <span class="property-value" [title]="prop.value">
+              {{ formatPropertyValue(prop.value) }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Properties Message -->
+    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
+      <mat-icon>info</mat-icon>
+      <span>No properties available</span>
+    </div>
+  </mat-card-content>
+
+  <!-- View Details Action (only for allowed node types) -->
+  @if (shouldShowViewDetails()) {
+  <mat-card-actions align="end">
+    <button
+      mat-button
+      color="primary"
+      (click)="onViewDetails($event)"
+      class="view-details-btn"
+    >
+      <mat-icon>arrow_forward</mat-icon>
+      View Details
+    </button>
+  </mat-card-actions>
+  }
+</mat-card>
+
+## src/app/components/relationship-card/relationship-card.component.scss <a id="relationship-card_component_scss"></a>
+
+.relationship-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 12px;
+}
+
+.node-title-section {
+  flex: 1;
+  min-width: 0;
+
+  .node-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .node-type {
+    margin: 4px 0 0 0;
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.6);
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+.relationship-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+
+  .direction-chip,
+  .type-chip {
+    font-size: 0.7rem;
+    height: 20px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    .direction-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+  }
+
+  .direction-chip {
+    &.incoming {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    &.outgoing {
+      background-color: #e8f5e8;
+      color: #388e3c;
+    }
+  }
+
+  .type-chip {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+  }
+}
+
+.properties-section {
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.properties-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.property-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .property-label {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    flex-shrink: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .property-value-container {
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .property-value {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.9);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    line-height: 1.4;
+    display: block;
+  }
+}
+
+// Array container styles
+.array-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+.array-item {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.9);
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: inline;
+}
+
+.array-separator {
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0 2px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.json-container {
+  max-height: 150px;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 4px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  .json-viewer {
+    font-size: 0.8rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    ::ng-deep {
+      .ngx-json-viewer {
+        word-break: break-word;
+        overflow-wrap: break-word;
+
+        .segment {
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
+        }
+      }
+    }
+  }
+}
+
+.no-properties {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  color: rgba(0, 0, 0, 0.5);
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  span {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+.view-details-btn {
+  margin-top: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-left: 4px;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .card-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .relationship-info {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .property-item {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .node-title {
+    font-size: 1rem;
+  }
+
+  .property-item {
+    .property-label {
+      font-size: 0.75rem;
+    }
+
+    .property-value {
+      font-size: 0.85rem;
+    }
+  }
+
+  .array-item {
+    font-size: 0.85rem;
+  }
+}
+
+// Ensure all text elements have proper wrapping
+:host {
+  * {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+## src/app/components/relationship-pagination/relationship-pagination.component.html <a id="relationship-pagination_component_html"></a>
+
+<div class="pagination-container">
+  <div class="pagination-info" *ngIf="totalItems > 0">
+    <span class="info-text">{{ getDisplayedRange() }}</span>
+  </div>
+
+  <div class="pagination-controls" *ngIf="totalPages > 1">
+    <div class="pagination-buttons">
+      <!-- Previous Button -->
+      <button
+        mat-icon-button
+        [disabled]="currentPage === 0 || isLoading"
+        (click)="previousPage()"
+        class="nav-button"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <!-- Page Numbers -->
+      <button
+        *ngFor="let page of pages"
+        mat-button
+        [class.active]="page === currentPage"
+        [disabled]="isLoading"
+        (click)="goToPage(page)"
+        class="page-button"
+      >
+        {{ page + 1 }}
+      </button>
+
+      <!-- Next Button -->
+      <button
+        mat-icon-button
+        [disabled]="currentPage === totalPages - 1 || isLoading"
+        (click)="nextPage()"
+        class="nav-button"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" *ngIf="isLoading">
+    <mat-progress-spinner
+      diameter="24"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+</div>
+
+## src/app/components/relationship-pagination/relationship-pagination.component.scss <a id="relationship-pagination_component_scss"></a>
+
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pagination-info {
+  .info-text {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.pagination-controls {
+  .pagination-buttons {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .nav-button,
+    .page-button {
+      min-width: 40px;
+      height: 40px;
+    }
+
+    .page-button {
+      &.active {
+        background-color: #006d33;
+        color: white;
+      }
+
+      &:not(.active):hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+    }
+
+    .nav-button {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 4px;
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .pagination-container {
+    padding: 12px 8px;
+  }
+
+  .pagination-buttons {
+    .nav-button,
+    .page-button {
+      min-width: 36px;
+      height: 36px;
+    }
+  }
+}
 
 ## src/app/components/results-display/results-display.component.html <a id="results-display_component_html"></a>
 
@@ -9701,223 +10942,111 @@ export interface ValidationError {
   </div>
 }
 
-## src/styles_theme-iroko.scss <a id="styles_theme-iroko_scss"></a>
+## src/app/components/results-display/results-display.component.scss <a id="results-display_component_scss"></a>
+
+
+## src/app/pages/search-results/search-results.component.html <a id="search-results_component_html"></a>
+
+<!-- src/app/pages/search-results/search-results.component.html (fixed) -->
+<div class="search-results-page">
+  <div class="container mx-auto p-4">
+    <!-- Search Header -->
+    <div class="search-header mb-6">
+      <h1 class="text-2xl font-bold mb-2">Search Results</h1>
+      <p class="text-gray-600" *ngIf="searchTerm">
+        Showing results for: <strong>"{{ searchTerm }}"</strong>
+      </p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <p class="mt-4">Searching...</p>
+    </div>
+
+    <!-- No Results -->
+    <div
+      *ngIf="!isLoading && hasSearched && results.length === 0"
+      class="no-results"
+    >
+      <mat-icon class="no-results-icon">search_off</mat-icon>
+      <h2>No results found</h2>
+      <p>Try adjusting your search terms or try a different search.</p>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="!isLoading && results.length > 0" class="results-container">
+      <!-- Results Summary -->
+      <div class="results-summary mb-6">
+        <p class="text-sm text-gray-600">
+          Found {{ results.length }} result{{ results.length === 1 ? "" : "s" }}
+          <span *ngIf="getUniqueTypes().length > 0">
+            across {{ getUniqueTypes().length }} type{{
+              getUniqueTypes().length === 1 ? "" : "s"
+            }}
+          </span>
+        </p>
+
+        <!-- Type Filters -->
+        <div class="type-filters mt-2">
+          <mat-chip
+            *ngFor="let type of getUniqueTypes()"
+            [class]="type.toLowerCase()"
+            class="mr-2 mb-2"
+          >
+            {{ type }} ({{ getResultCountByType(type) }})
+          </mat-chip>
+        </div>
+      </div>
+
+      <!-- Results List -->
+      <div class="results-grid">
+        <mat-card *ngFor="let result of results" class="result-card">
+          <mat-card-header>
+            <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
+              {{ result.type }}
+            </mat-chip>
+            <mat-card-title class="result-title">
+              {{ result.label }}
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="result.score" class="score">
+              Relevance: {{ (result.score * 100).toFixed(1) }}%
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content *ngIf="result.description">
+            <p class="result-description">
+              {{ result.description | slice : 0 : 200
+              }}{{ result.description.length > 200 ? "..." : "" }}
+            </p>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button
+              mat-button
+              color="primary"
+              (click)="navigateToResult(result)"
+            >
+              View Details
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+## src/app/pages/sources/sources.component.scss <a id="sources_component_scss"></a>
 
 ### Dependencies
 
-- `sass:map`
-- `@angular/material`
+- `../page-styles`
 
-// This file was generated by running 'ng generate @angular/material:theme-color'.
-// Proceed with caution if making changes to this file.
-
-@use 'sass:map';
-@use '@angular/material' as mat;
-
-// Note: Color palettes are generated from primary: #008b43, secondary: #006587, tertiary: #00967f, neutral: #e6e5e6, error: #db2608db
-$_palettes: (
-  primary: (
-    0: #000000,
-    10: #00210b,
-    20: #003918,
-    25: #00461e,
-    30: #005225,
-    35: #00602c,
-    40: #006d33,
-    50: #008942,
-    60: #31a559,
-    70: #50c071,
-    80: #6ddd8a,
-    90: #89faa4,
-    95: #c4ffcb,
-    98: #eaffe9,
-    99: #f5fff2,
-    100: #ffffff,
-  ),
-  secondary: (
-    0: #000000,
-    10: #001e2b,
-    20: #003548,
-    25: #004058,
-    30: #004d67,
-    35: #005978,
-    40: #026688,
-    50: #317fa2,
-    60: #4f99bd,
-    70: #6cb4d9,
-    80: #88cff6,
-    90: #c2e8ff,
-    95: #e2f3ff,
-    98: #f5faff,
-    99: #fbfcff,
-    100: #ffffff,
-  ),
-  tertiary: (
-    0: #000000,
-    10: #00201a,
-    20: #00382e,
-    25: #004438,
-    30: #005143,
-    35: #005e4f,
-    40: #006b5a,
-    50: #008772,
-    60: #22a28b,
-    70: #48bea5,
-    80: #67dac0,
-    90: #85f6db,
-    95: #b7ffeb,
-    98: #e6fff6,
-    99: #f3fffa,
-    100: #ffffff,
-  ),
-  neutral: (
-    0: #000000,
-    10: #1a1c1d,
-    20: #2f3031,
-    25: #3a3b3c,
-    30: #464748,
-    35: #525253,
-    40: #5e5e5f,
-    50: #777778,
-    60: #909092,
-    70: #ababac,
-    80: #c7c6c7,
-    90: #e3e2e3,
-    95: #f1f0f1,
-    98: #faf9fa,
-    99: #fdfcfd,
-    100: #ffffff,
-    4: #0d0e0f,
-    6: #121414,
-    12: #1e2021,
-    17: #292a2b,
-    22: #343536,
-    24: #38393a,
-    87: #dadadb,
-    92: #e9e8e9,
-    94: #efedee,
-    96: #f4f3f4,
-  ),
-  neutral-variant: (
-    0: #000000,
-    10: #131e15,
-    20: #283329,
-    25: #333e34,
-    30: #3e4a3f,
-    35: #4a554a,
-    40: #566156,
-    50: #6e7a6e,
-    60: #889487,
-    70: #a2afa1,
-    80: #bdcabb,
-    90: #d9e6d7,
-    95: #e7f4e5,
-    98: #f0fded,
-    99: #f5fff2,
-    100: #ffffff,
-  ),
-  error: (
-    0: #000000,
-    10: #0c006a,
-    20: #1900a7,
-    25: #1f00c7,
-    30: #2a14de,
-    35: #392ce8,
-    40: #463ef4,
-    50: #6461ff,
-    60: #8382ff,
-    70: #a2a2ff,
-    80: #c2c1ff,
-    90: #e2dfff,
-    95: #f2efff,
-    98: #fcf8ff,
-    99: #fffbff,
-    100: #ffffff,
-  ),
-);
-
-$_rest: (
-  secondary: map.get($_palettes, secondary),
-  neutral: map.get($_palettes, neutral),
-  neutral-variant: map.get($_palettes,  neutral-variant),
-  error: map.get($_palettes, error),
-);
-
-$primary-palette: map.merge(map.get($_palettes, primary), $_rest);
-$tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
-
-@function _high-contrast-value($light, $dark, $theme-type) {
-  @if ($theme-type == light) {
-    @return $light;
-  }
-  @if ($theme-type == dark) {
-    @return $dark;
-  }
-  @if ($theme-type == color-scheme) {
-    @return light-dark(#{$light}, #{$dark});
-  }
-
-  @error 'Unknown theme-type #{$theme-type}. Expected light, dark, or color-scheme';
-}
-
-@mixin high-contrast-overrides($theme-type) {
-  @include mat.theme-overrides((
-    primary: _high-contrast-value(#003415, #c1ffc9, $theme-type),
-    on-primary: _high-contrast-value(#ffffff, #000000, $theme-type),
-    primary-container: _high-contrast-value(#005526, #69d987, $theme-type),
-    on-primary-container: _high-contrast-value(#ffffff, #000c03, $theme-type),
-    inverse-primary: _high-contrast-value(#6ddd8a, #005426, $theme-type),
-    primary-fixed: _high-contrast-value(#005526, #89faa4, $theme-type),
-    primary-fixed-dim: _high-contrast-value(#003c19, #6ddd8a, $theme-type),
-    on-primary-fixed: _high-contrast-value(#ffffff, #000000, $theme-type),
-    on-primary-fixed-variant: _high-contrast-value(#ffffff, #001505, $theme-type),
-    secondary: _high-contrast-value(#003042, #e0f3ff, $theme-type),
-    on-secondary: _high-contrast-value(#ffffff, #000000, $theme-type),
-    secondary-container: _high-contrast-value(#004f6b, #84cbf2, $theme-type),
-    on-secondary-container: _high-contrast-value(#ffffff, #000d15, $theme-type),
-    secondary-fixed: _high-contrast-value(#004f6b, #c2e8ff, $theme-type),
-    secondary-fixed-dim: _high-contrast-value(#00374b, #88cff6, $theme-type),
-    on-secondary-fixed: _high-contrast-value(#ffffff, #000000, $theme-type),
-    on-secondary-fixed-variant: _high-contrast-value(#ffffff, #00131d, $theme-type),
-    tertiary: _high-contrast-value(#00332a, #b2ffea, $theme-type),
-    on-tertiary: _high-contrast-value(#ffffff, #000000, $theme-type),
-    tertiary-container: _high-contrast-value(#005346, #63d6bc, $theme-type),
-    on-tertiary-container: _high-contrast-value(#ffffff, #000b08, $theme-type),
-    tertiary-fixed: _high-contrast-value(#005346, #85f6db, $theme-type),
-    tertiary-fixed-dim: _high-contrast-value(#003a30, #67dac0, $theme-type),
-    on-tertiary-fixed: _high-contrast-value(#ffffff, #000000, $theme-type),
-    on-tertiary-fixed-variant: _high-contrast-value(#ffffff, #001510, $theme-type),
-    background: _high-contrast-value(#faf9fa, #121414, $theme-type),
-    on-background: _high-contrast-value(#1a1c1d, #e3e2e3, $theme-type),
-    surface: _high-contrast-value(#faf9fa, #121414, $theme-type),
-    surface-dim: _high-contrast-value(#b9b8b9, #121414, $theme-type),
-    surface-bright: _high-contrast-value(#faf9fa, #4f5051, $theme-type),
-    surface-container-lowest: _high-contrast-value(#ffffff, #000000, $theme-type),
-    surface-container: _high-contrast-value(#e3e2e3, #2f3031, $theme-type),
-    surface-container-high: _high-contrast-value(#d5d4d5, #3a3b3c, $theme-type),
-    surface-container-highest: _high-contrast-value(#c7c6c7, #464748, $theme-type),
-    on-surface: _high-contrast-value(#000000, #ffffff, $theme-type),
-    shadow: _high-contrast-value(#000000, #000000, $theme-type),
-    scrim: _high-contrast-value(#000000, #000000, $theme-type),
-    surface-tint: _high-contrast-value(#006d33, #6ddd8a, $theme-type),
-    inverse-surface: _high-contrast-value(#2f3031, #e3e2e3, $theme-type),
-    inverse-on-surface: _high-contrast-value(#ffffff, #000000, $theme-type),
-    outline: _high-contrast-value(#242f25, #e7f4e4, $theme-type),
-    outline-variant: _high-contrast-value(#404c41, #b9c6b8, $theme-type),
-    error: _high-contrast-value(#16009b, #f1eeff, $theme-type),
-    on-error: _high-contrast-value(#ffffff, #000000, $theme-type),
-    error-container: _high-contrast-value(#2d1ae0, #bdbcff, $theme-type),
-    on-error-container: _high-contrast-value(#ffffff, #04003b, $theme-type),
-    surface-variant: _high-contrast-value(#d9e6d7, #3e4a3f, $theme-type),
-    on-surface-variant: _high-contrast-value(#000000, #ffffff, $theme-type),
-  ))
- }
-
-## src/app/components/view-class/view-class.component.scss <a id="view-class_component_scss"></a>
-
-
-## src/app/components/view-instance/view-instance.component.scss <a id="view-instance_component_scss"></a>
-
+@use "../page-styles";
 
 ## src/app/schemas/source-v1.0.0.json <a id="source-v1_0_0_json"></a>
 
@@ -10177,6 +11306,299 @@ $tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
 }
 
 
+## src/app/pages/sources/sources.component.html <a id="sources_component_html"></a>
+
+<!-- src/app/pages/sources/sources.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Data Sources</h1>
+    <p>
+      Explore scientific journals, data repositories, and information sources
+      across various domains
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Source"
+    [columns]="sourceColumns"
+    label="Sources"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/search-results/search-results.component.scss <a id="search-results_component_scss"></a>
+
+
+## src/styles.scss <a id="styles_scss"></a>
+
+### Dependencies
+
+- `material-icons/iconfont/material-icons.css`
+- `@angular/material`
+- `./styles_theme-iroko`
+- `../public/fonts/Roboto-Light.ttf`
+- `../public/fonts/Roboto-Regular.ttf`
+- `../public/fonts/Roboto-Medium.ttf`
+- `../public/fonts/Roboto-Bold.ttf`
+
+/* src/styles.scss - updated */
+@use "@angular/material" as mat;
+@use "./styles_theme-iroko" as iroko-theme;
+
+@import "material-icons/iconfont/material-icons.css";
+
+// Include core styles
+@include mat.elevation-classes();
+@include mat.app-background();
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../public/fonts/Roboto-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../public/fonts/Roboto-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../public/fonts/Roboto-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../public/fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color-scheme: light;
+  background-color: #f8f9fa;
+  @include mat.theme(
+    (
+      color: (
+        primary: iroko-theme.$primary-palette,
+        tertiary: iroko-theme.$tertiary-palette,
+        theme-type: light,
+      ),
+      typography: (
+        plain-family: Roboto,
+        brand-family: "Open Sans",
+        bold-weight: 700,
+        medium-weight: 500,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+}
+
+html {
+  height: 100%;
+}
+
+// Utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+// Loading states
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+// Error states
+.error-snackbar {
+  background-color: #f44336;
+  color: white;
+}
+
+// Type chips
+.type-chip {
+  &.organization {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+  &.person {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+  }
+  &.source {
+    background-color: #e8f5e8;
+    color: #388e3c;
+  }
+  &.output {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+  &.project {
+    background-color: #fce4ec;
+    color: #c2185b;
+  }
+  &.term {
+    background-color: #e8eaf6;
+    color: #303f9f;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+// Card hover effects
+.result-card,
+.stat-card,
+.action-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+}
+
+// Search page styles
+.search-results-page {
+  min-height: 60vh;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+
+  .no-results-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+
+  h2 {
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+// Material overrides
+.mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.mat-sidenav-container {
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* src/app/pages/_page-styles.scss */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+
+  @media (max-width: 768px) {
+    padding: 16px 8px;
+  }
+}
+
+.page-header {
+  margin-bottom: 32px;
+  text-align: center;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      padding: 0 16px;
+    }
+  }
+}
+
+/* Import this in each page component's SCSS file */
+
 ## tsconfig.app.json <a id="tsconfig_app_json"></a>
 
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
@@ -10199,9 +11621,259 @@ $tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
 
 <p>view-class works!</p>
 
+## src/app/components/view-class/view-class.component.scss <a id="view-class_component_scss"></a>
+
+
+## src/styles_theme-iroko.scss <a id="styles_theme-iroko_scss"></a>
+
+### Dependencies
+
+- `sass:map`
+- `@angular/material`
+
+// This file was generated by running 'ng generate @angular/material:theme-color'.
+// Proceed with caution if making changes to this file.
+
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+// Note: Color palettes are generated from primary: #008b43, secondary: #006587, tertiary: #00967f, neutral: #e6e5e6, error: #db2608db
+$_palettes: (
+  primary: (
+    0: #000000,
+    10: #00210b,
+    20: #003918,
+    25: #00461e,
+    30: #005225,
+    35: #00602c,
+    40: #006d33,
+    50: #008942,
+    60: #31a559,
+    70: #50c071,
+    80: #6ddd8a,
+    90: #89faa4,
+    95: #c4ffcb,
+    98: #eaffe9,
+    99: #f5fff2,
+    100: #ffffff,
+  ),
+  secondary: (
+    0: #000000,
+    10: #001e2b,
+    20: #003548,
+    25: #004058,
+    30: #004d67,
+    35: #005978,
+    40: #026688,
+    50: #317fa2,
+    60: #4f99bd,
+    70: #6cb4d9,
+    80: #88cff6,
+    90: #c2e8ff,
+    95: #e2f3ff,
+    98: #f5faff,
+    99: #fbfcff,
+    100: #ffffff,
+  ),
+  tertiary: (
+    0: #000000,
+    10: #00201a,
+    20: #00382e,
+    25: #004438,
+    30: #005143,
+    35: #005e4f,
+    40: #006b5a,
+    50: #008772,
+    60: #22a28b,
+    70: #48bea5,
+    80: #67dac0,
+    90: #85f6db,
+    95: #b7ffeb,
+    98: #e6fff6,
+    99: #f3fffa,
+    100: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    10: #1a1c1d,
+    20: #2f3031,
+    25: #3a3b3c,
+    30: #464748,
+    35: #525253,
+    40: #5e5e5f,
+    50: #777778,
+    60: #909092,
+    70: #ababac,
+    80: #c7c6c7,
+    90: #e3e2e3,
+    95: #f1f0f1,
+    98: #faf9fa,
+    99: #fdfcfd,
+    100: #ffffff,
+    4: #0d0e0f,
+    6: #121414,
+    12: #1e2021,
+    17: #292a2b,
+    22: #343536,
+    24: #38393a,
+    87: #dadadb,
+    92: #e9e8e9,
+    94: #efedee,
+    96: #f4f3f4,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #131e15,
+    20: #283329,
+    25: #333e34,
+    30: #3e4a3f,
+    35: #4a554a,
+    40: #566156,
+    50: #6e7a6e,
+    60: #889487,
+    70: #a2afa1,
+    80: #bdcabb,
+    90: #d9e6d7,
+    95: #e7f4e5,
+    98: #f0fded,
+    99: #f5fff2,
+    100: #ffffff,
+  ),
+  error: (
+    0: #000000,
+    10: #0c006a,
+    20: #1900a7,
+    25: #1f00c7,
+    30: #2a14de,
+    35: #392ce8,
+    40: #463ef4,
+    50: #6461ff,
+    60: #8382ff,
+    70: #a2a2ff,
+    80: #c2c1ff,
+    90: #e2dfff,
+    95: #f2efff,
+    98: #fcf8ff,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+);
+
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes,  neutral-variant),
+  error: map.get($_palettes, error),
+);
+
+$primary-palette: map.merge(map.get($_palettes, primary), $_rest);
+$tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
+
+@function _high-contrast-value($light, $dark, $theme-type) {
+  @if ($theme-type == light) {
+    @return $light;
+  }
+  @if ($theme-type == dark) {
+    @return $dark;
+  }
+  @if ($theme-type == color-scheme) {
+    @return light-dark(#{$light}, #{$dark});
+  }
+
+  @error 'Unknown theme-type #{$theme-type}. Expected light, dark, or color-scheme';
+}
+
+@mixin high-contrast-overrides($theme-type) {
+  @include mat.theme-overrides((
+    primary: _high-contrast-value(#003415, #c1ffc9, $theme-type),
+    on-primary: _high-contrast-value(#ffffff, #000000, $theme-type),
+    primary-container: _high-contrast-value(#005526, #69d987, $theme-type),
+    on-primary-container: _high-contrast-value(#ffffff, #000c03, $theme-type),
+    inverse-primary: _high-contrast-value(#6ddd8a, #005426, $theme-type),
+    primary-fixed: _high-contrast-value(#005526, #89faa4, $theme-type),
+    primary-fixed-dim: _high-contrast-value(#003c19, #6ddd8a, $theme-type),
+    on-primary-fixed: _high-contrast-value(#ffffff, #000000, $theme-type),
+    on-primary-fixed-variant: _high-contrast-value(#ffffff, #001505, $theme-type),
+    secondary: _high-contrast-value(#003042, #e0f3ff, $theme-type),
+    on-secondary: _high-contrast-value(#ffffff, #000000, $theme-type),
+    secondary-container: _high-contrast-value(#004f6b, #84cbf2, $theme-type),
+    on-secondary-container: _high-contrast-value(#ffffff, #000d15, $theme-type),
+    secondary-fixed: _high-contrast-value(#004f6b, #c2e8ff, $theme-type),
+    secondary-fixed-dim: _high-contrast-value(#00374b, #88cff6, $theme-type),
+    on-secondary-fixed: _high-contrast-value(#ffffff, #000000, $theme-type),
+    on-secondary-fixed-variant: _high-contrast-value(#ffffff, #00131d, $theme-type),
+    tertiary: _high-contrast-value(#00332a, #b2ffea, $theme-type),
+    on-tertiary: _high-contrast-value(#ffffff, #000000, $theme-type),
+    tertiary-container: _high-contrast-value(#005346, #63d6bc, $theme-type),
+    on-tertiary-container: _high-contrast-value(#ffffff, #000b08, $theme-type),
+    tertiary-fixed: _high-contrast-value(#005346, #85f6db, $theme-type),
+    tertiary-fixed-dim: _high-contrast-value(#003a30, #67dac0, $theme-type),
+    on-tertiary-fixed: _high-contrast-value(#ffffff, #000000, $theme-type),
+    on-tertiary-fixed-variant: _high-contrast-value(#ffffff, #001510, $theme-type),
+    background: _high-contrast-value(#faf9fa, #121414, $theme-type),
+    on-background: _high-contrast-value(#1a1c1d, #e3e2e3, $theme-type),
+    surface: _high-contrast-value(#faf9fa, #121414, $theme-type),
+    surface-dim: _high-contrast-value(#b9b8b9, #121414, $theme-type),
+    surface-bright: _high-contrast-value(#faf9fa, #4f5051, $theme-type),
+    surface-container-lowest: _high-contrast-value(#ffffff, #000000, $theme-type),
+    surface-container: _high-contrast-value(#e3e2e3, #2f3031, $theme-type),
+    surface-container-high: _high-contrast-value(#d5d4d5, #3a3b3c, $theme-type),
+    surface-container-highest: _high-contrast-value(#c7c6c7, #464748, $theme-type),
+    on-surface: _high-contrast-value(#000000, #ffffff, $theme-type),
+    shadow: _high-contrast-value(#000000, #000000, $theme-type),
+    scrim: _high-contrast-value(#000000, #000000, $theme-type),
+    surface-tint: _high-contrast-value(#006d33, #6ddd8a, $theme-type),
+    inverse-surface: _high-contrast-value(#2f3031, #e3e2e3, $theme-type),
+    inverse-on-surface: _high-contrast-value(#ffffff, #000000, $theme-type),
+    outline: _high-contrast-value(#242f25, #e7f4e4, $theme-type),
+    outline-variant: _high-contrast-value(#404c41, #b9c6b8, $theme-type),
+    error: _high-contrast-value(#16009b, #f1eeff, $theme-type),
+    on-error: _high-contrast-value(#ffffff, #000000, $theme-type),
+    error-container: _high-contrast-value(#2d1ae0, #bdbcff, $theme-type),
+    on-error-container: _high-contrast-value(#ffffff, #04003b, $theme-type),
+    surface-variant: _high-contrast-value(#d9e6d7, #3e4a3f, $theme-type),
+    on-surface-variant: _high-contrast-value(#000000, #ffffff, $theme-type),
+  ))
+ }
+
 ## src/app/components/view-instance/view-instance.component.html <a id="view-instance_component_html"></a>
 
 <p>view-instance works!</p>
+
+## src/app/components/view-instance/view-instance.component.scss <a id="view-instance_component_scss"></a>
+
+
+## src/app/pages/vocabularies/vocabularies.component.html <a id="vocabularies_component_html"></a>
+
+<!-- src/app/pages/vocabularies/vocabularies.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Vocabularies & Terms</h1>
+    <p>
+      Explore controlled vocabularies, taxonomies, and classification systems
+      used across research domains
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Term"
+    [columns]="vocabularyColumns"
+    label="Vocabulary Terms"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/vocabularies/vocabularies.component.scss <a id="vocabularies_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
 ## Code Visualization
 
 
@@ -10219,111 +11891,115 @@ Below is a visualization of file dependencies in the codebase:
 
 ```mermaid
 graph LR
-  F1_iroko-ui-pwa_package.json["package.json"]
-  F2_app_app.component.ts["app.component.ts"]
-  F3_app_app.routes.ts["app.routes.ts"]
-  F4_services_cypher-builder.service.ts["cypher-builder.service.ts"]
-  F5_enhanced-node-viewer_enhanced-node-viewer.component.ts["enhanced-node-viewer.component.ts"]
-  F6_services_cache.service.ts["cache.service.ts"]
-  F7_interceptors_caching.interceptor.ts["caching.interceptor.ts"]
-  F8_services_error-handler.service.ts["error-handler.service.ts"]
+  F1_app_app.component.ts["app.component.ts"]
+  F2_app_app.component.scss["app.component.scss"]
+  F3_iroko-ui-pwa_.gitignore[".gitignore"]
+  F4_iroko-ui-pwa_README.md["README.md"]
+  F5_app_app.component.html["app.component.html"]
+  F6_iroko-ui-pwa_package.json["package.json"]
+  F7_iroko-ui-pwa_tsconfig.json["tsconfig.json"]
+  F8_src_main.ts["main.ts"]
   F9_app_app.config.ts["app.config.ts"]
-  F10_services_export.service.ts["export.service.ts"]
-  F11_generic-list_generic-list.component.ts["generic-list.component.ts"]
-  F12_home_home.component.ts["home.component.ts"]
-  F13_markdown-viewer_markdown-viewer.component.ts["markdown-viewer.component.ts"]
-  F14_node-view_node-view.component.ts["node-view.component.ts"]
-  F15_global-search_global-search.component.ts["global-search.component.ts"]
-  F16_outputs_outputs.component.ts["outputs.component.ts"]
-  F17_organizations_organizations.component.ts["organizations.component.ts"]
-  F18_mes_mes.component.ts["mes.component.ts"]
-  F19_projects_projects.component.ts["projects.component.ts"]
-  F20_persons_persons.component.ts["persons.component.ts"]
-  F21_relationship-card_relationship-card.component.ts["relationship-card.component.ts"]
-  F22_relationship-pagination_relationship-pagination.component.ts["relationship-pagination.component.ts"]
-  F23_sources_sources.component.ts["sources.component.ts"]
-  F24_vocabularies_vocabularies.component.ts["vocabularies.component.ts"]
-  F25_services_search.service.ts["search.service.ts"]
-  F26_search-results_search-results.component.ts["search-results.component.ts"]
-  F27_pages__page-styles.scss["_page-styles.scss"]
-  F28_app_app.component.scss["app.component.scss"]
-  F29_app_app.component.html["app.component.html"]
-  F30_public_config.json["config.json"]
-  F31_enhanced-node-viewer_enhanced-node-viewer.component.scss["enhanced-node-viewer.component.scss"]
-  F32_generic-list_generic-list.component.html["generic-list.component.html"]
-  F33_enhanced-node-viewer_enhanced-node-viewer.component.html["enhanced-node-viewer.component.html"]
-  F34_global-search_global-search.component.html["global-search.component.html"]
-  F35_global-search_global-search.component.scss["global-search.component.scss"]
-  F36_generic-list_generic-list.component.scss["generic-list.component.scss"]
-  F37_home_home.component.html["home.component.html"]
-  F38_home_home.component.scss["home.component.scss"]
-  F39_markdown-viewer_markdown-viewer.component.scss["markdown-viewer.component.scss"]
-  F40_mes_mes.component.html["mes.component.html"]
-  F41_mes_mes.component.scss["mes.component.scss"]
-  F42_node-view_node-view.component.html["node-view.component.html"]
-  F43_markdown-viewer_markdown-viewer.component.html["markdown-viewer.component.html"]
-  F44_organizations_organizations.component.html["organizations.component.html"]
-  F45_organizations_organizations.component.scss["organizations.component.scss"]
-  F46_outputs_outputs.component.html["outputs.component.html"]
-  F47_node-view_node-view.component.scss["node-view.component.scss"]
-  F48_outputs_outputs.component.scss["outputs.component.scss"]
-  F49_persons_persons.component.scss["persons.component.scss"]
-  F50_projects_projects.component.html["projects.component.html"]
-  F51_relationship-card_relationship-card.component.html["relationship-card.component.html"]
-  F52_relationship-card_relationship-card.component.scss["relationship-card.component.scss"]
-  F53_relationship-pagination_relationship-pagination.component.html["relationship-pagination.component.html"]
-  F54_projects_projects.component.scss["projects.component.scss"]
-  F55_relationship-pagination_relationship-pagination.component.scss["relationship-pagination.component.scss"]
-  F56_persons_persons.component.html["persons.component.html"]
-  F57_search-results_search-results.component.html["search-results.component.html"]
-  F58_sources_sources.component.html["sources.component.html"]
-  F59_search-results_search-results.component.scss["search-results.component.scss"]
-  F60_sources_sources.component.scss["sources.component.scss"]
-  F61_vocabularies_vocabularies.component.scss["vocabularies.component.scss"]
-  F62_vocabularies_vocabularies.component.html["vocabularies.component.html"]
-  F63_src_styles.scss["styles.scss"]
-  F64_iroko-ui-pwa_.gitignore[".gitignore"]
-  F65_src_main.ts["main.ts"]
-  F66_iroko-ui-pwa_tsconfig.json["tsconfig.json"]
-  F67_iroko-ui-pwa_README.md["README.md"]
-  F68_models_cypher-query.model.ts["cypher-query.model.ts"]
-  F69_error_error.component.ts["error.component.ts"]
-  F70_services_metadata.service.ts["metadata.service.ts"]
-  F71_models_http-validation-error.model.ts["http-validation-error.model.ts"]
-  F72_services_iroko-api.service.ts["iroko-api.service.ts"]
-  F73_services_config.service.ts["config.service.ts"]
-  F74_query-executor_query-executor.component.ts["query-executor.component.ts"]
-  F75_query-page_query-page.component.ts["query-page.component.ts"]
-  F76_results-display_results-display.component.ts["results-display.component.ts"]
-  F77_view-instance_view-instance.component.ts["view-instance.component.ts"]
-  F78_view-class_view-class.component.ts["view-class.component.ts"]
-  F79_models_validation-error.model.ts["validation-error.model.ts"]
-  F80_iroko-ui-pwa_.postcssrc.json[".postcssrc.json"]
-  F81_iroko-ui-pwa_angular.json["angular.json"]
-  F82_error_error.component.scss["error.component.scss"]
-  F83_error_error.component.html["error.component.html"]
-  F84_src_index.html["index.html"]
-  F85_services_openapi.json["openapi.json"]
-  F86_services_map.json["map.json"]
-  F87_schemas_output-v1.0.0.json["output-v1.0.0.json"]
-  F88_iroko-ui-pwa_ngsw-config.json["ngsw-config.json"]
-  F89_schemas_person-v1.0.0.json["person-v1.0.0.json"]
-  F90_schemas_organization-v1.0.0.json["organization-v1.0.0.json"]
-  F91_query-executor_query-executor.component.scss["query-executor.component.scss"]
-  F92_query-executor_query-executor.component.html["query-executor.component.html"]
-  F93_query-page_query-page.component.html["query-page.component.html"]
-  F94_query-page_query-page.component.scss["query-page.component.scss"]
-  F95_iroko-ui-pwa_proxy.conf.json["proxy.conf.json"]
-  F96_schemas_project-v1.0.0.json["project-v1.0.0.json"]
-  F97_results-display_results-display.component.scss["results-display.component.scss"]
-  F98_results-display_results-display.component.html["results-display.component.html"]
-  F99_src_styles_theme-iroko.scss["styles_theme-iroko.scss"]
-  F100_view-class_view-class.component.scss["view-class.component.scss"]
-  F101_view-instance_view-instance.component.scss["view-instance.component.scss"]
-  F102_schemas_source-v1.0.0.json["source-v1.0.0.json"]
-  F103_iroko-ui-pwa_tsconfig.app.json["tsconfig.app.json"]
-  F104_view-class_view-class.component.html["view-class.component.html"]
-  F105_view-instance_view-instance.component.html["view-instance.component.html"]
+  F10_about_about.component.ts["about.component.ts"]
+  F11_interceptors_caching.interceptor.ts["caching.interceptor.ts"]
+  F12_app_app.routes.ts["app.routes.ts"]
+  F13_services_cache.service.ts["cache.service.ts"]
+  F14_services_config.service.ts["config.service.ts"]
+  F15_services_cypher-builder.service.ts["cypher-builder.service.ts"]
+  F16_models_cypher-query.model.ts["cypher-query.model.ts"]
+  F17_enhanced-node-viewer_enhanced-node-viewer.component.ts["enhanced-node-viewer.component.ts"]
+  F18_services_error-handler.service.ts["error-handler.service.ts"]
+  F19_error_error.component.ts["error.component.ts"]
+  F20_services_export.service.ts["export.service.ts"]
+  F21_generic-list_generic-list.component.ts["generic-list.component.ts"]
+  F22_global-search_global-search.component.ts["global-search.component.ts"]
+  F23_home_home.component.ts["home.component.ts"]
+  F24_models_http-validation-error.model.ts["http-validation-error.model.ts"]
+  F25_services_iroko-api.service.ts["iroko-api.service.ts"]
+  F26_markdown-viewer_markdown-viewer.component.ts["markdown-viewer.component.ts"]
+  F27_mes_mes.component.ts["mes.component.ts"]
+  F28_services_metadata.service.ts["metadata.service.ts"]
+  F29_node-view_node-view.component.ts["node-view.component.ts"]
+  F30_outputs_outputs.component.ts["outputs.component.ts"]
+  F31_persons_persons.component.ts["persons.component.ts"]
+  F32_projects_projects.component.ts["projects.component.ts"]
+  F33_organizations_organizations.component.ts["organizations.component.ts"]
+  F34_query-page_query-page.component.ts["query-page.component.ts"]
+  F35_query-executor_query-executor.component.ts["query-executor.component.ts"]
+  F36_relationship-pagination_relationship-pagination.component.ts["relationship-pagination.component.ts"]
+  F37_relationship-card_relationship-card.component.ts["relationship-card.component.ts"]
+  F38_results-display_results-display.component.ts["results-display.component.ts"]
+  F39_services_search.service.ts["search.service.ts"]
+  F40_sources_sources.component.ts["sources.component.ts"]
+  F41_search-results_search-results.component.ts["search-results.component.ts"]
+  F42_models_validation-error.model.ts["validation-error.model.ts"]
+  F43_view-instance_view-instance.component.ts["view-instance.component.ts"]
+  F44_view-class_view-class.component.ts["view-class.component.ts"]
+  F45_vocabularies_vocabularies.component.ts["vocabularies.component.ts"]
+  F46_md_about.md["about.md"]
+  F47_pages__page-styles.scss["_page-styles.scss"]
+  F48_iroko-ui-pwa_.postcssrc.json[".postcssrc.json"]
+  F49_about_about.component.scss["about.component.scss"]
+  F50_iroko-ui-pwa_angular.json["angular.json"]
+  F51_about_about.component.html["about.component.html"]
+  F52_public_config.json["config.json"]
+  F53_enhanced-node-viewer_enhanced-node-viewer.component.html["enhanced-node-viewer.component.html"]
+  F54_enhanced-node-viewer_enhanced-node-viewer.component.scss["enhanced-node-viewer.component.scss"]
+  F55_error_error.component.html["error.component.html"]
+  F56_error_error.component.scss["error.component.scss"]
+  F57_generic-list_generic-list.component.html["generic-list.component.html"]
+  F58_generic-list_generic-list.component.scss["generic-list.component.scss"]
+  F59_global-search_global-search.component.html["global-search.component.html"]
+  F60_global-search_global-search.component.scss["global-search.component.scss"]
+  F61_home_home.component.html["home.component.html"]
+  F62_home_home.component.scss["home.component.scss"]
+  F63_src_index.html["index.html"]
+  F64_markdown-viewer_markdown-viewer.component.html["markdown-viewer.component.html"]
+  F65_markdown-viewer_markdown-viewer.component.scss["markdown-viewer.component.scss"]
+  F66_services_map.json["map.json"]
+  F67_mes_mes.component.html["mes.component.html"]
+  F68_mes_mes.component.scss["mes.component.scss"]
+  F69_iroko-ui-pwa_ngsw-config.json["ngsw-config.json"]
+  F70_node-view_node-view.component.html["node-view.component.html"]
+  F71_node-view_node-view.component.scss["node-view.component.scss"]
+  F72_services_openapi.json["openapi.json"]
+  F73_schemas_organization-v1.0.0.json["organization-v1.0.0.json"]
+  F74_organizations_organizations.component.html["organizations.component.html"]
+  F75_organizations_organizations.component.scss["organizations.component.scss"]
+  F76_schemas_output-v1.0.0.json["output-v1.0.0.json"]
+  F77_outputs_outputs.component.html["outputs.component.html"]
+  F78_outputs_outputs.component.scss["outputs.component.scss"]
+  F79_persons_persons.component.html["persons.component.html"]
+  F80_persons_persons.component.scss["persons.component.scss"]
+  F81_schemas_person-v1.0.0.json["person-v1.0.0.json"]
+  F82_schemas_project-v1.0.0.json["project-v1.0.0.json"]
+  F83_projects_projects.component.html["projects.component.html"]
+  F84_iroko-ui-pwa_proxy.conf.json["proxy.conf.json"]
+  F85_projects_projects.component.scss["projects.component.scss"]
+  F86_query-executor_query-executor.component.html["query-executor.component.html"]
+  F87_query-executor_query-executor.component.scss["query-executor.component.scss"]
+  F88_query-page_query-page.component.html["query-page.component.html"]
+  F89_query-page_query-page.component.scss["query-page.component.scss"]
+  F90_relationship-card_relationship-card.component.html["relationship-card.component.html"]
+  F91_relationship-card_relationship-card.component.scss["relationship-card.component.scss"]
+  F92_relationship-pagination_relationship-pagination.component.html["relationship-pagination.component.html"]
+  F93_relationship-pagination_relationship-pagination.component.scss["relationship-pagination.component.scss"]
+  F94_results-display_results-display.component.html["results-display.component.html"]
+  F95_results-display_results-display.component.scss["results-display.component.scss"]
+  F96_search-results_search-results.component.html["search-results.component.html"]
+  F97_sources_sources.component.scss["sources.component.scss"]
+  F98_schemas_source-v1.0.0.json["source-v1.0.0.json"]
+  F99_sources_sources.component.html["sources.component.html"]
+  F100_search-results_search-results.component.scss["search-results.component.scss"]
+  F101_src_styles.scss["styles.scss"]
+  F102_iroko-ui-pwa_tsconfig.app.json["tsconfig.app.json"]
+  F103_view-class_view-class.component.html["view-class.component.html"]
+  F104_view-class_view-class.component.scss["view-class.component.scss"]
+  F105_src_styles_theme-iroko.scss["styles_theme-iroko.scss"]
+  F106_view-instance_view-instance.component.html["view-instance.component.html"]
+  F107_view-instance_view-instance.component.scss["view-instance.component.scss"]
+  F108_vocabularies_vocabularies.component.html["vocabularies.component.html"]
+  F109_vocabularies_vocabularies.component.scss["vocabularies.component.scss"]
 ```
 
 ### Class Relationships

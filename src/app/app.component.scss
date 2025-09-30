@@ -1,10 +1,9 @@
-/* Remove existing footer styles and replace with: */
-
+/* src/app/app.component.scss */
 .app-footer {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
   padding: 20px 0;
-  margin-top: auto; /* This pushes footer to bottom */
+  margin-top: auto;
   width: 100%;
 
   .footer-content {
@@ -62,6 +61,165 @@
     }
   }
 }
+// Ensure the toolbar itself is styled consistently
+mat-toolbar {
+  // Use Angular Material's theme colors
+  // background: mat.get-color-from-palette(#{your-theme}, primary, 700); // Or primary default
+  // color: white; // Or use a text color from the palette
+  height: 64px; // Standard height
+  z-index: 1000; // Ensure it stays on top
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Add subtle shadow
+
+  // Ensure content aligns correctly within the toolbar
+  display: flex;
+  align-items: center;
+  padding: 0 16px; // Add horizontal padding
+
+  // Remove any fixed positioning if it's causing layout issues elsewhere
+  // position: fixed; // Consider if this is needed globally or just for overlay effect
+  // top: 0;
+  // left: 0;
+  // right: 0;
+}
+
+// Right Section (Search & User Menu)
+.toolbar-right-section {
+  // Add this class to the right div in HTML if needed for specificity
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; // Handled by Tailwind 'justify-end'
+  gap: 12px; // Consistent spacing between right items
+  flex: none; // Handled by Tailwind 'flex-none'
+}
+// Search Container Styling (ensure it fits in toolbar)
+.search-container {
+  // The class applied to the app-global-search component
+  // Tailwind: hidden md:block
+  // Max width might need adjustment based on design
+  max-width: 400px; // Or adjust as needed
+  flex-shrink: 1; // Allow it to shrink if necessary
+  // Ensure internal input fits
+  // Styles for the internal input field might be needed in global-search.component.scss
+  // or via view encapsulation piercing here (less ideal)
+  // Example: .mat-form-field { width: 100%; }
+}
+
+// User Menu Button
+.user-menu-button {
+  // Add this class to the user menu button in HTML if needed
+  color: inherit; // Inherits white from mat-toolbar
+  // Add specific styles if needed
+  // Angular Material button styles usually handle focus/hover well
+}
+
+// Center Section (Logo & Title)
+.app-branding {
+  // Tailwind classes from HTML: flex items-center justify-center flex-1
+  // These are good. Maybe add specific alignment if needed
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1; // Ensure it takes available space
+  gap: 8px; // Space between logo and title
+  // Prevent shrinking if side content is large
+  flex-shrink: 0;
+}
+
+/* App Bar Enhancements */
+.app-logo {
+  width: 32px;
+  height: 32px;
+  color: white;
+  margin-right: 1em;
+}
+
+.app-title {
+  color: #006d33; // This seems specific, consider using a theme color
+  // color: mat.get-color-from-palette(#{your-theme}, primary, contrast); // Alternative
+  font-weight: 600; // Already present
+  font-size: 1.25rem; // Or use a theme-defined typography level
+  white-space: nowrap; // Prevents title breaking
+  overflow: hidden; // In case title is very long
+  text-overflow: ellipsis; // Show ellipsis if truncated
+}
+
+/* Menu Enhancements */
+.menu-subheader {
+  color: #666;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-left: 16px;
+}
+
+.menu-item {
+  border-radius: 6px;
+  margin: 2px 0;
+  transition: all 0.2s ease;
+  height: 80px !important;
+  min-height: 80px !important;
+
+  &:hover {
+    background-color: rgba(0, 109, 51, 0.08);
+  }
+
+  &.active {
+    background-color: rgba(0, 109, 51, 0.12) !important;
+    color: #006d33;
+
+    .menu-icon {
+      color: #006d33 !important;
+    }
+
+    .menu-label {
+      color: #006d33 !important;
+      font-weight: 600;
+    }
+
+    .menu-description {
+      color: rgba(0, 109, 51, 0.8) !important;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background-color: #006d33;
+      border-radius: 0 2px 2px 0;
+    }
+  }
+}
+
+.menu-icon {
+  color: #666;
+  transition: color 0.2s ease;
+  margin-right: 12px !important;
+}
+
+.menu-label {
+  font-weight: 500;
+  color: #333;
+  transition: color 0.2s ease;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.menu-description {
+  color: #666;
+  font-size: 0.7rem;
+  transition: color 0.2s ease;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+.menu-divider {
+  margin: 8px 0;
+}
 
 /* Ensure the main layout uses flexbox properly */
 .flex {
@@ -72,26 +230,77 @@
   flex-direction: column;
 }
 
-.absolute {
-  position: absolute;
-}
-
-.inset-0 {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-/* Main container should grow to push footer down */
-.main-container {
-  display: flex;
-  flex-direction: column;
+.min-h-screen {
   min-height: 100vh;
 }
 
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .main-is-mobile {
+    .header-toolbar {
+      padding: 0 8px;
+    }
+  }
+
+  .menu-item {
+    height: 80px !important;
+    min-height: 80px !important;
+
+    .menu-label {
+      font-size: 0.85rem;
+    }
+
+    .menu-description {
+      font-size: 0.65rem;
+    }
+  }
+}
+
+/* Sidenav improvements */
+mat-sidenav {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  border-right: none;
+
+  @media (max-width: 768px) {
+    width: 280px;
+  }
+
+  @media (min-width: 769px) {
+    width: 300px;
+  }
+}
+
 mat-sidenav-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  background-color: #f8f9fa;
+  transition: margin 0.3s ease;
+}
+
+/* Global search in mobile menu */
+.mobile-search-menu {
+  .mat-menu-content {
+    padding: 0 !important;
+
+    .search-container {
+      padding: 16px;
+      width: 300px;
+    }
+  }
+}
+
+/* Fix mat-list-item default padding */
+::ng-deep {
+  .mat-mdc-list-item {
+    --mdc-list-list-item-container-shape: 6px;
+
+    .mdc-list-item__content {
+      padding: 0 8px !important;
+    }
+  }
+
+  /* Remove default active background from Angular Material */
+  .mat-mdc-list-item.mat-mdc-list-item-interactive.mat-mdc-list-item-single-line.mdc-list-item--with-one-line {
+    &.active {
+      --mdc-list-list-item-container-color: transparent !important;
+    }
+  }
 }

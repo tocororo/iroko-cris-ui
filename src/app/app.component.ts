@@ -150,4 +150,9 @@ export class AppComponent implements OnInit {
       ? 'main-is-mobile flex flex-col min-h-screen'
       : 'flex flex-col min-h-screen';
   }
+  // Add this method to the AppComponent class in app.component.ts
+  getSidenavOpenedState(): boolean {
+    // Expanded by default on desktop, collapsed on mobile
+    return !this.isMobile();
+  }
 }
