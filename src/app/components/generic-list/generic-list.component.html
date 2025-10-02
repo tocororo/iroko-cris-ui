@@ -1,10 +1,10 @@
 <!-- src/app/components/generic-list/generic-list.component.html -->
 <div class="generic-list-container">
-  <!-- Buscar and Sort Controls -->
+  <!-- Search, Sort, and Export Controls -->
   <mat-card class="controls-card">
     <mat-card-content>
       <div class="controls-row">
-        <!-- Buscar Field -->
+        <!-- Search Field -->
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Buscar...</mat-label>
           <input
@@ -56,111 +56,251 @@
           </button>
           }
         </div>
-        <!-- Advanced Query Controls -->
-        <div class="advanced-query-section">
-          <!-- <button
-            mat-button
-            color="primary"
-            (click)="showAdvancedQuery = !showAdvancedQuery"
-            class="advanced-query-toggle"
+
+        <!-- Export Button -->
+        <div class="export-section">
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="exportCurrentView()"
+            [disabled]="isExporting || totalCount === 0"
+            class="export-btn"
           >
-            <mat-icon>code</mat-icon>
-            Consulta Avanzada @if (hasAdvancedQuery()) {
-            <mat-chip class="active-chip">Activa</mat-chip>
+            <mat-icon>download</mat-icon>
+            {{ isExporting ? "Exporting..." : "Export CSV" }}
+          </button>
+
+          <div class="export-info" *ngIf="totalCount > 0">
+            <small
+              >Exports all {{ totalCount }} records, not just the current
+              page</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls -->
+      @if (filters.length > 0) {
+      <div class="filters-section">
+        <div class="filters-header">
+          <button
+            mat-button
+            (click)="showFilters = !showFilters"
+            class="filters-toggle"
+          >
+            <mat-icon>filter_list</mat-icon>
+            Filtros @if (hasActiveFilters()) {
+            <mat-chip class="active-filter-chip">{{
+              getActiveFilterCount()
+            }}</mat-chip>
             }
-          </button> -->
+          </button>
 
-          @if (showAdvancedQuery) {
-          <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>tune</mat-icon>
-                Consulta Cypher Personalizada
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <div class="advanced-query-content">
-              <!-- Custom WHERE Clause -->
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Cláusula WHERE Personalizada</mat-label>
-                <textarea
-                  matInput
-                  [(ngModel)]="customWhereClause"
-                  placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
-                  rows="3"
-                ></textarea>
-                <mat-hint>
-                  Usa 'n' como alias del nodo principal. Ejemplos:
-                  <code>n.source_type = 'journal'</code>,
-                  <code>EXISTS((n)-[:RELATED_TO]->(:Organization))</code>
-                </mat-hint>
-              </mat-form-field>
-
-              <!-- Custom Parameters -->
-              <div class="parameters-section">
-                <div class="parameters-header">
-                  <h4>Parámetros Personalizados</h4>
-                  <button
-                    mat-button
-                    color="primary"
-                    (click)="addCustomParameter()"
-                  >
-                    <mat-icon>add</mat-icon>
-                    Agregar Parámetro
-                  </button>
-                </div>
-
-                @for (param of customParameters; track param; let i = $index) {
-                <div class="parameter-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Key</mat-label>
-                    <input
-                      matInput
-                      [(ngModel)]="param.key"
-                      placeholder="nombreParametro"
-                    />
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline">
-                    <mat-label>Valor</mat-label>
-                    <input
-                      matInput
-                      [(ngModel)]="param.value"
-                      placeholder="valor"
-                    />
-                  </mat-form-field>
-
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    (click)="removeCustomParameter(i)"
-                    class="remove-param-btn"
-                  >
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-                }
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="advanced-query-actions">
-                <button mat-button (click)="clearAdvancedQuery()">
-                  <mat-icon>clear</mat-icon>
-                  Limpiar
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="applyAdvancedQuery()"
-                >
-                  <mat-icon>play_arrow</mat-icon>
-                  Aplicar Consulta
-                </button>
-              </div>
-            </div>
-          </mat-expansion-panel>
+          @if (hasActiveFilters()) {
+          <button
+            mat-button
+            color="warn"
+            (click)="clearFilters()"
+            class="clear-filters-btn"
+          >
+            <mat-icon>clear</mat-icon>
+            Limpiar Filtros
+          </button>
           }
         </div>
+
+        @if (showFilters) {
+        <div class="filters-content">
+          <form [formGroup]="filterForm" class="filters-form">
+            <div class="filters-grid">
+              @for (filter of filters; track filter.name) {
+              <div class="filter-field">
+                <!-- Text Filter -->
+                @if (filter.type === 'text') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="filter.name"
+                    [placeholder]="filter.placeholder || filter.label"
+                  />
+                </mat-form-field>
+                }
+
+                <!-- Select Filter -->
+                @if (filter.type === 'select') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <mat-select [formControlName]="filter.name">
+                    <mat-option value="">Todos</mat-option>
+                    @for (option of filter.options; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                }
+
+                <!-- Multi-Select Filter -->
+                @if (filter.type === 'multiselect') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <mat-select [formControlName]="filter.name" multiple>
+                    @for (option of filter.options; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                }
+
+                <!-- Date Filter -->
+                @if (filter.type === 'date') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="filter.name"
+                    [matDatepicker]="picker"
+                    [placeholder]="filter.placeholder || 'Seleccionar fecha'"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                }
+
+                <!-- Boolean Filter -->
+                @if (filter.type === 'boolean') {
+                <mat-checkbox [formControlName]="filter.name" color="primary">
+                  {{ filter.label }}
+                </mat-checkbox>
+                }
+              </div>
+              }
+            </div>
+
+            <div class="filter-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="applyFilters()"
+                [disabled]="filterForm.invalid"
+              >
+                <mat-icon>check</mat-icon>
+                Aplicar Filtros
+              </button>
+            </div>
+          </form>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Advanced Query Controls -->
+      <div class="advanced-query-section">
+        <button
+          mat-button
+          color="primary"
+          (click)="showAdvancedQuery = !showAdvancedQuery"
+          class="advanced-query-toggle"
+        >
+          <mat-icon>code</mat-icon>
+          Consulta Avanzada @if (hasAdvancedQuery()) {
+          <mat-chip class="active-chip">Activa</mat-chip>
+          }
+        </button>
+
+        @if (showAdvancedQuery) {
+        <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>tune</mat-icon>
+              Consulta Cypher Personalizada
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="advanced-query-content">
+            <!-- Custom WHERE Clause -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cláusula WHERE Personalizada</mat-label>
+              <textarea
+                matInput
+                [(ngModel)]="customWhereClause"
+                placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
+                rows="3"
+              ></textarea>
+              <mat-hint>
+                Usa 'n' como alias del nodo principal. Ejemplos:
+                <code>n.source_type = 'journal'</code>,
+                <code>EXISTS((n)-[:RELATED_TO]->(:Organization))</code>
+              </mat-hint>
+            </mat-form-field>
+
+            <!-- Custom Parameters -->
+            <div class="parameters-section">
+              <div class="parameters-header">
+                <h4>Parámetros Personalizados</h4>
+                <button
+                  mat-button
+                  color="primary"
+                  (click)="addCustomParameter()"
+                >
+                  <mat-icon>add</mat-icon>
+                  Agregar Parámetro
+                </button>
+              </div>
+
+              @for (param of customParameters; track param; let i = $index) {
+              <div class="parameter-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Key</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="param.key"
+                    placeholder="nombreParametro"
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Valor</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="param.value"
+                    placeholder="valor"
+                  />
+                </mat-form-field>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="removeCustomParameter(i)"
+                  class="remove-param-btn"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="advanced-query-actions">
+              <button mat-button (click)="clearAdvancedQuery()">
+                <mat-icon>clear</mat-icon>
+                Limpiar
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="applyAdvancedQuery()"
+              >
+                <mat-icon>play_arrow</mat-icon>
+                Aplicar Consulta
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        }
       </div>
     </mat-card-content>
   </mat-card>
@@ -247,7 +387,7 @@
             } }
           </div>
 
-          <!-- Ver Detalles Action -->
+          <!-- View Details Action -->
           <div class="card-actions">
             <button mat-button color="primary" class="view-details-btn">
               Ver Detalles

@@ -1,9 +1,9 @@
 Repository Summary:
 Files analyzed: 110
-Directories scanned: 4035
-Total size: 277.31 KB (283963 bytes)
-Estimated tokens: 70990
-Processing time: 2.03 seconds
+Directories scanned: 4040
+Total size: 287.28 KB (294177 bytes)
+Estimated tokens: 73544
+Processing time: 2.16 seconds
 
 
 ## Table of Contents
@@ -13,7 +13,7 @@ Processing time: 2.03 seconds
 - [Files Content](#files-content)
   - Files By Category:
     - Configuration (16 files):
-      - [.gitignore](#_gitignore) - 587 bytes
+      - [.gitignore](#_gitignore) - 609 bytes
       - [.postcssrc.json](#_postcssrc_json) - 54 bytes
       - [angular.json](#angular_json) - 3.6 KB
       - [config.json](#config_json) - 1.8 KB
@@ -37,7 +37,7 @@ Processing time: 2.03 seconds
       - [config.service.ts](#config_service_ts) - 608 bytes
       - [cypher-builder.service.ts](#cypher-builder_service_ts) - 6.2 KB
       - [cypher-query.model.ts](#cypher-query_model_ts) - 118 bytes
-      - [enhanced-node-viewer.component.ts](#enhanced-node-viewer_component_ts) - 7.6 KB
+      - [enhanced-node-viewer.component.ts](#enhanced-node-viewer_component_ts) - 7.8 KB
       - [and 30 more JavaScript/TypeScript files...]
     - Web (52 files):
       - [_page-styles.scss](#_page-styles_scss) - 803 bytes
@@ -45,11 +45,11 @@ Processing time: 2.03 seconds
       - [about.component.scss](#about_component_scss) - 698 bytes
       - [app.component.html](#app_component_html) - 3.7 KB
       - [app.component.scss](#app_component_scss) - 6.5 KB
-      - [enhanced-node-viewer.component.html](#enhanced-node-viewer_component_html) - 3.6 KB
+      - [enhanced-node-viewer.component.html](#enhanced-node-viewer_component_html) - 3.9 KB
       - [enhanced-node-viewer.component.scss](#enhanced-node-viewer_component_scss) - 3.4 KB
       - [error.component.html](#error_component_html) - 24 bytes
       - [error.component.scss](#error_component_scss) - 0 bytes
-      - [generic-list.component.html](#generic-list_component_html) - 5.5 KB
+      - [generic-list.component.html](#generic-list_component_html) - 9.2 KB
       - [and 42 more Web files...]
 - [Architecture and Relationships](#architecture-and-relationships)
   - [File Dependencies](#file-dependencies)
@@ -59,7 +59,7 @@ Processing time: 2.03 seconds
 ## Project Summary <a id="project-summary"></a>
 
 # Project Digest: iroko-ui-pwa
-Generated on: Tue Sep 30 2025 00:43:06 GMT-0400 (hora de verano de Cuba)
+Generated on: Tue Sep 30 2025 11:51:22 GMT-0400 (hora de verano de Cuba)
 Source: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 
@@ -226,7 +226,7 @@ Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 
 # Files Content
 
-## .gitignore <a id="gitignore"></a>
+## .gitignore <a id="gitignore"></a> 🔄 **[RECENTLY MODIFIED]**
 
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
@@ -270,6 +270,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+CodeFlattened_Output-
 
 ## package.json <a id="package_json"></a>
 
@@ -323,36 +324,6 @@ Thumbs.db
   }
 }
 
-## tsconfig.json <a id="tsconfig_json"></a>
-
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
-{
-  "compileOnSave": false,
-  "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "bundler",
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022"
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
-}
-
 ## README.md <a id="README_md"></a>
 
 # IrokoUiPwa
@@ -395,6 +366,36 @@ import { AppComponent } from './app/app.component';
 
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
+
+## tsconfig.json <a id="tsconfig_json"></a>
+
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
 
 ## src/app/pages/about/about.component.ts <a id="about_component_ts"></a>
 
@@ -638,6 +639,62 @@ export class AppComponent implements OnInit {
   }
 }
 
+## src/app/app.config.ts <a id="app_config_ts"></a>
+
+### Dependencies
+
+- `@angular/router`
+- `./app.routes`
+- `@angular/service-worker`
+- `@angular/platform-browser/animations`
+- `ngx-markdown`
+- `./api/services/iroko-api.service`
+- `./services/error-handler.service`
+- `./interceptors/caching.interceptor`
+
+// src/app/app.config.ts
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  isDevMode,
+  ErrorHandler,
+} from '@angular/core';
+import { provideRouter } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideServiceWorker } from '@angular/service-worker';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+import { provideMarkdown } from 'ngx-markdown';
+
+import { IrokoApiService } from './api/services/iroko-api.service';
+import { ErrorHandlerService } from './services/error-handler.service';
+import { cachingInterceptor } from './interceptors/caching.interceptor';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideAnimations(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
+    provideMarkdown(), // Add this line
+    IrokoApiService,
+    {
+      provide: ErrorHandler,
+      useClass: ErrorHandlerService,
+    },
+  ],
+};
+
 ## src/app/app.routes.ts <a id="app_routes_ts"></a>
 
 ### Dependencies
@@ -739,62 +796,6 @@ export const routes: Routes = [
     data: { title: 'Página No Encontrada' },
   },
 ];
-
-## src/app/app.config.ts <a id="app_config_ts"></a>
-
-### Dependencies
-
-- `@angular/router`
-- `./app.routes`
-- `@angular/service-worker`
-- `@angular/platform-browser/animations`
-- `ngx-markdown`
-- `./api/services/iroko-api.service`
-- `./services/error-handler.service`
-- `./interceptors/caching.interceptor`
-
-// src/app/app.config.ts
-import {
-  ApplicationConfig,
-  provideZoneChangeDetection,
-  isDevMode,
-  ErrorHandler,
-} from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
-import { provideServiceWorker } from '@angular/service-worker';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-
-import { provideMarkdown } from 'ngx-markdown';
-
-import { IrokoApiService } from './api/services/iroko-api.service';
-import { ErrorHandlerService } from './services/error-handler.service';
-import { cachingInterceptor } from './interceptors/caching.interceptor';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideAnimations(),
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
-    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
-    provideMarkdown(), // Add this line
-    IrokoApiService,
-    {
-      provide: ErrorHandler,
-      useClass: ErrorHandlerService,
-    },
-  ],
-};
 
 ## src/app/services/cache.service.ts <a id="cache_service_ts"></a>
 
@@ -1310,8 +1311,8 @@ interface RelationshipData {
 export class EnhancedNodeViewerComponent implements OnInit {
   @Input() nodeId!: string;
   @Input() nodeType!: string;
+  @Output() nodeLoaded = new EventEmitter<any>();
   @Output() nodeSelected = new EventEmitter<any>();
-
   node: any;
   relationshipGroups: RelationshipGroup[] = [];
   loading = false;
@@ -1363,6 +1364,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
       next: (result) => {
         if (result && result.length > 0) {
           this.node = result[0].n;
+          this.nodeLoaded.emit(this.node);
 
           this.processAllRelationships(result);
         } else {
@@ -1505,6 +1507,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
       const primaryType = nodeLabels.length > 0 ? nodeLabels[0] : 'node';
 
       // Emit the node data with type information
+
       this.nodeSelected.emit({
         node: nodeData,
         type: primaryType,
@@ -1520,7 +1523,9 @@ export class EnhancedNodeViewerComponent implements OnInit {
   }
 
   getTabLabel(group: RelationshipGroup): string {
-    return `${group.type} (${group.totalCount})`;
+    const dicon =
+      group.direction === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
+    return `<mat-icon class="direction-icon">${dicon} </mat-icon> ${group.type} (${group.totalCount})`;
   }
 }
 
@@ -1689,6 +1694,148 @@ export class ExportService {
     document.body.removeChild(link);
 
     URL.revokeObjectURL(url);
+  }
+}
+
+## src/app/components/global-search/global-search.component.ts <a id="global-search_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/forms`
+- `@angular/router`
+- `@angular/material/form-field`
+- `@angular/material/input`
+- `@angular/material/autocomplete`
+- `@angular/material/icon`
+- `@angular/material/button`
+- `@angular/material/progress-spinner`
+- `@angular/material/menu`
+- `@angular/material/chips`
+- `rxjs/operators`
+- `rxjs`
+- `../../services/search.service`
+
+// src/app/components/global-search/global-search.component.ts
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { SearchResult, SearchService } from '../../services/search.service';
+
+@Component({
+  selector: 'app-global-search',
+  templateUrl: './global-search.component.html',
+  styleUrls: ['./global-search.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatChipsModule,
+  ],
+})
+export class GlobalSearchComponent implements OnInit {
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  searchTerm = '';
+  searchResults: SearchResult[] = [];
+  isLoading = false;
+  showResults = false;
+
+  private searchTerms = new Subject<string>();
+
+  constructor(private searchService: SearchService, private router: Router) {}
+
+  ngOnInit() {
+    this.searchTerms
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term) => {
+          if (!term.trim()) {
+            this.searchResults = [];
+            return [];
+          }
+          this.isLoading = true;
+          return this.searchService.globalSearch(term);
+        })
+      )
+      .subscribe({
+        next: (results) => {
+          this.searchResults = results.map((item: any) => ({
+            id: item.node.properties.id || item.node.identity,
+            type: item.type,
+            label:
+              item.node.properties.name ||
+              item.node.properties.title ||
+              'Unnamed',
+            description: item.node.properties.description,
+            properties: item.node.properties,
+            score: item.score,
+          }));
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Buscar error:', error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  onSearchInput(event: Event): void {
+    const term = (event.target as HTMLInputElement).value;
+    this.searchTerms.next(term);
+  }
+
+  onSearchSubmit(): void {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/search'], {
+        queryParams: { q: this.searchTerm },
+      });
+      this.showResults = false;
+      this.searchInput.nativeElement.blur();
+    }
+  }
+
+  onResultSelect(result: SearchResult): void {
+    this.router.navigate([`/${result.type.toLowerCase()}s`, result.id]);
+    this.showResults = false;
+    this.searchTerm = '';
+  }
+
+  onFocus(): void {
+    if (this.searchResults.length > 0) {
+      this.showResults = true;
+    }
+  }
+
+  onBlur(): void {
+    setTimeout(() => {
+      this.showResults = false;
+    }, 200);
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.searchResults = [];
+    this.showResults = false;
   }
 }
 
@@ -1878,11 +2025,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 - `@angular/material/chips`
 - `@angular/material/divider`
 - `@angular/material/tooltip`
+- `@angular/material/expansion`
 - `../../api/services/iroko-api.service`
 - `../enhanced-node-viewer/enhanced-node-viewer.component`
 - `@angular/router`
 
-// src/app/components/generic-list/generic-list.component.ts
 import {
   Component,
   Input,
@@ -1890,6 +2037,8 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -1914,6 +2063,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { IrokoApiService } from '../../api/services/iroko-api.service';
 import {
@@ -1936,6 +2086,35 @@ export interface SortOption {
   direction: 'ASC' | 'DESC';
 }
 
+// EJEMPLOS
+// {
+//   customWhereClause: "EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))";
+// }
+// {
+//   customWhereClause: "n.source_type = $type AND n.start_year > $minYear",
+//   customParameters: {
+//     type: 'journal',
+//     minYear: 2000
+//   }
+// }
+// {
+//   relationships: [
+//     { type: 'PUBLISHED_BY', direction: 'OUT', targetLabel: 'Organization' },
+//     { type: 'CLASSIFIED_BY', direction: 'OUT', targetLabel: 'Term' }
+//   ]
+// }
+export interface AdvancedQueryOptions {
+  customWhereClause?: string;
+  customParameters?: { [key: string]: any };
+  relationships?: {
+    type: string;
+    direction?: 'IN' | 'OUT';
+    targetLabel?: string;
+    alias?: string;
+  }[];
+  customReturn?: string;
+}
+
 @Component({
   selector: 'app-generic-list',
   templateUrl: './generic-list.component.html',
@@ -1954,15 +2133,18 @@ export interface SortOption {
     MatChipsModule,
     MatDividerModule,
     MatTooltipModule,
+    MatExpansionModule,
   ],
 })
-export class GenericListComponent implements OnInit, OnDestroy {
+export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() entityType!: string;
   @Input() columns: ListColumn[] = [];
   @Input() label: string = '';
   @Input() pageSize: number = 10;
   @Input() defaultSort?: string;
   @Input() defaultSortOrder: 'ASC' | 'DESC' = 'ASC';
+  @Input() advancedQueryOptions?: AdvancedQueryOptions;
+  @Input() fixedFilters: QueryFilter[] = [];
   @Output() nodeSelected = new EventEmitter<any>();
 
   // Data state
@@ -1973,15 +2155,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
   hasError = false;
   errorMessage = '';
 
-  // Buscar and sort state
+  // Search and sort state
   searchTerm = '';
   sortBy: SortOption = { attribute: '', direction: 'ASC' };
 
-  // Node viewer state
-  selectedNode: any = null;
-  showNodeViewer = false;
+  // Advanced query state
+  showAdvancedQuery = false;
+  customWhereClause = '';
+  customParameters: { key: string; value: any }[] = [];
 
-  // UI state - use FormControl with proper typing
+  // UI state
   searchControl: FormControl<string | null>;
   sortControl: FormControl<string | null>;
   showSortOrder = false;
@@ -2007,15 +2190,36 @@ export class GenericListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initializeSorting();
     this.setupSearchDebounce();
+    this.initializeAdvancedQuery();
     this.loadPage(0);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['advancedQueryOptions'] || changes['fixedFilters']) {
+      this.initializeAdvancedQuery();
+      this.loadPage(0);
+    }
   }
 
   ngOnDestroy() {
     this.searchSubscription?.unsubscribe();
   }
 
+  private initializeAdvancedQuery() {
+    if (this.advancedQueryOptions) {
+      this.customWhereClause =
+        this.advancedQueryOptions.customWhereClause || '';
+
+      // Initialize parameters from advanced query options
+      if (this.advancedQueryOptions.customParameters) {
+        this.customParameters = Object.entries(
+          this.advancedQueryOptions.customParameters
+        ).map(([key, value]) => ({ key, value }));
+      }
+    }
+  }
+
   private initializeSorting() {
-    // Set default sort
     const sortableColumns = this.columns
       .filter((col) => col.sortable)
       .map((col) => col.name);
@@ -2080,18 +2284,18 @@ export class GenericListComponent implements OnInit, OnDestroy {
       })
       .toPromise();
 
-    // Handle the nested structure: result is array of objects with count property
     return result?.[0]?.count || 0;
   }
 
   private async fetchNodes(offset: number, limit: number): Promise<any[]> {
     const whereClause = this.buildWhereClause();
     const orderClause = this.buildOrderClause();
+    const returnClause = this.buildReturnClause();
 
     const query = `
       MATCH (n:${this.entityType})
       ${whereClause}
-      RETURN n
+      ${returnClause}
       ${orderClause}
       SKIP $offset
       LIMIT $limit
@@ -2111,58 +2315,86 @@ export class GenericListComponent implements OnInit, OnDestroy {
       })
       .toPromise();
 
-    // Extract the actual node data from the nested structure
-    // Result is array of objects like: [{n: {id: '...', name: '...'}}, ...]
-    return (result || []).map((item: { n: any }) =>
+    return (result || []).map((item: any) =>
       this.extractNodeData(item.n || item)
     );
   }
 
-  private extractNodeData(nodeWrapper: any): any {
-    // If the node data is nested under properties, extract it
-    if (nodeWrapper && nodeWrapper.properties) {
-      return {
-        id: nodeWrapper.elementId || nodeWrapper.properties.id,
-        ...nodeWrapper.properties,
-      };
-    }
+  private buildWhereClause(): string {
+    const conditions: string[] = [];
 
-    // If it's already a flat object with an id, return as is
-    if (nodeWrapper && nodeWrapper.id) {
-      return nodeWrapper;
-    }
+    // Search condition
+    if (this.searchTerm) {
+      const searchableColumns = this.columns
+        .filter((col) => col.filterable !== false)
+        .map((col) => col.name);
 
-    // Otherwise, try to extract meaningful data from the wrapper
-    const nodeData: any = { id: nodeWrapper.elementId };
-
-    // Copy all properties from the wrapper that aren't metadata
-    Object.keys(nodeWrapper).forEach((key) => {
-      if (!['elementId', 'labels', 'identity'].includes(key)) {
-        nodeData[key] = nodeWrapper[key];
+      if (searchableColumns.length > 0) {
+        const searchConditions = searchableColumns
+          .map(
+            (col) =>
+              `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`
+          )
+          .join(' OR ');
+        conditions.push(`(${searchConditions})`);
       }
-    });
+    }
 
-    return nodeData;
+    // Fixed filters
+    if (this.fixedFilters.length > 0) {
+      this.fixedFilters.forEach((filter, index) => {
+        const paramName = `fixedFilter${index}`;
+        switch (filter.operator) {
+          case 'CONTAINS':
+            conditions.push(
+              `toLower(n.${filter.property}) CONTAINS toLower($${paramName})`
+            );
+            break;
+          case 'STARTS WITH':
+            conditions.push(
+              `toLower(n.${filter.property}) STARTS WITH toLower($${paramName})`
+            );
+            break;
+          case 'ENDS WITH':
+            conditions.push(
+              `toLower(n.${filter.property}) ENDS WITH toLower($${paramName})`
+            );
+            break;
+          default:
+            conditions.push(
+              `n.${filter.property} ${filter.operator} $${paramName}`
+            );
+        }
+      });
+    }
+
+    // Custom WHERE clause from advanced query
+    if (this.customWhereClause) {
+      conditions.push(`(${this.customWhereClause})`);
+    }
+
+    // Relationships from advanced query options
+    if (this.advancedQueryOptions?.relationships) {
+      this.advancedQueryOptions.relationships.forEach((rel, index) => {
+        const alias = rel.alias || `related${index}`;
+        const direction = rel.direction === 'IN' ? '<' : '';
+        const arrow = rel.direction === 'OUT' ? '>' : '';
+        const targetLabel = rel.targetLabel ? `:${rel.targetLabel}` : '';
+
+        conditions.push(
+          `EXISTS((n)${direction}-[:${rel.type}]-${arrow}(${alias}${targetLabel}))`
+        );
+      });
+    }
+
+    return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   }
 
-  private buildWhereClause(): string {
-    if (!this.searchTerm) return '';
-
-    const searchableColumns = this.columns
-      .filter((col) => col.filterable !== false)
-      .map((col) => col.name);
-
-    if (searchableColumns.length === 0) return '';
-
-    // Build a search across multiple properties
-    const searchConditions = searchableColumns
-      .map(
-        (col) =>
-          `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`
-      )
-      .join(' OR ');
-
-    return `WHERE ${searchConditions}`;
+  private buildReturnClause(): string {
+    if (this.advancedQueryOptions?.customReturn) {
+      return this.advancedQueryOptions.customReturn;
+    }
+    return 'RETURN n';
   }
 
   private buildOrderClause(): string {
@@ -2172,16 +2404,56 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   private buildParameters(): any {
     const params: any = {};
+
+    // Search parameter
     if (this.searchTerm) {
       params.searchTerm = this.searchTerm;
     }
+
+    // Fixed filter parameters
+    this.fixedFilters.forEach((filter, index) => {
+      params[`fixedFilter${index}`] = filter.value;
+    });
+
+    // Custom parameters
+    this.customParameters.forEach((param) => {
+      if (param.key) {
+        params[param.key] = param.value;
+      }
+    });
+
+    // Advanced query parameters
+    if (this.advancedQueryOptions?.customParameters) {
+      Object.assign(params, this.advancedQueryOptions.customParameters);
+    }
+
     return params;
+  }
+
+  private extractNodeData(nodeWrapper: any): any {
+    if (nodeWrapper && nodeWrapper.properties) {
+      return {
+        id: nodeWrapper.elementId || nodeWrapper.properties.id,
+        ...nodeWrapper.properties,
+      };
+    }
+
+    if (nodeWrapper && nodeWrapper.id) {
+      return nodeWrapper;
+    }
+
+    const nodeData: any = { id: nodeWrapper.elementId };
+    Object.keys(nodeWrapper).forEach((key) => {
+      if (!['elementId', 'labels', 'identity'].includes(key)) {
+        nodeData[key] = nodeWrapper[key];
+      }
+    });
+
+    return nodeData;
   }
 
   private updatePagination() {
     this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
-
-    // Calculate pagination range (show max 5 pages)
     const startPage = Math.max(0, this.currentPage - 2);
     const endPage = Math.min(this.totalPages, startPage + 5);
 
@@ -2189,6 +2461,27 @@ export class GenericListComponent implements OnInit, OnDestroy {
     for (let i = startPage; i < endPage; i++) {
       this.paginationRange.push(i);
     }
+  }
+
+  // Advanced Query Methods
+  addCustomParameter() {
+    this.customParameters.push({ key: "[REDACTED]", value: '' });
+  }
+
+  removeCustomParameter(index: number) {
+    this.customParameters.splice(index, 1);
+  }
+
+  applyAdvancedQuery() {
+    this.showAdvancedQuery = false;
+    this.loadPage(0);
+  }
+
+  clearAdvancedQuery() {
+    this.customWhereClause = '';
+    this.customParameters = [];
+    this.showAdvancedQuery = false;
+    this.loadPage(0);
   }
 
   // UI Event Handlers
@@ -2209,7 +2502,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
       this.sortBy = { attribute: '', direction: 'ASC' };
       this.showSortOrder = false;
     } else {
-      // If sorting by the same attribute, toggle direction
       if (this.sortBy.attribute === newAttribute) {
         this.toggleSortOrder();
       } else {
@@ -2252,14 +2544,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   onNodeSelect(node: any) {
-    // Navigate to the node view route
     this.router.navigate(['/view', this.entityType.toLowerCase(), node.id]);
     this.nodeSelected.emit(node);
-  }
-
-  onBackToList() {
-    this.selectedNode = null;
-    this.showNodeViewer = false;
   }
 
   formatPropertyValue(value: any, type?: string): string {
@@ -2298,147 +2584,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
   getNodeDisplayName(node: any): string {
     return node.name || node.title || node.label || node.id || 'Unnamed';
   }
-}
 
-## src/app/components/global-search/global-search.component.ts <a id="global-search_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/forms`
-- `@angular/router`
-- `@angular/material/form-field`
-- `@angular/material/input`
-- `@angular/material/autocomplete`
-- `@angular/material/icon`
-- `@angular/material/button`
-- `@angular/material/progress-spinner`
-- `@angular/material/menu`
-- `@angular/material/chips`
-- `rxjs/operators`
-- `rxjs`
-- `../../services/search.service`
-
-// src/app/components/global-search/global-search.component.ts
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatChipsModule } from '@angular/material/chips';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { SearchResult, SearchService } from '../../services/search.service';
-
-@Component({
-  selector: 'app-global-search',
-  templateUrl: './global-search.component.html',
-  styleUrls: ['./global-search.component.scss'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatMenuModule,
-    MatChipsModule,
-  ],
-})
-export class GlobalSearchComponent implements OnInit {
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
-
-  searchTerm = '';
-  searchResults: SearchResult[] = [];
-  isLoading = false;
-  showResults = false;
-
-  private searchTerms = new Subject<string>();
-
-  constructor(private searchService: SearchService, private router: Router) {}
-
-  ngOnInit() {
-    this.searchTerms
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((term) => {
-          if (!term.trim()) {
-            this.searchResults = [];
-            return [];
-          }
-          this.isLoading = true;
-          return this.searchService.globalSearch(term);
-        })
-      )
-      .subscribe({
-        next: (results) => {
-          this.searchResults = results.map((item: any) => ({
-            id: item.node.properties.id || item.node.identity,
-            type: item.type,
-            label:
-              item.node.properties.name ||
-              item.node.properties.title ||
-              'Unnamed',
-            description: item.node.properties.description,
-            properties: item.node.properties,
-            score: item.score,
-          }));
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Buscar error:', error);
-          this.isLoading = false;
-        },
-      });
-  }
-
-  onSearchInput(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerms.next(term);
-  }
-
-  onSearchSubmit(): void {
-    if (this.searchTerm.trim()) {
-      this.router.navigate(['/search'], {
-        queryParams: { q: this.searchTerm },
-      });
-      this.showResults = false;
-      this.searchInput.nativeElement.blur();
-    }
-  }
-
-  onResultSelect(result: SearchResult): void {
-    this.router.navigate([`/${result.type.toLowerCase()}s`, result.id]);
-    this.showResults = false;
-    this.searchTerm = '';
-  }
-
-  onFocus(): void {
-    if (this.searchResults.length > 0) {
-      this.showResults = true;
-    }
-  }
-
-  onBlur(): void {
-    setTimeout(() => {
-      this.showResults = false;
-    }, 200);
-  }
-
-  clearSearch(): void {
-    this.searchTerm = '';
-    this.searchResults = [];
-    this.showResults = false;
+  hasAdvancedQuery(): boolean {
+    return !!this.customWhereClause || this.customParameters.length > 0;
   }
 }
 
@@ -2562,6 +2710,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import {
+  AdvancedQueryOptions,
   GenericListComponent,
   ListColumn,
 } from '../../components/generic-list/generic-list.component';
@@ -2646,13 +2795,17 @@ export class MesComponent {
     },
   ];
 
+  mesAdvancedQuery: AdvancedQueryOptions = {
+    customWhereClause:
+      "EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))",
+  };
+
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'MES Journals',
-      description:
-        'Explore scientific journals from the Cuban Ministry of Higher Education',
+      title: 'Revistas MES',
+      description: 'Revistas científicas del Ministerio de Educación Superior',
       authors: [],
       subjects: [],
     });
@@ -2661,6 +2814,86 @@ export class MesComponent {
   onNodeSelected(node: any) {
     console.log('MES journal selected:', node);
     // Navigate to journal detail or show dialog
+  }
+}
+
+## src/app/services/metadata.service.ts <a id="metadata_service_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `rxjs`
+- `@angular/platform-browser`
+
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Meta, Title } from '@angular/platform-browser';
+
+export interface PageMetadata {
+  title: string;
+  abstract?: string;
+  description?: string;
+  keywords?: string[];
+  subjects?: string[];
+  authors?: string[];
+  // Add any other metadata fields you need
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MetadataService {
+  private defaultMetadata: PageMetadata = {
+    title: '',
+    abstract: '',
+    description: '',
+    keywords: [],
+    subjects: [],
+  };
+
+  private metadataSource = new BehaviorSubject<PageMetadata>(
+    this.defaultMetadata
+  );
+  currentMetadata = this.metadataSource.asObservable();
+
+  constructor(private meta: Meta, private title: Title) {}
+
+  resetMetadata() {
+    this.metadataSource.next(this.defaultMetadata);
+  }
+
+  private updateMetaTags(metadata: PageMetadata) {
+    this.title.setTitle(metadata.title);
+
+    this.meta.updateTag({
+      name: 'description',
+      content: metadata.description || '',
+    });
+    this.meta.updateTag({
+      name: 'keywords',
+      content: metadata.keywords?.join(', ') || '',
+    });
+
+    // OpenGraph/Facebook meta tags
+    this.meta.updateTag({ property: 'og:title', content: metadata.title });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: metadata.description || '',
+    });
+
+    // Twitter meta tags
+    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: metadata.description || '',
+    });
+  }
+
+  updateMetadata(metadata: Partial<PageMetadata>) {
+    const current = this.metadataSource.getValue();
+    const newMetadata = { ...current, ...metadata };
+    this.metadataSource.next(newMetadata);
+    this.updateMetaTags(newMetadata);
   }
 }
 
@@ -2723,12 +2956,12 @@ export class NodeViewComponent implements OnInit {
 
   // Map entity types to display names
   private typeDisplayNames: { [key: string]: string } = {
-    Organization: 'Organization',
-    Person: 'Researcher',
-    Source: 'Data Source',
-    Project: 'Research Project',
-    Output: 'Research Output',
-    Término: 'Vocabulario Término',
+    Organization: 'Organización',
+    Person: 'Investigador',
+    Source: 'Fuente',
+    Project: 'Proyecto',
+    Output: 'Resultado de Investigación',
+    Term: 'Término',
   };
 
   constructor(
@@ -2741,12 +2974,11 @@ export class NodeViewComponent implements OnInit {
     this.routeSub = this.route.params.subscribe((params) => {
       this.nodeType = this.nodeTypes[params['type']];
       this.nodeId = params['id'];
-      console.log(this.nodeId, 'AAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
       const displayName = this.typeDisplayNames[this.nodeType] || this.nodeType;
       this.metadataService.updateMetadata({
-        title: `${displayName} Details`,
-        description: `View details for ${displayName.toLowerCase()}`,
+        title: `Detalles de ${displayName}`,
+        description: `Ver detalles de ${displayName.toLowerCase()}`,
       });
     });
   }
@@ -2780,10 +3012,300 @@ export class NodeViewComponent implements OnInit {
     return this.typeDisplayNames[this.nodeType] || this.nodeType;
   }
 
+  onNodeLoaded(node: any): void {
+    console.log(node);
+
+    const displayName = node.name || node.title || node.id;
+    this.metadataService.updateMetadata({
+      title: `Detalles de ${displayName}`,
+      description: `Información sobre el nodo ${displayName} de tipo ${this.nodeType}`,
+    });
+  }
+
   onRelatedNodeSelect(nodeData: any): void {
     console.log('NodeViewComponent - Related node selected:', nodeData);
     // If you want to handle navigation to related nodes from within the node view
     // You can implement this based on your requirements
+  }
+}
+
+## src/app/pages/persons/persons.component.ts <a id="persons_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/persons/persons.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-persons',
+  templateUrl: './persons.component.html',
+  styleUrls: ['./persons.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class PersonsComponent {
+  personColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'name',
+      label: 'Nombre Completo',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'last_name',
+      label: 'Apellido',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'email_addresses',
+      label: 'Direcciones de Correo',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'research_interests',
+      label: 'Intereses de Investigación',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'academic_titles',
+      label: 'Títulos Académicos',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'affiliations',
+      label: 'Afiliaciones',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'gender',
+      label: 'Género',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Investigadores',
+      description:
+        'Explore researchers, scientists, and contributors in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Person selected:', node);
+    // Navigate to person detail or show dialog
+  }
+}
+
+## src/app/pages/organizations/organizations.component.ts <a id="organizations_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/organizations/organizations.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-organizations',
+  templateUrl: './organizations.component.html',
+  styleUrls: ['./organizations.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class OrganizationsComponent {
+  organizationColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'types',
+      label: 'Tipos',
+      sortable: true,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'status',
+      label: 'Estado',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'acronyms',
+      label: 'Siglas',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'established',
+      label: 'Fundado',
+      sortable: true,
+      filterable: false,
+      type: 'date',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Organizaciones',
+      description: 'Explore organizations in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Organization selected:', node);
+    // You can navigate to a detail view or show a dialog here
+  }
+}
+
+## src/app/pages/projects/projects.component.ts <a id="projects_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/projects/projects.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class ProjectsComponent {
+  projectColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'title',
+      label: 'Título',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'creator',
+      label: 'Investigador Principal',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'fundingReference',
+      label: 'Financiamiento',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'language',
+      label: 'Idiomas',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'publisher',
+      label: 'Editor',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Proyectos de Investigación',
+      description:
+        'Explore research projects and initiatives in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Project selected:', node);
+    // Navigate to project detail or show dialog
   }
 }
 
@@ -2901,366 +3423,6 @@ export class OutputsComponent {
   onNodeSelected(node: any) {
     console.log('Output selected:', node);
     // Navigate to output detail or show dialog
-  }
-}
-
-## src/app/pages/organizations/organizations.component.ts <a id="organizations_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-
-// src/app/pages/organizations/organizations.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
-
-@Component({
-  selector: 'app-organizations',
-  templateUrl: './organizations.component.html',
-  styleUrls: ['./organizations.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
-})
-export class OrganizationsComponent {
-  organizationColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Name',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'types',
-      label: 'Tipos',
-      sortable: true,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'status',
-      label: 'Estado',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'acronyms',
-      label: 'Siglas',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'established',
-      label: 'Fundado',
-      sortable: true,
-      filterable: false,
-      type: 'date',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Organizaciones',
-      description: 'Explore organizations in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Organization selected:', node);
-    // You can navigate to a detail view or show a dialog here
-  }
-}
-
-## src/app/services/metadata.service.ts <a id="metadata_service_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `rxjs`
-- `@angular/platform-browser`
-
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Meta, Title } from '@angular/platform-browser';
-
-export interface PageMetadata {
-  title: string;
-  abstract?: string;
-  description?: string;
-  keywords?: string[];
-  subjects?: string[];
-  authors?: string[];
-  // Add any other metadata fields you need
-}
-
-@Injectable({
-  providedIn: 'root',
-})
-export class MetadataService {
-  private defaultMetadata: PageMetadata = {
-    title: '',
-    abstract: '',
-    description: '',
-    keywords: [],
-    subjects: [],
-  };
-
-  private metadataSource = new BehaviorSubject<PageMetadata>(
-    this.defaultMetadata
-  );
-  currentMetadata = this.metadataSource.asObservable();
-
-  constructor(private meta: Meta, private title: Title) {}
-
-  resetMetadata() {
-    this.metadataSource.next(this.defaultMetadata);
-  }
-
-  private updateMetaTags(metadata: PageMetadata) {
-    this.title.setTitle(metadata.title);
-
-    this.meta.updateTag({
-      name: 'description',
-      content: metadata.description || '',
-    });
-    this.meta.updateTag({
-      name: 'keywords',
-      content: metadata.keywords?.join(', ') || '',
-    });
-
-    // OpenGraph/Facebook meta tags
-    this.meta.updateTag({ property: 'og:title', content: metadata.title });
-    this.meta.updateTag({
-      property: 'og:description',
-      content: metadata.description || '',
-    });
-
-    // Twitter meta tags
-    this.meta.updateTag({ name: 'twitter:title', content: metadata.title });
-    this.meta.updateTag({
-      name: 'twitter:description',
-      content: metadata.description || '',
-    });
-  }
-
-  updateMetadata(metadata: Partial<PageMetadata>) {
-    const current = this.metadataSource.getValue();
-    const newMetadata = { ...current, ...metadata };
-    this.metadataSource.next(newMetadata);
-    this.updateMetaTags(newMetadata);
-  }
-}
-
-## src/app/pages/persons/persons.component.ts <a id="persons_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-
-// src/app/pages/persons/persons.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
-
-@Component({
-  selector: 'app-persons',
-  templateUrl: './persons.component.html',
-  styleUrls: ['./persons.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
-})
-export class PersonsComponent {
-  personColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Nombre Completo',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'last_name',
-      label: 'Apellido',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'email_addresses',
-      label: 'Direcciones de Correo',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'research_interests',
-      label: 'Intereses de Investigación',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'academic_titles',
-      label: 'Títulos Académicos',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'affiliations',
-      label: 'Afiliaciones',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'gender',
-      label: 'Género',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Investigadores',
-      description:
-        'Explore researchers, scientists, and contributors in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Person selected:', node);
-    // Navigate to person detail or show dialog
-  }
-}
-
-## src/app/pages/projects/projects.component.ts <a id="projects_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-
-// src/app/pages/projects/projects.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
-
-@Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
-})
-export class ProjectsComponent {
-  projectColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'title',
-      label: 'Título',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'creator',
-      label: 'Investigador Principal',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'fundingReference',
-      label: 'Financiamiento',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'language',
-      label: 'Idiomas',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'publisher',
-      label: 'Editor',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Proyectos de Investigación',
-      description:
-        'Explore research projects and initiatives in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Project selected:', node);
-    // Navigate to project detail or show dialog
   }
 }
 
@@ -3700,29 +3862,6 @@ export class RelationshipCardComponent {
   }
 }
 
-## src/app/components/results-display/results-display.component.ts <a id="results-display_component_ts"></a>
-
-### Dependencies
-
-- `@angular/common`
-- `@angular/core`
-- `ngx-json-viewer`
-
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
-
-@Component({
-  selector: 'app-results-display',
-  templateUrl: './results-display.component.html',
-  styleUrls: ['./results-display.component.scss'],
-  imports: [NgxJsonViewerModule, CommonModule],
-})
-export class ResultsDisplayComponent {
-  @Input() queryResult: any;
-  @Input() error: any;
-}
-
 ## src/app/components/relationship-pagination/relationship-pagination.component.ts <a id="relationship-pagination_component_ts"></a>
 
 ### Dependencies
@@ -3824,6 +3963,29 @@ export class RelationshipPaginationComponent implements OnChanges {
     );
     return `Mostrando ${start}-${end} de ${this.totalItems}`;
   }
+}
+
+## src/app/components/results-display/results-display.component.ts <a id="results-display_component_ts"></a>
+
+### Dependencies
+
+- `@angular/common`
+- `@angular/core`
+- `ngx-json-viewer`
+
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+
+@Component({
+  selector: 'app-results-display',
+  templateUrl: './results-display.component.html',
+  styleUrls: ['./results-display.component.scss'],
+  imports: [NgxJsonViewerModule, CommonModule],
+})
+export class ResultsDisplayComponent {
+  @Input() queryResult: any;
+  @Input() error: any;
 }
 
 ## src/app/pages/search-results/search-results.component.ts <a id="search-results_component_ts"></a>
@@ -4203,7 +4365,7 @@ export class SourcesComponent {
     this.metadataService.updateMetadata({
       title: 'Fuentes de Datos',
       description:
-        'Explore journals, repositories, and data sources in the knowledge graph',
+        'Explora revistas, repositorios y fuentes de datos en el grafos de conocimiento',
       authors: [],
       subjects: [],
     });
@@ -5521,7 +5683,12 @@ mat-sidenav-content {
       <mat-card-title>
         {{ node.name || node.title || node.id }}
       </mat-card-title>
-      <mat-card-subtitle>{{ nodeType }}</mat-card-subtitle>
+
+      <mat-card-subtitle
+        ><mat-chip class="entity-type-chip">{{
+          nodeType
+        }}</mat-chip></mat-card-subtitle
+      >
     </mat-card-header>
 
     <mat-card-content>
@@ -5563,7 +5730,15 @@ mat-sidenav-content {
 
         <!-- Relationships Tabs -->
         @for (group of relationshipGroups; track group.type; let i = $index) {
-        <mat-tab [label]="getTabLabel(group)">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="direction-icon">
+              {{
+                group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
+              }}
+            </mat-icon>
+            {{ group.type }} ({{ group.totalCount }})
+          </ng-template>
           <div class="relationships-tab-content">
             @if (group.isLoading) {
             <div class="relationships-loading">
@@ -5766,7 +5941,7 @@ mat-sidenav-content {
 
 .relationships-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
 }
@@ -5882,6 +6057,111 @@ mat-sidenav-content {
           </button>
           }
         </div>
+        <!-- Advanced Query Controls -->
+        <div class="advanced-query-section">
+          <!-- <button
+            mat-button
+            color="primary"
+            (click)="showAdvancedQuery = !showAdvancedQuery"
+            class="advanced-query-toggle"
+          >
+            <mat-icon>code</mat-icon>
+            Consulta Avanzada @if (hasAdvancedQuery()) {
+            <mat-chip class="active-chip">Activa</mat-chip>
+            }
+          </button> -->
+
+          @if (showAdvancedQuery) {
+          <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>tune</mat-icon>
+                Consulta Cypher Personalizada
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="advanced-query-content">
+              <!-- Custom WHERE Clause -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Cláusula WHERE Personalizada</mat-label>
+                <textarea
+                  matInput
+                  [(ngModel)]="customWhereClause"
+                  placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
+                  rows="3"
+                ></textarea>
+                <mat-hint>
+                  Usa 'n' como alias del nodo principal. Ejemplos:
+                  <code>n.source_type = 'journal'</code>,
+                  <code>EXISTS((n)-[:RELATED_TO]->(:Organization))</code>
+                </mat-hint>
+              </mat-form-field>
+
+              <!-- Custom Parameters -->
+              <div class="parameters-section">
+                <div class="parameters-header">
+                  <h4>Parámetros Personalizados</h4>
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="addCustomParameter()"
+                  >
+                    <mat-icon>add</mat-icon>
+                    Agregar Parámetro
+                  </button>
+                </div>
+
+                @for (param of customParameters; track param; let i = $index) {
+                <div class="parameter-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Key</mat-label>
+                    <input
+                      matInput
+                      [(ngModel)]="param.key"
+                      placeholder="nombreParametro"
+                    />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Valor</mat-label>
+                    <input
+                      matInput
+                      [(ngModel)]="param.value"
+                      placeholder="valor"
+                    />
+                  </mat-form-field>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeCustomParameter(i)"
+                    class="remove-param-btn"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                }
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="advanced-query-actions">
+                <button mat-button (click)="clearAdvancedQuery()">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar
+                </button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="applyAdvancedQuery()"
+                >
+                  <mat-icon>play_arrow</mat-icon>
+                  Aplicar Consulta
+                </button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          }
+        </div>
       </div>
     </mat-card-content>
   </mat-card>
@@ -5928,7 +6208,8 @@ mat-sidenav-content {
         <mat-icon>search_off</mat-icon>
         <h3>No hay datos disponibles</h3>
         <p>
-          No se encontraron {{ label.toLowerCase() || "elementos" }} que coincidan con sus criterios.
+          No se encontraron {{ label.toLowerCase() || "elementos" }} que
+          coincidan con sus criterios.
         </p>
       </mat-card-content>
     </mat-card>
@@ -6326,6 +6607,89 @@ mat-sidenav-content {
   .entity-type-chip {
     align-self: flex-start;
   }
+}
+
+/* Advanced Query Styles */
+.advanced-query-section {
+  margin: 16px 0;
+}
+
+.advanced-query-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.active-chip {
+  font-size: 0.7em;
+  height: 20px;
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.advanced-query-panel {
+  margin-top: 8px;
+
+  .mat-expansion-panel-header {
+    background-color: #f5f5f5;
+  }
+}
+
+.advanced-query-content {
+  padding: 16px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.parameters-section {
+  margin: 16px 0;
+
+  .parameters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h4 {
+      margin: 0;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+}
+
+.parameter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.remove-param-btn {
+  margin-bottom: 16px;
+}
+
+.advanced-query-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Code styling in hints */
+code {
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
 }
 
 ## src/app/components/global-search/global-search.component.html <a id="global-search_component_html"></a>
@@ -7043,112 +7407,6 @@ mat-sidenav-content {
   }
 </div>
 
-## src/app/components/markdown-viewer/markdown-viewer.component.scss <a id="markdown-viewer_component_scss"></a>
-
-.markdown-container {
-  padding: 16px;
-
-  // Style markdown content
-  ::ng-deep {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin-top: 24px;
-      margin-bottom: 16px;
-      color: #333;
-    }
-
-    h1 {
-      font-size: 2rem;
-      border-bottom: 1px solid #eaecef;
-      padding-bottom: 8px;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      border-bottom: 1px solid #eaecef;
-      padding-bottom: 6px;
-    }
-
-    h3 {
-      font-size: 1.25rem;
-    }
-
-    p {
-      margin-bottom: 16px;
-      line-height: 1.6;
-    }
-
-    ul,
-    ol {
-      margin-bottom: 16px;
-      padding-left: 24px;
-    }
-
-    li {
-      margin-bottom: 4px;
-      line-height: 1.6;
-    }
-
-    code {
-      background-color: #f6f8fa;
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-size: 0.9em;
-    }
-
-    pre {
-      background-color: #f6f8fa;
-      padding: 16px;
-      border-radius: 6px;
-      overflow-x: auto;
-      margin-bottom: 16px;
-
-      code {
-        background: none;
-        padding: 0;
-      }
-    }
-
-    blockquote {
-      border-left: 4px solid #dfe2e5;
-      padding-left: 16px;
-      margin-left: 0;
-      color: #6a737d;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 16px;
-
-      th,
-      td {
-        border: 1px solid #dfe2e5;
-        padding: 8px 12px;
-        text-align: left;
-      }
-
-      th {
-        background-color: #f6f8fa;
-        font-weight: 600;
-      }
-    }
-
-    a {
-      color: #0366d6;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
 ## src/app/services/map.json <a id="map_json"></a>
 
 {
@@ -7629,6 +7887,112 @@ mat-sidenav-content {
   ]
 }
 
+## src/app/components/markdown-viewer/markdown-viewer.component.scss <a id="markdown-viewer_component_scss"></a>
+
+.markdown-container {
+  padding: 16px;
+
+  // Style markdown content
+  ::ng-deep {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    code {
+      background-color: #f6f8fa;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: #f6f8fa;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+
+      code {
+        background: none;
+        padding: 0;
+      }
+    }
+
+    blockquote {
+      border-left: 4px solid #dfe2e5;
+      padding-left: 16px;
+      margin-left: 0;
+      color: #6a737d;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 16px;
+
+      th,
+      td {
+        border: 1px solid #dfe2e5;
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f6f8fa;
+        font-weight: 600;
+      }
+    }
+
+    a {
+      color: #0366d6;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
 ## src/app/pages/mes/mes.component.html <a id="mes_component_html"></a>
 
 <!-- src/app/pages/mes/mes.component.html -->
@@ -7648,6 +8012,7 @@ mat-sidenav-content {
     [defaultSort]="'title'"
     [defaultSortOrder]="'ASC'"
     [pageSize]="10"
+    [advancedQueryOptions]="mesAdvancedQuery"
     (nodeSelected)="onNodeSelected($event)"
   >
   </app-generic-list>
@@ -7693,6 +8058,35 @@ mat-sidenav-content {
     }
   ]
 }
+
+## src/app/pages/node-view/node-view.component.html <a id="node-view_component_html"></a>
+
+<!-- src/app/pages/node-view/node-view.component.html -->
+<div class="node-view-page">
+  <!-- <div class="page-header">
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a {{ getBreadcrumbLabel() }} Lista
+    </button>
+
+    <h1>Detalles de {{ getBreadcrumbLabel() }}</h1>
+    <p>
+      Explorando información detallada sobre este
+      {{ getBreadc  rumbLabel().toLowerCase() }}
+    </p>
+
+  </div> -->
+
+  <div class="node-viewer-container">
+    <app-enhanced-node-viewer
+      [nodeId]="nodeId"
+      [nodeType]="nodeType"
+      (nodeLoaded)="onNodeLoaded($event)"
+      (nodeSelected)="onRelatedNodeSelect($event)"
+    >
+    </app-enhanced-node-viewer>
+  </div>
+</div>
 
 ## src/app/pages/node-view/node-view.component.scss <a id="node-view_component_scss"></a>
 
@@ -7743,33 +8137,6 @@ mat-sidenav-content {
 .node-viewer-container {
   margin-top: 16px;
 }
-
-## src/app/pages/node-view/node-view.component.html <a id="node-view_component_html"></a>
-
-<!-- src/app/pages/node-view/node-view.component.html -->
-<div class="node-view-page">
-  <div class="page-header">
-    <button mat-button (click)="goBack()" class="back-button">
-      <mat-icon>arrow_back</mat-icon>
-      Volver a {{ getBreadcrumbLabel() }} Lista
-    </button>
-
-    <h1>{{ getBreadcrumbLabel() }} Details</h1>
-    <p>
-      Exploring detailed information about this
-      {{ getBreadcrumbLabel().toLowerCase() }}
-    </p>
-  </div>
-
-  <div class="node-viewer-container">
-    <app-enhanced-node-viewer
-      [nodeId]="nodeId"
-      [nodeType]="nodeType"
-      (nodeSelected)="onRelatedNodeSelect($event)"
-    >
-    </app-enhanced-node-viewer>
-  </div>
-</div>
 
 ## src/app/services/openapi.json <a id="openapi_json"></a>
 
@@ -8991,6 +9358,30 @@ mat-sidenav-content {
 }
 
 
+## src/app/pages/persons/persons.component.html <a id="persons_component_html"></a>
+
+<!-- src/app/pages/persons/persons.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Investigadores</h1>
+    <p>
+      Explora investigadores, científicos y colaboradores de diversas
+      instituciones y disciplinas.
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Person"
+    [columns]="personColumns"
+    label="Investigadores"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
 ## src/app/pages/persons/persons.component.scss <a id="persons_component_scss"></a>
 
 ### Dependencies
@@ -9517,30 +9908,6 @@ mat-sidenav-content {
   }
 }
 
-## src/app/pages/persons/persons.component.html <a id="persons_component_html"></a>
-
-<!-- src/app/pages/persons/persons.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Investigadores</h1>
-    <p>
-      Explora investigadores, científicos y colaboradores de diversas
-      instituciones y disciplinas.
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Person"
-    [columns]="personColumns"
-    label="Investigadores"
-    [defaultSort]="'name'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
 ## src/app/pages/projects/projects.component.html <a id="projects_component_html"></a>
 
 <!-- src/app/pages/projects/projects.component.html -->
@@ -9565,6 +9932,14 @@ mat-sidenav-content {
   </app-generic-list>
 </div>
 
+## src/app/pages/projects/projects.component.scss <a id="projects_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
 ## proxy.conf.json <a id="proxy_conf_json"></a>
 
 {
@@ -9574,114 +9949,6 @@ mat-sidenav-content {
     "changeOrigin": true
   }
 }
-
-## src/app/pages/projects/projects.component.scss <a id="projects_component_scss"></a>
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
-## src/app/components/query-executor/query-executor.component.html <a id="query-executor_component_html"></a>
-
-<form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="query-form">
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Consulta Cypher</mat-label>
-    <textarea
-      #queryTextarea
-      matInput
-      formControlName="query"
-      rows="12"
-      placeholder="Example: MATCH (n) RETURN n LIMIT 10"
-      class="query-textarea"
-    ></textarea>
-    @if (queryForm.get('query')?.hasError('required')) {
-    <mat-error> Query is required </mat-error>
-    }
-  </mat-form-field>
-
-  <div class="form-actions">
-    <div class="form-controls">
-      <mat-checkbox formControlName="readonly" color="primary">
-        Modo de solo lectura
-      </mat-checkbox>
-
-      <button
-        mat-button
-        type="button"
-        (click)="showParameters = !showParameters"
-        class="parameters-toggle"
-      >
-        <mat-icon>{{
-          showParameters ? "keyboard_arrow_up" : "keyboard_arrow_down"
-        }}</mat-icon>
-        Parámetros
-      </button>
-    </div>
-
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!queryForm.valid"
-      class="execute-btn"
-    >
-      <mat-icon>play_arrow</mat-icon>
-      Ejecutar Consulta
-    </button>
-  </div>
-
-  @if (showParameters) {
-  <div class="parameters-section">
-    <h4>Query Parámetros</h4>
-    <div class="parameters-list">
-      @for (param of parameters; track param; let i = $index) {
-      <div class="parameter-row">
-        <mat-form-field appearance="outline" class="parameter-field">
-          <mat-label>Clave</mat-label>
-          <input
-            matInput
-            [(ngModel)]="param.key"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="parameter_name"
-          />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="parameter-field">
-          <mat-label>Valor</mat-label>
-          <input
-            matInput
-            [(ngModel)]="param.value"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="value"
-          />
-        </mat-form-field>
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="removeParameter(i)"
-          type="button"
-          aria-label="Remove parameter"
-          class="remove-param-btn"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      }
-      <button
-        mat-stroked-button
-        type="button"
-        aria-label="Agregar Parámetro"
-        (click)="addParameter()"
-        class="add-param-btn"
-      >
-        <mat-icon>add</mat-icon>
-        Agregar Parámetro
-      </button>
-    </div>
-  </div>
-  }
-</form>
 
 ## src/app/components/query-executor/query-executor.component.scss <a id="query-executor_component_scss"></a>
 
@@ -9859,6 +10126,106 @@ mat-sidenav-content {
   }
 }
 
+## src/app/components/query-executor/query-executor.component.html <a id="query-executor_component_html"></a>
+
+<form [formGroup]="queryForm" (ngSubmit)="onSubmit()" class="query-form">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Consulta Cypher</mat-label>
+    <textarea
+      #queryTextarea
+      matInput
+      formControlName="query"
+      rows="12"
+      placeholder="Example: MATCH (n) RETURN n LIMIT 10"
+      class="query-textarea"
+    ></textarea>
+    @if (queryForm.get('query')?.hasError('required')) {
+    <mat-error> Query is required </mat-error>
+    }
+  </mat-form-field>
+
+  <div class="form-actions">
+    <div class="form-controls">
+      <mat-checkbox formControlName="readonly" color="primary">
+        Modo de solo lectura
+      </mat-checkbox>
+
+      <button
+        mat-button
+        type="button"
+        (click)="showParameters = !showParameters"
+        class="parameters-toggle"
+      >
+        <mat-icon>{{
+          showParameters ? "keyboard_arrow_up" : "keyboard_arrow_down"
+        }}</mat-icon>
+        Parámetros
+      </button>
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!queryForm.valid"
+      class="execute-btn"
+    >
+      <mat-icon>play_arrow</mat-icon>
+      Ejecutar Consulta
+    </button>
+  </div>
+
+  @if (showParameters) {
+  <div class="parameters-section">
+    <h4>Query Parámetros</h4>
+    <div class="parameters-list">
+      @for (param of parameters; track param; let i = $index) {
+      <div class="parameter-row">
+        <mat-form-field appearance="outline" class="parameter-field">
+          <mat-label>Clave</mat-label>
+          <input
+            matInput
+            [(ngModel)]="param.key"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="parameter_name"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="parameter-field">
+          <mat-label>Valor</mat-label>
+          <input
+            matInput
+            [(ngModel)]="param.value"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="value"
+          />
+        </mat-form-field>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="removeParameter(i)"
+          type="button"
+          aria-label="Remove parameter"
+          class="remove-param-btn"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      }
+      <button
+        mat-stroked-button
+        type="button"
+        aria-label="Agregar Parámetro"
+        (click)="addParameter()"
+        class="add-param-btn"
+      >
+        <mat-icon>add</mat-icon>
+        Agregar Parámetro
+      </button>
+    </div>
+  </div>
+  }
+</form>
+
 ## src/app/pages/query-page/query-page.component.html <a id="query-page_component_html"></a>
 
 <div class="query-page-container">
@@ -10008,140 +10375,6 @@ mat-sidenav-content {
       </div>
       }
     </div>
-  </div>
-</div>
-
-## src/app/components/relationship-card/relationship-card.component.html <a id="relationship-card_component_html"></a>
-
-<mat-card class="relationship-card">
-  <mat-card-header>
-    <div class="card-header-content">
-      <div class="node-title-section">
-        <mat-card-title class="node-title">
-          {{ getNodeDisplayName() }}
-        </mat-card-title>
-        <mat-card-subtitle class="node-type">
-          {{ getNodeType() }}
-        </mat-card-subtitle>
-      </div>
-      <div class="relationship-info">
-        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
-          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
-          {{ getDirectionLabel() }}
-        </mat-chip>
-        <mat-chip class="type-chip">
-          {{ relationshipType }}
-        </mat-chip>
-      </div>
-    </div>
-  </mat-card-header>
-
-  <mat-card-content>
-    <!-- Node Properties -->
-    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
-      <div class="properties-grid">
-        <div *ngFor="let prop of getNodeProperties()" class="property-item">
-          <strong class="property-label">{{ prop.key }}:</strong>
-          <div class="property-value-container">
-            @if (isArray(prop.value)) {
-            <div class="array-container">
-              @for (item of prop.value; track item; let last = $last) {
-              <span class="array-item">
-                {{ item }}@if (!last) {<span class="array-separator">, </span>}
-              </span>
-              }
-            </div>
-            } @else if (isObject(prop.value)) {
-            <div class="json-container">
-              <ngx-json-viewer
-                [json]="prop.value"
-                [expanded]="false"
-                class="json-viewer"
-              >
-              </ngx-json-viewer>
-            </div>
-            } @else {
-            <span class="property-value" [title]="prop.value">
-              {{ formatPropertyValue(prop.value) }}
-            </span>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- No Properties Message -->
-    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
-      <mat-icon>info</mat-icon>
-      <span>No properties available</span>
-    </div>
-  </mat-card-content>
-
-  <!-- Ver Detalles Action (only for allowed node types) -->
-  @if (shouldShowViewDetails()) {
-  <mat-card-actions align="end">
-    <button
-      mat-button
-      color="primary"
-      (click)="onViewDetails($event)"
-      class="view-details-btn"
-    >
-      <mat-icon>arrow_forward</mat-icon>
-      Ver Detalles
-    </button>
-  </mat-card-actions>
-  }
-</mat-card>
-
-## src/app/components/relationship-pagination/relationship-pagination.component.html <a id="relationship-pagination_component_html"></a>
-
-<div class="pagination-container">
-  <div class="pagination-info" *ngIf="totalItems > 0">
-    <span class="info-text">{{ getDisplayedRange() }}</span>
-  </div>
-
-  <div class="pagination-controls" *ngIf="totalPages > 1">
-    <div class="pagination-buttons">
-      <!-- Previous Button -->
-      <button
-        mat-icon-button
-        [disabled]="currentPage === 0 || isLoading"
-        (click)="previousPage()"
-        class="nav-button"
-      >
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-
-      <!-- Page Numbers -->
-      <button
-        *ngFor="let page of pages"
-        mat-button
-        [class.active]="page === currentPage"
-        [disabled]="isLoading"
-        (click)="goToPage(page)"
-        class="page-button"
-      >
-        {{ page + 1 }}
-      </button>
-
-      <!-- Next Button -->
-      <button
-        mat-icon-button
-        [disabled]="currentPage === totalPages - 1 || isLoading"
-        (click)="nextPage()"
-        class="nav-button"
-      >
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
-  </div>
-
-  <!-- Loading Spinner -->
-  <div class="loading-spinner" *ngIf="isLoading">
-    <mat-progress-spinner
-      diameter="24"
-      mode="indeterminate"
-    ></mat-progress-spinner>
   </div>
 </div>
 
@@ -10844,8 +11077,10 @@ mat-sidenav-content {
     font-size: 1.1rem;
     font-weight: 500;
     line-height: 1.3;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: normal; // optional (it's default)
+    word-break: normal; // optional (it's default)
+
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -11083,6 +11318,169 @@ mat-sidenav-content {
   }
 }
 
+.entity-type-chip {
+  font-size: 0.7em;
+  height: 20px;
+}
+
+## src/app/components/relationship-card/relationship-card.component.html <a id="relationship-card_component_html"></a>
+
+<mat-card class="relationship-card">
+  <mat-card-header>
+    <div class="card-header-content">
+      <div class="node-title-section">
+        <mat-card-title class="node-title">
+          {{ getNodeDisplayName() }}
+        </mat-card-title>
+        <mat-card-subtitle class="node-type">
+          <mat-chip class="entity-type-chip">
+            {{ getNodeType() }}
+          </mat-chip>
+        </mat-card-subtitle>
+      </div>
+      <!-- <div class="relationship-info">
+        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
+          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
+          {{ getDirectionLabel() }}
+        </mat-chip>
+        <mat-chip class="type-chip">
+          {{ relationshipType }}
+        </mat-chip>
+      </div> -->
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Node Properties -->
+    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
+      <div class="properties-grid">
+        <div *ngFor="let prop of getNodeProperties()" class="property-item">
+          <strong class="property-label">{{ prop.key }}:</strong>
+          <div class="property-value-container">
+            @if (isArray(prop.value)) {
+            <div class="array-container">
+              @for (item of prop.value; track item; let last = $last) {
+              <span class="array-item">
+                {{ item }}@if (!last) {<span class="array-separator">, </span>}
+              </span>
+              }
+            </div>
+            } @else if (isObject(prop.value)) {
+            <div class="json-container">
+              <ngx-json-viewer
+                [json]="prop.value"
+                [expanded]="false"
+                class="json-viewer"
+              >
+              </ngx-json-viewer>
+            </div>
+            } @else {
+            <span class="property-value" [title]="prop.value">
+              {{ formatPropertyValue(prop.value) }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Properties Message -->
+    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
+      <mat-icon>info</mat-icon>
+      <span>No properties available</span>
+    </div>
+  </mat-card-content>
+
+  <!-- Ver Detalles Action (only for allowed node types) -->
+  @if (shouldShowViewDetails()) {
+  <mat-card-actions align="end">
+    <button
+      mat-button
+      color="primary"
+      (click)="onViewDetails($event)"
+      class="view-details-btn"
+    >
+      <mat-icon>arrow_forward</mat-icon>
+      Ver Detalles
+    </button>
+  </mat-card-actions>
+  }
+</mat-card>
+
+## src/app/components/relationship-pagination/relationship-pagination.component.html <a id="relationship-pagination_component_html"></a>
+
+<div class="pagination-container">
+  <div class="pagination-info" *ngIf="totalItems > 0">
+    <span class="info-text">{{ getDisplayedRange() }}</span>
+  </div>
+
+  <div class="pagination-controls" *ngIf="totalPages > 1">
+    <div class="pagination-buttons">
+      <!-- Previous Button -->
+      <button
+        mat-icon-button
+        [disabled]="currentPage === 0 || isLoading"
+        (click)="previousPage()"
+        class="nav-button"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <!-- Page Numbers -->
+      <button
+        *ngFor="let page of pages"
+        mat-button
+        [class.active]="page === currentPage"
+        [disabled]="isLoading"
+        (click)="goToPage(page)"
+        class="page-button"
+      >
+        {{ page + 1 }}
+      </button>
+
+      <!-- Next Button -->
+      <button
+        mat-icon-button
+        [disabled]="currentPage === totalPages - 1 || isLoading"
+        (click)="nextPage()"
+        class="nav-button"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" *ngIf="isLoading">
+    <mat-progress-spinner
+      diameter="24"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+</div>
+
+## src/app/components/results-display/results-display.component.html <a id="results-display_component_html"></a>
+
+@if (queryResult || error) {
+  <div class="results-container">
+    @if (error) {
+      <div class="error-message">
+        <h3>Error</h3>
+        <pre>{{ error | json }}</pre>
+      </div>
+    }
+    @if (queryResult) {
+      <div class="query-result">
+        <h3>Resultados de la Consulta</h3>
+        <ngx-json-viewer [json]="queryResult" [expanded]="false"></ngx-json-viewer>
+      </div>
+    }
+  </div>
+}
+
+## src/app/components/results-display/results-display.component.scss <a id="results-display_component_scss"></a>
+
+
 ## src/app/components/relationship-pagination/relationship-pagination.component.scss <a id="relationship-pagination_component_scss"></a>
 
 .pagination-container {
@@ -11151,28 +11549,6 @@ mat-sidenav-content {
     }
   }
 }
-
-## src/app/components/results-display/results-display.component.html <a id="results-display_component_html"></a>
-
-@if (queryResult || error) {
-  <div class="results-container">
-    @if (error) {
-      <div class="error-message">
-        <h3>Error</h3>
-        <pre>{{ error | json }}</pre>
-      </div>
-    }
-    @if (queryResult) {
-      <div class="query-result">
-        <h3>Resultados de la Consulta</h3>
-        <ngx-json-viewer [json]="queryResult" [expanded]="false"></ngx-json-viewer>
-      </div>
-    }
-  </div>
-}
-
-## src/app/components/results-display/results-display.component.scss <a id="results-display_component_scss"></a>
-
 
 ## src/app/pages/search-results/search-results.component.html <a id="search-results_component_html"></a>
 
@@ -11557,6 +11933,14 @@ mat-sidenav-content {
   </app-generic-list>
 </div>
 
+## src/app/pages/sources/sources.component.scss <a id="sources_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
 ## src/styles_theme-iroko.scss <a id="styles_theme-iroko_scss"></a>
 
 ### Dependencies
@@ -11768,14 +12152,6 @@ $tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
     on-surface-variant: _high-contrast-value(#000000, #ffffff, $theme-type),
   ))
  }
-
-## src/app/pages/sources/sources.component.scss <a id="sources_component_scss"></a>
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
 
 ## src/styles.scss <a id="styles_scss"></a>
 
@@ -12027,12 +12403,12 @@ html {
 ## src/app/components/view-class/view-class.component.scss <a id="view-class_component_scss"></a>
 
 
-## src/app/components/view-instance/view-instance.component.scss <a id="view-instance_component_scss"></a>
-
-
 ## src/app/components/view-instance/view-instance.component.html <a id="view-instance_component_html"></a>
 
 <p>view-instance works!</p>
+
+## src/app/components/view-instance/view-instance.component.scss <a id="view-instance_component_scss"></a>
+
 
 ## src/app/pages/vocabularies/vocabularies.component.html <a id="vocabularies_component_html"></a>
 
@@ -12084,13 +12460,13 @@ Below is a visualization of file dependencies in the codebase:
 graph LR
   F1_iroko-ui-pwa_.gitignore[".gitignore"]
   F2_iroko-ui-pwa_package.json["package.json"]
-  F3_iroko-ui-pwa_tsconfig.json["tsconfig.json"]
-  F4_iroko-ui-pwa_README.md["README.md"]
-  F5_src_main.ts["main.ts"]
+  F3_iroko-ui-pwa_README.md["README.md"]
+  F4_src_main.ts["main.ts"]
+  F5_iroko-ui-pwa_tsconfig.json["tsconfig.json"]
   F6_about_about.component.ts["about.component.ts"]
   F7_app_app.component.ts["app.component.ts"]
-  F8_app_app.routes.ts["app.routes.ts"]
-  F9_app_app.config.ts["app.config.ts"]
+  F8_app_app.config.ts["app.config.ts"]
+  F9_app_app.routes.ts["app.routes.ts"]
   F10_services_cache.service.ts["cache.service.ts"]
   F11_interceptors_caching.interceptor.ts["caching.interceptor.ts"]
   F12_services_config.service.ts["config.service.ts"]
@@ -12100,24 +12476,24 @@ graph LR
   F16_services_error-handler.service.ts["error-handler.service.ts"]
   F17_error_error.component.ts["error.component.ts"]
   F18_services_export.service.ts["export.service.ts"]
-  F19_home_home.component.ts["home.component.ts"]
-  F20_generic-list_generic-list.component.ts["generic-list.component.ts"]
-  F21_global-search_global-search.component.ts["global-search.component.ts"]
+  F19_global-search_global-search.component.ts["global-search.component.ts"]
+  F20_home_home.component.ts["home.component.ts"]
+  F21_generic-list_generic-list.component.ts["generic-list.component.ts"]
   F22_models_http-validation-error.model.ts["http-validation-error.model.ts"]
   F23_services_iroko-api.service.ts["iroko-api.service.ts"]
   F24_markdown-viewer_markdown-viewer.component.ts["markdown-viewer.component.ts"]
   F25_mes_mes.component.ts["mes.component.ts"]
-  F26_node-view_node-view.component.ts["node-view.component.ts"]
-  F27_outputs_outputs.component.ts["outputs.component.ts"]
-  F28_organizations_organizations.component.ts["organizations.component.ts"]
-  F29_services_metadata.service.ts["metadata.service.ts"]
-  F30_persons_persons.component.ts["persons.component.ts"]
-  F31_projects_projects.component.ts["projects.component.ts"]
-  F32_query-page_query-page.component.ts["query-page.component.ts"]
-  F33_query-executor_query-executor.component.ts["query-executor.component.ts"]
+  F26_services_metadata.service.ts["metadata.service.ts"]
+  F27_node-view_node-view.component.ts["node-view.component.ts"]
+  F28_persons_persons.component.ts["persons.component.ts"]
+  F29_organizations_organizations.component.ts["organizations.component.ts"]
+  F30_projects_projects.component.ts["projects.component.ts"]
+  F31_outputs_outputs.component.ts["outputs.component.ts"]
+  F32_query-executor_query-executor.component.ts["query-executor.component.ts"]
+  F33_query-page_query-page.component.ts["query-page.component.ts"]
   F34_relationship-card_relationship-card.component.ts["relationship-card.component.ts"]
-  F35_results-display_results-display.component.ts["results-display.component.ts"]
-  F36_relationship-pagination_relationship-pagination.component.ts["relationship-pagination.component.ts"]
+  F35_relationship-pagination_relationship-pagination.component.ts["relationship-pagination.component.ts"]
+  F36_results-display_results-display.component.ts["results-display.component.ts"]
   F37_search-results_search-results.component.ts["search-results.component.ts"]
   F38_services_search.service.ts["search.service.ts"]
   F39_sources_sources.component.ts["sources.component.ts"]
@@ -12147,13 +12523,13 @@ graph LR
   F63_home_home.component.scss["home.component.scss"]
   F64_src_index.html["index.html"]
   F65_markdown-viewer_markdown-viewer.component.html["markdown-viewer.component.html"]
-  F66_markdown-viewer_markdown-viewer.component.scss["markdown-viewer.component.scss"]
-  F67_services_map.json["map.json"]
+  F66_services_map.json["map.json"]
+  F67_markdown-viewer_markdown-viewer.component.scss["markdown-viewer.component.scss"]
   F68_mes_mes.component.html["mes.component.html"]
   F69_mes_mes.component.scss["mes.component.scss"]
   F70_iroko-ui-pwa_ngsw-config.json["ngsw-config.json"]
-  F71_node-view_node-view.component.scss["node-view.component.scss"]
-  F72_node-view_node-view.component.html["node-view.component.html"]
+  F71_node-view_node-view.component.html["node-view.component.html"]
+  F72_node-view_node-view.component.scss["node-view.component.scss"]
   F73_services_openapi.json["openapi.json"]
   F74_schemas_organization-v1.0.0.json["organization-v1.0.0.json"]
   F75_organizations_organizations.component.html["organizations.component.html"]
@@ -12162,34 +12538,34 @@ graph LR
   F78_outputs_outputs.component.html["outputs.component.html"]
   F79_outputs_outputs.component.scss["outputs.component.scss"]
   F80_schemas_person-v1.0.0.json["person-v1.0.0.json"]
-  F81_persons_persons.component.scss["persons.component.scss"]
-  F82_persons_persons.component.html["persons.component.html"]
+  F81_persons_persons.component.html["persons.component.html"]
+  F82_persons_persons.component.scss["persons.component.scss"]
   F83_schemas_project-v1.0.0.json["project-v1.0.0.json"]
   F84_projects_projects.component.html["projects.component.html"]
-  F85_iroko-ui-pwa_proxy.conf.json["proxy.conf.json"]
-  F86_projects_projects.component.scss["projects.component.scss"]
-  F87_query-executor_query-executor.component.html["query-executor.component.html"]
-  F88_query-executor_query-executor.component.scss["query-executor.component.scss"]
+  F85_projects_projects.component.scss["projects.component.scss"]
+  F86_iroko-ui-pwa_proxy.conf.json["proxy.conf.json"]
+  F87_query-executor_query-executor.component.scss["query-executor.component.scss"]
+  F88_query-executor_query-executor.component.html["query-executor.component.html"]
   F89_query-page_query-page.component.html["query-page.component.html"]
-  F90_relationship-card_relationship-card.component.html["relationship-card.component.html"]
-  F91_relationship-pagination_relationship-pagination.component.html["relationship-pagination.component.html"]
-  F92_query-page_query-page.component.scss["query-page.component.scss"]
-  F93_relationship-card_relationship-card.component.scss["relationship-card.component.scss"]
-  F94_relationship-pagination_relationship-pagination.component.scss["relationship-pagination.component.scss"]
-  F95_results-display_results-display.component.html["results-display.component.html"]
-  F96_results-display_results-display.component.scss["results-display.component.scss"]
+  F90_query-page_query-page.component.scss["query-page.component.scss"]
+  F91_relationship-card_relationship-card.component.scss["relationship-card.component.scss"]
+  F92_relationship-card_relationship-card.component.html["relationship-card.component.html"]
+  F93_relationship-pagination_relationship-pagination.component.html["relationship-pagination.component.html"]
+  F94_results-display_results-display.component.html["results-display.component.html"]
+  F95_results-display_results-display.component.scss["results-display.component.scss"]
+  F96_relationship-pagination_relationship-pagination.component.scss["relationship-pagination.component.scss"]
   F97_search-results_search-results.component.html["search-results.component.html"]
   F98_search-results_search-results.component.scss["search-results.component.scss"]
   F99_schemas_source-v1.0.0.json["source-v1.0.0.json"]
   F100_sources_sources.component.html["sources.component.html"]
-  F101_src_styles_theme-iroko.scss["styles_theme-iroko.scss"]
-  F102_sources_sources.component.scss["sources.component.scss"]
+  F101_sources_sources.component.scss["sources.component.scss"]
+  F102_src_styles_theme-iroko.scss["styles_theme-iroko.scss"]
   F103_src_styles.scss["styles.scss"]
   F104_iroko-ui-pwa_tsconfig.app.json["tsconfig.app.json"]
   F105_view-class_view-class.component.html["view-class.component.html"]
   F106_view-class_view-class.component.scss["view-class.component.scss"]
-  F107_view-instance_view-instance.component.scss["view-instance.component.scss"]
-  F108_view-instance_view-instance.component.html["view-instance.component.html"]
+  F107_view-instance_view-instance.component.html["view-instance.component.html"]
+  F108_view-instance_view-instance.component.scss["view-instance.component.scss"]
   F109_vocabularies_vocabularies.component.html["vocabularies.component.html"]
   F110_vocabularies_vocabularies.component.scss["vocabularies.component.scss"]
 ```

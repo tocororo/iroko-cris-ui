@@ -8,7 +8,7 @@ import {
   distinctUntilChanged,
   switchMap,
 } from 'rxjs';
-import { IrokoApiService } from '../api/services/iroko-api.service';
+import { IrokoApiService } from './iroko-api.service';
 
 export interface SearchResult {
   id: string;

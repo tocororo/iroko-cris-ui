@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IrokoApiService } from '../../api/services/iroko-api.service';
+import { IrokoApiService } from '../../services/iroko-api.service';
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
 import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';

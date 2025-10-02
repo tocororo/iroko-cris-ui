@@ -16,6 +16,8 @@
     [defaultSortOrder]="'ASC'"
     [pageSize]="10"
     (nodeSelected)="onNodeSelected($event)"
+    [filters]="organizationFilters"
+    searchIndex="organizationSearch"
   >
   </app-generic-list>
 </div>

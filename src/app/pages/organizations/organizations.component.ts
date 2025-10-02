@@ -6,6 +6,7 @@ import { MetadataService } from '../../services/metadata.service';
 import {
   GenericListComponent,
   ListColumn,
+  ListFilter,
 } from '../../components/generic-list/generic-list.component';
 
 @Component({
@@ -31,7 +32,7 @@ export class OrganizationsComponent {
       type: 'string',
     },
     {
-      name: 'types',
+      name: 'organizationType',
       label: 'Tipos',
       sortable: true,
       filterable: true,
@@ -60,6 +61,38 @@ export class OrganizationsComponent {
     },
   ];
 
+  organizationFilters: ListFilter[] = [
+    {
+      name: 'name',
+      label: 'Nombre',
+      type: 'text',
+      placeholder: 'Filtrar por nombre...',
+    },
+    {
+      name: 'status',
+      label: 'Estado',
+      type: 'select',
+      options: ['active', 'inactive', 'pending'],
+    },
+    {
+      name: 'organizationType',
+      label: 'Tipo de Organización',
+      type: 'multiselect',
+      options: [
+        'Education',
+        'Healthcare',
+        'Company',
+        'Nonprofit',
+        'Government',
+      ],
+    },
+    {
+      name: 'established',
+      label: 'Año de Fundación',
+      type: 'date',
+    },
+  ];
+
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
@@ -73,6 +106,5 @@ export class OrganizationsComponent {
 
   onNodeSelected(node: any) {
     console.log('Organization selected:', node);
-    // You can navigate to a detail view or show a dialog here
   }
 }

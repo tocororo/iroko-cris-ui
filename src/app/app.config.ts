@@ -18,7 +18,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { provideMarkdown } from 'ngx-markdown';
 
-import { IrokoApiService } from './api/services/iroko-api.service';
+import { IrokoApiService } from './services/iroko-api.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { cachingInterceptor } from './interceptors/caching.interceptor';
 

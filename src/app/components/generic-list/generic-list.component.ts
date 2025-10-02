@@ -14,8 +14,10 @@ import {
   ReactiveFormsModule,
   FormBuilder,
   FormControl,
+  FormGroup,
 } from '@angular/forms';
 import {
+  Observable,
   Subject,
   Subscription,
   debounceTime,
@@ -32,13 +34,16 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
-import { IrokoApiService } from '../../api/services/iroko-api.service';
+import { IrokoApiService } from '../../services/iroko-api.service';
 import {
   CypherBuilderService,
   QueryFilter,
 } from '../../services/cypher-builder.service';
-import { EnhancedNodeViewerComponent } from '../enhanced-node-viewer/enhanced-node-viewer.component';
+import { ExportService } from '../../services/export.service';
 import { Router } from '@angular/router';
 
 export interface ListColumn {
@@ -49,28 +54,19 @@ export interface ListColumn {
   type?: 'string' | 'number' | 'date' | 'array';
 }
 
+export interface ListFilter {
+  name: string;
+  label: string;
+  type: 'text' | 'select' | 'multiselect' | 'date' | 'boolean';
+  options?: string[]; // For select/multiselect types
+  placeholder?: string;
+}
+
 export interface SortOption {
   attribute: string;
   direction: 'ASC' | 'DESC';
 }
 
-// EJEMPLOS
-// {
-//   customWhereClause: "EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))";
-// }
-// {
-//   customWhereClause: "n.source_type = $type AND n.start_year > $minYear",
-//   customParameters: {
-//     type: 'journal',
-//     minYear: 2000
-//   }
-// }
-// {
-//   relationships: [
-//     { type: 'PUBLISHED_BY', direction: 'OUT', targetLabel: 'Organization' },
-//     { type: 'CLASSIFIED_BY', direction: 'OUT', targetLabel: 'Term' }
-//   ]
-// }
 export interface AdvancedQueryOptions {
   customWhereClause?: string;
   customParameters?: { [key: string]: any };
@@ -102,11 +98,15 @@ export interface AdvancedQueryOptions {
     MatDividerModule,
     MatTooltipModule,
     MatExpansionModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
 })
 export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() entityType!: string;
   @Input() columns: ListColumn[] = [];
+  @Input() filters: ListFilter[] = [];
   @Input() label: string = '';
   @Input() pageSize: number = 10;
   @Input() defaultSort?: string;
@@ -114,6 +114,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() advancedQueryOptions?: AdvancedQueryOptions;
   @Input() fixedFilters: QueryFilter[] = [];
   @Output() nodeSelected = new EventEmitter<any>();
+  @Input() searchIndex?: string;
 
   // Data state
   nodes: any[] = [];
@@ -126,6 +127,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   // Search and sort state
   searchTerm = '';
   sortBy: SortOption = { attribute: '', direction: 'ASC' };
+
+  // Filter state
+  filterForm: FormGroup;
+  activeFilters: { [key: string]: any } = {};
+  showFilters = false;
 
   // Advanced query state
   showAdvancedQuery = false;
@@ -142,27 +148,34 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   paginationRange: number[] = [];
 
   // Debounce for search
-  private searchSubject = new Subject<string>();
+  private searchTerms = new Subject<string>();
   private searchSubscription?: Subscription;
+  isExporting: boolean = false;
 
   constructor(
     private irokoApiService: IrokoApiService,
     private cypherBuilder: CypherBuilderService,
+    private exportService: ExportService,
     private router: Router,
     private fb: FormBuilder
   ) {
     this.searchControl = this.fb.control('');
     this.sortControl = this.fb.control('');
+    this.filterForm = this.fb.group({});
   }
 
   ngOnInit() {
     this.initializeSorting();
+    this.initializeFilters();
     this.setupSearchDebounce();
     this.initializeAdvancedQuery();
     this.loadPage(0);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['filters']) {
+      this.initializeFilters();
+    }
     if (changes['advancedQueryOptions'] || changes['fixedFilters']) {
       this.initializeAdvancedQuery();
       this.loadPage(0);
@@ -173,12 +186,39 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.searchSubscription?.unsubscribe();
   }
 
+  private initializeFilters() {
+    // Clear existing form controls
+    const formGroup: { [key: string]: any } = {};
+
+    this.filters.forEach((filter) => {
+      switch (filter.type) {
+        case 'text':
+          formGroup[filter.name] = this.fb.control('');
+          break;
+        case 'select':
+          formGroup[filter.name] = this.fb.control('');
+          break;
+        case 'multiselect':
+          formGroup[filter.name] = this.fb.control([]);
+          break;
+        case 'date':
+          formGroup[filter.name] = this.fb.control('');
+          break;
+        case 'boolean':
+          formGroup[filter.name] = this.fb.control(false);
+          break;
+      }
+    });
+
+    this.filterForm = this.fb.group(formGroup);
+    this.activeFilters = {};
+  }
+
   private initializeAdvancedQuery() {
     if (this.advancedQueryOptions) {
       this.customWhereClause =
         this.advancedQueryOptions.customWhereClause || '';
 
-      // Initialize parameters from advanced query options
       if (this.advancedQueryOptions.customParameters) {
         this.customParameters = Object.entries(
           this.advancedQueryOptions.customParameters
@@ -204,18 +244,144 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.sortControl.setValue(initialSortAttr);
     this.showSortOrder = !!initialSortAttr;
   }
-
   private setupSearchDebounce() {
-    this.searchSubscription = this.searchSubject
+    this.searchSubscription = this.searchTerms
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((searchTerm) => {
         this.searchTerm = searchTerm;
+
         this.loadPage(0);
       });
 
     this.searchControl.valueChanges.subscribe((value) => {
-      this.searchSubject.next(value || '');
+      this.searchTerms.next(value || '');
     });
+  }
+
+  // Filter Methods
+  applyFilters() {
+    this.activeFilters = {};
+
+    Object.keys(this.filterForm.controls).forEach((key) => {
+      const control = this.filterForm.get(key);
+      if (control && control.value && control.value !== '') {
+        this.activeFilters[key] = control.value;
+      }
+    });
+
+    this.loadPage(0);
+  }
+
+  clearFilters() {
+    this.filterForm.reset();
+    this.activeFilters = {};
+    this.loadPage(0);
+  }
+
+  hasActiveFilters(): boolean {
+    return Object.keys(this.activeFilters).length > 0;
+  }
+
+  getActiveFilterCount(): number {
+    return Object.keys(this.activeFilters).length;
+  }
+
+  // Export Methods
+  exportToCSV(): void {
+    if (this.nodes.length === 0) {
+      console.warn('No data to export');
+      return;
+    }
+
+    // Prepare data for export
+    const exportData = this.nodes.map((node) => {
+      const row: any = {};
+      this.columns.forEach((column) => {
+        row[column.label] = this.formatPropertyValue(
+          node[column.name],
+          column.type
+        );
+      });
+      return row;
+    });
+
+    const filename = `${this.entityType.toLowerCase()}-export-${
+      new Date().toISOString().split('T')[0]
+    }.csv`;
+    this.exportService.exportToCSV(exportData, filename);
+  }
+  async exportCurrentView(): Promise<void> {
+    this.isExporting = true;
+
+    try {
+      let exportObservable: Observable<Blob>;
+
+      if (this.searchIndex && this.searchTerm) {
+        const whereClause = this.buildWhereClause(true); // skip search conditions
+        const orderClause = this.buildOrderClause();
+        const returnClause = this.buildReturnClause();
+        const searchIndex = this.searchIndex || 'generalSearch';
+        const searchTerm = this.buildSearchTerm(this.searchTerm);
+        const parameters = this.buildParameters(true); // skip search parameter
+
+        exportObservable = this.irokoApiService.exportFullTextQueryToCsv({
+          searchIndex,
+          searchTerm,
+          whereClause,
+          returnClause,
+          orderClause,
+          parameters,
+        });
+      } else {
+        const whereClause = this.buildWhereClause();
+        const orderClause = this.buildOrderClause();
+        const returnClause = this.buildReturnClause();
+
+        const query = `
+          MATCH (n:${this.entityType})
+          ${whereClause}
+          ${returnClause}
+          ${orderClause}
+        `;
+
+        const parameters = this.buildParameters();
+
+        exportObservable = this.irokoApiService.exportQueryToCsv({
+          query,
+          parameters,
+          readonly: true,
+        });
+      }
+
+      // Subscribe to the Observable to handle the Blob
+      exportObservable.subscribe({
+        next: (blob: Blob) => {
+          try {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            const timestamp = new Date().toISOString().slice(0, 10);
+            link.download = `${this.entityType.toLowerCase()}_export_${timestamp}.csv`;
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+          } finally {
+            this.isExporting = false;
+          }
+        },
+        error: (error) => {
+          console.error('Export failed:', error);
+          this.isExporting = false;
+          // TODO: Show user-friendly error message (e.g., via toast)
+        },
+      });
+    } catch (error) {
+      console.error('Export preparation failed:', error);
+      this.isExporting = false;
+      // TODO: Notify user of failure
+    }
   }
 
   async loadPage(page: number) {
@@ -233,29 +399,98 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     } catch (error) {
       console.error('Error loading page:', error);
       this.hasError = true;
-      this.errorMessage = 'Failed to load data. Please try again.';
+      this.errorMessage = 'Ha ocurrido un error al intentar cargar los datos. ';
     } finally {
       this.isLoading = false;
     }
   }
 
-  private async fetchTotalCount(): Promise<number> {
-    const whereClause = this.buildWhereClause();
-    const query = `MATCH (n:${this.entityType}) ${whereClause} RETURN count(n) AS count`;
-    const parameters = this.buildParameters();
+  private async fetchNodes(offset: number, limit: number): Promise<any[]> {
+    if (this.searchIndex && this.searchTerm) {
+      return await this.fetchNodesWithIndex(offset, limit);
+    } else {
+      return await this.fetchNodesWithBasicSearch(offset, limit);
+    }
+  }
+
+  private async fetchNodesWithIndex(
+    offset: number,
+    limit: number
+  ): Promise<any[]> {
+    const whereClause = this.buildWhereClause(true); // Pass flag to skip search conditions
+    const orderClause = this.buildOrderClause();
+    const returnClause = this.buildReturnClause();
+    const searchIndex = this.searchIndex || 'generalSearch';
+    const searchTerm = this.buildSearchTerm(this.searchTerm);
+    // Build the full-text search query
+    const query = `
+      CALL db.index.fulltext.queryNodes("${this.searchIndex}", $searchTerm)
+      YIELD node, score
+      WITH node AS n, score
+      ${whereClause}
+      ${returnClause}
+      ${orderClause}
+      SKIP $offset
+      LIMIT $limit
+    `;
+
+    const parameters = {
+      ...this.buildParameters(true), // Pass flag to skip search parameter
+      offset,
+      limit,
+    };
 
     const result = await this.irokoApiService
-      .executeQuery({
-        query,
+      .executeFullTextQuery({
+        searchIndex,
+        searchTerm,
+        whereClause,
+        returnClause,
+        orderClause,
         parameters,
-        readonly: true,
+      })
+      .toPromise();
+
+    return (result || []).map((item: any) =>
+      this.extractNodeData(item.n || item)
+    );
+  }
+
+  private async fetchTotalCountWithIndex(): Promise<number> {
+    const whereClause = this.buildWhereClause(true);
+    const searchIndex = this.searchIndex || 'generalSearch';
+    const searchTerm = this.buildSearchTerm(this.searchTerm);
+    const countTotal = true;
+    const query = `
+      CALL db.index.fulltext.queryNodes("${this.searchIndex}", $searchTerm)
+      YIELD node, score
+      WITH node AS n, score
+      ${whereClause}
+      RETURN count(n) AS count
+    `;
+
+    const parameters = {
+      ...this.buildParameters(true),
+      searchTerm: this.buildSearchTerm(this.searchTerm),
+    };
+
+    const result = await this.irokoApiService
+      .executeFullTextQuery({
+        searchIndex,
+        searchTerm,
+        whereClause,
+        parameters,
+        countTotal,
       })
       .toPromise();
 
     return result?.[0]?.count || 0;
   }
 
-  private async fetchNodes(offset: number, limit: number): Promise<any[]> {
+  private async fetchNodesWithBasicSearch(
+    offset: number,
+    limit: number
+  ): Promise<any[]> {
     const whereClause = this.buildWhereClause();
     const orderClause = this.buildOrderClause();
     const returnClause = this.buildReturnClause();
@@ -288,11 +523,63 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  private buildWhereClause(): string {
+  private async fetchTotalCount(): Promise<number> {
+    if (this.searchIndex && this.searchTerm) {
+      return await this.fetchTotalCountWithIndex();
+    } else {
+      return await this.fetchTotalCountWithBasicSearch();
+    }
+  }
+
+  private async fetchTotalCountWithBasicSearch(): Promise<number> {
+    const whereClause = this.buildWhereClause();
+    const query = `MATCH (n:${this.entityType}) ${whereClause} RETURN count(n) AS count`;
+    const parameters = this.buildParameters();
+
+    const result = await this.irokoApiService
+      .executeQuery({
+        query,
+        parameters,
+        readonly: true,
+      })
+      .toPromise();
+
+    return result?.[0]?.count || 0;
+  }
+
+  // Enhanced search term building for full-text search
+  private buildSearchTerm(term: string): string {
+    if (!term.trim()) return '';
+
+    // Add wildcard for partial matching and boost recent results
+    const escapedTerm = term.replace(/[\\"']/g, '\\$&');
+    return `${escapedTerm}*`;
+  }
+
+  private buildArrayFilterCondition(
+    filterName: string,
+    paramName: string,
+    filterType: string
+  ): string {
+    switch (filterType) {
+      case 'multiselect':
+        // Check if any of the selected values exist in the array
+        return `ANY(selectedValue IN $${paramName} WHERE selectedValue IN n.${filterName})`;
+
+      case 'text':
+        // For text search in arrays, check if any array element contains the text
+        return `ANY(element IN n.${filterName} WHERE toLower(element) CONTAINS toLower($${paramName}))`;
+
+      default:
+        return `ANY(selectedValue IN $${paramName} WHERE selectedValue IN n.${filterName})`;
+    }
+  }
+  // Update buildWhereClause to accept skipSearch parameter
+  private buildWhereClause(skipSearch: boolean = false): string {
     const conditions: string[] = [];
 
-    // Search condition
-    if (this.searchTerm) {
+    // Search condition (only for basic search)
+    if (this.searchTerm && !skipSearch && !this.searchIndex) {
       const searchableColumns = this.columns
         .filter((col) => col.filterable !== false)
         .map((col) => col.name);
@@ -306,6 +593,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           .join(' OR ');
         conditions.push(`(${searchConditions})`);
       }
+    }
+
+    // For index search, we need to filter by entity type
+    if (this.searchIndex && this.searchTerm) {
+      conditions.push(`n:${this.entityType}`);
     }
 
     // Fixed filters
@@ -335,6 +627,46 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
     }
+
+    // Custom filters from filter form
+    Object.keys(this.activeFilters).forEach((filterName, index) => {
+      const filterValue = this.activeFilters[filterName];
+      const paramName = `filter${index}`;
+      const filterDef = this.filters.find((f) => f.name === filterName);
+
+      if (Array.isArray(filterValue) && filterValue.length > 0) {
+        // Multi-select filter
+        const column = this.columns.find((col) => col.name === filterName);
+
+        if (column && column.type === 'array') {
+          // For array properties, check if any selected value exists in the array
+          conditions.push(
+            this.buildArrayFilterCondition(filterName, paramName, 'multiselect')
+          );
+        } else {
+          conditions.push(`n.${filterName} IN $${paramName}`);
+        }
+      } else if (typeof filterValue === 'boolean') {
+        conditions.push(`n.${filterName} = $${paramName}`);
+      } else if (filterValue instanceof Date) {
+        conditions.push(`date(n.${filterName}) = date($${paramName})`);
+      } else if (filterValue) {
+        // Text filter
+        const column = this.columns.find((col) => col.name === filterName);
+
+        if (column && column.type === 'array') {
+          // Text search within array elements
+          conditions.push(
+            this.buildArrayFilterCondition(filterName, paramName, 'text')
+          );
+        } else {
+          // Regular text search for non-array properties
+          conditions.push(
+            `toLower(COALESCE(toString(n.${filterName}), '')) CONTAINS toLower($${paramName})`
+          );
+        }
+      }
+    });
 
     // Custom WHERE clause from advanced query
     if (this.customWhereClause) {
@@ -370,17 +702,29 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return `ORDER BY n.${this.sortBy.attribute} ${this.sortBy.direction}`;
   }
 
-  private buildParameters(): any {
+  private buildParameters(skipSearch: boolean = false): any {
     const params: any = {};
 
-    // Search parameter
-    if (this.searchTerm) {
+    // Search parameter (only for basic search)
+    if (this.searchTerm && !skipSearch && !this.searchIndex) {
       params.searchTerm = this.searchTerm;
     }
 
     // Fixed filter parameters
     this.fixedFilters.forEach((filter, index) => {
       params[`fixedFilter${index}`] = filter.value;
+    });
+
+    // Custom filter parameters
+    Object.keys(this.activeFilters).forEach((filterName, index) => {
+      const filterValue = this.activeFilters[filterName];
+      const paramName = `filter${index}`;
+
+      if (filterValue instanceof Date) {
+        params[paramName] = filterValue.toISOString();
+      } else {
+        params[paramName] = filterValue;
+      }
     });
 
     // Custom parameters
