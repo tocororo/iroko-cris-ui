@@ -67,5 +67,25 @@
       "icon": "info",
       "route": "/about"
     }
-  ]
+  ],
+  "relationshipSearchIndices": {
+    "HAS_SUBJECT": "fullTextSearch",
+    "HAS_LICENCE": "fullTextSearch",
+    "COLLECTED_FROM": "fullTextSearch",
+    "SOURCE_CREATED_IN": "fullTextSearch",
+    "IN_INDEX": "fullTextSearch",
+    "CREATED_BY": "fullTextSearch",
+    "AFFILIATED_TO": "fullTextSearch",
+    "RESEARCH_INTEREST": "fullTextSearch",
+    "CLASSIFIED_BY": "fullTextSearch",
+    "RELATED_TO": "fullTextSearch"
+  },
+  "relationshipLabels": {
+    "COLLECTED_FROM": "Recolección",
+    "HAS_LICENCE": "Licencia",
+    "HAS_SUBJECT": "Materia",
+    "HAS": "Tiene",
+    "IN_INDEX": "Indización",
+    "SOURCE_CREATED_IN": "Organización"
+  }
 }

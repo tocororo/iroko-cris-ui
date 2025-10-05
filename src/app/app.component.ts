@@ -27,6 +27,7 @@ import { MetadataService, PageMetadata } from './services/metadata.service';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { filter, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { RelationshipsLabelService } from './services/relationships-label.service';
 
 @Component({
   selector: 'app-root',
@@ -67,6 +68,7 @@ export class AppComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private metadataService: MetadataService,
+    private labelService: RelationshipsLabelService,
     private router: Router
   ) {
     this.matIconRegistry.addSvgIcon(
@@ -103,6 +105,8 @@ export class AppComponent implements OnInit {
       this.metadata = metadata;
       this.currentPageTitle = metadata.title || 'Iroko';
     });
+
+    this.labelService.loadRelData().subscribe();
 
     // Set page title based on route
     this.router.events

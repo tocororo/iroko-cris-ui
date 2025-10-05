@@ -11,7 +11,7 @@ import {
   providedIn: 'root',
 })
 export class IrokoApiService {
-  private apiUrl = '/api/v1';
+  private apiUrl = '/api/v1/cypher';
 
   constructor(private http: HttpClient) {}
 

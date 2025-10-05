@@ -20,6 +20,11 @@ import { IrokoApiService } from '../../services/iroko-api.service';
 import { CypherBuilderService } from '../../services/cypher-builder.service';
 import { RelationshipCardComponent } from '../relationship-card/relationship-card.component';
 import { RelationshipPaginationComponent } from '../relationship-pagination/relationship-pagination.component';
+import { RelationshipsLabelService } from '../../services/relationships-label.service';
+import { ConfigService } from '../../services/config.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 interface RelationshipGroup {
   type: string;
@@ -29,6 +34,9 @@ interface RelationshipGroup {
   currentPage: number;
   pageSize: number;
   isLoading: boolean;
+  searchTerm?: string; // Add search term
+  searchIndex?: string; // Add search index
+  isSearching?: boolean; // Add search state
 }
 
 interface RelationshipData {
@@ -53,6 +61,9 @@ interface RelationshipData {
     MatProgressSpinnerModule,
     RelationshipCardComponent,
     RelationshipPaginationComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
   ],
 })
 export class EnhancedNodeViewerComponent implements OnInit {
@@ -64,13 +75,16 @@ export class EnhancedNodeViewerComponent implements OnInit {
   relationshipGroups: RelationshipGroup[] = [];
   loading = false;
   activeTab = 0;
+  relationshipSearchIndices: { [key: string]: string } = {};
 
   constructor(
     private irokoApiService: IrokoApiService,
-    private cypherBuilder: CypherBuilderService
+    private cypherBuilder: CypherBuilderService,
+    private labelService: RelationshipsLabelService
   ) {}
 
   ngOnInit() {
+    this.relationshipSearchIndices = this.labelService.getIndices() || {};
     this.loadNode();
   }
 
@@ -129,6 +143,20 @@ export class EnhancedNodeViewerComponent implements OnInit {
     });
   }
 
+  // Add search method
+  onRelationshipSearch(group: RelationshipGroup, searchTerm: string): void {
+    group.searchTerm = searchTerm;
+    group.currentPage = 0;
+    this.loadRelationshipPage(group, group.currentPage);
+  }
+
+  // Add clear search method
+  clearRelationshipSearch(group: RelationshipGroup): void {
+    group.searchTerm = '';
+    group.currentPage = 0;
+    this.loadRelationshipPage(group, group.currentPage);
+  }
+
   private processAllRelationships(result: any[]) {
     const relationshipMap = new Map<string, RelationshipGroup>();
 
@@ -138,17 +166,18 @@ export class EnhancedNodeViewerComponent implements OnInit {
         const direction: 'INCOMING' | 'OUTGOING' = row.isOutgoing
           ? 'OUTGOING'
           : 'INCOMING';
-        const key = `${row.relationshipType}-${direction}`;
+        const key = `${row.relationshipType}_${direction}`;
 
         if (!relationshipMap.has(key)) {
           relationshipMap.set(key, {
             type: row.relationshipType,
             relationships: [],
             direction: direction,
-            totalCount: 0, // We'll count as we process
+            totalCount: 0,
             currentPage: 0,
             pageSize: 10,
             isLoading: false,
+            searchIndex: this.relationshipSearchIndices[row.relationshipType], // Set search index from config
           });
         }
 
@@ -172,19 +201,31 @@ export class EnhancedNodeViewerComponent implements OnInit {
 
     // For groups with more than 10 items, we need to load counts properly
     this.relationshipGroups.forEach((group) => {
-      if (group.totalCount > group.pageSize) {
+      if (group.totalCount > group.pageSize || group.searchIndex) {
         this.loadRelationshipCount(group);
       }
     });
   }
-
   private loadRelationshipCount(group: RelationshipGroup): void {
-    const countQuery = this.cypherBuilder.buildRelationshipCountQuery(
-      this.nodeId,
-      group.type,
-      group.direction,
-      [this.nodeType]
-    );
+    let countQuery;
+
+    if (group.searchTerm && group.searchIndex) {
+      countQuery = this.cypherBuilder.buildRelationshipCountQueryWithSearch(
+        this.nodeId,
+        group.type,
+        group.direction,
+        [this.nodeType],
+        group.searchIndex,
+        group.searchTerm
+      );
+    } else {
+      countQuery = this.cypherBuilder.buildRelationshipCountQuery(
+        this.nodeId,
+        group.type,
+        group.direction,
+        [this.nodeType]
+      );
+    }
 
     this.irokoApiService.executeQuery(countQuery).subscribe({
       next: (countResult) => {
@@ -194,7 +235,6 @@ export class EnhancedNodeViewerComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading relationship count:', error);
-        // Keep the estimated count we have
       },
     });
   }
@@ -203,9 +243,26 @@ export class EnhancedNodeViewerComponent implements OnInit {
     if (group.isLoading) return;
 
     group.isLoading = true;
+    group.isSearching = !!group.searchTerm;
 
-    const relationshipsQuery =
-      this.cypherBuilder.buildPaginatedRelationshipsQuery(
+    let relationshipsQuery;
+
+    if (group.searchTerm && group.searchIndex) {
+      // Use full-text search query
+      relationshipsQuery =
+        this.cypherBuilder.buildPaginatedRelationshipsQueryWithSearch(
+          this.nodeId,
+          group.type,
+          group.direction,
+          [this.nodeType],
+          group.searchIndex,
+          group.searchTerm,
+          page,
+          group.pageSize
+        );
+    } else {
+      // Use regular paginated query
+      relationshipsQuery = this.cypherBuilder.buildPaginatedRelationshipsQuery(
         this.nodeId,
         group.type,
         group.direction,
@@ -213,6 +270,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
         page,
         group.pageSize
       );
+    }
 
     this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
       next: (result) => {
@@ -272,6 +330,11 @@ export class EnhancedNodeViewerComponent implements OnInit {
   getTabLabel(group: RelationshipGroup): string {
     const dicon =
       group.direction === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
-    return `<mat-icon class="direction-icon">${dicon} </mat-icon> ${group.type} (${group.totalCount})`;
+    return `<mat-icon class="direction-icon">${dicon} </mat-icon> ${this.labelName(
+      group.type
+    )} (${group.totalCount})`;
+  }
+  labelName(name: string): string {
+    return this.labelService.getLabel(name);
   }
 }

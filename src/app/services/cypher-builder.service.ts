@@ -247,4 +247,122 @@ export class CypherBuilderService {
       },
     };
   }
+
+  buildPaginatedRelationshipsQueryWithSearch(
+    nodeId: string,
+    relationshipType: string,
+    direction: 'INCOMING' | 'OUTGOING',
+    labels?: string[],
+    searchIndex?: string,
+    searchTerm?: string,
+    page: number = 0,
+    pageSize: number = 10
+  ): { query: string; parameters: any } {
+    const labelString = labels?.join(':') || '';
+    const alias = 'n';
+
+    let matchClause = '';
+    if (direction === 'OUTGOING') {
+      matchClause = `MATCH (${alias}${
+        labelString ? ':' + labelString : ''
+      } {id: $id})-[r:${relationshipType}]->(related)`;
+    } else {
+      matchClause = `MATCH (${alias}${
+        labelString ? ':' + labelString : ''
+      } {id: $id})<-[r:${relationshipType}]-(related)`;
+    }
+
+    let query = '';
+
+    if (searchIndex && searchTerm) {
+      // Use full-text search
+      query = `
+        CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
+        YIELD node, score
+        WITH node, score
+        ${matchClause}
+        WHERE node = related
+        RETURN related, r, labels(related) as relatedLabels, score
+        ORDER BY score DESC, related.name
+        SKIP $skip
+        LIMIT $limit
+      `;
+    } else {
+      // Regular query
+      query = `
+        ${matchClause}
+        RETURN related, r, labels(related) as relatedLabels
+        ORDER BY related.name, related.id
+        SKIP $skip
+        LIMIT $limit
+      `;
+    }
+
+    const parameters: any = {
+      id: nodeId,
+      skip: page * pageSize,
+      limit: pageSize,
+    };
+
+    if (searchTerm) {
+      parameters.searchTerm = `${searchTerm}*`; // Add wildcard for partial matching
+    }
+
+    return {
+      query,
+      parameters,
+    };
+  }
+
+  buildRelationshipCountQueryWithSearch(
+    nodeId: string,
+    relationshipType: string,
+    direction: 'INCOMING' | 'OUTGOING',
+    labels?: string[],
+    searchIndex?: string,
+    searchTerm?: string
+  ): { query: string; parameters: any } {
+    const labelString = labels?.join(':') || '';
+    const alias = 'n';
+
+    let matchClause = '';
+    if (direction === 'OUTGOING') {
+      matchClause = `MATCH (${alias}${
+        labelString ? ':' + labelString : ''
+      } {id: $id})-[r:${relationshipType}]->(related)`;
+    } else {
+      matchClause = `MATCH (${alias}${
+        labelString ? ':' + labelString : ''
+      } {id: $id})<-[r:${relationshipType}]-(related)`;
+    }
+
+    let query = '';
+
+    if (searchIndex && searchTerm) {
+      query = `
+        CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
+        YIELD node, score
+        WITH node, score
+        ${matchClause}
+        WHERE node = related
+        RETURN count(node) as count
+      `;
+    } else {
+      query = `
+        ${matchClause}
+        RETURN count(related) as count
+      `;
+    }
+
+    const parameters: any = { id: nodeId };
+
+    if (searchTerm) {
+      parameters.searchTerm = `${searchTerm}*`;
+    }
+
+    return {
+      query,
+      parameters,
+    };
+  }
 }

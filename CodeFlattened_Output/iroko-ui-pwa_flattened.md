@@ -1,9 +1,9 @@
 Repository Summary:
-Files analyzed: 110
-Directories scanned: 4040
-Total size: 287.28 KB (294177 bytes)
-Estimated tokens: 73544
-Processing time: 2.16 seconds
+Files analyzed: 112
+Directories scanned: 4043
+Total size: 307.52 KB (314904 bytes)
+Estimated tokens: 78726
+Processing time: 5.47 seconds
 
 
 ## Table of Contents
@@ -12,44 +12,44 @@ Processing time: 2.16 seconds
 - [Directory Structure](#directory-structure)
 - [Files Content](#files-content)
   - Files By Category:
-    - Configuration (16 files):
-      - [.gitignore](#_gitignore) - 609 bytes
+    - Configuration (17 files):
+      - [.gitignore](#_gitignore) - 608 bytes
       - [.postcssrc.json](#_postcssrc_json) - 54 bytes
       - [angular.json](#angular_json) - 3.6 KB
       - [config.json](#config_json) - 1.8 KB
+      - [labels.json](#labels_json) - 210 bytes
       - [map.json](#map_json) - 15.3 KB
       - [ngsw-config.json](#ngsw-config_json) - 639 bytes
       - [openapi.json](#openapi_json) - 2.6 KB
       - [organization-v1.0.0.json](#organization-v1_0_0_json) - 11.2 KB
       - [output-v1.0.0.json](#output-v1_0_0_json) - 10.0 KB
-      - [package.json](#package_json) - 1.3 KB
-      - [and 6 more Configuration files...]
+      - [and 7 more Configuration files...]
     - Documentation (2 files):
       - [about.md](#about_md) - 4.0 KB
       - [README.md](#README_md) - 1011 bytes
-    - JavaScript/TypeScript (40 files):
+    - JavaScript/TypeScript (41 files):
       - [about.component.ts](#about_component_ts) - 1.4 KB
-      - [app.component.ts](#app_component_ts) - 4.6 KB
+      - [app.component.ts](#app_component_ts) - 4.7 KB
       - [app.config.ts](#app_config_ts) - 1.2 KB
       - [app.routes.ts](#app_routes_ts) - 2.4 KB
       - [cache.service.ts](#cache_service_ts) - 1.7 KB
       - [caching.interceptor.ts](#caching_interceptor_ts) - 846 bytes
       - [config.service.ts](#config_service_ts) - 608 bytes
       - [cypher-builder.service.ts](#cypher-builder_service_ts) - 6.2 KB
-      - [cypher-query.model.ts](#cypher-query_model_ts) - 118 bytes
-      - [enhanced-node-viewer.component.ts](#enhanced-node-viewer_component_ts) - 7.8 KB
-      - [and 30 more JavaScript/TypeScript files...]
+      - [cypher-query.model.ts](#cypher-query_model_ts) - 348 bytes
+      - [enhanced-node-viewer.component.ts](#enhanced-node-viewer_component_ts) - 8.0 KB
+      - [and 31 more JavaScript/TypeScript files...]
     - Web (52 files):
       - [_page-styles.scss](#_page-styles_scss) - 803 bytes
       - [about.component.html](#about_component_html) - 1.1 KB
       - [about.component.scss](#about_component_scss) - 698 bytes
       - [app.component.html](#app_component_html) - 3.7 KB
       - [app.component.scss](#app_component_scss) - 6.5 KB
-      - [enhanced-node-viewer.component.html](#enhanced-node-viewer_component_html) - 3.9 KB
+      - [enhanced-node-viewer.component.html](#enhanced-node-viewer_component_html) - 4.3 KB
       - [enhanced-node-viewer.component.scss](#enhanced-node-viewer_component_scss) - 3.4 KB
       - [error.component.html](#error_component_html) - 24 bytes
       - [error.component.scss](#error_component_scss) - 0 bytes
-      - [generic-list.component.html](#generic-list_component_html) - 9.2 KB
+      - [generic-list.component.html](#generic-list_component_html) - 13.7 KB
       - [and 42 more Web files...]
 - [Architecture and Relationships](#architecture-and-relationships)
   - [File Dependencies](#file-dependencies)
@@ -59,7 +59,7 @@ Processing time: 2.16 seconds
 ## Project Summary <a id="project-summary"></a>
 
 # Project Digest: iroko-ui-pwa
-Generated on: Tue Sep 30 2025 11:51:22 GMT-0400 (hora de verano de Cuba)
+Generated on: Fri Oct 03 2025 12:16:21 GMT-0400 (hora de verano de Cuba)
 Source: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
 
@@ -87,6 +87,7 @@ Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
     [DIR] fonts
     [DIR] icons
     [DIR] img
+    [FILE] labels.json
     [DIR] md
       [FILE] about.md
   [DIR] src
@@ -97,7 +98,6 @@ Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
           [FILE] http-validation-error.model.ts
           [FILE] validation-error.model.ts
         [DIR] services
-          [FILE] iroko-api.service.ts
       [FILE] app.component.html
       [FILE] app.component.scss
       [FILE] app.component.ts
@@ -212,6 +212,8 @@ Project Directory: /home/malayo/dev/iroko-cris-ui/iroko-ui-pwa
         [FILE] cypher-builder.service.ts
         [FILE] error-handler.service.ts
         [FILE] export.service.ts
+        [FILE] iroko-api.service.ts
+        [FILE] label.service.ts
         [FILE] map.json
         [FILE] metadata.service.ts
         [FILE] openapi.json
@@ -270,7 +272,678 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-CodeFlattened_Output-
+CodeFlattened_Output
+
+## src/app/app.component.ts <a id="app_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+
+### Dependencies
+
+- `./services/config.service`
+- `@angular/material/sidenav`
+- `@angular/material/list`
+- `@angular/material/icon`
+- `@angular/material/toolbar`
+- `@angular/material/menu`
+- `@angular/material/button`
+- `@angular/cdk/layout`
+- `@angular/platform-browser`
+- `./services/metadata.service`
+- `./components/global-search/global-search.component`
+- `rxjs/operators`
+- `@angular/common`
+- `./services/label.service`
+
+// src/app/app.component.ts (updated)
+import {
+  Component,
+  importProvidersFrom,
+  inject,
+  signal,
+  OnInit,
+} from '@angular/core';
+import {
+  RouterModule,
+  RouterOutlet,
+  Router,
+  NavigationEnd,
+  NavigationStart,
+  NavigationError,
+} from '@angular/router';
+import { ConfigService, Config } from './services/config.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MetadataService, PageMetadata } from './services/metadata.service';
+import { GlobalSearchComponent } from './components/global-search/global-search.component';
+import { filter, map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { LabelService } from './services/label.service';
+
+@Component({
+  selector: 'app-root',
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    MatToolbarModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+    RouterModule,
+    MatIconModule,
+    GlobalSearchComponent,
+  ],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
+})
+export class AppComponent implements OnInit {
+  protected readonly isMobile = signal(true);
+  private readonly _mobileQuery: MediaQueryList;
+  private readonly _mobileQueryListener: () => void;
+
+  config: Config = { title: 'Iroko', menu: [] };
+  currentPageTitle = 'Iroko';
+  metadata: PageMetadata = {
+    title: '',
+    abstract: '',
+    description: '',
+    keywords: [],
+    subjects: [],
+  };
+
+  title = 'iroko-ui-pwa';
+
+  constructor(
+    private menuService: ConfigService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    private metadataService: MetadataService,
+    private labelService: LabelService,
+    private router: Router
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      'sceiba',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('img/sceiba.svg')
+    );
+    const media = inject(MediaMatcher);
+
+    this._mobileQuery = media.matchMedia('(max-width: 600px)');
+    this.isMobile.set(this._mobileQuery.matches);
+    this._mobileQueryListener = () =>
+      this.isMobile.set(this._mobileQuery.matches);
+    this._mobileQuery.addEventListener('change', this._mobileQueryListener);
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        console.log('NavigationStart:', event.url);
+      }
+      if (event instanceof NavigationEnd) {
+        console.log('NavigationEnd:', event.url);
+      }
+      if (event instanceof NavigationError) {
+        console.error('NavigationError:', event.error);
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.menuService.getConfig().subscribe((config) => {
+      this.config = config;
+    });
+
+    this.metadataService.currentMetadata.subscribe((metadata) => {
+      this.metadata = metadata;
+      this.currentPageTitle = metadata.title || 'Iroko';
+    });
+
+    this.labelService.loadLabels().subscribe();
+
+    // Set page title based on route
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => {
+          let route = this.router.routerState.root;
+          while (route.firstChild) route = route.firstChild;
+          return route;
+        }),
+        filter((route) => route.outlet === 'primary')
+      )
+      .subscribe((route) => {
+        const title =
+          route.snapshot.data['title'] || this.getTitleFromRoute(route);
+        this.metadataService.updateMetadata({ title });
+      });
+  }
+
+  private getTitleFromRoute(route: any): string {
+    const path = route.snapshot.routeConfig?.path;
+    if (!path) return 'Iroko';
+
+    const titleMap: { [key: string]: string } = {
+      '': 'Inicio',
+      sources: 'Sources',
+      organizations: 'Organizaciones',
+      persons: 'People',
+      projects: 'Projects',
+      outputs: 'Resultados de Investigación',
+      vocabs: 'Vocabularios',
+      query: 'Consulta Cypher',
+      search: 'Resultados de Búsqueda',
+    };
+
+    return titleMap[path] || 'Iroko';
+  }
+
+  ngOnDestroy(): void {
+    this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
+  }
+
+  getMainContainerClass(): string {
+    return this.isMobile()
+      ? 'main-is-mobile flex flex-col min-h-screen'
+      : 'flex flex-col min-h-screen';
+  }
+  // Add this method to the AppComponent class in app.component.ts
+  getSidenavOpenedState(): boolean {
+    // Expanded by default on desktop, collapsed on mobile
+    return !this.isMobile();
+  }
+}
+
+## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.ts <a id="enhanced-node-viewer_component_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+
+### Dependencies
+
+- `@angular/common`
+- `@angular/material/tabs`
+- `@angular/material/card`
+- `@angular/material/chips`
+- `@angular/material/button`
+- `@angular/material/icon`
+- `@angular/material/list`
+- `ngx-json-viewer`
+- `@angular/material/progress-spinner`
+- `../../services/iroko-api.service`
+- `../../services/cypher-builder.service`
+- `../relationship-card/relationship-card.component`
+- `../relationship-pagination/relationship-pagination.component`
+- `../../services/label.service`
+
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { IrokoApiService } from '../../services/iroko-api.service';
+import { CypherBuilderService } from '../../services/cypher-builder.service';
+import { RelationshipCardComponent } from '../relationship-card/relationship-card.component';
+import { RelationshipPaginationComponent } from '../relationship-pagination/relationship-pagination.component';
+import { LabelService } from '../../services/label.service';
+
+interface RelationshipGroup {
+  type: string;
+  relationships: RelationshipData[];
+  direction: 'INCOMING' | 'OUTGOING';
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+  isLoading: boolean;
+}
+
+interface RelationshipData {
+  node: any;
+  relationship: any;
+  nodeLabels: string[];
+}
+
+@Component({
+  selector: 'app-enhanced-node-viewer',
+  templateUrl: './enhanced-node-viewer.component.html',
+  styleUrls: ['./enhanced-node-viewer.component.scss'],
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    MatCardModule,
+    MatChipsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    NgxJsonViewerModule,
+    MatProgressSpinnerModule,
+    RelationshipCardComponent,
+    RelationshipPaginationComponent,
+  ],
+})
+export class EnhancedNodeViewerComponent implements OnInit {
+  @Input() nodeId!: string;
+  @Input() nodeType!: string;
+  @Output() nodeLoaded = new EventEmitter<any>();
+  @Output() nodeSelected = new EventEmitter<any>();
+  node: any;
+  relationshipGroups: RelationshipGroup[] = [];
+  loading = false;
+  activeTab = 0;
+
+  constructor(
+    private irokoApiService: IrokoApiService,
+    private cypherBuilder: CypherBuilderService,
+    private labelService: LabelService
+  ) {}
+
+  ngOnInit() {
+    this.loadNode();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('EnhancedNodeViewerComponent - Input changes:', changes);
+
+    // Reload node when nodeId or nodeType changes
+    if (
+      (changes['nodeId'] && changes['nodeId'].currentValue) ||
+      (changes['nodeType'] && changes['nodeType'].currentValue)
+    ) {
+      this.loadNode();
+    }
+  }
+
+  loadNode() {
+    this.activeTab = 0;
+    if (!this.nodeId || !this.nodeType) {
+      console.warn('EnhancedNodeViewerComponent - Missing nodeId or nodeType');
+      return;
+    }
+
+    console.log('EnhancedNodeViewerComponent - Loading node:', {
+      nodeId: this.nodeId,
+      nodeType: this.nodeType,
+    });
+
+    this.loading = true;
+
+    // Load node with all relationships
+    const queryData = this.cypherBuilder.buildNodeWithRelationshipsQuery(
+      this.nodeId,
+      [this.nodeType]
+    );
+    console.log(queryData);
+
+    this.irokoApiService.executeQuery(queryData).subscribe({
+      next: (result) => {
+        if (result && result.length > 0) {
+          this.node = result[0].n;
+          this.nodeLoaded.emit(this.node);
+
+          this.processAllRelationships(result);
+        } else {
+          console.warn('EnhancedNodeViewerComponent - No node found');
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error(
+          'EnhancedNodeViewerComponent - Error loading node:',
+          error
+        );
+        this.loading = false;
+      },
+    });
+  }
+
+  private processAllRelationships(result: any[]) {
+    const relationshipMap = new Map<string, RelationshipGroup>();
+
+    // Process all relationships from the result
+    result.forEach((row: any) => {
+      if (row.relationshipType && row.related) {
+        const direction: 'INCOMING' | 'OUTGOING' = row.isOutgoing
+          ? 'OUTGOING'
+          : 'INCOMING';
+        const key =  "[REDACTED]";
+
+        if (!relationshipMap.has(key)) {
+          relationshipMap.set(key, {
+            type: row.relationshipType,
+            relationships: [],
+            direction: direction,
+            totalCount: 0, // We'll count as we process
+            currentPage: 0,
+            pageSize: 10,
+            isLoading: false,
+          });
+        }
+
+        const group = relationshipMap.get(key)!;
+
+        // Only store the first page (10 items) initially
+        if (group.relationships.length < group.pageSize) {
+          group.relationships.push({
+            node: row.related,
+            relationship: row.r,
+            nodeLabels: row.relatedLabels || [],
+          });
+        }
+
+        // Count all relationships for this type
+        group.totalCount++;
+      }
+    });
+
+    this.relationshipGroups = Array.from(relationshipMap.values());
+
+    // For groups with more than 10 items, we need to load counts properly
+    this.relationshipGroups.forEach((group) => {
+      if (group.totalCount > group.pageSize) {
+        this.loadRelationshipCount(group);
+      }
+    });
+  }
+
+  private loadRelationshipCount(group: RelationshipGroup): void {
+    const countQuery = this.cypherBuilder.buildRelationshipCountQuery(
+      this.nodeId,
+      group.type,
+      group.direction,
+      [this.nodeType]
+    );
+
+    this.irokoApiService.executeQuery(countQuery).subscribe({
+      next: (countResult) => {
+        if (countResult && countResult.length > 0) {
+          group.totalCount = countResult[0].count || group.totalCount;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading relationship count:', error);
+        // Keep the estimated count we have
+      },
+    });
+  }
+
+  loadRelationshipPage(group: RelationshipGroup, page: number): void {
+    if (group.isLoading) return;
+
+    group.isLoading = true;
+
+    const relationshipsQuery =
+      this.cypherBuilder.buildPaginatedRelationshipsQuery(
+        this.nodeId,
+        group.type,
+        group.direction,
+        [this.nodeType],
+        page,
+        group.pageSize
+      );
+
+    this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
+      next: (result) => {
+        group.relationships = result.map((row: any) => ({
+          node: row.related,
+          relationship: row.r,
+          nodeLabels: row.relatedLabels || [],
+        }));
+        group.currentPage = page;
+        group.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading relationships:', error);
+        group.isLoading = false;
+      },
+    });
+  }
+
+  getNodeProperties(): { key: string; value: any }[] {
+    if (!this.node) return [];
+
+    return Object.entries(this.node)
+      .filter(([key]) => !key.startsWith('_'))
+      .map(([key, value]) => ({ key, value }));
+  }
+
+  isArray(value: any): boolean {
+    return Array.isArray(value);
+  }
+
+  isObject(value: any): boolean {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+  }
+
+  onRelatedNodeSelect(nodeData: any): void {
+    if (nodeData && nodeData.id) {
+      // Extract the primary node type from labels
+      const nodeLabels = nodeData.labels || nodeData.nodeLabels || [];
+      const primaryType = nodeLabels.length > 0 ? nodeLabels[0] : 'node';
+
+      // Emit the node data with type information
+
+      this.nodeSelected.emit({
+        node: nodeData,
+        type: primaryType,
+      });
+    }
+  }
+  getDisplayedRelationships(group: RelationshipGroup): RelationshipData[] {
+    return group.relationships;
+  }
+
+  shouldShowPagination(group: RelationshipGroup): boolean {
+    return group.totalCount > group.pageSize;
+  }
+
+  getTabLabel(group: RelationshipGroup): string {
+    const dicon =
+      group.direction === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
+    return `<mat-icon class="direction-icon">${dicon} </mat-icon> ${this.labelName(
+      group.type
+    )} (${group.totalCount})`;
+  }
+  labelName(name: string): string {
+    return this.labelService.getLabel(name);
+  }
+}
+
+## src/app/services/label.service.ts <a id="label_service_ts"></a> 🔄 **[RECENTLY MODIFIED]**
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common/http`
+- `rxjs`
+- `rxjs/operators`
+
+// src/app/services/label.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LabelService {
+  private labels: { [key: string]: string } = {};
+  private labelsLoaded = new BehaviorSubject<boolean>(false);
+
+  constructor(private http: HttpClient) {}
+
+  loadLabels(): Observable<any> {
+    return this.http.get('/labels.json').pipe(
+      tap((data: any) => {
+        this.labels = data.labels;
+        this.labelsLoaded.next(true);
+      })
+    );
+  }
+
+  getLabel(key: string): string {
+    return this.labels[key] || key;
+  }
+
+  isLoaded(): Observable<boolean> {
+    return this.labelsLoaded.asObservable();
+  }
+}
+
+## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.html <a id="enhanced-node-viewer_component_html"></a> 🔄 **[RECENTLY MODIFIED]**
+
+@if (loading) {
+<div class="loading-spinner">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+} @else if (node) {
+<div class="node-viewer">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ node.name || node.title || node.id }}
+      </mat-card-title>
+
+      <mat-card-subtitle
+        ><mat-chip class="entity-type-chip">{{
+          nodeType
+        }}</mat-chip></mat-card-subtitle
+      >
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-tab-group [(selectedIndex)]="activeTab">
+        <!-- Properties Tab -->
+        <mat-tab label="Propiedades">
+          <div class="properties-grid">
+            @for (prop of getNodeProperties(); track prop.key) {
+            <div class="property-item">
+              <strong class="property-label">{{ prop.key }}:</strong>
+              <div class="property-value-container">
+                @if (isArray(prop.value)) {
+                <div class="array-container">
+                  <ul class="array-list">
+                    @for (item of prop.value; track item) {
+                    <li class="array-list-item">
+                      <span class="array-item-content">{{ item }}</span>
+                    </li>
+                    }
+                  </ul>
+                </div>
+                } @else if (isObject(prop.value)) {
+                <div class="json-container">
+                  <ngx-json-viewer
+                    [json]="prop.value"
+                    [expanded]="false"
+                  ></ngx-json-viewer>
+                </div>
+                } @else {
+                <span class="property-value" [title]="prop.value">
+                  {{ prop.value }}
+                </span>
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Relationships Tabs -->
+        @for (group of relationshipGroups; track group.type; let i = $index) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="direction-icon">
+              {{
+                group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
+              }}
+            </mat-icon>
+            {{ labelName(group.type) }} ({{ group.totalCount }})
+          </ng-template>
+          <div class="relationships-tab-content">
+            @if (group.isLoading) {
+            <div class="relationships-loading">
+              <mat-progress-spinner
+                diameter="40"
+                mode="indeterminate"
+              ></mat-progress-spinner>
+              <p>Loading relationships...</p>
+            </div>
+            } @else if (group.relationships.length === 0) {
+            <div class="no-relationships">
+              <mat-icon>link_off</mat-icon>
+              <p>No {{ group.type.toLowerCase() }} relationships found</p>
+            </div>
+            } @else { @if (shouldShowPagination(group)) {
+            <app-relationship-pagination
+              [currentPage]="group.currentPage"
+              [pageSize]="group.pageSize"
+              [totalItems]="group.totalCount"
+              [isLoading]="group.isLoading"
+              (pageChange)="loadRelationshipPage(group, $event)"
+            ></app-relationship-pagination>
+            }
+
+            <div class="relationships-grid">
+              @for (rel of getDisplayedRelationships(group); track rel.node.id)
+              {
+              <app-relationship-card
+                [node]="rel.node"
+                [relationship]="rel.relationship"
+                [nodeLabels]="rel.nodeLabels"
+                [relationshipType]="group.type"
+                [direction]="group.direction"
+                (nodeSelected)="onRelatedNodeSelect($event)"
+              ></app-relationship-card>
+              }
+            </div>
+
+            @if (shouldShowPagination(group)) {
+            <app-relationship-pagination
+              [currentPage]="group.currentPage"
+              [pageSize]="group.pageSize"
+              [totalItems]="group.totalCount"
+              [isLoading]="group.isLoading"
+              (pageChange)="loadRelationshipPage(group, $event)"
+            ></app-relationship-pagination>
+            } }
+          </div>
+        </mat-tab>
+        }
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+} @else {
+<div class="no-data">
+  <mat-icon>error_outline</mat-icon>
+  <p>Node not found</p>
+</div>
+}
+
+## public/labels.json <a id="labels_json"></a> 🔄 **[RECENTLY MODIFIED]**
+
+{
+  "labels": {
+    "COLLECTED_FROM": "Recolección",
+    "HAS_LICENCE": "Licencia",
+    "HAS_SUBJECT": "Materia",
+    "HAS": "Tiene",
+    "IN_INDEX": "Indización",
+    "SOURCE_CREATED_IN": "Organización"
+  }
+}
 
 ## package.json <a id="package_json"></a>
 
@@ -352,21 +1025,6 @@ Base de datos de Neo4j, accesible a traves de un api de solo lectura a la que se
 
 - node-viewer: muestra un nodo, con sus metadatos correspondientes y ademas las estadisticas de ese nodo. Por cada tipo de relacion que tiene un nodo existe un tab donde se muesta la lista de nodos que estan relacionados con el nodo que se esta visitando. Si se tienen los permisos adecuados, es posible editar los metadatos de un nodo y tambien sus relaciones.
 
-## src/main.ts <a id="main_ts"></a>
-
-### Dependencies
-
-- `@angular/platform-browser`
-- `./app/app.config`
-- `./app/app.component`
-
-import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
-
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
-
 ## tsconfig.json <a id="tsconfig_json"></a>
 
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
@@ -396,6 +1054,21 @@ bootstrapApplication(AppComponent, appConfig)
     "strictTemplates": true
   }
 }
+
+## src/main.ts <a id="main_ts"></a>
+
+### Dependencies
+
+- `@angular/platform-browser`
+- `./app/app.config`
+- `./app/app.component`
+
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch((err) => console.error(err));
 
 ## src/app/pages/about/about.component.ts <a id="about_component_ts"></a>
 
@@ -461,239 +1134,6 @@ export class AboutComponent implements OnInit {
     this.errorMessage = error.message;
   }
 }
-
-## src/app/app.component.ts <a id="app_component_ts"></a>
-
-### Dependencies
-
-- `./services/config.service`
-- `@angular/material/sidenav`
-- `@angular/material/list`
-- `@angular/material/icon`
-- `@angular/material/toolbar`
-- `@angular/material/menu`
-- `@angular/material/button`
-- `@angular/cdk/layout`
-- `@angular/platform-browser`
-- `./services/metadata.service`
-- `./components/global-search/global-search.component`
-- `rxjs/operators`
-- `@angular/common`
-
-// src/app/app.component.ts (updated)
-import {
-  Component,
-  importProvidersFrom,
-  inject,
-  signal,
-  OnInit,
-} from '@angular/core';
-import {
-  RouterModule,
-  RouterOutlet,
-  Router,
-  NavigationEnd,
-  NavigationStart,
-  NavigationError,
-} from '@angular/router';
-import { ConfigService, Config } from './services/config.service';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MediaMatcher } from '@angular/cdk/layout';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MetadataService, PageMetadata } from './services/metadata.service';
-import { GlobalSearchComponent } from './components/global-search/global-search.component';
-import { filter, map } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  selector: 'app-root',
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatToolbarModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatListModule,
-    RouterModule,
-    MatIconModule,
-    GlobalSearchComponent,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-})
-export class AppComponent implements OnInit {
-  protected readonly isMobile = signal(true);
-  private readonly _mobileQuery: MediaQueryList;
-  private readonly _mobileQueryListener: () => void;
-
-  config: Config = { title: 'Iroko', menu: [] };
-  currentPageTitle = 'Iroko';
-  metadata: PageMetadata = {
-    title: '',
-    abstract: '',
-    description: '',
-    keywords: [],
-    subjects: [],
-  };
-
-  title = 'iroko-ui-pwa';
-
-  constructor(
-    private menuService: ConfigService,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metadataService: MetadataService,
-    private router: Router
-  ) {
-    this.matIconRegistry.addSvgIcon(
-      'sceiba',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('img/sceiba.svg')
-    );
-    const media = inject(MediaMatcher);
-
-    this._mobileQuery = media.matchMedia('(max-width: 600px)');
-    this.isMobile.set(this._mobileQuery.matches);
-    this._mobileQueryListener = () =>
-      this.isMobile.set(this._mobileQuery.matches);
-    this._mobileQuery.addEventListener('change', this._mobileQueryListener);
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        console.log('NavigationStart:', event.url);
-      }
-      if (event instanceof NavigationEnd) {
-        console.log('NavigationEnd:', event.url);
-      }
-      if (event instanceof NavigationError) {
-        console.error('NavigationError:', event.error);
-      }
-    });
-  }
-
-  ngOnInit() {
-    this.menuService.getConfig().subscribe((config) => {
-      this.config = config;
-    });
-
-    this.metadataService.currentMetadata.subscribe((metadata) => {
-      this.metadata = metadata;
-      this.currentPageTitle = metadata.title || 'Iroko';
-    });
-
-    // Set page title based on route
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        map(() => {
-          let route = this.router.routerState.root;
-          while (route.firstChild) route = route.firstChild;
-          return route;
-        }),
-        filter((route) => route.outlet === 'primary')
-      )
-      .subscribe((route) => {
-        const title =
-          route.snapshot.data['title'] || this.getTitleFromRoute(route);
-        this.metadataService.updateMetadata({ title });
-      });
-  }
-
-  private getTitleFromRoute(route: any): string {
-    const path = route.snapshot.routeConfig?.path;
-    if (!path) return 'Iroko';
-
-    const titleMap: { [key: string]: string } = {
-      '': 'Inicio',
-      sources: 'Sources',
-      organizations: 'Organizaciones',
-      persons: 'People',
-      projects: 'Projects',
-      outputs: 'Resultados de Investigación',
-      vocabs: 'Vocabularios',
-      query: 'Consulta Cypher',
-      search: 'Resultados de Búsqueda',
-    };
-
-    return titleMap[path] || 'Iroko';
-  }
-
-  ngOnDestroy(): void {
-    this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
-  }
-
-  getMainContainerClass(): string {
-    return this.isMobile()
-      ? 'main-is-mobile flex flex-col min-h-screen'
-      : 'flex flex-col min-h-screen';
-  }
-  // Add this method to the AppComponent class in app.component.ts
-  getSidenavOpenedState(): boolean {
-    // Expanded by default on desktop, collapsed on mobile
-    return !this.isMobile();
-  }
-}
-
-## src/app/app.config.ts <a id="app_config_ts"></a>
-
-### Dependencies
-
-- `@angular/router`
-- `./app.routes`
-- `@angular/service-worker`
-- `@angular/platform-browser/animations`
-- `ngx-markdown`
-- `./api/services/iroko-api.service`
-- `./services/error-handler.service`
-- `./interceptors/caching.interceptor`
-
-// src/app/app.config.ts
-import {
-  ApplicationConfig,
-  provideZoneChangeDetection,
-  isDevMode,
-  ErrorHandler,
-} from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
-import { provideServiceWorker } from '@angular/service-worker';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-
-import { provideMarkdown } from 'ngx-markdown';
-
-import { IrokoApiService } from './api/services/iroko-api.service';
-import { ErrorHandlerService } from './services/error-handler.service';
-import { cachingInterceptor } from './interceptors/caching.interceptor';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideAnimations(),
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
-    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
-    provideMarkdown(), // Add this line
-    IrokoApiService,
-    {
-      provide: ErrorHandler,
-      useClass: ErrorHandlerService,
-    },
-  ],
-};
 
 ## src/app/app.routes.ts <a id="app_routes_ts"></a>
 
@@ -796,6 +1236,62 @@ export const routes: Routes = [
     data: { title: 'Página No Encontrada' },
   },
 ];
+
+## src/app/app.config.ts <a id="app_config_ts"></a>
+
+### Dependencies
+
+- `@angular/router`
+- `./app.routes`
+- `@angular/service-worker`
+- `@angular/platform-browser/animations`
+- `ngx-markdown`
+- `./services/iroko-api.service`
+- `./services/error-handler.service`
+- `./interceptors/caching.interceptor`
+
+// src/app/app.config.ts
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  isDevMode,
+  ErrorHandler,
+} from '@angular/core';
+import { provideRouter } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideServiceWorker } from '@angular/service-worker';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+import { provideMarkdown } from 'ngx-markdown';
+
+import { IrokoApiService } from './services/iroko-api.service';
+import { ErrorHandlerService } from './services/error-handler.service';
+import { cachingInterceptor } from './interceptors/caching.interceptor';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideAnimations(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
+    provideMarkdown(), // Add this line
+    IrokoApiService,
+    {
+      provide: ErrorHandler,
+      useClass: ErrorHandlerService,
+    },
+  ],
+};
 
 ## src/app/services/cache.service.ts <a id="cache_service_ts"></a>
 
@@ -1233,300 +1729,14 @@ export interface CypherQuery {
   readonly?: boolean;
 }
 
-## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.ts <a id="enhanced-node-viewer_component_ts"></a>
-
-### Dependencies
-
-- `@angular/common`
-- `@angular/material/tabs`
-- `@angular/material/card`
-- `@angular/material/chips`
-- `@angular/material/button`
-- `@angular/material/icon`
-- `@angular/material/list`
-- `ngx-json-viewer`
-- `@angular/material/progress-spinner`
-- `../../api/services/iroko-api.service`
-- `../../services/cypher-builder.service`
-- `../relationship-card/relationship-card.component`
-- `../relationship-pagination/relationship-pagination.component`
-
-import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter,
-  SimpleChanges,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-import { IrokoApiService } from '../../api/services/iroko-api.service';
-import { CypherBuilderService } from '../../services/cypher-builder.service';
-import { RelationshipCardComponent } from '../relationship-card/relationship-card.component';
-import { RelationshipPaginationComponent } from '../relationship-pagination/relationship-pagination.component';
-
-interface RelationshipGroup {
-  type: string;
-  relationships: RelationshipData[];
-  direction: 'INCOMING' | 'OUTGOING';
-  totalCount: number;
-  currentPage: number;
-  pageSize: number;
-  isLoading: boolean;
-}
-
-interface RelationshipData {
-  node: any;
-  relationship: any;
-  nodeLabels: string[];
-}
-
-@Component({
-  selector: 'app-enhanced-node-viewer',
-  templateUrl: './enhanced-node-viewer.component.html',
-  styleUrls: ['./enhanced-node-viewer.component.scss'],
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    MatCardModule,
-    MatChipsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    NgxJsonViewerModule,
-    MatProgressSpinnerModule,
-    RelationshipCardComponent,
-    RelationshipPaginationComponent,
-  ],
-})
-export class EnhancedNodeViewerComponent implements OnInit {
-  @Input() nodeId!: string;
-  @Input() nodeType!: string;
-  @Output() nodeLoaded = new EventEmitter<any>();
-  @Output() nodeSelected = new EventEmitter<any>();
-  node: any;
-  relationshipGroups: RelationshipGroup[] = [];
-  loading = false;
-  activeTab = 0;
-
-  constructor(
-    private irokoApiService: IrokoApiService,
-    private cypherBuilder: CypherBuilderService
-  ) {}
-
-  ngOnInit() {
-    this.loadNode();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('EnhancedNodeViewerComponent - Input changes:', changes);
-
-    // Reload node when nodeId or nodeType changes
-    if (
-      (changes['nodeId'] && changes['nodeId'].currentValue) ||
-      (changes['nodeType'] && changes['nodeType'].currentValue)
-    ) {
-      this.loadNode();
-    }
-  }
-
-  loadNode() {
-    this.activeTab = 0;
-    if (!this.nodeId || !this.nodeType) {
-      console.warn('EnhancedNodeViewerComponent - Missing nodeId or nodeType');
-      return;
-    }
-
-    console.log('EnhancedNodeViewerComponent - Loading node:', {
-      nodeId: this.nodeId,
-      nodeType: this.nodeType,
-    });
-
-    this.loading = true;
-
-    // Load node with all relationships
-    const queryData = this.cypherBuilder.buildNodeWithRelationshipsQuery(
-      this.nodeId,
-      [this.nodeType]
-    );
-    console.log(queryData);
-
-    this.irokoApiService.executeQuery(queryData).subscribe({
-      next: (result) => {
-        if (result && result.length > 0) {
-          this.node = result[0].n;
-          this.nodeLoaded.emit(this.node);
-
-          this.processAllRelationships(result);
-        } else {
-          console.warn('EnhancedNodeViewerComponent - No node found');
-        }
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error(
-          'EnhancedNodeViewerComponent - Error loading node:',
-          error
-        );
-        this.loading = false;
-      },
-    });
-  }
-
-  private processAllRelationships(result: any[]) {
-    const relationshipMap = new Map<string, RelationshipGroup>();
-
-    // Process all relationships from the result
-    result.forEach((row: any) => {
-      if (row.relationshipType && row.related) {
-        const direction: 'INCOMING' | 'OUTGOING' = row.isOutgoing
-          ? 'OUTGOING'
-          : 'INCOMING';
-        const key =  "[REDACTED]";
-
-        if (!relationshipMap.has(key)) {
-          relationshipMap.set(key, {
-            type: row.relationshipType,
-            relationships: [],
-            direction: direction,
-            totalCount: 0, // We'll count as we process
-            currentPage: 0,
-            pageSize: 10,
-            isLoading: false,
-          });
-        }
-
-        const group = relationshipMap.get(key)!;
-
-        // Only store the first page (10 items) initially
-        if (group.relationships.length < group.pageSize) {
-          group.relationships.push({
-            node: row.related,
-            relationship: row.r,
-            nodeLabels: row.relatedLabels || [],
-          });
-        }
-
-        // Count all relationships for this type
-        group.totalCount++;
-      }
-    });
-
-    this.relationshipGroups = Array.from(relationshipMap.values());
-
-    // For groups with more than 10 items, we need to load counts properly
-    this.relationshipGroups.forEach((group) => {
-      if (group.totalCount > group.pageSize) {
-        this.loadRelationshipCount(group);
-      }
-    });
-  }
-
-  private loadRelationshipCount(group: RelationshipGroup): void {
-    const countQuery = this.cypherBuilder.buildRelationshipCountQuery(
-      this.nodeId,
-      group.type,
-      group.direction,
-      [this.nodeType]
-    );
-
-    this.irokoApiService.executeQuery(countQuery).subscribe({
-      next: (countResult) => {
-        if (countResult && countResult.length > 0) {
-          group.totalCount = countResult[0].count || group.totalCount;
-        }
-      },
-      error: (error) => {
-        console.error('Error loading relationship count:', error);
-        // Keep the estimated count we have
-      },
-    });
-  }
-
-  loadRelationshipPage(group: RelationshipGroup, page: number): void {
-    if (group.isLoading) return;
-
-    group.isLoading = true;
-
-    const relationshipsQuery =
-      this.cypherBuilder.buildPaginatedRelationshipsQuery(
-        this.nodeId,
-        group.type,
-        group.direction,
-        [this.nodeType],
-        page,
-        group.pageSize
-      );
-
-    this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
-      next: (result) => {
-        group.relationships = result.map((row: any) => ({
-          node: row.related,
-          relationship: row.r,
-          nodeLabels: row.relatedLabels || [],
-        }));
-        group.currentPage = page;
-        group.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading relationships:', error);
-        group.isLoading = false;
-      },
-    });
-  }
-
-  getNodeProperties(): { key: string; value: any }[] {
-    if (!this.node) return [];
-
-    return Object.entries(this.node)
-      .filter(([key]) => !key.startsWith('_'))
-      .map(([key, value]) => ({ key, value }));
-  }
-
-  isArray(value: any): boolean {
-    return Array.isArray(value);
-  }
-
-  isObject(value: any): boolean {
-    return typeof value === 'object' && value !== null && !Array.isArray(value);
-  }
-
-  onRelatedNodeSelect(nodeData: any): void {
-    if (nodeData && nodeData.id) {
-      // Extract the primary node type from labels
-      const nodeLabels = nodeData.labels || nodeData.nodeLabels || [];
-      const primaryType = nodeLabels.length > 0 ? nodeLabels[0] : 'node';
-
-      // Emit the node data with type information
-
-      this.nodeSelected.emit({
-        node: nodeData,
-        type: primaryType,
-      });
-    }
-  }
-  getDisplayedRelationships(group: RelationshipGroup): RelationshipData[] {
-    return group.relationships;
-  }
-
-  shouldShowPagination(group: RelationshipGroup): boolean {
-    return group.totalCount > group.pageSize;
-  }
-
-  getTabLabel(group: RelationshipGroup): string {
-    const dicon =
-      group.direction === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
-    return `<mat-icon class="direction-icon">${dicon} </mat-icon> ${group.type} (${group.totalCount})`;
-  }
+export interface FullTextCypherQuery {
+  searchIndex: string;
+  searchTerm: string;
+  whereClause?: string;
+  orderClause?: string;
+  returnClause?: string;
+  parameters?: { [key: string]: any } | null;
+  countTotal?: boolean;
 }
 
 ## src/app/services/error-handler.service.ts <a id="error-handler_service_ts"></a>
@@ -1697,319 +1907,6 @@ export class ExportService {
   }
 }
 
-## src/app/components/global-search/global-search.component.ts <a id="global-search_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/forms`
-- `@angular/router`
-- `@angular/material/form-field`
-- `@angular/material/input`
-- `@angular/material/autocomplete`
-- `@angular/material/icon`
-- `@angular/material/button`
-- `@angular/material/progress-spinner`
-- `@angular/material/menu`
-- `@angular/material/chips`
-- `rxjs/operators`
-- `rxjs`
-- `../../services/search.service`
-
-// src/app/components/global-search/global-search.component.ts
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatChipsModule } from '@angular/material/chips';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { SearchResult, SearchService } from '../../services/search.service';
-
-@Component({
-  selector: 'app-global-search',
-  templateUrl: './global-search.component.html',
-  styleUrls: ['./global-search.component.scss'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatMenuModule,
-    MatChipsModule,
-  ],
-})
-export class GlobalSearchComponent implements OnInit {
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
-
-  searchTerm = '';
-  searchResults: SearchResult[] = [];
-  isLoading = false;
-  showResults = false;
-
-  private searchTerms = new Subject<string>();
-
-  constructor(private searchService: SearchService, private router: Router) {}
-
-  ngOnInit() {
-    this.searchTerms
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((term) => {
-          if (!term.trim()) {
-            this.searchResults = [];
-            return [];
-          }
-          this.isLoading = true;
-          return this.searchService.globalSearch(term);
-        })
-      )
-      .subscribe({
-        next: (results) => {
-          this.searchResults = results.map((item: any) => ({
-            id: item.node.properties.id || item.node.identity,
-            type: item.type,
-            label:
-              item.node.properties.name ||
-              item.node.properties.title ||
-              'Unnamed',
-            description: item.node.properties.description,
-            properties: item.node.properties,
-            score: item.score,
-          }));
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Buscar error:', error);
-          this.isLoading = false;
-        },
-      });
-  }
-
-  onSearchInput(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerms.next(term);
-  }
-
-  onSearchSubmit(): void {
-    if (this.searchTerm.trim()) {
-      this.router.navigate(['/search'], {
-        queryParams: { q: this.searchTerm },
-      });
-      this.showResults = false;
-      this.searchInput.nativeElement.blur();
-    }
-  }
-
-  onResultSelect(result: SearchResult): void {
-    this.router.navigate([`/${result.type.toLowerCase()}s`, result.id]);
-    this.showResults = false;
-    this.searchTerm = '';
-  }
-
-  onFocus(): void {
-    if (this.searchResults.length > 0) {
-      this.showResults = true;
-    }
-  }
-
-  onBlur(): void {
-    setTimeout(() => {
-      this.showResults = false;
-    }, 200);
-  }
-
-  clearSearch(): void {
-    this.searchTerm = '';
-    this.searchResults = [];
-    this.showResults = false;
-  }
-}
-
-## src/app/pages/home/home.component.ts <a id="home_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-- `../../api/services/iroko-api.service`
-- `@angular/material/card`
-- `@angular/material/button`
-- `@angular/material/icon`
-- `@angular/material/grid-list`
-- `@angular/material/progress-spinner`
-
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import { IrokoApiService } from '../../api/services/iroko-api.service';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatGridListModule,
-    MatProgressSpinnerModule,
-  ],
-})
-export class HomeComponent implements OnInit, OnDestroy {
-  stats = [
-    {
-      label: 'Organizaciones',
-      count: 0,
-      icon: 'corporate_fare',
-      route: '/organizations',
-      color: 'primary',
-      type: 'Organization',
-    },
-    {
-      label: 'Investigadores',
-      count: 0,
-      icon: 'people',
-      route: '/persons',
-      color: 'accent',
-      type: 'Person',
-    },
-    {
-      label: 'Resultados de Investigación',
-      count: 0,
-      icon: 'article',
-      route: '/outputs',
-      color: 'warn',
-      type: 'Output',
-    },
-    {
-      label: 'Projects',
-      count: 0,
-      icon: 'folder',
-      route: '/projects',
-      color: 'primary',
-      type: 'Project',
-    },
-    {
-      label: 'Fuentes de Datos',
-      count: 0,
-      icon: 'source',
-      route: '/sources',
-      color: 'accent',
-      type: 'Source',
-    },
-    {
-      label: 'Vocabularios',
-      count: 0,
-      icon: 'tag',
-      route: '/vocabularies',
-      color: 'warn',
-      type: 'Término',
-    },
-  ];
-
-  quickActions = [
-    {
-      label: 'Búsqueda Avanzada',
-      description: 'Buscar across all entities',
-      icon: 'search',
-      route: '/search',
-    },
-    {
-      label: 'Consulta Cypher',
-      description: 'Run custom graph queries',
-      icon: 'code',
-      route: '/query',
-    },
-    {
-      label: 'Browse Catalog',
-      description: 'Explore by categories',
-      icon: 'explore',
-      route: '/sources',
-    },
-  ];
-
-  isLoading = true;
-
-  constructor(
-    private metadataService: MetadataService,
-    private irokoApiService: IrokoApiService
-  ) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Explorador del Grafo de Conocimiento Iroko',
-      description:
-        'Explore research data, organizations, and publications in the Cuban research ecosystem',
-      authors: [],
-      subjects: [],
-    });
-
-    this.loadStatistics();
-  }
-
-  ngOnDestroy() {
-    this.metadataService.resetMetadata();
-  }
-
-  private loadStatistics() {
-    const queries = this.stats.map((stat) =>
-      this.irokoApiService.executeQuery({
-        query: `MATCH (n:${stat.type}) RETURN count(n) AS count`,
-        parameters: {},
-        readonly: true,
-      })
-    );
-
-    // Execute all queries in parallel
-    Promise.all(queries.map((q) => q.toPromise()))
-      .then((results) => {
-        results.forEach((result, index) => {
-          if (result && result.length > 0) {
-            this.stats[index].count = result[0].count || 0;
-          }
-        });
-        this.isLoading = false;
-      })
-      .catch((error) => {
-        console.error('Error loading statistics:', error);
-        this.isLoading = false;
-      });
-  }
-
-  formatCount(count: number): string {
-    if (count >= 1000000) {
-      return (count / 1000000).toFixed(1) + 'M';
-    } else if (count >= 1000) {
-      return (count / 1000).toFixed(1) + 'K';
-    }
-    return count.toString();
-  }
-}
-
 ## src/app/components/generic-list/generic-list.component.ts <a id="generic-list_component_ts"></a>
 
 ### Dependencies
@@ -2026,8 +1923,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 - `@angular/material/divider`
 - `@angular/material/tooltip`
 - `@angular/material/expansion`
-- `../../api/services/iroko-api.service`
-- `../enhanced-node-viewer/enhanced-node-viewer.component`
+- `@angular/material/checkbox`
+- `@angular/material/datepicker`
+- `@angular/material/core`
+- `../../services/iroko-api.service`
+- `../../services/export.service`
 - `@angular/router`
 
 import {
@@ -2046,8 +1946,10 @@ import {
   ReactiveFormsModule,
   FormBuilder,
   FormControl,
+  FormGroup,
 } from '@angular/forms';
 import {
+  Observable,
   Subject,
   Subscription,
   debounceTime,
@@ -2064,13 +1966,16 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
-import { IrokoApiService } from '../../api/services/iroko-api.service';
+import { IrokoApiService } from '../../services/iroko-api.service';
 import {
   CypherBuilderService,
   QueryFilter,
 } from '../../services/cypher-builder.service';
-import { EnhancedNodeViewerComponent } from '../enhanced-node-viewer/enhanced-node-viewer.component';
+import { ExportService } from '../../services/export.service';
 import { Router } from '@angular/router';
 
 export interface ListColumn {
@@ -2081,28 +1986,19 @@ export interface ListColumn {
   type?: 'string' | 'number' | 'date' | 'array';
 }
 
+export interface ListFilter {
+  name: string;
+  label: string;
+  type: 'text' | 'select' | 'multiselect' | 'date' | 'boolean';
+  options?: string[]; // For select/multiselect types
+  placeholder?: string;
+}
+
 export interface SortOption {
   attribute: string;
   direction: 'ASC' | 'DESC';
 }
 
-// EJEMPLOS
-// {
-//   customWhereClause: "EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))";
-// }
-// {
-//   customWhereClause: "n.source_type = $type AND n.start_year > $minYear",
-//   customParameters: {
-//     type: 'journal',
-//     minYear: 2000
-//   }
-// }
-// {
-//   relationships: [
-//     { type: 'PUBLISHED_BY', direction: 'OUT', targetLabel: 'Organization' },
-//     { type: 'CLASSIFIED_BY', direction: 'OUT', targetLabel: 'Term' }
-//   ]
-// }
 export interface AdvancedQueryOptions {
   customWhereClause?: string;
   customParameters?: { [key: string]: any };
@@ -2134,11 +2030,15 @@ export interface AdvancedQueryOptions {
     MatDividerModule,
     MatTooltipModule,
     MatExpansionModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
 })
 export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() entityType!: string;
   @Input() columns: ListColumn[] = [];
+  @Input() filters: ListFilter[] = [];
   @Input() label: string = '';
   @Input() pageSize: number = 10;
   @Input() defaultSort?: string;
@@ -2146,6 +2046,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() advancedQueryOptions?: AdvancedQueryOptions;
   @Input() fixedFilters: QueryFilter[] = [];
   @Output() nodeSelected = new EventEmitter<any>();
+  @Input() searchIndex?: string;
 
   // Data state
   nodes: any[] = [];
@@ -2158,6 +2059,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   // Search and sort state
   searchTerm = '';
   sortBy: SortOption = { attribute: '', direction: 'ASC' };
+
+  // Filter state
+  filterForm: FormGroup;
+  activeFilters: { [key: string]: any } = {};
+  showFilters = false;
 
   // Advanced query state
   showAdvancedQuery = false;
@@ -2174,27 +2080,34 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   paginationRange: number[] = [];
 
   // Debounce for search
-  private searchSubject = new Subject<string>();
+  private searchTerms = new Subject<string>();
   private searchSubscription?: Subscription;
+  isExporting: boolean = false;
 
   constructor(
     private irokoApiService: IrokoApiService,
     private cypherBuilder: CypherBuilderService,
+    private exportService: ExportService,
     private router: Router,
     private fb: FormBuilder
   ) {
     this.searchControl = this.fb.control('');
     this.sortControl = this.fb.control('');
+    this.filterForm = this.fb.group({});
   }
 
   ngOnInit() {
     this.initializeSorting();
+    this.initializeFilters();
     this.setupSearchDebounce();
     this.initializeAdvancedQuery();
     this.loadPage(0);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['filters']) {
+      this.initializeFilters();
+    }
     if (changes['advancedQueryOptions'] || changes['fixedFilters']) {
       this.initializeAdvancedQuery();
       this.loadPage(0);
@@ -2205,12 +2118,39 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.searchSubscription?.unsubscribe();
   }
 
+  private initializeFilters() {
+    // Clear existing form controls
+    const formGroup: { [key: string]: any } = {};
+
+    this.filters.forEach((filter) => {
+      switch (filter.type) {
+        case 'text':
+          formGroup[filter.name] = this.fb.control('');
+          break;
+        case 'select':
+          formGroup[filter.name] = this.fb.control('');
+          break;
+        case 'multiselect':
+          formGroup[filter.name] = this.fb.control([]);
+          break;
+        case 'date':
+          formGroup[filter.name] = this.fb.control('');
+          break;
+        case 'boolean':
+          formGroup[filter.name] = this.fb.control(false);
+          break;
+      }
+    });
+
+    this.filterForm = this.fb.group(formGroup);
+    this.activeFilters = {};
+  }
+
   private initializeAdvancedQuery() {
     if (this.advancedQueryOptions) {
       this.customWhereClause =
         this.advancedQueryOptions.customWhereClause || '';
 
-      // Initialize parameters from advanced query options
       if (this.advancedQueryOptions.customParameters) {
         this.customParameters = Object.entries(
           this.advancedQueryOptions.customParameters
@@ -2236,18 +2176,144 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.sortControl.setValue(initialSortAttr);
     this.showSortOrder = !!initialSortAttr;
   }
-
   private setupSearchDebounce() {
-    this.searchSubscription = this.searchSubject
+    this.searchSubscription = this.searchTerms
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((searchTerm) => {
         this.searchTerm = searchTerm;
+
         this.loadPage(0);
       });
 
     this.searchControl.valueChanges.subscribe((value) => {
-      this.searchSubject.next(value || '');
+      this.searchTerms.next(value || '');
     });
+  }
+
+  // Filter Methods
+  applyFilters() {
+    this.activeFilters = {};
+
+    Object.keys(this.filterForm.controls).forEach((key) => {
+      const control = this.filterForm.get(key);
+      if (control && control.value && control.value !== '') {
+        this.activeFilters[key] = control.value;
+      }
+    });
+
+    this.loadPage(0);
+  }
+
+  clearFilters() {
+    this.filterForm.reset();
+    this.activeFilters = {};
+    this.loadPage(0);
+  }
+
+  hasActiveFilters(): boolean {
+    return Object.keys(this.activeFilters).length > 0;
+  }
+
+  getActiveFilterCount(): number {
+    return Object.keys(this.activeFilters).length;
+  }
+
+  // Export Methods
+  exportToCSV(): void {
+    if (this.nodes.length === 0) {
+      console.warn('No data to export');
+      return;
+    }
+
+    // Prepare data for export
+    const exportData = this.nodes.map((node) => {
+      const row: any = {};
+      this.columns.forEach((column) => {
+        row[column.label] = this.formatPropertyValue(
+          node[column.name],
+          column.type
+        );
+      });
+      return row;
+    });
+
+    const filename = `${this.entityType.toLowerCase()}-export-${
+      new Date().toISOString().split('T')[0]
+    }.csv`;
+    this.exportService.exportToCSV(exportData, filename);
+  }
+  async exportCurrentView(): Promise<void> {
+    this.isExporting = true;
+
+    try {
+      let exportObservable: Observable<Blob>;
+
+      if (this.searchIndex && this.searchTerm) {
+        const whereClause = this.buildWhereClause(true); // skip search conditions
+        const orderClause = this.buildOrderClause();
+        const returnClause = this.buildReturnClause();
+        const searchIndex = this.searchIndex || 'generalSearch';
+        const searchTerm = this.buildSearchTerm(this.searchTerm);
+        const parameters = this.buildParameters(true); // skip search parameter
+
+        exportObservable = this.irokoApiService.exportFullTextQueryToCsv({
+          searchIndex,
+          searchTerm,
+          whereClause,
+          returnClause,
+          orderClause,
+          parameters,
+        });
+      } else {
+        const whereClause = this.buildWhereClause();
+        const orderClause = this.buildOrderClause();
+        const returnClause = this.buildReturnClause();
+
+        const query = `
+          MATCH (n:${this.entityType})
+          ${whereClause}
+          ${returnClause}
+          ${orderClause}
+        `;
+
+        const parameters = this.buildParameters();
+
+        exportObservable = this.irokoApiService.exportQueryToCsv({
+          query,
+          parameters,
+          readonly: true,
+        });
+      }
+
+      // Subscribe to the Observable to handle the Blob
+      exportObservable.subscribe({
+        next: (blob: Blob) => {
+          try {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            const timestamp = new Date().toISOString().slice(0, 10);
+            link.download = `${this.entityType.toLowerCase()}_export_${timestamp}.csv`;
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+          } finally {
+            this.isExporting = false;
+          }
+        },
+        error: (error) => {
+          console.error('Export failed:', error);
+          this.isExporting = false;
+          // TODO: Show user-friendly error message (e.g., via toast)
+        },
+      });
+    } catch (error) {
+      console.error('Export preparation failed:', error);
+      this.isExporting = false;
+      // TODO: Notify user of failure
+    }
   }
 
   async loadPage(page: number) {
@@ -2265,29 +2331,98 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     } catch (error) {
       console.error('Error loading page:', error);
       this.hasError = true;
-      this.errorMessage = 'Failed to load data. Please try again.';
+      this.errorMessage = 'Ha ocurrido un error al intentar cargar los datos. ';
     } finally {
       this.isLoading = false;
     }
   }
 
-  private async fetchTotalCount(): Promise<number> {
-    const whereClause = this.buildWhereClause();
-    const query = `MATCH (n:${this.entityType}) ${whereClause} RETURN count(n) AS count`;
-    const parameters = this.buildParameters();
+  private async fetchNodes(offset: number, limit: number): Promise<any[]> {
+    if (this.searchIndex && this.searchTerm) {
+      return await this.fetchNodesWithIndex(offset, limit);
+    } else {
+      return await this.fetchNodesWithBasicSearch(offset, limit);
+    }
+  }
+
+  private async fetchNodesWithIndex(
+    offset: number,
+    limit: number
+  ): Promise<any[]> {
+    const whereClause = this.buildWhereClause(true); // Pass flag to skip search conditions
+    const orderClause = this.buildOrderClause();
+    const returnClause = this.buildReturnClause();
+    const searchIndex = this.searchIndex || 'generalSearch';
+    const searchTerm = this.buildSearchTerm(this.searchTerm);
+    // Build the full-text search query
+    const query = `
+      CALL db.index.fulltext.queryNodes("${this.searchIndex}", $searchTerm)
+      YIELD node, score
+      WITH node AS n, score
+      ${whereClause}
+      ${returnClause}
+      ${orderClause}
+      SKIP $offset
+      LIMIT $limit
+    `;
+
+    const parameters = {
+      ...this.buildParameters(true), // Pass flag to skip search parameter
+      offset,
+      limit,
+    };
 
     const result = await this.irokoApiService
-      .executeQuery({
-        query,
+      .executeFullTextQuery({
+        searchIndex,
+        searchTerm,
+        whereClause,
+        returnClause,
+        orderClause,
         parameters,
-        readonly: true,
+      })
+      .toPromise();
+
+    return (result || []).map((item: any) =>
+      this.extractNodeData(item.n || item)
+    );
+  }
+
+  private async fetchTotalCountWithIndex(): Promise<number> {
+    const whereClause = this.buildWhereClause(true);
+    const searchIndex = this.searchIndex || 'generalSearch';
+    const searchTerm = this.buildSearchTerm(this.searchTerm);
+    const countTotal = true;
+    const query = `
+      CALL db.index.fulltext.queryNodes("${this.searchIndex}", $searchTerm)
+      YIELD node, score
+      WITH node AS n, score
+      ${whereClause}
+      RETURN count(n) AS count
+    `;
+
+    const parameters = {
+      ...this.buildParameters(true),
+      searchTerm: this.buildSearchTerm(this.searchTerm),
+    };
+
+    const result = await this.irokoApiService
+      .executeFullTextQuery({
+        searchIndex,
+        searchTerm,
+        whereClause,
+        parameters,
+        countTotal,
       })
       .toPromise();
 
     return result?.[0]?.count || 0;
   }
 
-  private async fetchNodes(offset: number, limit: number): Promise<any[]> {
+  private async fetchNodesWithBasicSearch(
+    offset: number,
+    limit: number
+  ): Promise<any[]> {
     const whereClause = this.buildWhereClause();
     const orderClause = this.buildOrderClause();
     const returnClause = this.buildReturnClause();
@@ -2320,11 +2455,63 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  private buildWhereClause(): string {
+  private async fetchTotalCount(): Promise<number> {
+    if (this.searchIndex && this.searchTerm) {
+      return await this.fetchTotalCountWithIndex();
+    } else {
+      return await this.fetchTotalCountWithBasicSearch();
+    }
+  }
+
+  private async fetchTotalCountWithBasicSearch(): Promise<number> {
+    const whereClause = this.buildWhereClause();
+    const query = `MATCH (n:${this.entityType}) ${whereClause} RETURN count(n) AS count`;
+    const parameters = this.buildParameters();
+
+    const result = await this.irokoApiService
+      .executeQuery({
+        query,
+        parameters,
+        readonly: true,
+      })
+      .toPromise();
+
+    return result?.[0]?.count || 0;
+  }
+
+  // Enhanced search term building for full-text search
+  private buildSearchTerm(term: string): string {
+    if (!term.trim()) return '';
+
+    // Add wildcard for partial matching and boost recent results
+    const escapedTerm = term.replace(/[\\"']/g, '\\$&');
+    return `${escapedTerm}*`;
+  }
+
+  private buildArrayFilterCondition(
+    filterName: string,
+    paramName: string,
+    filterType: string
+  ): string {
+    switch (filterType) {
+      case 'multiselect':
+        // Check if any of the selected values exist in the array
+        return `ANY(selectedValue IN $${paramName} WHERE selectedValue IN n.${filterName})`;
+
+      case 'text':
+        // For text search in arrays, check if any array element contains the text
+        return `ANY(element IN n.${filterName} WHERE toLower(element) CONTAINS toLower($${paramName}))`;
+
+      default:
+        return `ANY(selectedValue IN $${paramName} WHERE selectedValue IN n.${filterName})`;
+    }
+  }
+  // Update buildWhereClause to accept skipSearch parameter
+  private buildWhereClause(skipSearch: boolean = false): string {
     const conditions: string[] = [];
 
-    // Search condition
-    if (this.searchTerm) {
+    // Search condition (only for basic search)
+    if (this.searchTerm && !skipSearch && !this.searchIndex) {
       const searchableColumns = this.columns
         .filter((col) => col.filterable !== false)
         .map((col) => col.name);
@@ -2338,6 +2525,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           .join(' OR ');
         conditions.push(`(${searchConditions})`);
       }
+    }
+
+    // For index search, we need to filter by entity type
+    if (this.searchIndex && this.searchTerm) {
+      conditions.push(`n:${this.entityType}`);
     }
 
     // Fixed filters
@@ -2367,6 +2559,46 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
     }
+
+    // Custom filters from filter form
+    Object.keys(this.activeFilters).forEach((filterName, index) => {
+      const filterValue = this.activeFilters[filterName];
+      const paramName = `filter${index}`;
+      const filterDef = this.filters.find((f) => f.name === filterName);
+
+      if (Array.isArray(filterValue) && filterValue.length > 0) {
+        // Multi-select filter
+        const column = this.columns.find((col) => col.name === filterName);
+
+        if (column && column.type === 'array') {
+          // For array properties, check if any selected value exists in the array
+          conditions.push(
+            this.buildArrayFilterCondition(filterName, paramName, 'multiselect')
+          );
+        } else {
+          conditions.push(`n.${filterName} IN $${paramName}`);
+        }
+      } else if (typeof filterValue === 'boolean') {
+        conditions.push(`n.${filterName} = $${paramName}`);
+      } else if (filterValue instanceof Date) {
+        conditions.push(`date(n.${filterName}) = date($${paramName})`);
+      } else if (filterValue) {
+        // Text filter
+        const column = this.columns.find((col) => col.name === filterName);
+
+        if (column && column.type === 'array') {
+          // Text search within array elements
+          conditions.push(
+            this.buildArrayFilterCondition(filterName, paramName, 'text')
+          );
+        } else {
+          // Regular text search for non-array properties
+          conditions.push(
+            `toLower(COALESCE(toString(n.${filterName}), '')) CONTAINS toLower($${paramName})`
+          );
+        }
+      }
+    });
 
     // Custom WHERE clause from advanced query
     if (this.customWhereClause) {
@@ -2402,17 +2634,29 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return `ORDER BY n.${this.sortBy.attribute} ${this.sortBy.direction}`;
   }
 
-  private buildParameters(): any {
+  private buildParameters(skipSearch: boolean = false): any {
     const params: any = {};
 
-    // Search parameter
-    if (this.searchTerm) {
+    // Search parameter (only for basic search)
+    if (this.searchTerm && !skipSearch && !this.searchIndex) {
       params.searchTerm = this.searchTerm;
     }
 
     // Fixed filter parameters
     this.fixedFilters.forEach((filter, index) => {
       params[`fixedFilter${index}`] = filter.value;
+    });
+
+    // Custom filter parameters
+    Object.keys(this.activeFilters).forEach((filterName, index) => {
+      const filterValue = this.activeFilters[filterName];
+      const paramName = `filter${index}`;
+
+      if (filterValue instanceof Date) {
+        params[paramName] = filterValue.toISOString();
+      } else {
+        params[paramName] = filterValue;
+      }
     });
 
     // Custom parameters
@@ -2590,6 +2834,319 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 }
 
+## src/app/components/global-search/global-search.component.ts <a id="global-search_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/forms`
+- `@angular/router`
+- `@angular/material/form-field`
+- `@angular/material/input`
+- `@angular/material/autocomplete`
+- `@angular/material/icon`
+- `@angular/material/button`
+- `@angular/material/progress-spinner`
+- `@angular/material/menu`
+- `@angular/material/chips`
+- `rxjs/operators`
+- `rxjs`
+- `../../services/search.service`
+
+// src/app/components/global-search/global-search.component.ts
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { SearchResult, SearchService } from '../../services/search.service';
+
+@Component({
+  selector: 'app-global-search',
+  templateUrl: './global-search.component.html',
+  styleUrls: ['./global-search.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatChipsModule,
+  ],
+})
+export class GlobalSearchComponent implements OnInit {
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  searchTerm = '';
+  searchResults: SearchResult[] = [];
+  isLoading = false;
+  showResults = false;
+
+  private searchTerms = new Subject<string>();
+
+  constructor(private searchService: SearchService, private router: Router) {}
+
+  ngOnInit() {
+    this.searchTerms
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term) => {
+          if (!term.trim()) {
+            this.searchResults = [];
+            return [];
+          }
+          this.isLoading = true;
+          return this.searchService.globalSearch(term);
+        })
+      )
+      .subscribe({
+        next: (results) => {
+          this.searchResults = results.map((item: any) => ({
+            id: item.node.properties.id || item.node.identity,
+            type: item.type,
+            label:
+              item.node.properties.name ||
+              item.node.properties.title ||
+              'Unnamed',
+            description: item.node.properties.description,
+            properties: item.node.properties,
+            score: item.score,
+          }));
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Buscar error:', error);
+          this.isLoading = false;
+        },
+      });
+  }
+
+  onSearchInput(event: Event): void {
+    const term = (event.target as HTMLInputElement).value;
+    this.searchTerms.next(term);
+  }
+
+  onSearchSubmit(): void {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/search'], {
+        queryParams: { q: this.searchTerm },
+      });
+      this.showResults = false;
+      this.searchInput.nativeElement.blur();
+    }
+  }
+
+  onResultSelect(result: SearchResult): void {
+    this.router.navigate([`/${result.type.toLowerCase()}s`, result.id]);
+    this.showResults = false;
+    this.searchTerm = '';
+  }
+
+  onFocus(): void {
+    if (this.searchResults.length > 0) {
+      this.showResults = true;
+    }
+  }
+
+  onBlur(): void {
+    setTimeout(() => {
+      this.showResults = false;
+    }, 200);
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.searchResults = [];
+    this.showResults = false;
+  }
+}
+
+## src/app/pages/home/home.component.ts <a id="home_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+- `../../services/iroko-api.service`
+- `@angular/material/card`
+- `@angular/material/button`
+- `@angular/material/icon`
+- `@angular/material/grid-list`
+- `@angular/material/progress-spinner`
+
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import { IrokoApiService } from '../../services/iroko-api.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
+  ],
+})
+export class HomeComponent implements OnInit, OnDestroy {
+  stats = [
+    {
+      label: 'Organizaciones',
+      count: 0,
+      icon: 'corporate_fare',
+      route: '/organizations',
+      color: 'primary',
+      type: 'Organization',
+    },
+    {
+      label: 'Investigadores',
+      count: 0,
+      icon: 'people',
+      route: '/persons',
+      color: 'accent',
+      type: 'Person',
+    },
+    {
+      label: 'Resultados de Investigación',
+      count: 0,
+      icon: 'article',
+      route: '/outputs',
+      color: 'warn',
+      type: 'Output',
+    },
+    {
+      label: 'Projects',
+      count: 0,
+      icon: 'folder',
+      route: '/projects',
+      color: 'primary',
+      type: 'Project',
+    },
+    {
+      label: 'Fuentes de Datos',
+      count: 0,
+      icon: 'source',
+      route: '/sources',
+      color: 'accent',
+      type: 'Source',
+    },
+    {
+      label: 'Vocabularios',
+      count: 0,
+      icon: 'tag',
+      route: '/vocabularies',
+      color: 'warn',
+      type: 'Término',
+    },
+  ];
+
+  quickActions = [
+    {
+      label: 'Búsqueda Avanzada',
+      description: 'Buscar across all entities',
+      icon: 'search',
+      route: '/search',
+    },
+    {
+      label: 'Consulta Cypher',
+      description: 'Run custom graph queries',
+      icon: 'code',
+      route: '/query',
+    },
+    {
+      label: 'Browse Catalog',
+      description: 'Explore by categories',
+      icon: 'explore',
+      route: '/sources',
+    },
+  ];
+
+  isLoading = true;
+
+  constructor(
+    private metadataService: MetadataService,
+    private irokoApiService: IrokoApiService
+  ) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Explorador del Grafo de Conocimiento Iroko',
+      description:
+        'Explore research data, organizations, and publications in the Cuban research ecosystem',
+      authors: [],
+      subjects: [],
+    });
+
+    this.loadStatistics();
+  }
+
+  ngOnDestroy() {
+    this.metadataService.resetMetadata();
+  }
+
+  private loadStatistics() {
+    const queries = this.stats.map((stat) =>
+      this.irokoApiService.executeQuery({
+        query: `MATCH (n:${stat.type}) RETURN count(n) AS count`,
+        parameters: {},
+        readonly: true,
+      })
+    );
+
+    // Execute all queries in parallel
+    Promise.all(queries.map((q) => q.toPromise()))
+      .then((results) => {
+        results.forEach((result, index) => {
+          if (result && result.length > 0) {
+            this.stats[index].count = result[0].count || 0;
+          }
+        });
+        this.isLoading = false;
+      })
+      .catch((error) => {
+        console.error('Error loading statistics:', error);
+        this.isLoading = false;
+      });
+  }
+
+  formatCount(count: number): string {
+    if (count >= 1000000) {
+      return (count / 1000000).toFixed(1) + 'M';
+    } else if (count >= 1000) {
+      return (count / 1000).toFixed(1) + 'K';
+    }
+    return count.toString();
+  }
+}
+
 ## src/app/api/models/http-validation-error.model.ts <a id="http-validation-error_model_ts"></a>
 
 ### Dependencies
@@ -2602,7 +3159,7 @@ export interface HTTPValidationError {
   detail?: ValidationError[];
 }
 
-## src/app/api/services/iroko-api.service.ts <a id="iroko-api_service_ts"></a>
+## src/app/services/iroko-api.service.ts <a id="iroko-api_service_ts"></a>
 
 ### Dependencies
 
@@ -2610,13 +3167,15 @@ export interface HTTPValidationError {
 - `@angular/common/http`
 - `rxjs`
 - `rxjs/operators`
-- `../models/cypher-query.model`
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { CypherQuery } from '../models/cypher-query.model';
+import {
+  CypherQuery,
+  FullTextCypherQuery,
+} from '../api/models/cypher-query.model';
 
 @Injectable({
   providedIn: 'root',
@@ -2630,6 +3189,26 @@ export class IrokoApiService {
     return this.http
       .post(`${this.apiUrl}/query`, queryData)
       .pipe(catchError(this.handleError));
+  }
+
+  exportQueryToCsv(queryData: CypherQuery): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/query/export/csv`, queryData, {
+      responseType: 'blob',
+      observe: 'body',
+    });
+  }
+
+  executeFullTextQuery(queryData: FullTextCypherQuery): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/fulltext`, queryData)
+      .pipe(catchError(this.handleError));
+  }
+
+  exportFullTextQueryToCsv(queryData: FullTextCypherQuery): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/fulltext/export/csv`, queryData, {
+      responseType: 'blob',
+      observe: 'body',
+    });
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -3029,109 +3608,6 @@ export class NodeViewComponent implements OnInit {
   }
 }
 
-## src/app/pages/persons/persons.component.ts <a id="persons_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-
-// src/app/pages/persons/persons.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
-
-@Component({
-  selector: 'app-persons',
-  templateUrl: './persons.component.html',
-  styleUrls: ['./persons.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
-})
-export class PersonsComponent {
-  personColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Nombre Completo',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'last_name',
-      label: 'Apellido',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'email_addresses',
-      label: 'Direcciones de Correo',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'research_interests',
-      label: 'Intereses de Investigación',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'academic_titles',
-      label: 'Títulos Académicos',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'affiliations',
-      label: 'Afiliaciones',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'gender',
-      label: 'Género',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Investigadores',
-      description:
-        'Explore researchers, scientists, and contributors in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Person selected:', node);
-    // Navigate to person detail or show dialog
-  }
-}
-
 ## src/app/pages/organizations/organizations.component.ts <a id="organizations_component_ts"></a>
 
 ### Dependencies
@@ -3149,6 +3625,7 @@ import { MetadataService } from '../../services/metadata.service';
 import {
   GenericListComponent,
   ListColumn,
+  ListFilter,
 } from '../../components/generic-list/generic-list.component';
 
 @Component({
@@ -3174,7 +3651,7 @@ export class OrganizationsComponent {
       type: 'string',
     },
     {
-      name: 'types',
+      name: 'organizationType',
       label: 'Tipos',
       sortable: true,
       filterable: true,
@@ -3203,6 +3680,38 @@ export class OrganizationsComponent {
     },
   ];
 
+  organizationFilters: ListFilter[] = [
+    {
+      name: 'name',
+      label: 'Nombre',
+      type: 'text',
+      placeholder: 'Filtrar por nombre...',
+    },
+    {
+      name: 'status',
+      label: 'Estado',
+      type: 'select',
+      options: ['active', 'inactive', 'pending'],
+    },
+    {
+      name: 'organizationType',
+      label: 'Tipo de Organización',
+      type: 'multiselect',
+      options: [
+        'Education',
+        'Healthcare',
+        'Company',
+        'Nonprofit',
+        'Government',
+      ],
+    },
+    {
+      name: 'established',
+      label: 'Año de Fundación',
+      type: 'date',
+    },
+  ];
+
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
@@ -3216,96 +3725,6 @@ export class OrganizationsComponent {
 
   onNodeSelected(node: any) {
     console.log('Organization selected:', node);
-    // You can navigate to a detail view or show a dialog here
-  }
-}
-
-## src/app/pages/projects/projects.component.ts <a id="projects_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-- `@angular/common`
-- `@angular/router`
-- `../../services/metadata.service`
-
-// src/app/pages/projects/projects.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
-
-@Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
-})
-export class ProjectsComponent {
-  projectColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'title',
-      label: 'Título',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'creator',
-      label: 'Investigador Principal',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'fundingReference',
-      label: 'Financiamiento',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'language',
-      label: 'Idiomas',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'publisher',
-      label: 'Editor',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-  ];
-
-  constructor(private metadataService: MetadataService) {}
-
-  ngOnInit() {
-    this.metadataService.updateMetadata({
-      title: 'Proyectos de Investigación',
-      description:
-        'Explore research projects and initiatives in the knowledge graph',
-      authors: [],
-      subjects: [],
-    });
-  }
-
-  onNodeSelected(node: any) {
-    console.log('Project selected:', node);
-    // Navigate to project detail or show dialog
   }
 }
 
@@ -3426,12 +3845,318 @@ export class OutputsComponent {
   }
 }
 
+## src/app/pages/persons/persons.component.ts <a id="persons_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/persons/persons.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-persons',
+  templateUrl: './persons.component.html',
+  styleUrls: ['./persons.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class PersonsComponent {
+  personColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'name',
+      label: 'Nombre Completo',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'last_name',
+      label: 'Apellido',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'email_addresses',
+      label: 'Direcciones de Correo',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'research_interests',
+      label: 'Intereses de Investigación',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'academic_titles',
+      label: 'Títulos Académicos',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'affiliations',
+      label: 'Afiliaciones',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'gender',
+      label: 'Género',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Investigadores',
+      description:
+        'Explore researchers, scientists, and contributors in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Person selected:', node);
+    // Navigate to person detail or show dialog
+  }
+}
+
+## src/app/pages/projects/projects.component.ts <a id="projects_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+- `@angular/common`
+- `@angular/router`
+- `../../services/metadata.service`
+
+// src/app/pages/projects/projects.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MetadataService } from '../../services/metadata.service';
+import {
+  GenericListComponent,
+  ListColumn,
+} from '../../components/generic-list/generic-list.component';
+
+@Component({
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss'],
+  imports: [CommonModule, GenericListComponent, RouterModule],
+})
+export class ProjectsComponent {
+  projectColumns: ListColumn[] = [
+    {
+      name: 'id',
+      label: 'ID',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'title',
+      label: 'Título',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'creator',
+      label: 'Investigador Principal',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+    {
+      name: 'fundingReference',
+      label: 'Financiamiento',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'language',
+      label: 'Idiomas',
+      sortable: false,
+      filterable: true,
+      type: 'array',
+    },
+    {
+      name: 'publisher',
+      label: 'Editor',
+      sortable: true,
+      filterable: true,
+      type: 'string',
+    },
+  ];
+
+  constructor(private metadataService: MetadataService) {}
+
+  ngOnInit() {
+    this.metadataService.updateMetadata({
+      title: 'Proyectos de Investigación',
+      description:
+        'Explore research projects and initiatives in the knowledge graph',
+      authors: [],
+      subjects: [],
+    });
+  }
+
+  onNodeSelected(node: any) {
+    console.log('Project selected:', node);
+    // Navigate to project detail or show dialog
+  }
+}
+
+## src/app/components/query-executor/query-executor.component.ts <a id="query-executor_component_ts"></a>
+
+### Dependencies
+
+- `../../api/models/cypher-query.model`
+- `@angular/material/form-field`
+- `@angular/material/icon`
+- `@angular/material/input`
+- `@angular/material/checkbox`
+- `@angular/material/button`
+
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CypherQuery } from '../../api/models/cypher-query.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+
+@Component({
+  selector: 'app-query-executor',
+  templateUrl: './query-executor.component.html',
+  styleUrls: ['./query-executor.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatButtonModule,
+  ],
+})
+export class QueryExecutorComponent {
+  @Output() queryExecuted = new EventEmitter<CypherQuery>();
+  @ViewChild('queryTextarea') queryTextarea!: ElementRef;
+
+  queryForm: FormGroup;
+  parameters: { key: string; value: any }[] = [];
+  showParameters = false;
+
+  constructor(private fb: FormBuilder) {
+    this.queryForm = this.fb.group({
+      query: ['', Validators.required],
+      readonly: [true],
+    });
+  }
+
+  addParameter() {
+    this.parameters.push({ key: "[REDACTED]", value: '' });
+  }
+
+  removeParameter(index: number) {
+    this.parameters.splice(index, 1);
+  }
+
+  onSubmit() {
+    if (this.queryForm.valid) {
+      const formValue = this.queryForm.value;
+      const parametersObj = this.parameters.reduce((acc, param) => {
+        if (param.key) {
+          acc[param.key] = param.value;
+        }
+        return acc;
+      }, {} as { [key: string]: any });
+
+      const queryData: CypherQuery = {
+        query: formValue.query,
+        parameters:
+          Object.keys(parametersObj).length > 0 ? parametersObj : null,
+        readonly: formValue.readonly,
+      };
+
+      this.queryExecuted.emit(queryData);
+    }
+  }
+
+  // Method to load examples
+  loadExample(type: string) {
+    const examples: { [key: string]: string } = {
+      organizations: 'MATCH (n:Organization) RETURN n LIMIT 10',
+      researchers: 'MATCH (n:Person) RETURN n LIMIT 10',
+      publications:
+        'MATCH (n:Output) RETURN n ORDER BY n.publication_date DESC LIMIT 10',
+      relationships:
+        'MATCH (o:Organization)-[r]-(related) RETURN o, r, related LIMIT 15',
+    };
+
+    if (examples[type]) {
+      this.queryForm.patchValue({
+        query: examples[type],
+      });
+
+      // Focus the textarea
+      if (this.queryTextarea) {
+        this.queryTextarea.nativeElement.focus();
+      }
+    }
+  }
+}
+
 ## src/app/pages/query-page/query-page.component.ts <a id="query-page_component_ts"></a>
 
 ### Dependencies
 
 - `@angular/core`
-- `../../api/services/iroko-api.service`
+- `../../services/iroko-api.service`
 - `../../api/models/cypher-query.model`
 - `../../components/query-executor/query-executor.component`
 - `../../components/results-display/results-display.component`
@@ -3443,7 +4168,7 @@ export class OutputsComponent {
 - `@angular/material/icon`
 
 import { Component, ViewChild } from '@angular/core';
-import { IrokoApiService } from '../../api/services/iroko-api.service';
+import { IrokoApiService } from '../../services/iroko-api.service';
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
 import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
@@ -3572,120 +4297,6 @@ export class QueryPageComponent {
   loadExample(exampleId: string) {
     if (this.queryExecutor) {
       this.queryExecutor.loadExample(exampleId);
-    }
-  }
-}
-
-## src/app/components/query-executor/query-executor.component.ts <a id="query-executor_component_ts"></a>
-
-### Dependencies
-
-- `../../api/models/cypher-query.model`
-- `@angular/material/form-field`
-- `@angular/material/icon`
-- `@angular/material/input`
-- `@angular/material/checkbox`
-- `@angular/material/button`
-
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { CypherQuery } from '../../api/models/cypher-query.model';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
-
-@Component({
-  selector: 'app-query-executor',
-  templateUrl: './query-executor.component.html',
-  styleUrls: ['./query-executor.component.scss'],
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatCheckboxModule,
-    MatButtonModule,
-  ],
-})
-export class QueryExecutorComponent {
-  @Output() queryExecuted = new EventEmitter<CypherQuery>();
-  @ViewChild('queryTextarea') queryTextarea!: ElementRef;
-
-  queryForm: FormGroup;
-  parameters: { key: string; value: any }[] = [];
-  showParameters = false;
-
-  constructor(private fb: FormBuilder) {
-    this.queryForm = this.fb.group({
-      query: ['', Validators.required],
-      readonly: [true],
-    });
-  }
-
-  addParameter() {
-    this.parameters.push({ key: "[REDACTED]", value: '' });
-  }
-
-  removeParameter(index: number) {
-    this.parameters.splice(index, 1);
-  }
-
-  onSubmit() {
-    if (this.queryForm.valid) {
-      const formValue = this.queryForm.value;
-      const parametersObj = this.parameters.reduce((acc, param) => {
-        if (param.key) {
-          acc[param.key] = param.value;
-        }
-        return acc;
-      }, {} as { [key: string]: any });
-
-      const queryData: CypherQuery = {
-        query: formValue.query,
-        parameters:
-          Object.keys(parametersObj).length > 0 ? parametersObj : null,
-        readonly: formValue.readonly,
-      };
-
-      this.queryExecuted.emit(queryData);
-    }
-  }
-
-  // Method to load examples
-  loadExample(type: string) {
-    const examples: { [key: string]: string } = {
-      organizations: 'MATCH (n:Organization) RETURN n LIMIT 10',
-      researchers: 'MATCH (n:Person) RETURN n LIMIT 10',
-      publications:
-        'MATCH (n:Output) RETURN n ORDER BY n.publication_date DESC LIMIT 10',
-      relationships:
-        'MATCH (o:Organization)-[r]-(related) RETURN o, r, related LIMIT 15',
-    };
-
-    if (examples[type]) {
-      this.queryForm.patchValue({
-        query: examples[type],
-      });
-
-      // Focus the textarea
-      if (this.queryTextarea) {
-        this.queryTextarea.nativeElement.focus();
-      }
     }
   }
 }
@@ -4103,7 +4714,7 @@ export class SearchResultsComponent implements OnInit {
 
 - `@angular/core`
 - `@angular/common/http`
-- `../api/services/iroko-api.service`
+- `./iroko-api.service`
 
 // src/app/services/search.service.ts
 import { Injectable } from '@angular/core';
@@ -4115,7 +4726,7 @@ import {
   distinctUntilChanged,
   switchMap,
 } from 'rxjs';
-import { IrokoApiService } from '../api/services/iroko-api.service';
+import { IrokoApiService } from './iroko-api.service';
 
 export interface SearchResult {
   id: string;
@@ -4599,33 +5210,6 @@ export interface ValidationError {
   type: string;
 }
 
-## src/app/components/view-class/view-class.component.ts <a id="view-class_component_ts"></a>
-
-### Dependencies
-
-- `@angular/core`
-
-import { Component, Input } from '@angular/core';
-
-/**
- * Visualizar una clase significa:
- * - mostrar las propiedades y relaciones de la clase
- * - visualizar un "resumen" de los datos que existen en el grafo sobre esa clase (averiguar...)
- * - explorar la colleccion de instancias de esa clase.
- * - explorar el grafo a partir de la clase y sus instancias.
- * 
- * 
- * /
-@Component({
-  selector: 'app-view-class',
-  imports: [],
-  templateUrl: './view-class.component.html',
-  styleUrl: './view-class.component.scss',
-})
-export class ViewClassComponent {
-  @Input() className: string = '';
-}
-
 ## src/app/components/view-instance/view-instance.component.ts <a id="view-instance_component_ts"></a>
 
 ### Dependencies
@@ -4756,6 +5340,33 @@ export class VocabulariesComponent {
     console.log('Vocabulario term selected:', node);
     // Navigate to term detail or show dialog
   }
+}
+
+## src/app/components/view-class/view-class.component.ts <a id="view-class_component_ts"></a>
+
+### Dependencies
+
+- `@angular/core`
+
+import { Component, Input } from '@angular/core';
+
+/**
+ * Visualizar una clase significa:
+ * - mostrar las propiedades y relaciones de la clase
+ * - visualizar un "resumen" de los datos que existen en el grafo sobre esa clase (averiguar...)
+ * - explorar la colleccion de instancias de esa clase.
+ * - explorar el grafo a partir de la clase y sus instancias.
+ * 
+ * 
+ * /
+@Component({
+  selector: 'app-view-class',
+  imports: [],
+  templateUrl: './view-class.component.html',
+  styleUrl: './view-class.component.scss',
+})
+export class ViewClassComponent {
+  @Input() className: string = '';
 }
 
 ## public/md/about.md <a id="about_md"></a>
@@ -5670,127 +6281,6 @@ mat-sidenav-content {
   ]
 }
 
-## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.html <a id="enhanced-node-viewer_component_html"></a>
-
-@if (loading) {
-<div class="loading-spinner">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-</div>
-} @else if (node) {
-<div class="node-viewer">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{ node.name || node.title || node.id }}
-      </mat-card-title>
-
-      <mat-card-subtitle
-        ><mat-chip class="entity-type-chip">{{
-          nodeType
-        }}</mat-chip></mat-card-subtitle
-      >
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-tab-group [(selectedIndex)]="activeTab">
-        <!-- Properties Tab -->
-        <mat-tab label="Properties">
-          <div class="properties-grid">
-            @for (prop of getNodeProperties(); track prop.key) {
-            <div class="property-item">
-              <strong class="property-label">{{ prop.key }}:</strong>
-              <div class="property-value-container">
-                @if (isArray(prop.value)) {
-                <div class="array-container">
-                  <ul class="array-list">
-                    @for (item of prop.value; track item) {
-                    <li class="array-list-item">
-                      <span class="array-item-content">{{ item }}</span>
-                    </li>
-                    }
-                  </ul>
-                </div>
-                } @else if (isObject(prop.value)) {
-                <div class="json-container">
-                  <ngx-json-viewer
-                    [json]="prop.value"
-                    [expanded]="false"
-                  ></ngx-json-viewer>
-                </div>
-                } @else {
-                <span class="property-value" [title]="prop.value">
-                  {{ prop.value }}
-                </span>
-                }
-              </div>
-            </div>
-            }
-          </div>
-        </mat-tab>
-
-        <!-- Relationships Tabs -->
-        @for (group of relationshipGroups; track group.type; let i = $index) {
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="direction-icon">
-              {{
-                group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
-              }}
-            </mat-icon>
-            {{ group.type }} ({{ group.totalCount }})
-          </ng-template>
-          <div class="relationships-tab-content">
-            @if (group.isLoading) {
-            <div class="relationships-loading">
-              <mat-progress-spinner
-                diameter="40"
-                mode="indeterminate"
-              ></mat-progress-spinner>
-              <p>Loading relationships...</p>
-            </div>
-            } @else if (group.relationships.length === 0) {
-            <div class="no-relationships">
-              <mat-icon>link_off</mat-icon>
-              <p>No {{ group.type.toLowerCase() }} relationships found</p>
-            </div>
-            } @else {
-            <div class="relationships-grid">
-              @for (rel of getDisplayedRelationships(group); track rel.node.id)
-              {
-              <app-relationship-card
-                [node]="rel.node"
-                [relationship]="rel.relationship"
-                [nodeLabels]="rel.nodeLabels"
-                [relationshipType]="group.type"
-                [direction]="group.direction"
-                (nodeSelected)="onRelatedNodeSelect($event)"
-              ></app-relationship-card>
-              }
-            </div>
-
-            @if (shouldShowPagination(group)) {
-            <app-relationship-pagination
-              [currentPage]="group.currentPage"
-              [pageSize]="group.pageSize"
-              [totalItems]="group.totalCount"
-              [isLoading]="group.isLoading"
-              (pageChange)="loadRelationshipPage(group, $event)"
-            ></app-relationship-pagination>
-            } }
-          </div>
-        </mat-tab>
-        }
-      </mat-tab-group>
-    </mat-card-content>
-  </mat-card>
-</div>
-} @else {
-<div class="no-data">
-  <mat-icon>error_outline</mat-icon>
-  <p>Node not found</p>
-</div>
-}
-
 ## src/app/components/enhanced-node-viewer/enhanced-node-viewer.component.scss <a id="enhanced-node-viewer_component_scss"></a>
 
 .loading-spinner {
@@ -5990,22 +6480,22 @@ mat-sidenav-content {
   }
 }
 
+## src/app/pages/error/error.component.scss <a id="error_component_scss"></a>
+
+
 ## src/app/pages/error/error.component.html <a id="error_component_html"></a>
 
 <p>¡error funciona!</p>
-
-## src/app/pages/error/error.component.scss <a id="error_component_scss"></a>
-
 
 ## src/app/components/generic-list/generic-list.component.html <a id="generic-list_component_html"></a>
 
 <!-- src/app/components/generic-list/generic-list.component.html -->
 <div class="generic-list-container">
-  <!-- Buscar and Sort Controls -->
+  <!-- Search, Sort, and Export Controls -->
   <mat-card class="controls-card">
     <mat-card-content>
       <div class="controls-row">
-        <!-- Buscar Field -->
+        <!-- Search Field -->
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Buscar...</mat-label>
           <input
@@ -6057,111 +6547,251 @@ mat-sidenav-content {
           </button>
           }
         </div>
-        <!-- Advanced Query Controls -->
-        <div class="advanced-query-section">
-          <!-- <button
-            mat-button
-            color="primary"
-            (click)="showAdvancedQuery = !showAdvancedQuery"
-            class="advanced-query-toggle"
+
+        <!-- Export Button -->
+        <div class="export-section">
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="exportCurrentView()"
+            [disabled]="isExporting || totalCount === 0"
+            class="export-btn"
           >
-            <mat-icon>code</mat-icon>
-            Consulta Avanzada @if (hasAdvancedQuery()) {
-            <mat-chip class="active-chip">Activa</mat-chip>
+            <mat-icon>download</mat-icon>
+            {{ isExporting ? "Exporting..." : "Export CSV" }}
+          </button>
+
+          <div class="export-info" *ngIf="totalCount > 0">
+            <small
+              >Exports all {{ totalCount }} records, not just the current
+              page</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls -->
+      @if (filters.length > 0) {
+      <div class="filters-section">
+        <div class="filters-header">
+          <button
+            mat-button
+            (click)="showFilters = !showFilters"
+            class="filters-toggle"
+          >
+            <mat-icon>filter_list</mat-icon>
+            Filtros @if (hasActiveFilters()) {
+            <mat-chip class="active-filter-chip">{{
+              getActiveFilterCount()
+            }}</mat-chip>
             }
-          </button> -->
+          </button>
 
-          @if (showAdvancedQuery) {
-          <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>tune</mat-icon>
-                Consulta Cypher Personalizada
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <div class="advanced-query-content">
-              <!-- Custom WHERE Clause -->
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Cláusula WHERE Personalizada</mat-label>
-                <textarea
-                  matInput
-                  [(ngModel)]="customWhereClause"
-                  placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
-                  rows="3"
-                ></textarea>
-                <mat-hint>
-                  Usa 'n' como alias del nodo principal. Ejemplos:
-                  <code>n.source_type = 'journal'</code>,
-                  <code>EXISTS((n)-[:RELATED_TO]->(:Organization))</code>
-                </mat-hint>
-              </mat-form-field>
-
-              <!-- Custom Parameters -->
-              <div class="parameters-section">
-                <div class="parameters-header">
-                  <h4>Parámetros Personalizados</h4>
-                  <button
-                    mat-button
-                    color="primary"
-                    (click)="addCustomParameter()"
-                  >
-                    <mat-icon>add</mat-icon>
-                    Agregar Parámetro
-                  </button>
-                </div>
-
-                @for (param of customParameters; track param; let i = $index) {
-                <div class="parameter-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Key</mat-label>
-                    <input
-                      matInput
-                      [(ngModel)]="param.key"
-                      placeholder="nombreParametro"
-                    />
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline">
-                    <mat-label>Valor</mat-label>
-                    <input
-                      matInput
-                      [(ngModel)]="param.value"
-                      placeholder="valor"
-                    />
-                  </mat-form-field>
-
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    (click)="removeCustomParameter(i)"
-                    class="remove-param-btn"
-                  >
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-                }
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="advanced-query-actions">
-                <button mat-button (click)="clearAdvancedQuery()">
-                  <mat-icon>clear</mat-icon>
-                  Limpiar
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="applyAdvancedQuery()"
-                >
-                  <mat-icon>play_arrow</mat-icon>
-                  Aplicar Consulta
-                </button>
-              </div>
-            </div>
-          </mat-expansion-panel>
+          @if (hasActiveFilters()) {
+          <button
+            mat-button
+            color="warn"
+            (click)="clearFilters()"
+            class="clear-filters-btn"
+          >
+            <mat-icon>clear</mat-icon>
+            Limpiar Filtros
+          </button>
           }
         </div>
+
+        @if (showFilters) {
+        <div class="filters-content">
+          <form [formGroup]="filterForm" class="filters-form">
+            <div class="filters-grid">
+              @for (filter of filters; track filter.name) {
+              <div class="filter-field">
+                <!-- Text Filter -->
+                @if (filter.type === 'text') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="filter.name"
+                    [placeholder]="filter.placeholder || filter.label"
+                  />
+                </mat-form-field>
+                }
+
+                <!-- Select Filter -->
+                @if (filter.type === 'select') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <mat-select [formControlName]="filter.name">
+                    <mat-option value="">Todos</mat-option>
+                    @for (option of filter.options; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                }
+
+                <!-- Multi-Select Filter -->
+                @if (filter.type === 'multiselect') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <mat-select [formControlName]="filter.name" multiple>
+                    @for (option of filter.options; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                }
+
+                <!-- Date Filter -->
+                @if (filter.type === 'date') {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter.label }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="filter.name"
+                    [matDatepicker]="picker"
+                    [placeholder]="filter.placeholder || 'Seleccionar fecha'"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                }
+
+                <!-- Boolean Filter -->
+                @if (filter.type === 'boolean') {
+                <mat-checkbox [formControlName]="filter.name" color="primary">
+                  {{ filter.label }}
+                </mat-checkbox>
+                }
+              </div>
+              }
+            </div>
+
+            <div class="filter-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="applyFilters()"
+                [disabled]="filterForm.invalid"
+              >
+                <mat-icon>check</mat-icon>
+                Aplicar Filtros
+              </button>
+            </div>
+          </form>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Advanced Query Controls -->
+      <div class="advanced-query-section">
+        <button
+          mat-button
+          color="primary"
+          (click)="showAdvancedQuery = !showAdvancedQuery"
+          class="advanced-query-toggle"
+        >
+          <mat-icon>code</mat-icon>
+          Consulta Avanzada @if (hasAdvancedQuery()) {
+          <mat-chip class="active-chip">Activa</mat-chip>
+          }
+        </button>
+
+        @if (showAdvancedQuery) {
+        <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>tune</mat-icon>
+              Consulta Cypher Personalizada
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="advanced-query-content">
+            <!-- Custom WHERE Clause -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cláusula WHERE Personalizada</mat-label>
+              <textarea
+                matInput
+                [(ngModel)]="customWhereClause"
+                placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
+                rows="3"
+              ></textarea>
+              <mat-hint>
+                Usa 'n' como alias del nodo principal. Ejemplos:
+                <code>n.source_type = 'journal'</code>,
+                <code>EXISTS((n)-[:RELATED_TO]->(:Organization))</code>
+              </mat-hint>
+            </mat-form-field>
+
+            <!-- Custom Parameters -->
+            <div class="parameters-section">
+              <div class="parameters-header">
+                <h4>Parámetros Personalizados</h4>
+                <button
+                  mat-button
+                  color="primary"
+                  (click)="addCustomParameter()"
+                >
+                  <mat-icon>add</mat-icon>
+                  Agregar Parámetro
+                </button>
+              </div>
+
+              @for (param of customParameters; track param; let i = $index) {
+              <div class="parameter-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Key</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="param.key"
+                    placeholder="nombreParametro"
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Valor</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="param.value"
+                    placeholder="valor"
+                  />
+                </mat-form-field>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="removeCustomParameter(i)"
+                  class="remove-param-btn"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="advanced-query-actions">
+              <button mat-button (click)="clearAdvancedQuery()">
+                <mat-icon>clear</mat-icon>
+                Limpiar
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="applyAdvancedQuery()"
+              >
+                <mat-icon>play_arrow</mat-icon>
+                Aplicar Consulta
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        }
       </div>
     </mat-card-content>
   </mat-card>
@@ -6248,7 +6878,7 @@ mat-sidenav-content {
             } }
           </div>
 
-          <!-- Ver Detalles Action -->
+          <!-- View Details Action -->
           <div class="card-actions">
             <button mat-button color="primary" class="view-details-btn">
               Ver Detalles
@@ -6300,6 +6930,81 @@ mat-sidenav-content {
     </div>
   </div>
   }
+</div>
+
+## src/app/components/global-search/global-search.component.html <a id="global-search_component_html"></a>
+
+<!-- src/app/components/global-search/global-search.component.html -->
+<div class="search-container">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Buscar en el grafo de conocimiento...</mat-label>
+    <input
+      #searchInput
+      matInput
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keyup.enter)="onSearchSubmit()"
+      placeholder="Buscar organizations, people, publications..."
+    />
+
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="searchTerm"
+      (click)="clearSearch()"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="!searchTerm"
+      (click)="searchInput.focus()"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <mat-progress-spinner
+      *ngIf="isLoading"
+      matSuffix
+      diameter="20"
+      mode="indeterminate"
+    >
+    </mat-progress-spinner>
+  </mat-form-field>
+
+  <div class="search-results" *ngIf="showResults && searchResults.length > 0">
+    <div class="results-header">
+      <span>Resultados de Búsqueda</span>
+      <small>{{ searchResults.length }} found</small>
+    </div>
+
+    <div class="result-list">
+      <div
+        *ngFor="let result of searchResults"
+        class="result-item"
+        (click)="onResultSelect(result)"
+      >
+        <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
+          {{ result.type }}
+        </mat-chip>
+
+        <div class="result-content">
+          <div class="result-title">{{ result.label }}</div>
+          <div *ngIf="result.description" class="result-description">
+            {{ result.description | slice : 0 : 100
+            }}{{ result.description.length > 100 ? "..." : "" }}
+          </div>
+        </div>
+
+        <mat-icon class="result-arrow">arrow_forward</mat-icon>
+      </div>
+    </div>
+  </div>
 </div>
 
 ## src/app/components/generic-list/generic-list.component.scss <a id="generic-list_component_scss"></a>
@@ -6692,80 +7397,144 @@ code {
   font-size: 0.9em;
 }
 
-## src/app/components/global-search/global-search.component.html <a id="global-search_component_html"></a>
+/* Add these styles to src/app/components/generic-list/generic-list.component.scss */
 
-<!-- src/app/components/global-search/global-search.component.html -->
-<div class="search-container">
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Buscar en el grafo de conocimiento...</mat-label>
-    <input
-      #searchInput
-      matInput
-      type="text"
-      [(ngModel)]="searchTerm"
-      (input)="onSearchInput($event)"
-      (focus)="onFocus()"
-      (blur)="onBlur()"
-      (keyup.enter)="onSearchSubmit()"
-      placeholder="Buscar organizations, people, publications..."
-    />
+/* Export Button */
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
 
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="searchTerm"
-      (click)="clearSearch()"
-    >
-      <mat-icon>clear</mat-icon>
-    </button>
+/* Filters Section */
+.filters-section {
+  margin-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+}
 
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="!searchTerm"
-      (click)="searchInput.focus()"
-    >
-      <mat-icon>search</mat-icon>
-    </button>
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
 
-    <mat-progress-spinner
-      *ngIf="isLoading"
-      matSuffix
-      diameter="20"
-      mode="indeterminate"
-    >
-    </mat-progress-spinner>
-  </mat-form-field>
+.filters-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  <div class="search-results" *ngIf="showResults && searchResults.length > 0">
-    <div class="results-header">
-      <span>Resultados de Búsqueda</span>
-      <small>{{ searchResults.length }} found</small>
-    </div>
+.active-filter-chip {
+  font-size: 0.7em;
+  height: 20px;
+  background-color: #ff9800 !important;
+  color: white !important;
+}
 
-    <div class="result-list">
-      <div
-        *ngFor="let result of searchResults"
-        class="result-item"
-        (click)="onResultSelect(result)"
-      >
-        <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
-          {{ result.type }}
-        </mat-chip>
+.clear-filters-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+}
 
-        <div class="result-content">
-          <div class="result-title">{{ result.label }}</div>
-          <div *ngIf="result.description" class="result-description">
-            {{ result.description | slice : 0 : 100
-            }}{{ result.description.length > 100 ? "..." : "" }}
-          </div>
-        </div>
+.filters-content {
+  background-color: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
 
-        <mat-icon class="result-arrow">arrow_forward</mat-icon>
-      </div>
-    </div>
-  </div>
-</div>
+.filters-form {
+  width: 100%;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+}
+
+/* Responsive adjustments for filters */
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .clear-filters-btn {
+    align-self: flex-end;
+  }
+}
+
+/* Enhanced controls layout */
+.controls-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 300px;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sort-field {
+  width: 200px;
+}
+
+@media (max-width: 768px) {
+  .controls-row {
+    flex-direction: column;
+  }
+
+  .search-field {
+    min-width: 100%;
+  }
+
+  .sort-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .export-btn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 ## src/app/components/global-search/global-search.component.scss <a id="global-search_component_scss"></a>
 
@@ -7407,6 +8176,137 @@ code {
   }
 </div>
 
+## src/app/pages/mes/mes.component.html <a id="mes_component_html"></a>
+
+<!-- src/app/pages/mes/mes.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Revistas Científicas del MES</h1>
+    <p>
+      Explora las revistas y publicaciones científicas del Ministerio de
+      Educación Superior de Cuba.
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Source"
+    [columns]="mesColumns"
+    label="MES Journals"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    [advancedQueryOptions]="mesAdvancedQuery"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/components/markdown-viewer/markdown-viewer.component.scss <a id="markdown-viewer_component_scss"></a>
+
+.markdown-container {
+  padding: 16px;
+
+  // Style markdown content
+  ::ng-deep {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    code {
+      background-color: #f6f8fa;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: #f6f8fa;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+
+      code {
+        background: none;
+        padding: 0;
+      }
+    }
+
+    blockquote {
+      border-left: 4px solid #dfe2e5;
+      padding-left: 16px;
+      margin-left: 0;
+      color: #6a737d;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 16px;
+
+      th,
+      td {
+        border: 1px solid #dfe2e5;
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f6f8fa;
+        font-weight: 600;
+      }
+    }
+
+    a {
+      color: #0366d6;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
 ## src/app/services/map.json <a id="map_json"></a>
 
 {
@@ -7886,137 +8786,6 @@ code {
     }
   ]
 }
-
-## src/app/components/markdown-viewer/markdown-viewer.component.scss <a id="markdown-viewer_component_scss"></a>
-
-.markdown-container {
-  padding: 16px;
-
-  // Style markdown content
-  ::ng-deep {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin-top: 24px;
-      margin-bottom: 16px;
-      color: #333;
-    }
-
-    h1 {
-      font-size: 2rem;
-      border-bottom: 1px solid #eaecef;
-      padding-bottom: 8px;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      border-bottom: 1px solid #eaecef;
-      padding-bottom: 6px;
-    }
-
-    h3 {
-      font-size: 1.25rem;
-    }
-
-    p {
-      margin-bottom: 16px;
-      line-height: 1.6;
-    }
-
-    ul,
-    ol {
-      margin-bottom: 16px;
-      padding-left: 24px;
-    }
-
-    li {
-      margin-bottom: 4px;
-      line-height: 1.6;
-    }
-
-    code {
-      background-color: #f6f8fa;
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-size: 0.9em;
-    }
-
-    pre {
-      background-color: #f6f8fa;
-      padding: 16px;
-      border-radius: 6px;
-      overflow-x: auto;
-      margin-bottom: 16px;
-
-      code {
-        background: none;
-        padding: 0;
-      }
-    }
-
-    blockquote {
-      border-left: 4px solid #dfe2e5;
-      padding-left: 16px;
-      margin-left: 0;
-      color: #6a737d;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 16px;
-
-      th,
-      td {
-        border: 1px solid #dfe2e5;
-        padding: 8px 12px;
-        text-align: left;
-      }
-
-      th {
-        background-color: #f6f8fa;
-        font-weight: 600;
-      }
-    }
-
-    a {
-      color: #0366d6;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-## src/app/pages/mes/mes.component.html <a id="mes_component_html"></a>
-
-<!-- src/app/pages/mes/mes.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Revistas Científicas del MES</h1>
-    <p>
-      Explora las revistas y publicaciones científicas del Ministerio de
-      Educación Superior de Cuba.
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Source"
-    [columns]="mesColumns"
-    label="MES Journals"
-    [defaultSort]="'title'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    [advancedQueryOptions]="mesAdvancedQuery"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
 
 ## src/app/pages/mes/mes.component.scss <a id="mes_component_scss"></a>
 
@@ -8650,6 +9419,8 @@ code {
     [defaultSortOrder]="'ASC'"
     [pageSize]="10"
     (nodeSelected)="onNodeSelected($event)"
+    [filters]="organizationFilters"
+    searchIndex="organizationSearch"
   >
   </app-generic-list>
 </div>
@@ -9079,11 +9850,77 @@ code {
     [defaultSortOrder]="'DESC'"
     [pageSize]="10"
     (nodeSelected)="onNodeSelected($event)"
+    searchIndex="outputSearch"
   >
   </app-generic-list>
 </div>
 
 ## src/app/pages/outputs/outputs.component.scss <a id="outputs_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
+## src/app/pages/persons/persons.component.html <a id="persons_component_html"></a>
+
+<!-- src/app/pages/persons/persons.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Investigadores</h1>
+    <p>
+      Explora investigadores, científicos y colaboradores de diversas
+      instituciones y disciplinas.
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Person"
+    [columns]="personColumns"
+    label="Investigadores"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+    searchIndex="personSearch"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/persons/persons.component.scss <a id="persons_component_scss"></a>
+
+### Dependencies
+
+- `../page-styles`
+
+@use "../page-styles";
+
+## src/app/pages/projects/projects.component.html <a id="projects_component_html"></a>
+
+<!-- src/app/pages/projects/projects.component.html -->
+<div class="page-container">
+  <div class="page-header">
+    <h1>Proyectos de Investigación</h1>
+    <p>
+      Explora proyectos de investigación, subvenciones e iniciativas científicas
+      en diversos ámbitos.
+    </p>
+  </div>
+
+  <app-generic-list
+    entityType="Project"
+    [columns]="projectColumns"
+    label="Projects"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list>
+</div>
+
+## src/app/pages/projects/projects.component.scss <a id="projects_component_scss"></a>
 
 ### Dependencies
 
@@ -9357,38 +10194,6 @@ code {
   }
 }
 
-
-## src/app/pages/persons/persons.component.html <a id="persons_component_html"></a>
-
-<!-- src/app/pages/persons/persons.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Investigadores</h1>
-    <p>
-      Explora investigadores, científicos y colaboradores de diversas
-      instituciones y disciplinas.
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Person"
-    [columns]="personColumns"
-    label="Investigadores"
-    [defaultSort]="'name'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/pages/persons/persons.component.scss <a id="persons_component_scss"></a>
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
 
 ## src/app/schemas/project-v1.0.0.json <a id="project-v1_0_0_json"></a>
 
@@ -9908,38 +10713,6 @@ code {
   }
 }
 
-## src/app/pages/projects/projects.component.html <a id="projects_component_html"></a>
-
-<!-- src/app/pages/projects/projects.component.html -->
-<div class="page-container">
-  <div class="page-header">
-    <h1>Proyectos de Investigación</h1>
-    <p>
-      Explora proyectos de investigación, subvenciones e iniciativas científicas
-      en diversos ámbitos.
-    </p>
-  </div>
-
-  <app-generic-list
-    entityType="Project"
-    [columns]="projectColumns"
-    label="Projects"
-    [defaultSort]="'title'"
-    [defaultSortOrder]="'ASC'"
-    [pageSize]="10"
-    (nodeSelected)="onNodeSelected($event)"
-  >
-  </app-generic-list>
-</div>
-
-## src/app/pages/projects/projects.component.scss <a id="projects_component_scss"></a>
-
-### Dependencies
-
-- `../page-styles`
-
-@use "../page-styles";
-
 ## proxy.conf.json <a id="proxy_conf_json"></a>
 
 {
@@ -10377,6 +11150,90 @@ code {
     </div>
   </div>
 </div>
+
+## src/app/components/relationship-card/relationship-card.component.html <a id="relationship-card_component_html"></a>
+
+<mat-card class="relationship-card">
+  <mat-card-header>
+    <div class="card-header-content">
+      <div class="node-title-section">
+        <mat-card-title class="node-title">
+          {{ getNodeDisplayName() }}
+        </mat-card-title>
+        <mat-card-subtitle class="node-type">
+          <mat-chip class="entity-type-chip">
+            {{ getNodeType() }}
+          </mat-chip>
+        </mat-card-subtitle>
+      </div>
+      <!-- <div class="relationship-info">
+        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
+          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
+          {{ getDirectionLabel() }}
+        </mat-chip>
+        <mat-chip class="type-chip">
+          {{ relationshipType }}
+        </mat-chip>
+      </div> -->
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Node Properties -->
+    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
+      <div class="properties-grid">
+        <div *ngFor="let prop of getNodeProperties()" class="property-item">
+          <strong class="property-label">{{ prop.key }}:</strong>
+          <div class="property-value-container">
+            @if (isArray(prop.value)) {
+            <div class="array-container">
+              @for (item of prop.value; track item; let last = $last) {
+              <span class="array-item">
+                {{ item }}@if (!last) {<span class="array-separator">, </span>}
+              </span>
+              }
+            </div>
+            } @else if (isObject(prop.value)) {
+            <div class="json-container">
+              <ngx-json-viewer
+                [json]="prop.value"
+                [expanded]="false"
+                class="json-viewer"
+              >
+              </ngx-json-viewer>
+            </div>
+            } @else {
+            <span class="property-value" [title]="prop.value">
+              {{ formatPropertyValue(prop.value) }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Properties Message -->
+    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
+      <mat-icon>info</mat-icon>
+      <span>No properties available</span>
+    </div>
+  </mat-card-content>
+
+  <!-- Ver Detalles Action (only for allowed node types) -->
+  @if (shouldShowViewDetails()) {
+  <mat-card-actions align="end">
+    <button
+      mat-button
+      color="primary"
+      (click)="onViewDetails($event)"
+      class="view-details-btn"
+    >
+      <mat-icon>arrow_forward</mat-icon>
+      Ver Detalles
+    </button>
+  </mat-card-actions>
+  }
+</mat-card>
 
 ## src/app/pages/query-page/query-page.component.scss <a id="query-page_component_scss"></a>
 
@@ -11323,90 +12180,6 @@ code {
   height: 20px;
 }
 
-## src/app/components/relationship-card/relationship-card.component.html <a id="relationship-card_component_html"></a>
-
-<mat-card class="relationship-card">
-  <mat-card-header>
-    <div class="card-header-content">
-      <div class="node-title-section">
-        <mat-card-title class="node-title">
-          {{ getNodeDisplayName() }}
-        </mat-card-title>
-        <mat-card-subtitle class="node-type">
-          <mat-chip class="entity-type-chip">
-            {{ getNodeType() }}
-          </mat-chip>
-        </mat-card-subtitle>
-      </div>
-      <!-- <div class="relationship-info">
-        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
-          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
-          {{ getDirectionLabel() }}
-        </mat-chip>
-        <mat-chip class="type-chip">
-          {{ relationshipType }}
-        </mat-chip>
-      </div> -->
-    </div>
-  </mat-card-header>
-
-  <mat-card-content>
-    <!-- Node Properties -->
-    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
-      <div class="properties-grid">
-        <div *ngFor="let prop of getNodeProperties()" class="property-item">
-          <strong class="property-label">{{ prop.key }}:</strong>
-          <div class="property-value-container">
-            @if (isArray(prop.value)) {
-            <div class="array-container">
-              @for (item of prop.value; track item; let last = $last) {
-              <span class="array-item">
-                {{ item }}@if (!last) {<span class="array-separator">, </span>}
-              </span>
-              }
-            </div>
-            } @else if (isObject(prop.value)) {
-            <div class="json-container">
-              <ngx-json-viewer
-                [json]="prop.value"
-                [expanded]="false"
-                class="json-viewer"
-              >
-              </ngx-json-viewer>
-            </div>
-            } @else {
-            <span class="property-value" [title]="prop.value">
-              {{ formatPropertyValue(prop.value) }}
-            </span>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- No Properties Message -->
-    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
-      <mat-icon>info</mat-icon>
-      <span>No properties available</span>
-    </div>
-  </mat-card-content>
-
-  <!-- Ver Detalles Action (only for allowed node types) -->
-  @if (shouldShowViewDetails()) {
-  <mat-card-actions align="end">
-    <button
-      mat-button
-      color="primary"
-      (click)="onViewDetails($event)"
-      class="view-details-btn"
-    >
-      <mat-icon>arrow_forward</mat-icon>
-      Ver Detalles
-    </button>
-  </mat-card-actions>
-  }
-</mat-card>
-
 ## src/app/components/relationship-pagination/relationship-pagination.component.html <a id="relationship-pagination_component_html"></a>
 
 <div class="pagination-container">
@@ -11458,28 +12231,6 @@ code {
     ></mat-progress-spinner>
   </div>
 </div>
-
-## src/app/components/results-display/results-display.component.html <a id="results-display_component_html"></a>
-
-@if (queryResult || error) {
-  <div class="results-container">
-    @if (error) {
-      <div class="error-message">
-        <h3>Error</h3>
-        <pre>{{ error | json }}</pre>
-      </div>
-    }
-    @if (queryResult) {
-      <div class="query-result">
-        <h3>Resultados de la Consulta</h3>
-        <ngx-json-viewer [json]="queryResult" [expanded]="false"></ngx-json-viewer>
-      </div>
-    }
-  </div>
-}
-
-## src/app/components/results-display/results-display.component.scss <a id="results-display_component_scss"></a>
-
 
 ## src/app/components/relationship-pagination/relationship-pagination.component.scss <a id="relationship-pagination_component_scss"></a>
 
@@ -11549,6 +12300,28 @@ code {
     }
   }
 }
+
+## src/app/components/results-display/results-display.component.html <a id="results-display_component_html"></a>
+
+@if (queryResult || error) {
+  <div class="results-container">
+    @if (error) {
+      <div class="error-message">
+        <h3>Error</h3>
+        <pre>{{ error | json }}</pre>
+      </div>
+    }
+    @if (queryResult) {
+      <div class="query-result">
+        <h3>Resultados de la Consulta</h3>
+        <ngx-json-viewer [json]="queryResult" [expanded]="false"></ngx-json-viewer>
+      </div>
+    }
+  </div>
+}
+
+## src/app/components/results-display/results-display.component.scss <a id="results-display_component_scss"></a>
+
 
 ## src/app/pages/search-results/search-results.component.html <a id="search-results_component_html"></a>
 
@@ -11929,6 +12702,7 @@ code {
     [defaultSortOrder]="'ASC'"
     [pageSize]="10"
     (nodeSelected)="onNodeSelected($event)"
+    searchIndex="sourceSearch"
   >
   </app-generic-list>
 </div>
@@ -12400,9 +13174,6 @@ html {
 
 <p>view-class works!</p>
 
-## src/app/components/view-class/view-class.component.scss <a id="view-class_component_scss"></a>
-
-
 ## src/app/components/view-instance/view-instance.component.html <a id="view-instance_component_html"></a>
 
 <p>view-instance works!</p>
@@ -12441,6 +13212,9 @@ html {
 - `../page-styles`
 
 @use "../page-styles";
+
+## src/app/components/view-class/view-class.component.scss <a id="view-class_component_scss"></a>
+
 ## Code Visualization
 
 
@@ -12459,115 +13233,117 @@ Below is a visualization of file dependencies in the codebase:
 ```mermaid
 graph LR
   F1_iroko-ui-pwa_.gitignore[".gitignore"]
-  F2_iroko-ui-pwa_package.json["package.json"]
-  F3_iroko-ui-pwa_README.md["README.md"]
-  F4_src_main.ts["main.ts"]
-  F5_iroko-ui-pwa_tsconfig.json["tsconfig.json"]
-  F6_about_about.component.ts["about.component.ts"]
-  F7_app_app.component.ts["app.component.ts"]
-  F8_app_app.config.ts["app.config.ts"]
-  F9_app_app.routes.ts["app.routes.ts"]
-  F10_services_cache.service.ts["cache.service.ts"]
-  F11_interceptors_caching.interceptor.ts["caching.interceptor.ts"]
-  F12_services_config.service.ts["config.service.ts"]
-  F13_services_cypher-builder.service.ts["cypher-builder.service.ts"]
-  F14_models_cypher-query.model.ts["cypher-query.model.ts"]
-  F15_enhanced-node-viewer_enhanced-node-viewer.component.ts["enhanced-node-viewer.component.ts"]
-  F16_services_error-handler.service.ts["error-handler.service.ts"]
-  F17_error_error.component.ts["error.component.ts"]
-  F18_services_export.service.ts["export.service.ts"]
-  F19_global-search_global-search.component.ts["global-search.component.ts"]
-  F20_home_home.component.ts["home.component.ts"]
-  F21_generic-list_generic-list.component.ts["generic-list.component.ts"]
-  F22_models_http-validation-error.model.ts["http-validation-error.model.ts"]
-  F23_services_iroko-api.service.ts["iroko-api.service.ts"]
-  F24_markdown-viewer_markdown-viewer.component.ts["markdown-viewer.component.ts"]
-  F25_mes_mes.component.ts["mes.component.ts"]
-  F26_services_metadata.service.ts["metadata.service.ts"]
-  F27_node-view_node-view.component.ts["node-view.component.ts"]
-  F28_persons_persons.component.ts["persons.component.ts"]
-  F29_organizations_organizations.component.ts["organizations.component.ts"]
-  F30_projects_projects.component.ts["projects.component.ts"]
-  F31_outputs_outputs.component.ts["outputs.component.ts"]
-  F32_query-executor_query-executor.component.ts["query-executor.component.ts"]
-  F33_query-page_query-page.component.ts["query-page.component.ts"]
-  F34_relationship-card_relationship-card.component.ts["relationship-card.component.ts"]
-  F35_relationship-pagination_relationship-pagination.component.ts["relationship-pagination.component.ts"]
-  F36_results-display_results-display.component.ts["results-display.component.ts"]
-  F37_search-results_search-results.component.ts["search-results.component.ts"]
-  F38_services_search.service.ts["search.service.ts"]
-  F39_sources_sources.component.ts["sources.component.ts"]
-  F40_iroko-ui-pwa_translate-to-spanish.js["translate-to-spanish.js"]
-  F41_models_validation-error.model.ts["validation-error.model.ts"]
-  F42_view-class_view-class.component.ts["view-class.component.ts"]
-  F43_view-instance_view-instance.component.ts["view-instance.component.ts"]
-  F44_vocabularies_vocabularies.component.ts["vocabularies.component.ts"]
-  F45_md_about.md["about.md"]
-  F46_pages__page-styles.scss["_page-styles.scss"]
-  F47_iroko-ui-pwa_.postcssrc.json[".postcssrc.json"]
-  F48_about_about.component.html["about.component.html"]
-  F49_about_about.component.scss["about.component.scss"]
-  F50_iroko-ui-pwa_angular.json["angular.json"]
-  F51_app_app.component.html["app.component.html"]
-  F52_app_app.component.scss["app.component.scss"]
-  F53_public_config.json["config.json"]
-  F54_enhanced-node-viewer_enhanced-node-viewer.component.html["enhanced-node-viewer.component.html"]
-  F55_enhanced-node-viewer_enhanced-node-viewer.component.scss["enhanced-node-viewer.component.scss"]
-  F56_error_error.component.html["error.component.html"]
-  F57_error_error.component.scss["error.component.scss"]
-  F58_generic-list_generic-list.component.html["generic-list.component.html"]
-  F59_generic-list_generic-list.component.scss["generic-list.component.scss"]
-  F60_global-search_global-search.component.html["global-search.component.html"]
-  F61_global-search_global-search.component.scss["global-search.component.scss"]
-  F62_home_home.component.html["home.component.html"]
-  F63_home_home.component.scss["home.component.scss"]
-  F64_src_index.html["index.html"]
-  F65_markdown-viewer_markdown-viewer.component.html["markdown-viewer.component.html"]
-  F66_services_map.json["map.json"]
-  F67_markdown-viewer_markdown-viewer.component.scss["markdown-viewer.component.scss"]
+  F2_app_app.component.ts["app.component.ts"]
+  F3_enhanced-node-viewer_enhanced-node-viewer.component.ts["enhanced-node-viewer.component.ts"]
+  F4_services_label.service.ts["label.service.ts"]
+  F5_enhanced-node-viewer_enhanced-node-viewer.component.html["enhanced-node-viewer.component.html"]
+  F6_public_labels.json["labels.json"]
+  F7_iroko-ui-pwa_package.json["package.json"]
+  F8_iroko-ui-pwa_README.md["README.md"]
+  F9_iroko-ui-pwa_tsconfig.json["tsconfig.json"]
+  F10_src_main.ts["main.ts"]
+  F11_about_about.component.ts["about.component.ts"]
+  F12_app_app.routes.ts["app.routes.ts"]
+  F13_app_app.config.ts["app.config.ts"]
+  F14_services_cache.service.ts["cache.service.ts"]
+  F15_interceptors_caching.interceptor.ts["caching.interceptor.ts"]
+  F16_services_config.service.ts["config.service.ts"]
+  F17_services_cypher-builder.service.ts["cypher-builder.service.ts"]
+  F18_models_cypher-query.model.ts["cypher-query.model.ts"]
+  F19_services_error-handler.service.ts["error-handler.service.ts"]
+  F20_error_error.component.ts["error.component.ts"]
+  F21_services_export.service.ts["export.service.ts"]
+  F22_generic-list_generic-list.component.ts["generic-list.component.ts"]
+  F23_global-search_global-search.component.ts["global-search.component.ts"]
+  F24_home_home.component.ts["home.component.ts"]
+  F25_models_http-validation-error.model.ts["http-validation-error.model.ts"]
+  F26_services_iroko-api.service.ts["iroko-api.service.ts"]
+  F27_markdown-viewer_markdown-viewer.component.ts["markdown-viewer.component.ts"]
+  F28_mes_mes.component.ts["mes.component.ts"]
+  F29_services_metadata.service.ts["metadata.service.ts"]
+  F30_node-view_node-view.component.ts["node-view.component.ts"]
+  F31_organizations_organizations.component.ts["organizations.component.ts"]
+  F32_outputs_outputs.component.ts["outputs.component.ts"]
+  F33_persons_persons.component.ts["persons.component.ts"]
+  F34_projects_projects.component.ts["projects.component.ts"]
+  F35_query-executor_query-executor.component.ts["query-executor.component.ts"]
+  F36_query-page_query-page.component.ts["query-page.component.ts"]
+  F37_relationship-card_relationship-card.component.ts["relationship-card.component.ts"]
+  F38_relationship-pagination_relationship-pagination.component.ts["relationship-pagination.component.ts"]
+  F39_results-display_results-display.component.ts["results-display.component.ts"]
+  F40_search-results_search-results.component.ts["search-results.component.ts"]
+  F41_services_search.service.ts["search.service.ts"]
+  F42_sources_sources.component.ts["sources.component.ts"]
+  F43_iroko-ui-pwa_translate-to-spanish.js["translate-to-spanish.js"]
+  F44_models_validation-error.model.ts["validation-error.model.ts"]
+  F45_view-class_view-class.component.ts["view-class.component.ts"]
+  F46_view-instance_view-instance.component.ts["view-instance.component.ts"]
+  F47_vocabularies_vocabularies.component.ts["vocabularies.component.ts"]
+  F48_md_about.md["about.md"]
+  F49_pages__page-styles.scss["_page-styles.scss"]
+  F50_iroko-ui-pwa_.postcssrc.json[".postcssrc.json"]
+  F51_about_about.component.html["about.component.html"]
+  F52_about_about.component.scss["about.component.scss"]
+  F53_iroko-ui-pwa_angular.json["angular.json"]
+  F54_app_app.component.html["app.component.html"]
+  F55_app_app.component.scss["app.component.scss"]
+  F56_public_config.json["config.json"]
+  F57_enhanced-node-viewer_enhanced-node-viewer.component.scss["enhanced-node-viewer.component.scss"]
+  F58_error_error.component.scss["error.component.scss"]
+  F59_error_error.component.html["error.component.html"]
+  F60_generic-list_generic-list.component.html["generic-list.component.html"]
+  F61_global-search_global-search.component.html["global-search.component.html"]
+  F62_generic-list_generic-list.component.scss["generic-list.component.scss"]
+  F63_global-search_global-search.component.scss["global-search.component.scss"]
+  F64_home_home.component.html["home.component.html"]
+  F65_home_home.component.scss["home.component.scss"]
+  F66_src_index.html["index.html"]
+  F67_markdown-viewer_markdown-viewer.component.html["markdown-viewer.component.html"]
   F68_mes_mes.component.html["mes.component.html"]
-  F69_mes_mes.component.scss["mes.component.scss"]
-  F70_iroko-ui-pwa_ngsw-config.json["ngsw-config.json"]
-  F71_node-view_node-view.component.html["node-view.component.html"]
-  F72_node-view_node-view.component.scss["node-view.component.scss"]
-  F73_services_openapi.json["openapi.json"]
-  F74_schemas_organization-v1.0.0.json["organization-v1.0.0.json"]
-  F75_organizations_organizations.component.html["organizations.component.html"]
-  F76_organizations_organizations.component.scss["organizations.component.scss"]
-  F77_schemas_output-v1.0.0.json["output-v1.0.0.json"]
-  F78_outputs_outputs.component.html["outputs.component.html"]
-  F79_outputs_outputs.component.scss["outputs.component.scss"]
-  F80_schemas_person-v1.0.0.json["person-v1.0.0.json"]
-  F81_persons_persons.component.html["persons.component.html"]
-  F82_persons_persons.component.scss["persons.component.scss"]
-  F83_schemas_project-v1.0.0.json["project-v1.0.0.json"]
+  F69_markdown-viewer_markdown-viewer.component.scss["markdown-viewer.component.scss"]
+  F70_services_map.json["map.json"]
+  F71_mes_mes.component.scss["mes.component.scss"]
+  F72_iroko-ui-pwa_ngsw-config.json["ngsw-config.json"]
+  F73_node-view_node-view.component.html["node-view.component.html"]
+  F74_node-view_node-view.component.scss["node-view.component.scss"]
+  F75_services_openapi.json["openapi.json"]
+  F76_schemas_organization-v1.0.0.json["organization-v1.0.0.json"]
+  F77_organizations_organizations.component.html["organizations.component.html"]
+  F78_organizations_organizations.component.scss["organizations.component.scss"]
+  F79_schemas_output-v1.0.0.json["output-v1.0.0.json"]
+  F80_outputs_outputs.component.html["outputs.component.html"]
+  F81_outputs_outputs.component.scss["outputs.component.scss"]
+  F82_persons_persons.component.html["persons.component.html"]
+  F83_persons_persons.component.scss["persons.component.scss"]
   F84_projects_projects.component.html["projects.component.html"]
   F85_projects_projects.component.scss["projects.component.scss"]
-  F86_iroko-ui-pwa_proxy.conf.json["proxy.conf.json"]
-  F87_query-executor_query-executor.component.scss["query-executor.component.scss"]
-  F88_query-executor_query-executor.component.html["query-executor.component.html"]
-  F89_query-page_query-page.component.html["query-page.component.html"]
-  F90_query-page_query-page.component.scss["query-page.component.scss"]
-  F91_relationship-card_relationship-card.component.scss["relationship-card.component.scss"]
+  F86_schemas_person-v1.0.0.json["person-v1.0.0.json"]
+  F87_schemas_project-v1.0.0.json["project-v1.0.0.json"]
+  F88_iroko-ui-pwa_proxy.conf.json["proxy.conf.json"]
+  F89_query-executor_query-executor.component.scss["query-executor.component.scss"]
+  F90_query-executor_query-executor.component.html["query-executor.component.html"]
+  F91_query-page_query-page.component.html["query-page.component.html"]
   F92_relationship-card_relationship-card.component.html["relationship-card.component.html"]
-  F93_relationship-pagination_relationship-pagination.component.html["relationship-pagination.component.html"]
-  F94_results-display_results-display.component.html["results-display.component.html"]
-  F95_results-display_results-display.component.scss["results-display.component.scss"]
+  F93_query-page_query-page.component.scss["query-page.component.scss"]
+  F94_relationship-card_relationship-card.component.scss["relationship-card.component.scss"]
+  F95_relationship-pagination_relationship-pagination.component.html["relationship-pagination.component.html"]
   F96_relationship-pagination_relationship-pagination.component.scss["relationship-pagination.component.scss"]
-  F97_search-results_search-results.component.html["search-results.component.html"]
-  F98_search-results_search-results.component.scss["search-results.component.scss"]
-  F99_schemas_source-v1.0.0.json["source-v1.0.0.json"]
-  F100_sources_sources.component.html["sources.component.html"]
-  F101_sources_sources.component.scss["sources.component.scss"]
-  F102_src_styles_theme-iroko.scss["styles_theme-iroko.scss"]
-  F103_src_styles.scss["styles.scss"]
-  F104_iroko-ui-pwa_tsconfig.app.json["tsconfig.app.json"]
-  F105_view-class_view-class.component.html["view-class.component.html"]
-  F106_view-class_view-class.component.scss["view-class.component.scss"]
-  F107_view-instance_view-instance.component.html["view-instance.component.html"]
-  F108_view-instance_view-instance.component.scss["view-instance.component.scss"]
-  F109_vocabularies_vocabularies.component.html["vocabularies.component.html"]
-  F110_vocabularies_vocabularies.component.scss["vocabularies.component.scss"]
+  F97_results-display_results-display.component.html["results-display.component.html"]
+  F98_results-display_results-display.component.scss["results-display.component.scss"]
+  F99_search-results_search-results.component.html["search-results.component.html"]
+  F100_search-results_search-results.component.scss["search-results.component.scss"]
+  F101_schemas_source-v1.0.0.json["source-v1.0.0.json"]
+  F102_sources_sources.component.html["sources.component.html"]
+  F103_sources_sources.component.scss["sources.component.scss"]
+  F104_src_styles_theme-iroko.scss["styles_theme-iroko.scss"]
+  F105_src_styles.scss["styles.scss"]
+  F106_iroko-ui-pwa_tsconfig.app.json["tsconfig.app.json"]
+  F107_view-class_view-class.component.html["view-class.component.html"]
+  F108_view-instance_view-instance.component.html["view-instance.component.html"]
+  F109_view-instance_view-instance.component.scss["view-instance.component.scss"]
+  F110_vocabularies_vocabularies.component.html["vocabularies.component.html"]
+  F111_vocabularies_vocabularies.component.scss["vocabularies.component.scss"]
+  F112_view-class_view-class.component.scss["view-class.component.scss"]
 ```
 
 ### Class Relationships

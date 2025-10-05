@@ -9,18 +9,15 @@
       <mat-card-title>
         {{ node.name || node.title || node.id }}
       </mat-card-title>
-
-      <mat-card-subtitle
-        ><mat-chip class="entity-type-chip">{{
-          nodeType
-        }}</mat-chip></mat-card-subtitle
-      >
+      <mat-card-subtitle>
+        <mat-chip class="entity-type-chip">{{ nodeType }}</mat-chip>
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <mat-tab-group [(selectedIndex)]="activeTab">
-        <!-- Properties Tab -->
-        <mat-tab label="Properties">
+        <!-- Properties Tab (unchanged) -->
+        <mat-tab label="Propiedades">
           <div class="properties-grid">
             @for (prop of getNodeProperties(); track prop.key) {
             <div class="property-item">
@@ -63,23 +60,79 @@
                 group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
               }}
             </mat-icon>
-            {{ group.type }} ({{ group.totalCount }})
+            {{ labelName(group.type) }} ({{ group.totalCount }})
           </ng-template>
+
           <div class="relationships-tab-content">
-            @if (group.isLoading) {
+            <!-- Search Bar -->
+            @if (group.searchIndex) {
+            <div class="relationship-search-container">
+              <mat-form-field
+                appearance="outline"
+                class="relationship-search-field"
+              >
+                <mat-label>Buscar en {{ labelName(group.type) }}</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="group.searchTerm"
+                  (keyup.enter)="
+                    onRelationshipSearch(group, group.searchTerm || '')
+                  "
+                  placeholder="Escriba para buscar..."
+                />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  *ngIf="group.searchTerm"
+                  (click)="clearRelationshipSearch(group)"
+                >
+                  <mat-icon>clear</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  matSuffix
+                  (click)="onRelationshipSearch(group, group.searchTerm || '')"
+                >
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            } @if (group.isLoading) {
             <div class="relationships-loading">
               <mat-progress-spinner
                 diameter="40"
                 mode="indeterminate"
               ></mat-progress-spinner>
-              <p>Loading relationships...</p>
+              <p>
+                {{
+                  group.isSearching
+                    ? "Buscando relaciones..."
+                    : "Cargando relaciones..."
+                }}
+              </p>
             </div>
             } @else if (group.relationships.length === 0) {
             <div class="no-relationships">
               <mat-icon>link_off</mat-icon>
-              <p>No {{ group.type.toLowerCase() }} relationships found</p>
+              <p>
+                @if (group.searchTerm) { No se encontraron relaciones de
+                {{ group.type.toLowerCase() }} que coincidan con "{{
+                  group.searchTerm
+                }}" } @else { No se encontraron relaciones de
+                {{ group.type.toLowerCase() }}
+                }
+              </p>
             </div>
-            } @else {
+            } @else { @if (shouldShowPagination(group)) {
+            <app-relationship-pagination
+              [currentPage]="group.currentPage"
+              [pageSize]="group.pageSize"
+              [totalItems]="group.totalCount"
+              [isLoading]="group.isLoading"
+              (pageChange)="loadRelationshipPage(group, $event)"
+            ></app-relationship-pagination>
+            }
+
             <div class="relationships-grid">
               @for (rel of getDisplayedRelationships(group); track rel.node.id)
               {

@@ -194,3 +194,32 @@
     overflow-wrap: break-word;
   }
 }
+// Add to the existing styles
+.relationship-search-container {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.relationship-search-field {
+  width: 100%;
+
+  .mat-form-field-wrapper {
+    margin-bottom: 0;
+  }
+}
+
+// Update the relationships-tab-content to account for search bar
+.relationships-tab-content {
+  padding: 0; // Remove top padding since search container has its own
+
+  .relationships-loading,
+  .no-relationships {
+    padding: 40px 16px; // Add horizontal padding
+  }
+}
+
+// Ensure search results are properly styled
+.relationships-grid {
+  padding: 16px;
+}
