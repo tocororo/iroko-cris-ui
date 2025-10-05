@@ -11,7 +11,12 @@ import { OutputsComponent } from './pages/outputs/outputs.component';
 import { VocabulariesComponent } from './pages/vocabularies/vocabularies.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { NodeViewComponent } from './pages/node-view/node-view.component';
-import { AboutComponent } from './pages/about/about.component'; // Add this import
+import { AboutComponent } from './pages/about/about.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -57,7 +62,12 @@ export const routes: Routes = [
   {
     path: 'query',
     component: QueryPageComponent,
-    data: { title: 'Consulta Cypher' },
+    data: {
+      title: 'Consulta Cypher',
+      roles: ['admin', 'researcher', 'user'], // Only these roles can access
+      permissions: ['query:execute'], // And must have this permission
+    },
+    canActivate: [AuthGuard, RoleGuard],
   },
   {
     path: 'search',
@@ -70,9 +80,24 @@ export const routes: Routes = [
     data: { title: 'Detalles del Nodo' },
   },
   {
-    path: 'about', // Add this route
+    path: 'about',
     component: AboutComponent,
     data: { title: 'Acerca de' },
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: { title: 'Login' },
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: { title: 'Register' },
+  },
+  {
+    path: 'access-denied',
+    component: AccessDeniedComponent,
+    data: { title: 'Access Denied' },
   },
   {
     path: '**',

@@ -1,0 +1,177 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.register-card-wrapper {
+  width: 100%;
+  max-width: 450px;
+}
+
+.register-card {
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+
+  mat-card-header {
+    text-align: center;
+    margin-bottom: 24px;
+
+    mat-card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #006d33;
+      margin-bottom: 8px;
+    }
+
+    mat-card-subtitle {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.register-button {
+  height: 48px;
+  font-size: 1rem;
+  margin-top: 8px;
+
+  mat-spinner {
+    margin-right: 8px;
+  }
+}
+
+.card-actions-center {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 0 0;
+}
+
+.login-link {
+  color: #006d33;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// CAPTCHA Styles
+.captcha-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fafafa;
+
+  h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 1rem;
+  }
+
+  .captcha-description {
+    margin: 0 0 16px 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+}
+
+.captcha-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  color: #666;
+}
+
+.captcha-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.captcha-image-container {
+  position: relative;
+  display: inline-block;
+  align-self: flex-start;
+
+  .captcha-image {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background: white;
+    max-width: 200px;
+    height: auto;
+    display: block; /* Ensure it's displayed as block */
+  }
+
+  .refresh-captcha {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(255, 255, 255, 0.9);
+
+    &:hover {
+      background: white;
+    }
+  }
+}
+
+.captcha-input {
+  margin-top: 8px;
+}
+
+// Debug Section Styles
+.debug-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+
+  h4 {
+    margin: 0 0 10px 0;
+    color: #495057;
+  }
+
+  p {
+    margin: 5px 0;
+    word-break: break-all;
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .register-container {
+    padding: 16px;
+  }
+
+  .register-card {
+    padding: 20px;
+  }
+
+  .captcha-image-container {
+    align-self: center;
+  }
+
+  .debug-section {
+    font-size: 0.7rem;
+  }
+}

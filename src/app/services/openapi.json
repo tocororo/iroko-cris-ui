@@ -1,12 +1,14 @@
 {
   "openapi": "3.1.0",
   "info": { "title": "Iroko API", "version": "0.1.0" },
+  "servers": [{ "url": "/api" }],
   "paths": {
-    "/api/v1/query": {
+    "/v1/cypher/query": {
       "post": {
+        "tags": ["cypher"],
         "summary": "Execute a read-only Cypher query",
         "description": "Execute a safe Cypher query with parameters.\n\n- **query**: Valid Cypher read-only query\n- **parameters**: Optional query parameters\n- **readonly**: Enforce read-only mode (default: True)",
-        "operationId": "execute_cypher_api_v1_query_post",
+        "operationId": "execute_query_v1_cypher_query_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -30,10 +32,446 @@
           }
         }
       }
+    },
+    "/v1/cypher/query/export/csv": {
+      "post": {
+        "tags": ["cypher"],
+        "summary": "Export query results to CSV",
+        "description": "Export complete query results as CSV download.",
+        "operationId": "query_export_to_csv_v1_cypher_query_export_csv_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CypherQuery" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cypher/fulltext": {
+      "post": {
+        "tags": ["cypher"],
+        "summary": "Execute a full-text index search",
+        "description": "Execute a full-text index search query.\n\n- **searchIndex**: The full-text index to use\n- **searchTerm**: The term to search for\n- **whereClause**: Additional WHERE clause for filtering\n- **returnClause**: RETURN clause for results\n- **orderClause**: ORDER BY clause for sorting\n- **parameters**: Optional query parameters\n- **countTotal**: Whether to return only the count",
+        "operationId": "execute_fulltext_query_v1_cypher_fulltext_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FullTextCypherQuery" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cypher/fulltext/export/csv": {
+      "post": {
+        "tags": ["cypher"],
+        "summary": "Export fulltext index search results to CSV",
+        "description": "Export full-text search results as CSV download.\n\n- **searchIndex**: The full-text index to use\n- **searchTerm**: The term to search for\n- **whereClause**: Additional WHERE clause for filtering\n- **returnClause**: RETURN clause for results\n- **orderClause**: ORDER BY clause for sorting\n- **parameters**: Optional query parameters\n- **countTotal**: Whether to return only the count",
+        "operationId": "fulltext_export_to_csv_v1_cypher_fulltext_export_csv_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FullTextCypherQuery" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/token": {
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Login For Access Token",
+        "operationId": "login_for_access_token_v1_auth_token_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_for_access_token_v1_auth_token_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Token" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Register User",
+        "operationId": "register_user_v1_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/users": {
+      "get": {
+        "tags": ["authentication"],
+        "summary": "List Users",
+        "operationId": "list_users_v1_auth_users_get",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UserWithRoles" },
+                  "title": "Response List Users V1 Auth Users Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Create User",
+        "operationId": "create_user_v1_auth_users_post",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/users/{user_id}": {
+      "put": {
+        "tags": ["authentication"],
+        "summary": "Update User",
+        "operationId": "update_user_v1_auth_users__user_id__put",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/users/{user_id}/roles/{role_name}": {
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Assign Role To User",
+        "operationId": "assign_role_to_user_v1_auth_users__user_id__roles__role_name__post",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          },
+          {
+            "name": "role_name",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Role Name" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["authentication"],
+        "summary": "Remove Role From User",
+        "operationId": "remove_role_from_user_v1_auth_users__user_id__roles__role_name__delete",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          },
+          {
+            "name": "role_name",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Role Name" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/roles": {
+      "get": {
+        "tags": ["authentication"],
+        "summary": "List Roles",
+        "operationId": "list_roles_v1_auth_roles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/RoleResponse" },
+                  "type": "array",
+                  "title": "Response List Roles V1 Auth Roles Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      },
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Create Role",
+        "operationId": "create_role_v1_auth_roles_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RoleCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
     }
   },
   "components": {
     "schemas": {
+      "Body_login_for_access_token_v1_auth_token_post": {
+        "properties": {
+          "grant_type": {
+            "anyOf": [
+              { "type": "string", "pattern": "^password$" },
+              { "type": "null" }
+            ],
+            "title": "Grant Type"
+          },
+          "username": { "type": "string", "title": "Username" },
+          "password": { "type": "string", "title": "Password" },
+          "scope": { "type": "string", "title": "Scope", "default": "" },
+          "client_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": ["username", "password"],
+        "title": "Body_login_for_access_token_v1_auth_token_post"
+      },
       "CypherQuery": {
         "properties": {
           "query": { "type": "string", "title": "Query" },
@@ -59,6 +497,49 @@
           "readonly": true
         }
       },
+      "FullTextCypherQuery": {
+        "properties": {
+          "searchIndex": { "type": "string", "title": "Searchindex" },
+          "searchTerm": { "type": "string", "title": "Searchterm" },
+          "whereClause": {
+            "type": "string",
+            "title": "Whereclause",
+            "default": ""
+          },
+          "orderClause": {
+            "type": "string",
+            "title": "Orderclause",
+            "default": ""
+          },
+          "returnClause": {
+            "type": "string",
+            "title": "Returnclause",
+            "default": ""
+          },
+          "parameters": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Parameters"
+          },
+          "countTotal": {
+            "type": "boolean",
+            "title": "Counttotal",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": ["searchIndex", "searchTerm"],
+        "title": "FullTextCypherQuery",
+        "example": {
+          "parameters": { "status": "active" },
+          "readonly": true,
+          "searchIndex": "OrganizationSearch",
+          "searchTerm": "Pinar",
+          "whereClause": "WHERE n.status = $status RETURN n LIMIT 10"
+        }
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -69,6 +550,138 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "RoleCreate": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "permissions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Permissions",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["name"],
+        "title": "RoleCreate"
+      },
+      "RoleResponse": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "permissions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Permissions"
+          }
+        },
+        "type": "object",
+        "required": ["name", "id", "permissions"],
+        "title": "RoleResponse"
+      },
+      "Token": {
+        "properties": {
+          "access_token": { "type": "string", "title": "Access Token" },
+          "token_type": { "type": "string", "title": "Token Type" },
+          "user": { "$ref": "#/components/schemas/UserResponse" }
+        },
+        "type": "object",
+        "required": ["access_token", "token_type", "user"],
+        "title": "Token"
+      },
+      "UserCreate": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "password": { "type": "string", "title": "Password" }
+        },
+        "type": "object",
+        "required": ["email", "password"],
+        "title": "UserCreate"
+      },
+      "UserResponse": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "is_superuser": { "type": "boolean", "title": "Is Superuser" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["email", "id", "is_superuser", "created_at", "updated_at"],
+        "title": "UserResponse"
+      },
+      "UserWithRoles": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "is_superuser": { "type": "boolean", "title": "Is Superuser" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          },
+          "roles": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Roles",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["email", "id", "is_superuser", "created_at", "updated_at"],
+        "title": "UserWithRoles"
       },
       "ValidationError": {
         "properties": {
@@ -83,6 +696,12 @@
         "type": "object",
         "required": ["loc", "msg", "type"],
         "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": { "password": { "scopes": {}, "tokenUrl": "v1/auth/token" } }
       }
     }
   }

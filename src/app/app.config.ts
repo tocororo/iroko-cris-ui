@@ -1,4 +1,3 @@
-// src/app/app.config.ts
 import {
   ApplicationConfig,
   provideZoneChangeDetection,
@@ -6,7 +5,6 @@ import {
   ErrorHandler,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
 import {
@@ -15,12 +13,12 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-
 import { provideMarkdown } from 'ngx-markdown';
 
 import { IrokoApiService } from './services/iroko-api.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { cachingInterceptor } from './interceptors/caching.interceptor';
+import { jwtInterceptor } from './interceptors/jwt.interceptor'; // Updated import
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,8 +29,14 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),
-    provideMarkdown(), // Add this line
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([
+        cachingInterceptor,
+        jwtInterceptor, // Updated to use the function
+      ])
+    ),
+    provideMarkdown(),
     IrokoApiService,
     {
       provide: ErrorHandler,

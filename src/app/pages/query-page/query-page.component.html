@@ -11,6 +11,28 @@
   </div>
 
   <!-- Main Content -->
+  @if (!hasQueryAccess) {
+  <div class="access-denied-message">
+    <mat-card>
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon color="warn">block</mat-icon>
+          <h3>Acceso denegado</h3>
+          <p>
+            {{
+              error?.message ||
+                "No tienes permiso para acceder a esta funcionalidad."
+            }}
+          </p>
+          <p class="subtext">
+            Por favor, contacta a tu administrador si crees que esto es un
+            error.
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  } @else {
   <div class="query-layout">
     <!-- Query Input Section -->
     <div class="query-input-section">
@@ -146,4 +168,5 @@
       }
     </div>
   </div>
+  }
 </div>

@@ -1,4 +1,3 @@
-// src/app/app.component.ts (updated)
 import {
   Component,
   importProvidersFrom,
@@ -28,6 +27,7 @@ import { GlobalSearchComponent } from './components/global-search/global-search.
 import { filter, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { RelationshipsLabelService } from './services/relationships-label.service';
+import { AuthService } from './services/auth.service'; // Add this import
 
 @Component({
   selector: 'app-root',
@@ -62,6 +62,8 @@ export class AppComponent implements OnInit {
   };
 
   title = 'iroko-ui-pwa';
+  currentUser: any = null; // Add this
+  isLoggedIn = false; // Add this
 
   constructor(
     private menuService: ConfigService,
@@ -69,6 +71,7 @@ export class AppComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private metadataService: MetadataService,
     private labelService: RelationshipsLabelService,
+    private authService: AuthService, // Add this
     private router: Router
   ) {
     this.matIconRegistry.addSvgIcon(
@@ -108,6 +111,16 @@ export class AppComponent implements OnInit {
 
     this.labelService.loadRelData().subscribe();
 
+    // Subscribe to auth state changes
+    this.authService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+      console.log(this.currentUser);
+    });
+
+    this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+      this.isLoggedIn = isAuthenticated;
+    });
+
     // Set page title based on route
     this.router.events
       .pipe(
@@ -126,6 +139,11 @@ export class AppComponent implements OnInit {
       });
   }
 
+  // Add logout method
+  logout(): void {
+    this.authService.logout();
+  }
+
   private getTitleFromRoute(route: any): string {
     const path = route.snapshot.routeConfig?.path;
     if (!path) return 'Iroko';
@@ -140,6 +158,8 @@ export class AppComponent implements OnInit {
       vocabs: 'Vocabularios',
       query: 'Consulta Cypher',
       search: 'Resultados de Búsqueda',
+      login: 'Login', // Add this
+      register: 'Register', // Add this
     };
 
     return titleMap[path] || 'Iroko';
@@ -154,9 +174,8 @@ export class AppComponent implements OnInit {
       ? 'main-is-mobile flex flex-col min-h-screen'
       : 'flex flex-col min-h-screen';
   }
-  // Add this method to the AppComponent class in app.component.ts
+
   getSidenavOpenedState(): boolean {
-    // Expanded by default on desktop, collapsed on mobile
     return !this.isMobile();
   }
 }

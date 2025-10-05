@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../services/auth.service'; // Add this import
 
 @Component({
   selector: 'app-query-page',
@@ -33,6 +34,7 @@ export class QueryPageComponent {
   hasResults = false;
   queryTime?: number;
   resultCount?: number;
+  hasQueryAccess = false; // Add this
 
   // Quick examples data
   quickExamples = [
@@ -66,7 +68,8 @@ export class QueryPageComponent {
 
   constructor(
     private apiService: IrokoApiService,
-    private metadataService: MetadataService
+    private metadataService: MetadataService,
+    private authService: AuthService // Add this
   ) {}
 
   ngOnInit() {
@@ -76,6 +79,15 @@ export class QueryPageComponent {
       authors: [],
       subjects: [],
     });
+    // Check if user has access to query page
+    this.hasQueryAccess = this.authService.canAccessQueryPage();
+
+    if (!this.hasQueryAccess) {
+      this.error = {
+        message:
+          'You do not have permission to access the query page. Please contact your administrator.',
+      };
+    }
   }
 
   ngOnDestroy() {
