@@ -6,15 +6,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { MetadataService } from '../../services/metadata.service';
 import { EnhancedNodeViewerComponent } from '../../components/enhanced-node-viewer/enhanced-node-viewer.component';
+import { NodeEvaluationsComponent } from '../../components/node-evaluations/node-evaluations.component';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-node-view',
-  templateUrl: './node-view.component.html',
-  styleUrls: ['./node-view.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
@@ -23,11 +24,17 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatProgressSpinnerModule,
     EnhancedNodeViewerComponent,
+    MatTabsModule,
+    NodeEvaluationsComponent,
   ],
+  templateUrl: './node-view.component.html',
+  styleUrls: ['./node-view.component.scss'],
 })
 export class NodeViewComponent implements OnInit {
   nodeType: string = '';
   nodeId: string = '';
+  activeTab = 0;
+
   private routeSub!: Subscription;
 
   // Map entity types to display names
@@ -68,15 +75,14 @@ export class NodeViewComponent implements OnInit {
       });
     });
   }
+
   ngOnDestroy() {
-    // Clean up subscription to prevent memory leaks
     if (this.routeSub) {
       this.routeSub.unsubscribe();
     }
   }
 
   goBack() {
-    // Navigate back to the previous page or the list page
     const listRoute = this.getListRoute();
     this.router.navigate([listRoute]);
   }
@@ -90,7 +96,6 @@ export class NodeViewComponent implements OnInit {
       Output: '/outputs',
       Término: '/vocabularies',
     };
-
     return routeMap[this.nodeType] || '/';
   }
 
@@ -99,8 +104,6 @@ export class NodeViewComponent implements OnInit {
   }
 
   onNodeLoaded(node: any): void {
-    console.log(node);
-
     const displayName = node.name || node.title || node.id;
     this.metadataService.updateMetadata({
       title: `Detalles de ${displayName}`,
@@ -110,7 +113,5 @@ export class NodeViewComponent implements OnInit {
 
   onRelatedNodeSelect(nodeData: any): void {
     console.log('NodeViewComponent - Related node selected:', nodeData);
-    // If you want to handle navigation to related nodes from within the node view
-    // You can implement this based on your requirements
   }
 }

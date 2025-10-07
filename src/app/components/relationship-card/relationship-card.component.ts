@@ -29,7 +29,7 @@ export class RelationshipCardComponent {
   @Input() direction: 'INCOMING' | 'OUTGOING' = 'OUTGOING';
   @Output() nodeSelected = new EventEmitter<any>();
 
-  private router = inject(Router); // Inject Router
+  private router = inject(Router);
 
   // Allowed node types for view details
   private readonly allowedNodeTypes = [
@@ -41,6 +41,29 @@ export class RelationshipCardComponent {
     'Término',
   ];
 
+  // Get relationship properties
+  getRelationshipProperties(): { key: string; value: any }[] {
+    if (!this.relationship) return [];
+
+    return Object.entries(this.relationship)
+      .filter(
+        ([key]) =>
+          !key.startsWith('_') &&
+          key !== 'type' &&
+          key !== 'identity' &&
+          key !== 'elementId' &&
+          key !== 'start' &&
+          key !== 'end'
+      )
+      .map(([key, value]) => ({ key, value }));
+  }
+
+  // Check if relationship has properties
+  hasRelationshipProperties(): boolean {
+    return this.getRelationshipProperties().length > 0;
+  }
+
+  // Get node properties (existing method)
   getNodeProperties(): { key: string; value: any }[] {
     if (!this.node) return [];
 
@@ -76,7 +99,6 @@ export class RelationshipCardComponent {
   }
 
   getNodeType(): string {
-    // Try multiple ways to get the node type
     if (this.nodeLabels && this.nodeLabels.length > 0) {
       return this.nodeLabels.join(', ');
     }
@@ -94,25 +116,12 @@ export class RelationshipCardComponent {
 
   getPrimaryNodeType(): string {
     const nodeType = this.getNodeType();
-    return nodeType.split(',')[0].trim(); // Get the first label as primary type
+    return nodeType.split(',')[0].trim();
   }
 
   shouldShowViewDetails(): boolean {
     const primaryType = this.getPrimaryNodeType();
     return this.allowedNodeTypes.includes(primaryType);
-  }
-
-  getViewDetailsRoute(): any[] {
-    console.log('aaaa');
-
-    const primaryType = this.getPrimaryNodeType().toLowerCase();
-    const nodeId = this.node.id;
-
-    if (nodeId) {
-      return ['/view', primaryType, nodeId];
-    }
-
-    return ['/']; // Fallback route if no ID
   }
 
   onNodeClick(): void {
@@ -122,14 +131,12 @@ export class RelationshipCardComponent {
   }
 
   onViewDetails(event: Event): void {
-    console.log(this.node);
-    event.stopPropagation(); // Prevent card click event
+    event.stopPropagation();
 
     const primaryType = this.getPrimaryNodeType().toLowerCase();
     const nodeId = this.node.id;
 
     if (nodeId && primaryType) {
-      console.log('Navigating to:', ['/view', primaryType, nodeId]);
       this.router.navigate(['/view', primaryType, nodeId]);
       this.nodeSelected.emit(this.node);
     }
@@ -146,11 +153,10 @@ export class RelationshipCardComponent {
   // Helper to format property values for display
   formatPropertyValue(value: any): any {
     if (this.isArray(value)) {
-      return value; // Arrays are handled by the array container
+      return value;
     } else if (this.isObject(value)) {
-      return value; // Objects are handled by JSON viewer
+      return value;
     } else if (typeof value === 'string' && value.length > 150) {
-      // Only truncate very long strings for display, but keep full text in title
       return value.substring(0, 150) + '...';
     }
     return value;

@@ -82,6 +82,19 @@ mat-toolbar {
   // right: 0;
 }
 
+/* Garantizar visibilidad del menú de usuario en móviles */
+.user-menu-container {
+  flex-shrink: 0 !important;
+}
+
+/* Asegurar que el contenedor derecho no se colapse */
+.toolbar-right-section,
+.user-menu-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 // Right Section (Search & User Menu)
 .toolbar-right-section {
   // Add this class to the right div in HTML if needed for specificity
@@ -133,16 +146,26 @@ mat-toolbar {
   margin-right: 1em;
 }
 
+/* app.component.scss */
 .app-title {
-  color: #006d33; // This seems specific, consider using a theme color
-  // color: mat.get-color-from-palette(#{your-theme}, primary, contrast); // Alternative
-  font-weight: 600; // Already present
-  font-size: 1.25rem; // Or use a theme-defined typography level
-  white-space: nowrap; // Prevents title breaking
-  overflow: hidden; // In case title is very long
-  text-overflow: ellipsis; // Show ellipsis if truncated
+  color: #006d33;
+  font-weight: 600;
+  font-size: 1.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Ocultar en móvil, mostrar en desktop (≥768px) */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-only {
+    display: block;
+  }
+}
 /* Menu Enhancements */
 .menu-subheader {
   color: #666;
@@ -332,7 +355,8 @@ mat-sidenav-content {
 .login-button {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  margin-right: 8px;
 }
 
 // Mobile adjustments

@@ -17,6 +17,9 @@ import { RegisterComponent } from './pages/register/register.component';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
+import { EvaluationsComponent } from './pages/evaluations/evaluations.component';
+import { EvaluationComponent } from './pages/evaluation/evaluation.component';
+import { NodeEvaluationPageComponent } from './pages/node-evaluation-page/node-evaluation-page.component';
 
 export const routes: Routes = [
   {
@@ -45,11 +48,6 @@ export const routes: Routes = [
     data: { title: 'Investigadores' },
   },
   {
-    path: 'projects',
-    component: ProjectsComponent,
-    data: { title: 'Proyectos de Investigación' },
-  },
-  {
     path: 'outputs',
     component: OutputsComponent,
     data: { title: 'Resultados de Investigación' },
@@ -64,7 +62,7 @@ export const routes: Routes = [
     component: QueryPageComponent,
     data: {
       title: 'Consulta Cypher',
-      roles: ['admin', 'researcher', 'user'], // Only these roles can access
+      roles: ['admin', 'researcher', 'viewer'], // Only these roles can access
       permissions: ['query:execute'], // And must have this permission
     },
     canActivate: [AuthGuard, RoleGuard],
@@ -98,6 +96,17 @@ export const routes: Routes = [
     path: 'access-denied',
     component: AccessDeniedComponent,
     data: { title: 'Access Denied' },
+  },
+  // Evaluation Routes
+  {
+    path: 'evaluations',
+    component: EvaluationsComponent,
+    data: { title: 'Metodologías de Evaluación' },
+  },
+  {
+    path: 'evaluations/:eval_id',
+    component: EvaluationComponent,
+    data: { title: 'Evaluación' },
   },
   {
     path: '**',

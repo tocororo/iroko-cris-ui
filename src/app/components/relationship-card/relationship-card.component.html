@@ -11,21 +11,53 @@
           </mat-chip>
         </mat-card-subtitle>
       </div>
-      <!-- <div class="relationship-info">
-        <mat-chip class="direction-chip" [class]="direction.toLowerCase()">
-          <mat-icon class="direction-icon">{{ getDirectionIcon() }}</mat-icon>
-          {{ getDirectionLabel() }}
-        </mat-chip>
-        <mat-chip class="type-chip">
-          {{ relationshipType }}
-        </mat-chip>
-      </div> -->
     </div>
   </mat-card-header>
 
   <mat-card-content>
+    <!-- Relationship Properties Section -->
+    @if (hasRelationshipProperties()) {
+    <div class="relationship-properties-section">
+      <h4 class="section-title">Relación</h4>
+      <div class="properties-grid">
+        <div
+          *ngFor="let prop of getRelationshipProperties()"
+          class="property-item"
+        >
+          <strong class="property-label">{{ prop.key }}:</strong>
+          <div class="property-value-container">
+            @if (isArray(prop.value)) {
+            <div class="array-container">
+              @for (item of prop.value; track item; let last = $last) {
+              <span class="array-item">
+                {{ item }}@if (!last) {<span class="array-separator">, </span>}
+              </span>
+              }
+            </div>
+            } @else if (isObject(prop.value)) {
+            <div class="json-container">
+              <ngx-json-viewer
+                [json]="prop.value"
+                [expanded]="false"
+                class="json-viewer"
+              >
+              </ngx-json-viewer>
+            </div>
+            } @else {
+            <span class="property-value" [title]="prop.value">
+              {{ formatPropertyValue(prop.value) }}
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    }
+
     <!-- Node Properties -->
     <div class="properties-section" *ngIf="getNodeProperties().length > 0">
+      <h4 class="section-title">Propiedades</h4>
       <div class="properties-grid">
         <div *ngFor="let prop of getNodeProperties()" class="property-item">
           <strong class="property-label">{{ prop.key }}:</strong>
@@ -58,10 +90,13 @@
     </div>
 
     <!-- No Properties Message -->
-    <div *ngIf="getNodeProperties().length === 0" class="no-properties">
+    @if(getNodeProperties().length === 0 && !hasRelationshipProperties()){
+    <div class="no-properties">
       <mat-icon>info</mat-icon>
       <span>No properties available</span>
     </div>
+
+    }
   </mat-card-content>
 
   <!-- Ver Detalles Action (only for allowed node types) -->

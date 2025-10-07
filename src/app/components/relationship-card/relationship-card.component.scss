@@ -29,8 +29,8 @@
     font-weight: 500;
     line-height: 1.3;
     white-space: normal;
-    overflow-wrap: normal; // optional (it's default)
-    word-break: normal; // optional (it's default)
+    overflow-wrap: normal;
+    word-break: normal;
 
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -47,48 +47,39 @@
   }
 }
 
-.relationship-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex-shrink: 0;
+// Section titles
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+  margin: 16px 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
 
-  .direction-chip,
-  .type-chip {
-    font-size: 0.7rem;
-    height: 20px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-
-    .direction-icon {
-      font-size: 14px;
-      width: 14px;
-      height: 14px;
-      margin-right: 4px;
-    }
-  }
-
-  .direction-chip {
-    &.incoming {
-      background-color: #e3f2fd;
-      color: #1976d2;
-    }
-
-    &.outgoing {
-      background-color: #e8f5e8;
-      color: #388e3c;
-    }
-  }
-
-  .type-chip {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
+  &:first-child {
+    margin-top: 0;
   }
 }
 
+// Relationship properties section
+.relationship-properties-section {
+  margin-bottom: 16px;
+
+  .section-title {
+    color: #7b1fa2; // Purple color for relationship section
+    border-bottom-color: #e1bee7;
+  }
+}
+
+// Node properties section
 .properties-section {
   margin-bottom: 16px;
   flex: 1;
+
+  .section-title {
+    color: #1976d2; // Blue color for node section
+    border-bottom-color: #bbdefb;
+  }
 }
 
 .properties-grid {
@@ -230,12 +221,6 @@
     gap: 8px;
   }
 
-  .relationship-info {
-    flex-direction: row;
-    width: 100%;
-    justify-content: flex-start;
-  }
-
   .property-item {
     flex-direction: column;
   }
@@ -244,6 +229,10 @@
 @media (max-width: 480px) {
   .node-title {
     font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 0.85rem;
   }
 
   .property-item {

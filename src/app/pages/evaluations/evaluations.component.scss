@@ -1,0 +1,160 @@
+.evaluations-container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 2rem;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 1.1rem;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+
+  p {
+    margin-top: 16px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.methodologies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.methodology-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    .action-button {
+      transform: translateX(4px);
+    }
+  }
+
+  .methodology-icon {
+    background: #2196f3;
+    color: white;
+    border-radius: 50%;
+    padding: 8px;
+  }
+}
+
+.methodology-description {
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.methodology-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #666;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #2196f3;
+    }
+  }
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.2s ease;
+  margin-left: auto;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .evaluations-container {
+    padding: 8px;
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .methodologies-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .methodology-meta {
+    flex-direction: column;
+  }
+}

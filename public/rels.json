@@ -5,18 +5,13 @@
     "HAS_SUBJECT": "Materia",
     "HAS": "Tiene",
     "IN_INDEX": "Indización",
-    "SOURCE_CREATED_IN": "Organización"
+    "SOURCE_CREATED_IN": "Organización",
+    "RELATED_ORGANIZATION": "Organizaciones Relacionadas",
+    "HAS_LANGUAGE": "Idiomas",
+    "REDIRECTED_ORGANIZATION": "Redireccionadas"
   },
   "searchIndices": {
-    "HAS_SUBJECT": "fullTextSearch",
-    "HAS_LICENCE": "fullTextSearch",
     "COLLECTED_FROM": "outputSearch",
-    "SOURCE_CREATED_IN": "organizationSearch",
-    "IN_INDEX": "fullTextSearch",
-    "CREATED_BY": "fullTextSearch",
-    "AFFILIATED_TO": "fullTextSearch",
-    "RESEARCH_INTEREST": "fullTextSearch",
-    "CLASSIFIED_BY": "fullTextSearch",
-    "RELATED_TO": "fullTextSearch"
+    "RELATED_ORGANIZATION": "organizationSearch"
   }
 }

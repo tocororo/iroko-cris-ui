@@ -1,0 +1,195 @@
+<div class="evaluation-viewer-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>assessment</mat-icon>
+        {{ title }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ evaluation.name }} v{{ evaluation.version }}
+        <div class="overall-score">
+          <div class="score-info">
+            <span class="score-text"
+              >Progreso: {{ getOverallScore() | number : "1.0-0" }}%</span
+            >
+            <span class="questions-count">
+              {{ getAnsweredQuestions() }} de
+              {{ getTotalQuestions() }} preguntas respondidas
+            </span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="getOverallScore()"
+            color="primary"
+          >
+          </mat-progress-bar>
+        </div>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Evaluation Summary -->
+      <div class="evaluation-summary">
+        <div class="summary-item">
+          <mat-icon>description</mat-icon>
+          <div class="summary-content">
+            <span class="summary-label">Descripción</span>
+            <span class="summary-value">{{ evaluation.description }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <mat-icon>label</mat-icon>
+          <div class="summary-content">
+            <span class="summary-label">Entidad</span>
+            <span class="summary-value">{{ evaluation.entity }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <mat-icon>view_list</mat-icon>
+          <div class="summary-content">
+            <span class="summary-label">Estructura</span>
+            <span class="summary-value">
+              {{ evaluation.sections.length }} secciones,
+              {{ getTotalCategories() }} categorías
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sections Accordion -->
+      <mat-accordion multi class="sections-accordion">
+        @for (section of evaluation.sections; track trackBySection($index,
+        section)) {
+        <mat-expansion-panel
+          [expanded]="panelOpenState[section.id]"
+          (opened)="panelOpenState[section.id] = true"
+          (closed)="panelOpenState[section.id] = false"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title class="section-header">
+              <mat-icon>folder_open</mat-icon>
+              {{ section.title }}
+            </mat-panel-title>
+            <mat-panel-description class="section-description">
+              <span class="section-text">{{ section.description }}</span>
+              <span class="score-badge">
+                {{ getSectionScore(section) | number : "1.0-0" }}%
+              </span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <!-- Section Result and Recommendation -->
+          @if (section.result !== undefined || section.recommendation) {
+          <div class="section-results">
+            @if (section.result !== undefined) {
+            <div class="result-item">
+              <mat-icon>score</mat-icon>
+              <div class="result-content">
+                <strong>Resultado de la sección:</strong> {{ section.result }}
+              </div>
+            </div>
+            } @if (section.recommendation) {
+            <div class="recommendation-item section-recommendation">
+              <mat-icon color="warn">warning</mat-icon>
+              <div class="recommendation-content">
+                <strong>Recomendación:</strong> {{ section.recommendation }}
+              </div>
+            </div>
+            }
+          </div>
+          }
+
+          <!-- Categories Accordion -->
+          <mat-accordion multi class="categories-accordion">
+            @for (category of section.categories; track trackByCategory($index,
+            category)) {
+            <mat-expansion-panel
+              [expanded]="panelOpenState[category.id]"
+              (opened)="panelOpenState[category.id] = true"
+              (closed)="panelOpenState[category.id] = false"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title class="category-title">
+                  <mat-icon>category</mat-icon>
+                  {{ category.title }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <!-- Category Result and Recommendation -->
+              @if (category.result !== undefined || category.recommendation) {
+              <div class="category-results">
+                @if (category.result !== undefined) {
+                <div class="result-item">
+                  <mat-icon>score</mat-icon>
+                  <div class="result-content">
+                    <strong>Resultado de la categoría:</strong>
+                    {{ category.result }}
+                  </div>
+                </div>
+                } @if (category.recommendation) {
+                <div class="recommendation-item category-recommendation">
+                  <mat-icon color="accent">recommend</mat-icon>
+                  <div class="recommendation-content">
+                    <strong>Recomendación:</strong>
+                    {{ category.recommendation }}
+                  </div>
+                </div>
+                }
+              </div>
+              }
+
+              <!-- Questions List -->
+              <div class="questions-list">
+                @for (question of category.questions; track
+                trackByQuestion($index, question)) {
+                <div
+                  class="question-item"
+                  [class.has-result]="
+                    question.result !== undefined && question.result !== null
+                  "
+                  [class.has-recommendation]="question.recommendation"
+                >
+                  <div class="question-header">
+                    <div class="question-info">
+                      <h4 class="question-description">
+                        {{ question.description }}
+                      </h4>
+                      <span class="question-id">{{ question.id }}</span>
+                    </div>
+
+                    <mat-chip
+                      [color]="getQuestionResultColor(question)"
+                      [matTooltip]="question.type"
+                      class="result-chip"
+                    >
+                      <mat-icon class="chip-icon">{{
+                        getQuestionResultIcon(question)
+                      }}</mat-icon>
+                      {{ getQuestionResultDisplay(question) }}
+                    </mat-chip>
+                  </div>
+
+                  <!-- Question Recommendation -->
+                  @if (question.recommendation) {
+                  <div class="recommendation-item question-recommendation">
+                    <mat-icon color="primary">lightbulb</mat-icon>
+                    <div class="recommendation-content">
+                      <strong>Recomendación:</strong>
+                      {{ question.recommendation }}
+                    </div>
+                  </div>
+                  }
+                </div>
+                }
+              </div>
+            </mat-expansion-panel>
+            }
+          </mat-accordion>
+        </mat-expansion-panel>
+        }
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
+</div>

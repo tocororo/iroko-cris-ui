@@ -2,7 +2,7 @@
 <div [class]="getMainContainerClass()">
   <mat-toolbar
     color="primary"
-    class="flex justify-between items-center px-4 fixed z-[2] main-is-mobile:header-toolbar"
+    class="flex justify-between items-center px-2 md:px-4 fixed z-[2] main-is-mobile:header-toolbar w-full"
   >
     <!-- Left Section: Drawer Toggle -->
     <div class="flex items-center flex-none">
@@ -15,7 +15,8 @@
     <div class="app-branding flex items-center justify-center flex-1">
       <div class="flex items-center gap-3 app-branding">
         <mat-icon svgIcon="sceiba" class="app-logo"></mat-icon>
-        <h1 class="app-title m-0 text-xl font-semibold">
+        <!-- app.component.html -->
+        <h1 class="app-title m-0 text-xl font-semibold desktop-only">
           {{ config.title }}
         </h1>
       </div>
@@ -50,11 +51,21 @@
         <span>Cerrar sesión</span>
       </button>
       } @else {
-      <button mat-menu-item routerLink="/login">
+      <button
+        mat-menu-item
+        color="primary"
+        class="login-button"
+        routerLink="/login"
+      >
         <mat-icon>login</mat-icon>
         <span>Iniciar sesión</span>
       </button>
-      <button mat-menu-item routerLink="/register">
+      <button
+        mat-menu-item
+        color="primary"
+        class="login-button"
+        routerLink="/register"
+      >
         <mat-icon>person_add</mat-icon>
         <span>Registrarse</span>
       </button>
@@ -62,12 +73,11 @@
     </mat-menu>
 
     <!-- Update the user menu button in the toolbar -->
-    <div class="flex items-center gap-3">
+    <div class="user-menu-container flex items-center gap-3 flex-shrink-0">
       <!-- <app-global-search
         class="hidden md:block search-container"
       ></app-global-search> -->
 
-      @if (isLoggedIn && currentUser) {
       <button
         mat-icon-button
         [matMenuTriggerFor]="userMenu"
@@ -75,17 +85,6 @@
       >
         <mat-icon>account_circle</mat-icon>
       </button>
-      } @else {
-      <button
-        mat-raised-button
-        color="primary"
-        [matMenuTriggerFor]="userMenu"
-        class="login-button"
-      >
-        <mat-icon>account_circle</mat-icon>
-        <span class="hidden md:inline">Iniciar sesión</span>
-      </button>
-      }
     </div>
     <!--
     <mat-menu #mobileMenu="matMenu" class="mobile-search-menu">

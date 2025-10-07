@@ -1,5 +1,6 @@
 // src/app/api/services/cypher-builder.service.ts
 import { Injectable } from '@angular/core';
+import { FullTextCypherQuery } from '../api/models/cypher-query.model';
 
 export interface QueryFilter {
   property: string;
@@ -112,7 +113,7 @@ export class CypherBuilderService {
       MATCH (n {id: $id})-[r${
         relationshipType ? ':' + relationshipType : ''
       }]-(related)
-      RETURN type(r) as relationshipType, r, related
+      RETURN type(r) as relationshipType, r, properties(r) as relationProperties, related
       ORDER BY relationshipType
     `;
 
@@ -166,6 +167,7 @@ export class CypherBuilderService {
              type(r) as relationshipType,
              r,
              related,
+             properties(r) as relationProperties,
              labels(related) as relatedLabels,
              startNode(r) = ${alias} as isOutgoing
       ORDER BY type(r), related.name
@@ -232,7 +234,7 @@ export class CypherBuilderService {
 
     const query = `
       ${matchClause}
-      RETURN related, r, labels(related) as relatedLabels
+      RETURN related, r, properties(r) as relationProperties, labels(related) as relatedLabels
       ORDER BY related.name, related.id
       SKIP $skip
       LIMIT $limit
@@ -251,15 +253,15 @@ export class CypherBuilderService {
   buildPaginatedRelationshipsQueryWithSearch(
     nodeId: string,
     relationshipType: string,
+    searchIndex: string,
+    searchTerm: string,
     direction: 'INCOMING' | 'OUTGOING',
     labels?: string[],
-    searchIndex?: string,
-    searchTerm?: string,
     page: number = 0,
     pageSize: number = 10
-  ): { query: string; parameters: any } {
+  ): FullTextCypherQuery {
     const labelString = labels?.join(':') || '';
-    const alias = 'n';
+    const alias = 'nrel';
 
     let matchClause = '';
     if (direction === 'OUTGOING') {
@@ -272,32 +274,35 @@ export class CypherBuilderService {
       } {id: $id})<-[r:${relationshipType}]-(related)`;
     }
 
-    let query = '';
+    // let query = '';
 
-    if (searchIndex && searchTerm) {
-      // Use full-text search
-      query = `
-        CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
-        YIELD node, score
-        WITH node, score
-        ${matchClause}
-        WHERE node = related
-        RETURN related, r, labels(related) as relatedLabels, score
-        ORDER BY score DESC, related.name
-        SKIP $skip
-        LIMIT $limit
-      `;
-    } else {
-      // Regular query
-      query = `
-        ${matchClause}
-        RETURN related, r, labels(related) as relatedLabels
-        ORDER BY related.name, related.id
-        SKIP $skip
-        LIMIT $limit
-      `;
-    }
-
+    // if (searchIndex && searchTerm) {
+    //   // Use full-text search
+    //   query = `
+    //     CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
+    //     YIELD node, score
+    //     WITH node, score
+    //     ${matchClause}
+    //     WHERE node = related
+    //     RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score
+    //     ORDER BY score DESC, related.name
+    //     SKIP $skip
+    //     LIMIT $limit
+    //   `;
+    // } else {
+    //   // Regular query
+    //   query = `
+    //     ${matchClause}
+    //     RETURN related, r, labels(related) as relatedLabels
+    //     ORDER BY related.name, related.id
+    //     SKIP $skip
+    //     LIMIT $limit
+    //   `;
+    // }
+    let whereClause = `${matchClause} WHERE n = related`;
+    let returnClause =
+      'RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score';
+    let orderClause = 'ORDER BY score DESC, related.name';
     const parameters: any = {
       id: nodeId,
       skip: page * pageSize,
@@ -309,7 +314,11 @@ export class CypherBuilderService {
     }
 
     return {
-      query,
+      searchIndex,
+      searchTerm,
+      whereClause,
+      returnClause,
+      orderClause,
       parameters,
     };
   }
@@ -317,13 +326,13 @@ export class CypherBuilderService {
   buildRelationshipCountQueryWithSearch(
     nodeId: string,
     relationshipType: string,
+    searchIndex: string,
+    searchTerm: string,
     direction: 'INCOMING' | 'OUTGOING',
-    labels?: string[],
-    searchIndex?: string,
-    searchTerm?: string
-  ): { query: string; parameters: any } {
+    labels?: string[]
+  ): FullTextCypherQuery {
     const labelString = labels?.join(':') || '';
-    const alias = 'n';
+    const alias = 'nrel';
 
     let matchClause = '';
     if (direction === 'OUTGOING') {
@@ -336,33 +345,44 @@ export class CypherBuilderService {
       } {id: $id})<-[r:${relationshipType}]-(related)`;
     }
 
-    let query = '';
+    // let query = '';
 
-    if (searchIndex && searchTerm) {
-      query = `
-        CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
-        YIELD node, score
-        WITH node, score
-        ${matchClause}
-        WHERE node = related
-        RETURN count(node) as count
-      `;
-    } else {
-      query = `
-        ${matchClause}
-        RETURN count(related) as count
-      `;
-    }
+    // if (searchIndex && searchTerm) {
+    //   query = `
+    //     CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
+    //     YIELD node, score
+    //     WITH node, score
+    //     ${matchClause}
+    //     WHERE node = related
+    //     RETURN count(node) as count
+    //   `;
+    // } else {
+    //   query = `
+    //     ${matchClause}
+    //     RETURN count(related) as count
+    //   `;
+    // }
+
+    let whereClause = `${matchClause} WHERE n = related`;
+    let returnClause =
+      'RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score';
+    let orderClause = 'ORDER BY score DESC, related.name';
 
     const parameters: any = { id: nodeId };
 
     if (searchTerm) {
       parameters.searchTerm = `${searchTerm}*`;
     }
+    let countTotal = true;
 
     return {
-      query,
+      searchIndex,
+      searchTerm,
+      whereClause,
+      returnClause,
+      orderClause,
       parameters,
+      countTotal,
     };
   }
 }

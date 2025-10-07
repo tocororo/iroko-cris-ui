@@ -84,8 +84,12 @@ export class EnhancedNodeViewerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.relationshipSearchIndices = this.labelService.getIndices() || {};
-    this.loadNode();
+    this.labelService.loadRelData().subscribe((metadata) => {
+      this.relationshipSearchIndices = metadata.searchIndices;
+      console.error(metadata);
+
+      this.loadNode();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -187,7 +191,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
         if (group.relationships.length < group.pageSize) {
           group.relationships.push({
             node: row.related,
-            relationship: row.r,
+            relationship: row.relationProperties,
             nodeLabels: row.relatedLabels || [],
           });
         }
@@ -213,11 +217,21 @@ export class EnhancedNodeViewerComponent implements OnInit {
       countQuery = this.cypherBuilder.buildRelationshipCountQueryWithSearch(
         this.nodeId,
         group.type,
-        group.direction,
-        [this.nodeType],
         group.searchIndex,
-        group.searchTerm
+        group.searchTerm,
+        group.direction,
+        [this.nodeType]
       );
+      this.irokoApiService.executeFullTextQuery(countQuery).subscribe({
+        next: (countResult) => {
+          if (countResult && countResult.length > 0) {
+            group.totalCount = countResult[0].count || group.totalCount;
+          }
+        },
+        error: (error) => {
+          console.error('Error loading relationship count:', error);
+        },
+      });
     } else {
       countQuery = this.cypherBuilder.buildRelationshipCountQuery(
         this.nodeId,
@@ -225,18 +239,17 @@ export class EnhancedNodeViewerComponent implements OnInit {
         group.direction,
         [this.nodeType]
       );
+      this.irokoApiService.executeQuery(countQuery).subscribe({
+        next: (countResult) => {
+          if (countResult && countResult.length > 0) {
+            group.totalCount = countResult[0].count || group.totalCount;
+          }
+        },
+        error: (error) => {
+          console.error('Error loading relationship count:', error);
+        },
+      });
     }
-
-    this.irokoApiService.executeQuery(countQuery).subscribe({
-      next: (countResult) => {
-        if (countResult && countResult.length > 0) {
-          group.totalCount = countResult[0].count || group.totalCount;
-        }
-      },
-      error: (error) => {
-        console.error('Error loading relationship count:', error);
-      },
-    });
   }
 
   loadRelationshipPage(group: RelationshipGroup, page: number): void {
@@ -249,17 +262,43 @@ export class EnhancedNodeViewerComponent implements OnInit {
 
     if (group.searchTerm && group.searchIndex) {
       // Use full-text search query
+
+      // TODO: USAR ESTO
+      // const result = await this.irokoApiService.executeFullTextQuery({
+      //   searchIndex,
+      //   searchTerm,
+      //   whereClause,
+      //   returnClause,
+      //   orderClause,
+      //   parameters,
+      // });
+
       relationshipsQuery =
         this.cypherBuilder.buildPaginatedRelationshipsQueryWithSearch(
           this.nodeId,
           group.type,
-          group.direction,
-          [this.nodeType],
           group.searchIndex,
           group.searchTerm,
+          group.direction,
+          [this.nodeType],
           page,
           group.pageSize
         );
+      this.irokoApiService.executeFullTextQuery(relationshipsQuery).subscribe({
+        next: (result) => {
+          group.relationships = result.map((row: any) => ({
+            node: row.related,
+            relationship: row.relationProperties,
+            nodeLabels: row.relatedLabels || [],
+          }));
+          group.currentPage = page;
+          group.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading relationships:', error);
+          group.isLoading = false;
+        },
+      });
     } else {
       // Use regular paginated query
       relationshipsQuery = this.cypherBuilder.buildPaginatedRelationshipsQuery(
@@ -270,23 +309,22 @@ export class EnhancedNodeViewerComponent implements OnInit {
         page,
         group.pageSize
       );
+      this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
+        next: (result) => {
+          group.relationships = result.map((row: any) => ({
+            node: row.related,
+            relationship: row.relationProperties,
+            nodeLabels: row.relatedLabels || [],
+          }));
+          group.currentPage = page;
+          group.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading relationships:', error);
+          group.isLoading = false;
+        },
+      });
     }
-
-    this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
-      next: (result) => {
-        group.relationships = result.map((row: any) => ({
-          node: row.related,
-          relationship: row.r,
-          nodeLabels: row.relatedLabels || [],
-        }));
-        group.currentPage = page;
-        group.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading relationships:', error);
-        group.isLoading = false;
-      },
-    });
   }
 
   getNodeProperties(): { key: string; value: any }[] {

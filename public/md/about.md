@@ -54,7 +54,7 @@ Vocabularios controlados, taxonomías y términos de clasificación para una cat
 
 ### Frontend
 
-- **Angular 17+**: Framework web moderno con TypeScript
+- **Angular 20+**: Framework web moderno con TypeScript
 - **Angular Material**: Componentes de Material Design
 - **Tailwind CSS**: Framework CSS basado en utilidades
 - **PWA**: Service workers para funcionalidad sin conexión

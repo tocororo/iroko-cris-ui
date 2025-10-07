@@ -1,0 +1,85 @@
+<div class="evaluation-container">
+  @if (isLoading) {
+  <div class="loading-container">
+    <mat-progress-spinner
+      diameter="40"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+    <p>Cargando metodología de evaluación...</p>
+  </div>
+  } @if (!isLoading && methodology) {
+  <div class="evaluation-content">
+    <!-- Methodology Header -->
+    <div class="methodology-header">
+      <mat-card class="methodology-info">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="methodology-icon"
+            >assessment</mat-icon
+          >
+          <mat-card-title
+            >{{ methodology.name }} v{{ methodology.version }}</mat-card-title
+          >
+          <mat-card-subtitle>{{ methodology.entity }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="methodology-description">{{ methodology.description }}</p>
+
+          <div class="methodology-stats">
+            <div class="stat-item">
+              <strong>{{ methodology.sections.length }}</strong>
+              <span>Secciones</span>
+            </div>
+
+            <div class="stat-item">
+              <strong>{{ getTotalCategories(methodology) }}</strong>
+              <span>Categorías</span>
+            </div>
+
+            <div class="stat-item">
+              <strong>{{ getTotalQuestions(methodology) }}</strong>
+              <span>Preguntas</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>search</mat-icon>
+            Buscar {{ getEntityType() }} para Evaluar
+          </mat-card-title>
+          <mat-card-subtitle>
+            Encuentre el nodo que desea evaluar usando esta metodología
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <app-generic-list
+          [entityType]="getEntityType()"
+          [columns]="searchColumns"
+          [pageSize]="10"
+          (nodeSelected)="onNodeSelected($event)"
+          [fixedFilters]="[]"
+        >
+        </app-generic-list>
+      </mat-card>
+    </div>
+  </div>
+  } @if (!isLoading && !methodology) {
+  <div class="no-methodology">
+    <mat-icon>error_outline</mat-icon>
+    <h3>Metodología no encontrada</h3>
+    <p>
+      La metodología de evaluación solicitada no existe o no está disponible.
+    </p>
+    <button mat-button routerLink="/evaluations">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a Metodologías
+    </button>
+  </div>
+  }
+</div>

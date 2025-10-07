@@ -1,0 +1,242 @@
+.evaluation-viewer-container {
+  padding: 16px;
+}
+
+.overall-score {
+  margin-top: 12px;
+
+  .score-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .score-text {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .questions-count {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+}
+
+.evaluation-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+
+  .summary-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    mat-icon {
+      color: #2196f3;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .summary-content {
+      display: flex;
+      flex-direction: column;
+
+      .summary-label {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 2px;
+      }
+
+      .summary-value {
+        font-size: 0.9rem;
+        color: #333;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.sections-accordion {
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-description {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+
+    .section-text {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .score-badge {
+      background: #2196f3;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.categories-accordion {
+  margin: 8px 0;
+
+  .category-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// Results and Recommendations
+.section-results,
+.category-results {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  .result-content {
+    font-size: 0.95rem;
+  }
+}
+
+.recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+
+  .recommendation-content {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+}
+
+.section-recommendation {
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+}
+
+.category-recommendation {
+  background: #f3e5f5;
+  border-left: 4px solid #9c27b0;
+}
+
+.question-recommendation {
+  background: #e8f5e8;
+  border-left: 4px solid #4caf50;
+}
+
+// Questions List
+.questions-list {
+  padding: 16px 0;
+}
+
+.question-item {
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &.has-result {
+    border-left: 4px solid #4caf50;
+    background-color: #f8f9fa;
+  }
+
+  &.has-recommendation {
+    border-left: 4px solid #ff9800;
+  }
+
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 12px;
+
+    .question-info {
+      flex: 1;
+
+      .question-description {
+        margin: 0 0 8px 0;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+
+      .question-id {
+        font-size: 0.8rem;
+        color: rgba(0, 0, 0, 0.5);
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+    }
+
+    .result-chip {
+      .chip-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .evaluation-viewer-container {
+    padding: 8px;
+  }
+
+  .evaluation-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .overall-score .score-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .question-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    .result-chip {
+      align-self: flex-start;
+    }
+  }
+
+  .section-description {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

@@ -123,6 +123,74 @@
         }
       }
     },
+    "/v1/auth/captcha/": {
+      "get": {
+        "tags": ["authentication", "captcha"],
+        "summary": "Generate Captcha",
+        "description": "Generate a new CAPTCHA challenge",
+        "operationId": "generate_captcha_v1_auth_captcha__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CaptchaResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/captcha/validate": {
+      "post": {
+        "tags": ["authentication", "captcha"],
+        "summary": "Validate Captcha",
+        "description": "Validate a CAPTCHA challenge",
+        "operationId": "validate_captcha_v1_auth_captcha_validate_post",
+        "parameters": [
+          {
+            "name": "captcha_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Captcha Id" }
+          },
+          {
+            "name": "user_input",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "User Input" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/captcha/cleanup": {
+      "post": {
+        "tags": ["authentication", "captcha"],
+        "summary": "Cleanup Captchas",
+        "description": "Clean up expired CAPTCHA challenges (admin endpoint)",
+        "operationId": "cleanup_captchas_v1_auth_captcha_cleanup_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
     "/v1/auth/token": {
       "post": {
         "tags": ["authentication"],
@@ -176,7 +244,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/UserResponse" }
+                "schema": { "$ref": "#/components/schemas/Token" }
               }
             }
           },
@@ -443,6 +511,227 @@
         },
         "security": [{ "OAuth2PasswordBearer": [] }]
       }
+    },
+    "/v1/evals/methodologies": {
+      "get": {
+        "tags": ["evaluations"],
+        "summary": "List Methodologies",
+        "description": "List all available evaluation methodologies",
+        "operationId": "list_methodologies_v1_evals_methodologies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EvaluationMethodology-Output"
+                  },
+                  "type": "array",
+                  "title": "Response List Methodologies V1 Evals Methodologies Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/evals/methodologies/{methodology_id}": {
+      "get": {
+        "tags": ["evaluations"],
+        "summary": "Get Methodology",
+        "description": "Get a specific methodology",
+        "operationId": "get_methodology_v1_evals_methodologies__methodology_id__get",
+        "parameters": [
+          {
+            "name": "methodology_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Methodology Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationMethodology-Output"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/evals/evaluate/{methodology_id}/{node_id}": {
+      "post": {
+        "tags": ["evaluations"],
+        "summary": "Evaluate Node",
+        "description": "Evaluate a node using the specified methodology",
+        "operationId": "evaluate_node_v1_evals_evaluate__methodology_id___node_id__post",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "methodology_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Methodology Id" }
+          },
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Node Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationResult-Output"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/evals/evaluate/store": {
+      "post": {
+        "tags": ["evaluations"],
+        "summary": "Store Evaluation",
+        "description": "Store an evaluation result",
+        "operationId": "store_evaluation_v1_evals_evaluate_store_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationResult-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StoredEvaluation" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
+    "/v1/evals/history/{node_id}": {
+      "get": {
+        "tags": ["evaluations"],
+        "summary": "Get Evaluation History",
+        "description": "Get evaluation history for a node",
+        "operationId": "get_evaluation_history_v1_evals_history__node_id__get",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Node Id" }
+          },
+          {
+            "name": "methodology_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Methodology Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/StoredEvaluation" },
+                  "title": "Response Get Evaluation History V1 Evals History  Node Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/evals/complete": {
+      "post": {
+        "tags": ["evaluations"],
+        "summary": "Complete Evaluation",
+        "description": "Complete an evaluation by providing missing answers and store the result.\nThis is the second step where users provide missing answers.",
+        "operationId": "complete_evaluation_v1_evals_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationResult-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
     }
   },
   "components": {
@@ -472,6 +761,48 @@
         "required": ["username", "password"],
         "title": "Body_login_for_access_token_v1_auth_token_post"
       },
+      "CaptchaResponse": {
+        "properties": {
+          "captcha_id": { "type": "string", "title": "Captcha Id" },
+          "captcha_image": { "type": "string", "title": "Captcha Image" },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": ["captcha_id", "captcha_image", "expires_at"],
+        "title": "CaptchaResponse"
+      },
+      "CategoryResult": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "id": { "type": "string", "title": "Id" },
+          "questions": {
+            "items": { "$ref": "#/components/schemas/QuestionResult" },
+            "type": "array",
+            "title": "Questions",
+            "default": []
+          },
+          "recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recommendation"
+          },
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": ["title", "id"],
+        "title": "CategoryResult"
+      },
       "CypherQuery": {
         "properties": {
           "query": { "type": "string", "title": "Query" },
@@ -496,6 +827,136 @@
           "query": "MATCH (n:Person) WHERE n.name = $name RETURN n LIMIT 10",
           "readonly": true
         }
+      },
+      "EvaluationMethodology-Input": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "version": { "type": "string", "title": "Version" },
+          "description": { "type": "string", "title": "Description" },
+          "entity": { "type": "string", "title": "Entity" },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/MethodologySection" },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "version",
+          "description",
+          "entity",
+          "sections"
+        ],
+        "title": "EvaluationMethodology"
+      },
+      "EvaluationMethodology-Output": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "version": { "type": "string", "title": "Version" },
+          "description": { "type": "string", "title": "Description" },
+          "entity": { "type": "string", "title": "Entity" },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/MethodologySection" },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "version",
+          "description",
+          "entity",
+          "sections"
+        ],
+        "title": "EvaluationMethodology"
+      },
+      "EvaluationResult-Input": {
+        "properties": {
+          "methodology": {
+            "$ref": "#/components/schemas/EvaluationMethodology-Input"
+          },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/SectionResult-Input" },
+            "type": "array",
+            "title": "Sections"
+          },
+          "node_id": { "type": "string", "title": "Node Id" },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "user_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "User Id"
+          },
+          "is_complete": {
+            "type": "boolean",
+            "title": "Is Complete",
+            "default": false
+          },
+          "final_score": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Final Score"
+          },
+          "overall_recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Overall Recommendation"
+          }
+        },
+        "type": "object",
+        "required": ["methodology", "sections", "node_id", "timestamp"],
+        "title": "EvaluationResult"
+      },
+      "EvaluationResult-Output": {
+        "properties": {
+          "methodology": {
+            "$ref": "#/components/schemas/EvaluationMethodology-Output"
+          },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/SectionResult-Output" },
+            "type": "array",
+            "title": "Sections"
+          },
+          "node_id": { "type": "string", "title": "Node Id" },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "user_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "User Id"
+          },
+          "is_complete": {
+            "type": "boolean",
+            "title": "Is Complete",
+            "default": false
+          },
+          "final_score": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Final Score"
+          },
+          "overall_recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Overall Recommendation"
+          }
+        },
+        "type": "object",
+        "required": ["methodology", "sections", "node_id", "timestamp"],
+        "title": "EvaluationResult"
       },
       "FullTextCypherQuery": {
         "properties": {
@@ -551,6 +1012,87 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "MethodologyCategory": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "id": { "type": "string", "title": "Id" },
+          "questions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Questions",
+            "default": []
+          },
+          "recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recommendation"
+          },
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": ["title", "id"],
+        "title": "MethodologyCategory"
+      },
+      "MethodologySection": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "id": { "type": "string", "title": "Id" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "categories": {
+            "items": { "$ref": "#/components/schemas/MethodologyCategory" },
+            "type": "array",
+            "title": "Categories",
+            "default": []
+          },
+          "recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recommendation"
+          },
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": ["title", "id"],
+        "title": "MethodologySection"
+      },
+      "QuestionResult": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          },
+          "recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recommendation"
+          }
+        },
+        "type": "object",
+        "required": ["id"],
+        "title": "QuestionResult"
+      },
       "RoleCreate": {
         "properties": {
           "name": { "type": "string", "title": "Name" },
@@ -587,6 +1129,100 @@
         "required": ["name", "id", "permissions"],
         "title": "RoleResponse"
       },
+      "SectionResult-Input": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "id": { "type": "string", "title": "Id" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "categories": {
+            "items": { "$ref": "#/components/schemas/CategoryResult" },
+            "type": "array",
+            "title": "Categories",
+            "default": []
+          },
+          "recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recommendation"
+          },
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": ["title", "id"],
+        "title": "SectionResult"
+      },
+      "SectionResult-Output": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "id": { "type": "string", "title": "Id" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "categories": {
+            "items": { "$ref": "#/components/schemas/CategoryResult" },
+            "type": "array",
+            "title": "Categories",
+            "default": []
+          },
+          "recommendation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Recommendation"
+          },
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": ["title", "id"],
+        "title": "SectionResult"
+      },
+      "StoredEvaluation": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "node_id": { "type": "string", "title": "Node Id" },
+          "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
+          "methodology_id": { "type": "string", "title": "Methodology Id" },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "evaluation_data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Evaluation Data"
+          },
+          "is_complete": { "type": "boolean", "title": "Is Complete" }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "node_id",
+          "user_id",
+          "methodology_id",
+          "timestamp",
+          "evaluation_data",
+          "is_complete"
+        ],
+        "title": "StoredEvaluation"
+      },
       "Token": {
         "properties": {
           "access_token": { "type": "string", "title": "Access Token" },
@@ -617,70 +1253,82 @@
       },
       "UserResponse": {
         "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
           "email": { "type": "string", "format": "email", "title": "Email" },
           "full_name": {
             "anyOf": [{ "type": "string" }, { "type": "null" }],
             "title": "Full Name"
           },
-          "is_active": {
-            "type": "boolean",
-            "title": "Is Active",
-            "default": true
-          },
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "is_active": { "type": "boolean", "title": "Is Active" },
           "is_superuser": { "type": "boolean", "title": "Is Superuser" },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          },
-          "updated_at": {
-            "anyOf": [
-              { "type": "string", "format": "date-time" },
-              { "type": "null" }
-            ],
-            "title": "Updated At"
-          }
-        },
-        "type": "object",
-        "required": ["email", "id", "is_superuser", "created_at", "updated_at"],
-        "title": "UserResponse"
-      },
-      "UserWithRoles": {
-        "properties": {
-          "email": { "type": "string", "format": "email", "title": "Email" },
-          "full_name": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Full Name"
-          },
-          "is_active": {
-            "type": "boolean",
-            "title": "Is Active",
-            "default": true
-          },
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "is_superuser": { "type": "boolean", "title": "Is Superuser" },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          },
-          "updated_at": {
-            "anyOf": [
-              { "type": "string", "format": "date-time" },
-              { "type": "null" }
-            ],
-            "title": "Updated At"
-          },
           "roles": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Roles",
             "default": []
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
           }
         },
         "type": "object",
-        "required": ["email", "id", "is_superuser", "created_at", "updated_at"],
+        "required": [
+          "id",
+          "email",
+          "is_active",
+          "is_superuser",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "UserResponse"
+      },
+      "UserWithRoles": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "is_superuser": { "type": "boolean", "title": "Is Superuser" },
+          "roles": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Roles",
+            "default": []
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "is_active",
+          "is_superuser",
+          "created_at",
+          "updated_at"
+        ],
         "title": "UserWithRoles"
       },
       "ValidationError": {

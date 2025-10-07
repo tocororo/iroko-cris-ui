@@ -67,14 +67,11 @@
             class="export-btn"
           >
             <mat-icon>download</mat-icon>
-            {{ isExporting ? "Exporting..." : "Export CSV" }}
+            {{ isExporting ? "Exportando..." : "Exportar CSV" }}
           </button>
 
           <div class="export-info" *ngIf="totalCount > 0">
-            <small
-              >Exports all {{ totalCount }} records, not just the current
-              page</small
-            >
+            <small>Exportar los {{ totalCount }} elementos</small>
           </div>
         </div>
       </div>

@@ -80,7 +80,7 @@ export class QueryPageComponent {
       subjects: [],
     });
     // Check if user has access to query page
-    this.hasQueryAccess = this.authService.canAccessQueryPage();
+    this.hasQueryAccess = true; // this.authService.canAccessQueryPage();
 
     if (!this.hasQueryAccess) {
       this.error = {

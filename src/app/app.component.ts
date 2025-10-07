@@ -41,7 +41,7 @@ import { AuthService } from './services/auth.service'; // Add this import
     MatListModule,
     RouterModule,
     MatIconModule,
-    GlobalSearchComponent,
+    // GlobalSearchComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

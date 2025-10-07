@@ -1,0 +1,275 @@
+<div class="evaluation-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>assessment</mat-icon>
+        Evaluación: {{ evaluation.name }} v{{ evaluation.version }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        <p>{{ evaluation.description }}</p>
+        <div class="methodology-stats">
+          <div class="stat">
+            <mat-icon>view_list</mat-icon>
+            <span>{{ evaluation.sections.length }} secciones</span>
+          </div>
+          <div class="stat">
+            <mat-icon>category</mat-icon>
+            <span>{{ getTotalCategories(evaluation) }} categorías</span>
+          </div>
+        </div>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Progress Section -->
+      <div class="progress-section">
+        <div class="progress-info">
+          <span class="progress-text"
+            >Progreso general:
+            {{ getOverallCompletion() | number : "1.0-0" }}%</span
+          >
+          <span class="node-info">Nodo: {{ nodeId }}</span>
+        </div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="getOverallCompletion()"
+          color="primary"
+        >
+        </mat-progress-bar>
+      </div>
+
+      <form
+        [formGroup]="evaluationForm"
+        (ngSubmit)="onSubmit()"
+        class="evaluation-form"
+      >
+        <!-- Sections Accordion -->
+        <mat-accordion multi class="sections-accordion">
+          @for (section of evaluation.sections; track trackBySection($index,
+          section)) {
+          <mat-expansion-panel
+            [expanded]="panelOpenState[section.id]"
+            (opened)="panelOpenState[section.id] = true"
+            (closed)="panelOpenState[section.id] = false"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="section-header">
+                <mat-icon>folder_open</mat-icon>
+                {{ section.title }}
+              </mat-panel-title>
+              <mat-panel-description class="section-description">
+                <span class="section-text">{{ section.description }}</span>
+                <span class="completion-badge">
+                  {{ getSectionCompletion(section) | number : "1.0-0" }}%
+                </span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <!-- Section Recommendation -->
+            @if (section.recommendation) {
+            <div class="section-recommendation">
+              <mat-icon color="warn">warning</mat-icon>
+              <div class="recommendation-content">
+                <strong>Recomendación:</strong> {{ section.recommendation }}
+              </div>
+            </div>
+            }
+
+            <!-- Categories Accordion -->
+            <mat-accordion multi class="categories-accordion">
+              @for (category of section.categories; track
+              trackByCategory($index, category)) {
+              <mat-expansion-panel
+                [expanded]="panelOpenState[category.id]"
+                (opened)="panelOpenState[category.id] = true"
+                (closed)="panelOpenState[category.id] = false"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="category-title">
+                    <mat-icon>category</mat-icon>
+                    {{ category.title }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <!-- Category Recommendation -->
+                @if (category.recommendation) {
+                <div class="category-recommendation">
+                  <mat-icon color="accent">recommend</mat-icon>
+                  <div class="recommendation-content">
+                    <strong>Recomendación:</strong>
+                    {{ category.recommendation }}
+                  </div>
+                </div>
+                }
+
+                <!-- Questions List -->
+                <div class="questions-container">
+                  @for (question of category.questions; track
+                  trackByQuestion($index, question)) {
+                  <div
+                    class="question-item"
+                    [class.answered]="isQuestionAnswered(question)"
+                    [class.has-recommendation]="question.recommendation"
+                    [class.has-error]="isFieldInvalid(question.id)"
+                  >
+                    <div class="question-header">
+                      <h4 class="question-description">
+                        {{ question.description }}
+                      </h4>
+                      <span class="question-id">{{ question.id }}</span>
+                    </div>
+
+                    <!-- Question Controls -->
+                    <div class="question-controls">
+                      <!-- Boolean Question -->
+                      @if (question.type === 'boolean') { @if (question.result
+                      === undefined || question.result === null) {
+                      <mat-checkbox
+                        [formControlName]="question.id"
+                        color="primary"
+                        class="boolean-control"
+                      >
+                        Sí
+                      </mat-checkbox>
+                      @if (isFieldInvalid(question.id)) {
+                      <mat-error class="field-error">
+                        Esta pregunta es requerida
+                      </mat-error>
+                      } } @else {
+                      <div class="pre-filled-result">
+                        <mat-icon class="result-icon">check_circle</mat-icon>
+                        <span class="result-text">
+                          <strong>Respuesta del sistema:</strong>
+                          {{ question.result ? "Sí" : "No" }}
+                        </span>
+                      </div>
+                      } }
+
+                      <!-- Number Question -->
+                      @if (question.type === 'number') { @if (question.result
+                      === undefined || question.result === null) {
+                      <mat-form-field
+                        appearance="outline"
+                        class="number-control"
+                      >
+                        <mat-label>Valor</mat-label>
+                        <input
+                          matInput
+                          type="number"
+                          [formControlName]="question.id"
+                          placeholder="Ingrese un valor"
+                        />
+                        <mat-icon matSuffix>numbers</mat-icon>
+                        @if (isFieldInvalid(question.id)) {
+                        <mat-error>
+                          @if
+                          (getQuestionControl(question.id)?.hasError('required'))
+                          { Este campo es requerido } @if
+                          (getQuestionControl(question.id)?.hasError('min')) {
+                          El valor mínimo es {{ question.min }} } @if
+                          (getQuestionControl(question.id)?.hasError('max')) {
+                          El valor máximo es {{ question.max }}
+                          }
+                        </mat-error>
+                        }
+                      </mat-form-field>
+                      } @else {
+                      <div class="pre-filled-result">
+                        <mat-icon class="result-icon">check_circle</mat-icon>
+                        <span class="result-text">
+                          <strong>Respuesta del sistema:</strong>
+                          {{ question.result }}
+                        </span>
+                      </div>
+                      } }
+
+                      <!-- Select Question -->
+                      @if (question.type === 'select') { @if (question.result
+                      === undefined || question.result === null) {
+                      <mat-form-field
+                        appearance="outline"
+                        class="select-control"
+                      >
+                        <mat-label>Seleccione una opción</mat-label>
+                        <mat-select [formControlName]="question.id">
+                          @for (option of question.selectOptions; track
+                          trackByOption($index, option)) {
+                          <mat-option [value]="option.value">
+                            {{ option.label }}
+                          </mat-option>
+                          }
+                        </mat-select>
+                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                        @if (isFieldInvalid(question.id)) {
+                        <mat-error> Esta selección es requerida </mat-error>
+                        }
+                      </mat-form-field>
+                      } @else {
+                      <div class="pre-filled-result">
+                        <mat-icon class="result-icon">check_circle</mat-icon>
+                        <span class="result-text">
+                          <strong>Respuesta del sistema:</strong>
+                          {{ getSelectOptionLabel(question, question.result) }}
+                        </span>
+                      </div>
+                      } }
+                    </div>
+
+                    <!-- Question Recommendation -->
+                    @if (question.recommendation) {
+                    <div class="question-recommendation">
+                      <mat-icon color="primary" class="recommendation-icon"
+                        >lightbulb</mat-icon
+                      >
+                      <div class="recommendation-content">
+                        <strong>Recomendación:</strong>
+                        {{ question.recommendation }}
+                      </div>
+                    </div>
+                    }
+                  </div>
+                  }
+                </div>
+              </mat-expansion-panel>
+              }
+            </mat-accordion>
+          </mat-expansion-panel>
+          }
+        </mat-accordion>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!evaluationForm.valid || isLoading"
+            class="submit-button"
+          >
+            @if (isLoading) {
+            <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+            <span>Procesando...</span>
+            } @else {
+            <mat-icon>send</mat-icon>
+            <span>Enviar Evaluación</span>
+            }
+          </button>
+
+          <div class="form-status">
+            @if (evaluationForm.valid) {
+            <span class="status-valid">
+              <mat-icon>check_circle</mat-icon>
+              Formulario completo
+            </span>
+            } @else {
+            <span class="status-invalid">
+              <mat-icon>error</mat-icon>
+              Complete todos los campos requeridos
+            </span>
+            }
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

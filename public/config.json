@@ -1,9 +1,9 @@
 {
-  "title": "Grafo de Conocimiento Sceiba",
+  "title": "Iroko",
   "menu": [
     {
       "label": "Inicio",
-      "description": "Resumen del sistema y estadísticas",
+      "description": "Página principal",
       "icon": "home",
       "route": "/"
     },
@@ -13,79 +13,66 @@
       "children": [
         {
           "label": "Revistas MES",
-          "description": "Revistas científicas del MES",
-          "icon": "source",
+          "description": "Revistas científicas del Ministerio de Educación Superior",
+          "icon": "library_books",
           "route": "/mes"
         },
         {
-          "label": "Organizaciones",
-          "description": "Organizaciones e instituciones de investigación",
-          "icon": "corporate_fare",
-          "route": "/organizations"
-        },
-        {
-          "label": "Personas",
-          "description": "Investigadores y colaboradores",
-          "icon": "people",
-          "route": "/persons"
-        },
-        {
-          "label": "Proyectos",
-          "description": "Proyectos e iniciativas de investigación",
-          "icon": "folder",
-          "route": "/projects"
-        },
-        {
-          "label": "Resultados",
-          "description": "Resultados de investigación y publicaciones",
-          "icon": "article",
-          "route": "/outputs"
-        },
-        {
-          "label": "Fuentes",
+          "label": "Fuentes de Datos",
           "description": "Revistas, repositorios y fuentes de datos",
           "icon": "source",
           "route": "/sources"
         },
         {
+          "label": "Organizaciones",
+          "description": "Instituciones y organizaciones de investigación",
+          "icon": "corporate_fare",
+          "route": "/organizations"
+        },
+        {
+          "label": "Investigadores",
+          "description": "Investigadores y científicos",
+          "icon": "people",
+          "route": "/persons"
+        },
+        {
+          "label": "Catálogo",
+          "description": "Revistas, repositorios y fuentes de datos",
+          "icon": "source",
+          "route": "/sources"
+        },
+        {
+          "label": "Resultados",
+          "description": "Resultados de investigación",
+          "icon": "article",
+          "route": "/outputs"
+        },
+        {
           "label": "Vocabularios",
-          "description": "Vocabularios controlados y términos",
+          "description": "Términos y taxonomías",
           "icon": "tag",
           "route": "/vocabularies"
         }
       ]
     },
+
     {
-      "label": "Consulta",
-      "description": "Interfaz avanzada de consultas Cypher",
+      "label": "Evaluaciones",
+      "description": "Metodologías de evaluación",
+      "icon": "assessment",
+      "route": "/evaluations"
+    },
+    {
+      "label": "Consulta Cypher",
+      "description": "Consultas personalizadas al grafo",
       "icon": "code",
       "route": "/query"
     },
     {
       "label": "Acerca de",
-      "description": "Acerca de esta aplicación",
+      "description": "Información sobre la plataforma",
       "icon": "info",
       "route": "/about"
     }
-  ],
-  "relationshipSearchIndices": {
-    "HAS_SUBJECT": "fullTextSearch",
-    "HAS_LICENCE": "fullTextSearch",
-    "COLLECTED_FROM": "fullTextSearch",
-    "SOURCE_CREATED_IN": "fullTextSearch",
-    "IN_INDEX": "fullTextSearch",
-    "CREATED_BY": "fullTextSearch",
-    "AFFILIATED_TO": "fullTextSearch",
-    "RESEARCH_INTEREST": "fullTextSearch",
-    "CLASSIFIED_BY": "fullTextSearch",
-    "RELATED_TO": "fullTextSearch"
-  },
-  "relationshipLabels": {
-    "COLLECTED_FROM": "Recolección",
-    "HAS_LICENCE": "Licencia",
-    "HAS_SUBJECT": "Materia",
-    "HAS": "Tiene",
-    "IN_INDEX": "Indización",
-    "SOURCE_CREATED_IN": "Organización"
-  }
+  ]
 }
