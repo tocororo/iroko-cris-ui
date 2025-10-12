@@ -86,8 +86,6 @@ export class EnhancedNodeViewerComponent implements OnInit {
   ngOnInit() {
     this.labelService.loadRelData().subscribe((metadata) => {
       this.relationshipSearchIndices = metadata.searchIndices;
-      console.error(metadata);
-
       this.loadNode();
     });
   }

@@ -109,6 +109,11 @@ export const routes: Routes = [
     data: { title: 'Evaluación' },
   },
   {
+    path: 'evaluate/:node_id/:eval_id',
+    component: NodeEvaluationPageComponent,
+    data: { title: 'Evaluación' },
+  },
+  {
     path: '**',
     component: ErrorComponent,
     data: { title: 'Página No Encontrada' },

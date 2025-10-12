@@ -1,3 +1,9 @@
+export interface Answer {
+  result?: any;
+  recommendation?: string;
+  user_id?: string;
+}
+
 export interface EvaluationMethodology {
   id: string;
   name: string;
@@ -5,34 +11,33 @@ export interface EvaluationMethodology {
   description: string;
   entity: string;
   sections: EvaluationSection[];
+  answer?: Answer;
 }
 
 export interface EvaluationSection {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   categories: EvaluationCategory[];
-  result?: number;
-  recommendation?: string;
+  answer?: Answer;
 }
 
 export interface EvaluationCategory {
   id: string;
   title: string;
-  questions: EvaluationQuestion[];
-  result?: number;
-  recommendation?: string;
+  description?: string;
+  questions: string[]; // Changed from EvaluationQuestion[] to string[] (question IDs)
+  answer?: Answer;
 }
 
 export interface EvaluationQuestion {
   id: string;
   type: 'boolean' | 'number' | 'select';
-  description: string;
+  desc: string;
   min?: number;
   max?: number;
   selectOptions?: SelectOption[];
-  result?: any;
-  recommendation?: string;
+  answer?: Answer;
 }
 
 export interface SelectOption {
@@ -41,17 +46,20 @@ export interface SelectOption {
 }
 
 export interface EvaluationResult {
-  methodology_id: string;
+  methodology: EvaluationMethodology;
   node_id: string;
   user_id?: string;
   timestamp?: string;
-  evaluation: EvaluationMethodology;
+  is_complete: boolean;
+  is_finalized: boolean;
+  // New field to store question data separately
+  question_data: { [questionId: string]: EvaluationQuestion };
 }
 
 export interface EvaluationRequest {
   node_id: string;
   methodology_id: string;
-  evaluation: EvaluationMethodology;
+  evaluation: EvaluationResult;
 }
 
 export interface EvaluationHistoryItem {
@@ -63,4 +71,25 @@ export interface EvaluationHistoryItem {
   user_name: string;
   timestamp: string;
   overall_score?: number;
+}
+
+// New interface for stored evaluations from backend
+export interface StoredEvaluation {
+  id: string;
+  node_id: string;
+  user_id: string;
+  methodology_id: string;
+  timestamp: string;
+  evaluation_data: any; // JSON representation of EvaluationResult
+  is_complete: boolean;
+}
+
+// New interface for methodology listing
+export interface Methodology {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  entity: string;
+  sections: EvaluationSection[];
 }

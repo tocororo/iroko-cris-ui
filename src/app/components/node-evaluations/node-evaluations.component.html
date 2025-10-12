@@ -1,214 +1,99 @@
 <div class="node-evaluations-container">
-  <!-- Evaluation Workspace -->
-  @if (selectedEvaluation) {
-  <div class="evaluation-workspace">
-    <mat-tab-group [(selectedIndex)]="activeTab" class="evaluation-tabs">
-      <!-- Tab 1: New Evaluation -->
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>create</mat-icon>
+  @if (isLoadingHistory) {
+  <div class="loading-container">
+    <mat-progress-spinner
+      diameter="40"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+    <p>Cargando historial de evaluaciones...</p>
+  </div>
+  } @if (!isLoadingHistory && evaluationHistory.length === 0) {
+  <div class="no-history">
+    <mat-icon>history_toggle_off</mat-icon>
+    <h3>No hay evaluaciones</h3>
+  </div>
+  } @if (!isLoadingHistory && evaluationHistory.length > 0) {
+  <div class="history-container">
+    <div class="history-sidebar">
+      <div class="history-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="startNewEvaluation()"
+          class="new-evaluation-btn"
+        >
+          <mat-icon>add</mat-icon>
           Nueva Evaluación
-        </ng-template>
+        </button>
+      </div>
 
-        <div class="tab-content">
-          <!-- Evaluation Selection -->
-          @if (!methodologyId) {
-          <div class="evaluation-selection">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>assessment</mat-icon>
-                  Seleccionar Evaluación
-                </mat-card-title>
-                <mat-card-subtitle>
-                  Elige una metodología de evaluación para este nodo
-                </mat-card-subtitle>
-              </mat-card-header>
+      <div class="history-list">
+        <h3>Evaluaciones Anteriores</h3>
 
-              <mat-card-content>
-                @if (isLoadingEvaluations) {
-                <div class="loading-container">
-                  <mat-progress-spinner
-                    diameter="40"
-                    mode="indeterminate"
-                  ></mat-progress-spinner>
-                  <p>Cargando evaluaciones disponibles...</p>
-                </div>
-                } @if (!isLoadingEvaluations && availableEvaluations.length ===
-                0) {
-                <div class="no-evaluations">
-                  <mat-icon>assessment_off</mat-icon>
-                  <h3>No hay evaluaciones disponibles</h3>
-                  <p>
-                    No se encontraron metodologías de evaluación para nodos de
-                    tipo
-                    {{ nodeType }}.
+        <div class="history-items">
+          @for (item of evaluationHistory; track trackByHistoryItem($index,
+          item)) {
+          <mat-card
+            class="history-item"
+            [class.selected]="
+              selectedEvaluationResult?.timestamp === item.timestamp
+            "
+            (click)="viewEvaluationResult(item.id)"
+          >
+            <mat-card-content>
+              <div class="history-item-header">
+                <div class="item-info">
+                  <h4>{{ item.methodology_name }}</h4>
+                  <p class="user-info">Evaluado por: {{ item.user_name }}</p>
+                  <p class="timestamp">
+                    {{ item.timestamp | date : "medium" }}
                   </p>
-                  <button mat-button routerLink="/evaluations">
-                    <mat-icon>explore</mat-icon>
-                    Explorar Todas las Evaluaciones
-                  </button>
                 </div>
-                } @if (!isLoadingEvaluations && availableEvaluations.length > 0)
-                {
-                <div class="evaluations-grid">
-                  @for (methodology of availableEvaluations; track
-                  trackByMethodology($index, methodology)) {
-                  <mat-card
-                    class="methodology-card"
-                    [class.selected]="selectedEvaluation?.id === methodology.id"
-                    (click)="selectEvaluation(methodology)"
-                  >
-                    <mat-card-header>
-                      <mat-icon mat-card-avatar class="methodology-icon">
-                        {{ getEvaluationIcon(methodology.entity) }}
-                      </mat-icon>
-                      <mat-card-title>{{ methodology.name }}</mat-card-title>
-                      <mat-card-subtitle
-                        >v{{ methodology.version }}</mat-card-subtitle
-                      >
-                    </mat-card-header>
-                  </mat-card>
-                  }
+
+                @if (item.overall_score !== undefined) {
+                <div class="item-score">
+                  <span class="score-value">{{
+                    item.overall_score | number : "1.1-1"
+                  }}</span>
+                  <span class="score-label">Puntuación</span>
                 </div>
                 }
-              </mat-card-content>
-            </mat-card>
-          </div>
-          }
+              </div>
 
-          <app-node-evaluation-form
-            [evaluation]="selectedEvaluation"
-            [nodeId]="nodeId"
-            [isLoading]="isSubmitting"
-            (evaluationSubmit)="onEvaluationSubmit($event)"
-          >
-          </app-node-evaluation-form>
-        </div>
-      </mat-tab>
-
-      <!-- Tab 2: Evaluation History -->
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>history</mat-icon>
-          Historial @if (evaluationHistory.length > 0) {
-          <span class="tab-badge">{{ evaluationHistory.length }}</span>
-          }
-        </ng-template>
-
-        <div class="tab-content">
-          @if (isLoadingHistory) {
-          <div class="loading-container">
-            <mat-progress-spinner
-              diameter="40"
-              mode="indeterminate"
-            ></mat-progress-spinner>
-            <p>Cargando historial de evaluaciones...</p>
-          </div>
-          } @if (!isLoadingHistory && evaluationHistory.length === 0) {
-          <div class="no-history">
-            <mat-icon>history_toggle_off</mat-icon>
-            <h3>No hay evaluaciones anteriores</h3>
-            <p>
-              Realiza una evaluación en la pestaña "Nueva Evaluación" para ver
-              el historial aquí.
-            </p>
-          </div>
-          } @if (!isLoadingHistory && evaluationHistory.length > 0) {
-          <div class="history-container">
-            <div class="history-sidebar">
-              <div class="history-actions">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="startNewEvaluation()"
-                  class="new-evaluation-btn"
-                >
-                  <mat-icon>add</mat-icon>
-                  Nueva Evaluación
+              <div class="history-item-actions">
+                <button mat-button color="primary" class="view-details-btn">
+                  <mat-icon>visibility</mat-icon>
+                  Ver Detalles
                 </button>
               </div>
-
-              <div class="history-list">
-                <h3>Evaluaciones Anteriores</h3>
-
-                <div class="history-items">
-                  @for (item of evaluationHistory; track
-                  trackByHistoryItem($index, item)) {
-                  <mat-card
-                    class="history-item"
-                    [class.selected]="
-                      selectedEvaluationResult?.timestamp === item.timestamp
-                    "
-                    (click)="viewEvaluationResult(item.id)"
-                  >
-                    <mat-card-content>
-                      <div class="history-item-header">
-                        <div class="item-info">
-                          <h4>{{ item.methodology_name }}</h4>
-                          <p class="user-info">
-                            Evaluado por: {{ item.user_name }}
-                          </p>
-                          <p class="timestamp">
-                            {{ item.timestamp | date : "medium" }}
-                          </p>
-                        </div>
-
-                        @if (item.overall_score !== undefined) {
-                        <div class="item-score">
-                          <span class="score-value">{{
-                            item.overall_score | number : "1.1-1"
-                          }}</span>
-                          <span class="score-label">Puntuación</span>
-                        </div>
-                        }
-                      </div>
-
-                      <div class="history-item-actions">
-                        <button
-                          mat-button
-                          color="primary"
-                          class="view-details-btn"
-                        >
-                          <mat-icon>visibility</mat-icon>
-                          Ver Detalles
-                        </button>
-                      </div>
-                    </mat-card-content>
-                  </mat-card>
-                  }
-                </div>
-              </div>
-            </div>
-
-            <div class="history-details">
-              @if (selectedEvaluationResult) {
-              <app-node-evaluation-viewer
-                [evaluation]="selectedEvaluationResult.evaluation"
-                [title]="
-                  'Evaluación - ' +
-                  (selectedEvaluationResult.timestamp | date : 'medium')
-                "
-                [showDetails]="true"
-              >
-              </app-node-evaluation-viewer>
-              } @if (!selectedEvaluationResult && evaluationHistory.length > 0)
-              {
-              <div class="no-selection">
-                <mat-icon>info</mat-icon>
-                <h3>Selecciona una evaluación</h3>
-                <p>
-                  Elige una evaluación del historial para ver los detalles
-                  completos
-                </p>
-              </div>
-              }
-            </div>
-          </div>
+            </mat-card-content>
+          </mat-card>
           }
         </div>
-      </mat-tab>
-    </mat-tab-group>
+      </div>
+    </div>
+
+    <div class="history-details">
+      @if (selectedEvaluationResult) {
+      <app-node-evaluation-viewer
+        [result]="selectedEvaluationResult"
+        [title]="
+          'Evaluación - ' +
+          (selectedEvaluationResult.timestamp | date : 'medium')
+        "
+        [showDetails]="true"
+      >
+      </app-node-evaluation-viewer>
+      } @if (!selectedEvaluationResult && evaluationHistory.length > 0) {
+      <div class="no-selection">
+        <mat-icon>info</mat-icon>
+        <h3>Selecciona una evaluación</h3>
+        <p>
+          Elige una evaluación del historial para ver los detalles completos
+        </p>
+      </div>
+      }
+    </div>
   </div>
   }
 </div>

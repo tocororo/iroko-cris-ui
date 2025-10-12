@@ -33,22 +33,31 @@ export class EvaluationService {
   startEvaluation(
     nodeId: string,
     methodologyId: string
-  ): Observable<EvaluationMethodology> {
-    return this.http.get<EvaluationMethodology>(
+  ): Observable<EvaluationResult> {
+    return this.http.get<EvaluationResult>(
       `${this.API_URL}/evaluate/${methodologyId}/${nodeId}`
     );
   }
 
   // Submit evaluation for processing
   submitEvaluation(
-    evaluationRequest: EvaluationRequest
+    evaluationRequest: EvaluationResult
   ): Observable<EvaluationResult> {
     return this.http.post<EvaluationResult>(
-      `${this.API_URL}/evaluate`,
+      `${this.API_URL}/evaluate/complete`,
       evaluationRequest
     );
   }
 
+  // Submit evaluation for processing
+  finishEvaluation(
+    evaluationRequest: EvaluationResult
+  ): Observable<EvaluationResult> {
+    return this.http.post<EvaluationResult>(
+      `${this.API_URL}/evaluate/store`,
+      evaluationRequest
+    );
+  }
   // Get evaluation history for a node
   getEvaluationHistory(nodeId: string): Observable<EvaluationHistoryItem[]> {
     return this.http.get<EvaluationHistoryItem[]>(

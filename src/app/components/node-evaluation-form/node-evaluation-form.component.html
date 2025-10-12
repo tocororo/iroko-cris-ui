@@ -1,20 +1,25 @@
+<!-- node-evaluation-form.component.html -->
 <div class="evaluation-form-container">
   <mat-card>
     <mat-card-header>
       <mat-card-title>
         <mat-icon>assessment</mat-icon>
-        Evaluación: {{ evaluation.name }} v{{ evaluation.version }}
+        Evaluación: {{ evaluation.methodology.name }} v{{
+          evaluation.methodology.version
+        }}
       </mat-card-title>
       <mat-card-subtitle>
-        <p>{{ evaluation.description }}</p>
+        <p>{{ evaluation.methodology.description }}</p>
         <div class="methodology-stats">
           <div class="stat">
             <mat-icon>view_list</mat-icon>
-            <span>{{ evaluation.sections.length }} secciones</span>
+            <span>{{ evaluation.methodology.sections.length }} secciones</span>
           </div>
           <div class="stat">
             <mat-icon>category</mat-icon>
-            <span>{{ getTotalCategories(evaluation) }} categorías</span>
+            <span
+              >{{ getTotalCategories(evaluation.methodology) }} categorías</span
+            >
           </div>
         </div>
       </mat-card-subtitle>
@@ -45,8 +50,8 @@
       >
         <!-- Sections Accordion -->
         <mat-accordion multi class="sections-accordion">
-          @for (section of evaluation.sections; track trackBySection($index,
-          section)) {
+          @for (section of evaluation.methodology.sections; track
+          trackBySection($index, section)) {
           <mat-expansion-panel
             [expanded]="panelOpenState[section.id]"
             (opened)="panelOpenState[section.id] = true"
@@ -66,11 +71,12 @@
             </mat-expansion-panel-header>
 
             <!-- Section Recommendation -->
-            @if (section.recommendation) {
+            @if (section.answer?.recommendation) {
             <div class="section-recommendation">
               <mat-icon color="warn">warning</mat-icon>
               <div class="recommendation-content">
-                <strong>Recomendación:</strong> {{ section.recommendation }}
+                <strong>Recomendación:</strong>
+                {{ section.answer?.recommendation }}
               </div>
             </div>
             }
@@ -92,29 +98,30 @@
                 </mat-expansion-panel-header>
 
                 <!-- Category Recommendation -->
-                @if (category.recommendation) {
+                @if (category.answer?.recommendation) {
                 <div class="category-recommendation">
                   <mat-icon color="accent">recommend</mat-icon>
                   <div class="recommendation-content">
                     <strong>Recomendación:</strong>
-                    {{ category.recommendation }}
+                    {{ category.answer?.recommendation }}
                   </div>
                 </div>
                 }
 
                 <!-- Questions List -->
                 <div class="questions-container">
-                  @for (question of category.questions; track
-                  trackByQuestion($index, question)) {
+                  @for (questionId of category.questions; track
+                  trackByQuestion($index, questionId)) { @let question =
+                  evaluation.question_data[questionId];
                   <div
                     class="question-item"
-                    [class.answered]="isQuestionAnswered(question)"
-                    [class.has-recommendation]="question.recommendation"
-                    [class.has-error]="isFieldInvalid(question.id)"
+                    [class.answered]="isQuestionAnswered(questionId)"
+                    [class.has-recommendation]="question.answer?.recommendation"
+                    [class.has-error]="isFieldInvalid(questionId)"
                   >
                     <div class="question-header">
                       <h4 class="question-description">
-                        {{ question.description }}
+                        {{ question.desc }}
                       </h4>
                       <span class="question-id">{{ question.id }}</span>
                     </div>
@@ -122,15 +129,23 @@
                     <!-- Question Controls -->
                     <div class="question-controls">
                       <!-- Boolean Question -->
-                      @if (question.type === 'boolean') { @if (question.result
-                      === undefined || question.result === null) {
-                      <mat-checkbox
+                      @if (question.type === 'boolean') { @if
+                      (question.answer?.result === undefined ||
+                      question.answer?.result === null ||
+                      isUserAnsweredQuestion(question)) {
+                      <mat-radio-group
                         [formControlName]="question.id"
-                        color="primary"
                         class="boolean-control"
+                        aria-label="{{ question.desc }}"
                       >
-                        Sí
-                      </mat-checkbox>
+                        <mat-radio-button value="true" color="primary"
+                          >Sí</mat-radio-button
+                        >
+                        <mat-radio-button value="false" color="primary"
+                          >No</mat-radio-button
+                        >
+                      </mat-radio-group>
+
                       @if (isFieldInvalid(question.id)) {
                       <mat-error class="field-error">
                         Esta pregunta es requerida
@@ -139,15 +154,17 @@
                       <div class="pre-filled-result">
                         <mat-icon class="result-icon">check_circle</mat-icon>
                         <span class="result-text">
-                          <strong>Respuesta del sistema:</strong>
-                          {{ question.result ? "Sí" : "No" }}
+                          <strong>{{ getAnswerTypeLabel(question) }}</strong>
+                          {{ question.answer?.result ? "Sí" : "No" }}
                         </span>
                       </div>
                       } }
 
                       <!-- Number Question -->
-                      @if (question.type === 'number') { @if (question.result
-                      === undefined || question.result === null) {
+                      @if (question.type === 'number') { @if
+                      (question.answer?.result === undefined ||
+                      question.answer?.result === null ||
+                      isUserAnsweredQuestion(question)) {
                       <mat-form-field
                         appearance="outline"
                         class="number-control"
@@ -177,15 +194,17 @@
                       <div class="pre-filled-result">
                         <mat-icon class="result-icon">check_circle</mat-icon>
                         <span class="result-text">
-                          <strong>Respuesta del sistema:</strong>
-                          {{ question.result }}
+                          <strong>{{ getAnswerTypeLabel(question) }}</strong>
+                          {{ question.answer?.result }}
                         </span>
                       </div>
                       } }
 
                       <!-- Select Question -->
-                      @if (question.type === 'select') { @if (question.result
-                      === undefined || question.result === null) {
+                      @if (question.type === 'select') { @if
+                      (question.answer?.result === undefined ||
+                      question.answer?.result === null ||
+                      isUserAnsweredQuestion(question)) {
                       <mat-form-field
                         appearance="outline"
                         class="select-control"
@@ -199,7 +218,7 @@
                           </mat-option>
                           }
                         </mat-select>
-                        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+
                         @if (isFieldInvalid(question.id)) {
                         <mat-error> Esta selección es requerida </mat-error>
                         }
@@ -208,22 +227,27 @@
                       <div class="pre-filled-result">
                         <mat-icon class="result-icon">check_circle</mat-icon>
                         <span class="result-text">
-                          <strong>Respuesta del sistema:</strong>
-                          {{ getSelectOptionLabel(question, question.result) }}
+                          <strong>{{ getAnswerTypeLabel(question) }}</strong>
+                          {{
+                            getSelectOptionLabel(
+                              question,
+                              question.answer?.result
+                            )
+                          }}
                         </span>
                       </div>
                       } }
                     </div>
 
                     <!-- Question Recommendation -->
-                    @if (question.recommendation) {
+                    @if (question.answer?.recommendation) {
                     <div class="question-recommendation">
                       <mat-icon color="primary" class="recommendation-icon"
                         >lightbulb</mat-icon
                       >
                       <div class="recommendation-content">
                         <strong>Recomendación:</strong>
-                        {{ question.recommendation }}
+                        {{ question.answer?.recommendation }}
                       </div>
                     </div>
                     }
@@ -239,27 +263,58 @@
 
         <!-- Submit Button -->
         <div class="form-actions">
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="!evaluationForm.valid || isLoading"
-            class="submit-button"
-          >
-            @if (isLoading) {
-            <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-            <span>Procesando...</span>
-            } @else {
-            <mat-icon>send</mat-icon>
-            <span>Enviar Evaluación</span>
-            }
-          </button>
+          <div class="action-buttons">
+            <!-- Enviar Evaluación Button - Only show if there are unanswered questions -->
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="!evaluationForm.valid || isLoading"
+              class="submit-button"
+            >
+              @if (isLoading) {
+              <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+              <span>Procesando...</span>
+              } @else {
+              <ng-container>
+                <mat-icon>send</mat-icon>
+                <span>Procesar Evaluación</span></ng-container
+              >
+              }
+            </button>
+
+            <!-- Finalizar Evaluación Button -->
+            <button
+              mat-raised-button
+              color="accent"
+              type="button"
+              (click)="onFinalize()"
+              [disabled]="isFinalizing || hasUnansweredQuestions()"
+              class="finalize-button"
+            >
+              @if (isFinalizing) {
+              <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+              <span>Finalizando...</span>
+              } @else {
+              <ng-container>
+                <mat-icon>check_circle</mat-icon>
+                <span>Finalizar Evaluación</span></ng-container
+              >
+              }
+            </button>
+          </div>
 
           <div class="form-status">
-            @if (evaluationForm.valid) {
+            @if (!hasUnansweredQuestions()) {
             <span class="status-valid">
               <mat-icon>check_circle</mat-icon>
-              Formulario completo
+              Todas las preguntas han sido respondidas
+            </span>
+            } @else if (evaluationForm.valid) {
+            <span class="status-valid">
+              <mat-icon>check_circle</mat-icon>
+              Formulario completo - Listo para enviar
             </span>
             } @else {
             <span class="status-invalid">

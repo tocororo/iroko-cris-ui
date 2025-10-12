@@ -1,3 +1,4 @@
+<!-- node-evaluation-viewer.component.html -->
 <div class="evaluation-viewer-container">
   <mat-card>
     <mat-card-header>
@@ -6,7 +7,7 @@
         {{ title }}
       </mat-card-title>
       <mat-card-subtitle>
-        {{ evaluation.name }} v{{ evaluation.version }}
+        {{ result.methodology.name }} v{{ result.methodology.version }}
         <div class="overall-score">
           <div class="score-info">
             <span class="score-text"
@@ -34,7 +35,9 @@
           <mat-icon>description</mat-icon>
           <div class="summary-content">
             <span class="summary-label">Descripción</span>
-            <span class="summary-value">{{ evaluation.description }}</span>
+            <span class="summary-value">{{
+              result.methodology.description
+            }}</span>
           </div>
         </div>
 
@@ -42,7 +45,7 @@
           <mat-icon>label</mat-icon>
           <div class="summary-content">
             <span class="summary-label">Entidad</span>
-            <span class="summary-value">{{ evaluation.entity }}</span>
+            <span class="summary-value">{{ result.methodology.entity }}</span>
           </div>
         </div>
 
@@ -51,7 +54,7 @@
           <div class="summary-content">
             <span class="summary-label">Estructura</span>
             <span class="summary-value">
-              {{ evaluation.sections.length }} secciones,
+              {{ result.methodology.sections.length }} secciones,
               {{ getTotalCategories() }} categorías
             </span>
           </div>
@@ -60,8 +63,8 @@
 
       <!-- Sections Accordion -->
       <mat-accordion multi class="sections-accordion">
-        @for (section of evaluation.sections; track trackBySection($index,
-        section)) {
+        @for (section of result.methodology.sections; track
+        trackBySection($index, section)) {
         <mat-expansion-panel
           [expanded]="panelOpenState[section.id]"
           (opened)="panelOpenState[section.id] = true"
@@ -81,20 +84,23 @@
           </mat-expansion-panel-header>
 
           <!-- Section Result and Recommendation -->
-          @if (section.result !== undefined || section.recommendation) {
+          @if (section.answer?.result !== undefined ||
+          section.answer?.recommendation) {
           <div class="section-results">
-            @if (section.result !== undefined) {
+            @if (section.answer?.result !== undefined) {
             <div class="result-item">
               <mat-icon>score</mat-icon>
               <div class="result-content">
-                <strong>Resultado de la sección:</strong> {{ section.result }}
+                <strong>Resultado de la sección:</strong>
+                {{ section.answer?.result }}
               </div>
             </div>
-            } @if (section.recommendation) {
+            } @if (section.answer?.recommendation) {
             <div class="recommendation-item section-recommendation">
               <mat-icon color="warn">warning</mat-icon>
               <div class="recommendation-content">
-                <strong>Recomendación:</strong> {{ section.recommendation }}
+                <strong>Recomendación:</strong>
+                {{ section.answer?.recommendation }}
               </div>
             </div>
             }
@@ -118,22 +124,23 @@
               </mat-expansion-panel-header>
 
               <!-- Category Result and Recommendation -->
-              @if (category.result !== undefined || category.recommendation) {
+              @if (category.answer?.result !== undefined ||
+              category.answer?.recommendation) {
               <div class="category-results">
-                @if (category.result !== undefined) {
+                @if (category.answer?.result !== undefined) {
                 <div class="result-item">
                   <mat-icon>score</mat-icon>
                   <div class="result-content">
                     <strong>Resultado de la categoría:</strong>
-                    {{ category.result }}
+                    {{ category.answer?.result }}
                   </div>
                 </div>
-                } @if (category.recommendation) {
+                } @if (category.answer?.recommendation) {
                 <div class="recommendation-item category-recommendation">
                   <mat-icon color="accent">recommend</mat-icon>
                   <div class="recommendation-content">
                     <strong>Recomendación:</strong>
-                    {{ category.recommendation }}
+                    {{ category.answer?.recommendation }}
                   </div>
                 </div>
                 }
@@ -142,19 +149,21 @@
 
               <!-- Questions List -->
               <div class="questions-list">
-                @for (question of category.questions; track
-                trackByQuestion($index, question)) {
+                @for (questionId of category.questions; track
+                trackByQuestion($index, questionId)) { @let question =
+                result.question_data[questionId];
                 <div
                   class="question-item"
                   [class.has-result]="
-                    question.result !== undefined && question.result !== null
+                    question.answer?.result !== undefined &&
+                    question.answer?.result !== null
                   "
-                  [class.has-recommendation]="question.recommendation"
+                  [class.has-recommendation]="question.answer?.recommendation"
                 >
                   <div class="question-header">
                     <div class="question-info">
                       <h4 class="question-description">
-                        {{ question.description }}
+                        {{ question.desc }}
                       </h4>
                       <span class="question-id">{{ question.id }}</span>
                     </div>
@@ -172,12 +181,12 @@
                   </div>
 
                   <!-- Question Recommendation -->
-                  @if (question.recommendation) {
+                  @if (question.answer?.recommendation) {
                   <div class="recommendation-item question-recommendation">
                     <mat-icon color="primary">lightbulb</mat-icon>
                     <div class="recommendation-content">
                       <strong>Recomendación:</strong>
-                      {{ question.recommendation }}
+                      {{ question.answer?.recommendation }}
                     </div>
                   </div>
                   }

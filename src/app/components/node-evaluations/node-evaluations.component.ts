@@ -17,7 +17,6 @@ import {
   EvaluationResult,
   EvaluationHistoryItem,
 } from '../../api/models/evaluation.model';
-
 @Component({
   selector: 'app-node-evaluations',
   standalone: true,
@@ -30,7 +29,6 @@ import {
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    NodeEvaluationFormComponent,
     NodeEvaluationViewerComponent,
   ],
   templateUrl: './node-evaluations.component.html',
@@ -39,7 +37,6 @@ import {
 export class NodeEvaluationsComponent implements OnInit, OnDestroy {
   private evaluationService = inject(EvaluationService);
   private snackBar = inject(MatSnackBar);
-  private router = inject(Router);
 
   @Input({ required: true }) nodeId!: string;
   @Input({ required: true }) nodeType!: string;
@@ -166,44 +163,6 @@ export class NodeEvaluationsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
-  onEvaluationSubmit(evaluation: EvaluationMethodology) {
-    if (!this.selectedEvaluation) return;
-
-    this.isSubmitting = true;
-
-    const sub = this.evaluationService
-      .submitEvaluation({
-        node_id: this.nodeId,
-        methodology_id: this.selectedEvaluation.id,
-        evaluation: evaluation,
-      })
-      .subscribe({
-        next: (result) => {
-          this.isSubmitting = false;
-          this.snackBar.open('Evaluación enviada exitosamente', 'Cerrar', {
-            duration: 5000,
-          });
-
-          // Update with results
-          this.selectedEvaluation = result.evaluation;
-
-          // Reload history to include the new evaluation
-          this.loadEvaluationHistory();
-
-          // Switch to history tab to see the result
-          this.activeTab = 1;
-        },
-        error: (error) => {
-          console.error('Error submitting evaluation:', error);
-          this.snackBar.open('Error al enviar la evaluación', 'Cerrar', {
-            duration: 5000,
-          });
-          this.isSubmitting = false;
-        },
-      });
-    this.subscriptions.push(sub);
-  }
-
   viewEvaluationResult(evaluationId: string) {
     const sub = this.evaluationService
       .getEvaluationResult(evaluationId)
@@ -240,20 +199,6 @@ export class NodeEvaluationsComponent implements OnInit, OnDestroy {
       Output: 'article',
     };
     return iconMap[entityType] || 'assessment';
-  }
-
-  getTotalCategories(evaluation: EvaluationMethodology): number {
-    return evaluation.sections.reduce(
-      (total, section) => total + section.categories.length,
-      0
-    );
-  }
-
-  trackByMethodology(
-    index: number,
-    methodology: EvaluationMethodology
-  ): string {
-    return methodology.id;
   }
 
   trackByHistoryItem(index: number, item: EvaluationHistoryItem): string {

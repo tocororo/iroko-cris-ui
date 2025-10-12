@@ -1,43 +1,43 @@
 <!-- src/app/pages/node-view/node-view.component.html -->
-<div class="node-view-page">
-  <div class="page-header">
-    <!-- <mat-card-header>
-      <mat-card-title>
-        {{ node.name || node.title || node.id }}
-      </mat-card-title>
-      <mat-card-subtitle>
+<div class="page-container">
+  <div class="node-view-page">
+    <div class="page-header">
+      <h1>
+        {{ nodeName }}
+      </h1>
+      <span>
         <mat-chip class="entity-type-chip">{{ nodeType }}</mat-chip>
-      </mat-card-subtitle>
-    </mat-card-header>
+      </span>
+    </div>
 
-    <button mat-button (click)="goBack()" class="back-button">
-      <mat-icon>arrow_back</mat-icon>
-      Volver a {{ getBreadcrumbLabel() }}
-    </button> -->
-  </div>
-
-  <mat-tab-group [(selectedIndex)]="activeTab" class="node-view-tabs">
-    <!-- Tab 1: Node Details -->
-    <mat-tab label="Detalles del Nodo">
-      <div class="tab-content">
-        <div class="node-viewer-container">
-          <app-enhanced-node-viewer
-            [nodeId]="nodeId"
-            [nodeType]="nodeType"
-            (nodeLoaded)="onNodeLoaded($event)"
-            (nodeSelected)="onRelatedNodeSelect($event)"
-          >
-          </app-enhanced-node-viewer>
+    <mat-tab-group [(selectedIndex)]="activeTab" class="node-view-tabs">
+      <!-- Tab 1: Node Details -->
+      <mat-tab label="Detalles del Nodo">
+        <div class="tab-content">
+          <div class="node-viewer-container">
+            <app-enhanced-node-viewer
+              [nodeId]="nodeId"
+              [nodeType]="nodeType"
+              (nodeLoaded)="onNodeLoaded($event)"
+              (nodeSelected)="onRelatedNodeSelect($event)"
+            >
+            </app-enhanced-node-viewer>
+          </div>
         </div>
-      </div>
-    </mat-tab>
+      </mat-tab>
 
-    <!-- Tab 2: Evaluations -->
-    <mat-tab label="Evaluaciones">
-      <div class="tab-content">
-        <app-node-evaluations [nodeId]="nodeId" [nodeType]="nodeType">
-        </app-node-evaluations>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+      <!-- Tab 2: Evaluations -->
+      <mat-tab label="Evaluaciones">
+        <div class="tab-content">
+          <button mat-button (click)="openEvaluationSelection()">
+            <mat-icon>add</mat-icon>
+            <!-- Note: 'new' isn't a standard Material icon -->
+            Nueva Evaluación
+          </button>
+          <app-node-evaluations [nodeId]="nodeId" [nodeType]="nodeType">
+          </app-node-evaluations>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>

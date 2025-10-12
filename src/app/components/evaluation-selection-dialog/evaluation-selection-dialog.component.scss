@@ -1,0 +1,246 @@
+.evaluation-selection-dialog {
+  min-width: 600px;
+  max-width: 800px;
+
+  .dialog-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+
+    h2 {
+      margin: 0;
+      color: #333;
+      font-size: 1.5rem;
+    }
+
+    mat-icon {
+      color: #2196f3;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .dialog-content {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+
+    .dialog-description {
+      margin: 0 0 24px 0;
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+    gap: 12px;
+
+    .start-button {
+      min-width: 180px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .explore-all-button {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  p {
+    margin-top: 16px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.no-evaluations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: #9e9e9e;
+  }
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 1.3rem;
+  }
+
+  p {
+    margin: 0 0 20px 0;
+    color: rgba(0, 0, 0, 0.5);
+    line-height: 1.5;
+  }
+
+  .explore-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.evaluations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.methodology-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.selected {
+    border-color: #2196f3;
+    background-color: #f3f9ff;
+
+    .select-button {
+      background: #2196f3;
+      color: white;
+    }
+  }
+
+  .methodology-icon {
+    background: #2196f3;
+    color: white;
+    border-radius: 50%;
+    padding: 8px;
+  }
+}
+
+.methodology-description {
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.methodology-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #666;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #2196f3;
+    }
+  }
+}
+
+.select-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: 1px solid #e0e0e0;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .evaluation-selection-dialog {
+    min-width: unset;
+    width: 95vw;
+    max-width: 95vw;
+
+    .dialog-title {
+      padding: 20px 20px 12px 20px;
+
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    .dialog-content {
+      padding: 20px;
+    }
+
+    .dialog-actions {
+      padding: 12px 20px;
+      flex-wrap: wrap;
+
+      .start-button {
+        min-width: unset;
+        flex: 1;
+      }
+    }
+  }
+
+  .evaluations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .methodology-stats {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .evaluation-selection-dialog {
+    .dialog-actions {
+      flex-direction: column;
+      gap: 8px;
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

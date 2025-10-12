@@ -1,9 +1,12 @@
+// node-evaluation-form.component.ts
 import {
   Component,
   Input,
   Output,
   EventEmitter,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -28,11 +31,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
 
 // Models
 import {
   EvaluationMethodology,
   EvaluationQuestion,
+  EvaluationResult,
+  EvaluationSection,
+  EvaluationCategory,
 } from '../../api/models/evaluation.model';
 
 @Component({
@@ -47,7 +54,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatCheckboxModule,
+    MatRadioModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
@@ -58,88 +65,141 @@ import {
   templateUrl: './node-evaluation-form.component.html',
   styleUrls: ['./node-evaluation-form.component.scss'],
 })
-export class NodeEvaluationFormComponent implements OnInit {
+export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
 
-  @Input({ required: true }) evaluation!: EvaluationMethodology;
+  @Input({ required: true }) evaluation!: EvaluationResult;
   @Input({ required: true }) nodeId!: string;
   @Input() isLoading = false;
-  @Output() evaluationSubmit = new EventEmitter<EvaluationMethodology>();
+  @Input() isFinalizing = false;
+  @Output() evaluationSubmit = new EventEmitter<EvaluationResult>();
+  @Output() evaluationFinalize = new EventEmitter<EvaluationResult>();
 
   evaluationForm!: FormGroup;
   panelOpenState: { [key: string]: boolean } = {};
+  hasBeenSubmitted = false;
+
+  user_id: string | undefined = undefined;
 
   ngOnInit() {
     this.buildForm();
+    this.user_id = this.evaluation.user_id;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Rebuild form when evaluation input changes (after reload)
+    if (changes['evaluation'] && !changes['evaluation'].firstChange) {
+      this.user_id = this.evaluation.user_id;
+      this.buildForm();
+    }
   }
 
   private buildForm() {
     const formControls: { [key: string]: [any, any[]?] } = {};
 
-    this.evaluation.sections.forEach((section) => {
-      section.categories.forEach((category) => {
-        category.questions.forEach((question) => {
-          // Only create controls for questions that don't have pre-filled results
-          if (question.result === undefined || question.result === null) {
-            const validators = [];
-
-            if (question.type === 'number') {
-              validators.push(Validators.required);
-              if (question.min !== undefined) {
-                validators.push(Validators.min(question.min));
-              }
-              if (question.max !== undefined) {
-                validators.push(Validators.max(question.max));
-              }
-            } else if (
-              question.type === 'boolean' ||
-              question.type === 'select'
+    this.evaluation.methodology.sections.forEach(
+      (section: EvaluationSection) => {
+        section.categories.forEach((category: EvaluationCategory) => {
+          category.questions.forEach((question_id: string) => {
+            const question: EvaluationQuestion =
+              this.evaluation.question_data[question_id];
+            // Only create controls for questions that don't have pre-filled results
+            // After submission, all user answers will be pre-filled, so no controls will be created
+            if (
+              question.answer?.result === undefined ||
+              question.answer?.result === null ||
+              this.isUserAnsweredQuestion(question)
             ) {
-              validators.push(Validators.required);
-            }
+              const validators = [];
 
-            formControls[question.id] = [question.result || '', validators];
-          }
+              if (question.type === 'number') {
+                validators.push(Validators.required);
+                if (question.min !== undefined) {
+                  validators.push(Validators.min(question.min));
+                }
+                if (question.max !== undefined) {
+                  validators.push(Validators.max(question.max));
+                }
+              } else if (
+                question.type === 'boolean' ||
+                question.type === 'select'
+              ) {
+                validators.push(Validators.required);
+              }
+
+              formControls[question.id] = [
+                question.answer?.result || '',
+                validators,
+              ];
+            }
+          });
         });
-      });
-    });
+      }
+    );
 
     this.evaluationForm = this.fb.group(formControls);
 
     // Initialize panel states - open first section by default
-    this.evaluation.sections.forEach((section, index) => {
-      this.panelOpenState[section.id] = index === 0; // Open first section
-      section.categories.forEach((category) => {
-        this.panelOpenState[category.id] = false;
-      });
-    });
+    this.evaluation.methodology.sections.forEach(
+      (section: EvaluationSection, index: number) => {
+        this.panelOpenState[section.id] = index === 0; // Open first section
+        section.categories.forEach((category: EvaluationCategory) => {
+          this.panelOpenState[category.id] = false;
+        });
+      }
+    );
   }
 
   onSubmit() {
     if (this.evaluationForm.valid) {
       // Create a deep copy of the evaluation to avoid mutation
-      const updatedEvaluation: EvaluationMethodology = {
+      const updatedEvaluation: EvaluationResult = {
         ...this.evaluation,
-        sections: this.evaluation.sections.map((section) => ({
-          ...section,
-          categories: section.categories.map((category) => ({
-            ...category,
-            questions: category.questions.map((question) => ({
-              ...question,
-              // Update result if this question is in the form
-              ...(this.evaluationForm.contains(question.id) && {
-                result: this.evaluationForm.get(question.id)?.value,
-              }),
-            })),
-          })),
-        })),
+        question_data: { ...this.evaluation.question_data },
       };
 
+      // Update question answers from form
+      Object.keys(this.evaluationForm.controls).forEach((questionId) => {
+        if (updatedEvaluation.question_data[questionId]) {
+          const formValue = this.evaluationForm.get(questionId)?.value;
+
+          updatedEvaluation.question_data[questionId] = {
+            ...updatedEvaluation.question_data[questionId],
+            answer: {
+              ...updatedEvaluation.question_data[questionId].answer,
+              result: formValue,
+              // Add user_id only for user-answered questions (not pre-filled)
+              user_id: this.user_id,
+            },
+          };
+        }
+      });
+
+      // Update completion status
+      updatedEvaluation.is_complete = this.getOverallCompletion() === 100;
+
       this.evaluationSubmit.emit(updatedEvaluation);
+
+      // Mark as submitted - form will be rebuilt when evaluation is reloaded
+      this.hasBeenSubmitted = true;
     } else {
       // Mark all fields as touched to show validation errors
       this.markFormGroupTouched(this.evaluationForm);
     }
+  }
+
+  onFinalize() {
+    // For finalize, we use the current evaluation data (which includes user answers after submission)
+    const finalizedEvaluation: EvaluationResult = {
+      ...this.evaluation,
+      question_data: { ...this.evaluation.question_data },
+    };
+
+    // Mark as complete and finalized
+    finalizedEvaluation.is_complete = true;
+    finalizedEvaluation.is_finalized = true;
+
+    this.evaluationFinalize.emit(finalizedEvaluation);
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
@@ -153,24 +213,45 @@ export class NodeEvaluationFormComponent implements OnInit {
     });
   }
 
-  isQuestionAnswered(question: EvaluationQuestion): boolean {
-    if (this.evaluationForm.contains(question.id)) {
-      const control = this.evaluationForm.get(question.id);
+  isQuestionAnswered(questionId: string): boolean {
+    const question: EvaluationQuestion =
+      this.evaluation.question_data[questionId];
+
+    // Check if question has a pre-filled answer
+    if (
+      question.answer?.result !== undefined &&
+      question.answer?.result !== null
+    ) {
+      return true;
+    }
+
+    // Check if form has a valid value for this question
+    if (this.evaluationForm.contains(questionId)) {
+      const control = this.evaluationForm.get(questionId);
       return control
         ? control.value !== null && control.value !== '' && control.valid
         : false;
     }
-    return question.result !== undefined && question.result !== null;
+
+    return false;
   }
 
-  getSectionCompletion(section: any): number {
+  getAnswerTypeLabel(question: EvaluationQuestion): string {
+    if (question.answer?.user_id) {
+      return 'Respuesta del usuario:';
+    } else {
+      return 'Respuesta del sistema:';
+    }
+  }
+
+  getSectionCompletion(section: EvaluationSection): number {
     let totalQuestions = 0;
     let answeredQuestions = 0;
 
-    section.categories.forEach((category: any) => {
-      category.questions.forEach((question: any) => {
+    section.categories.forEach((category: EvaluationCategory) => {
+      category.questions.forEach((questionId: string) => {
         totalQuestions++;
-        if (this.isQuestionAnswered(question)) {
+        if (this.isQuestionAnswered(questionId)) {
           answeredQuestions++;
         }
       });
@@ -183,16 +264,18 @@ export class NodeEvaluationFormComponent implements OnInit {
     let totalQuestions = 0;
     let answeredQuestions = 0;
 
-    this.evaluation.sections.forEach((section) => {
-      section.categories.forEach((category) => {
-        category.questions.forEach((question) => {
-          totalQuestions++;
-          if (this.isQuestionAnswered(question)) {
-            answeredQuestions++;
-          }
+    this.evaluation.methodology.sections.forEach(
+      (section: EvaluationSection) => {
+        section.categories.forEach((category: EvaluationCategory) => {
+          category.questions.forEach((questionId: string) => {
+            totalQuestions++;
+            if (this.isQuestionAnswered(questionId)) {
+              answeredQuestions++;
+            }
+          });
         });
-      });
-    });
+      }
+    );
 
     return totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
   }
@@ -211,17 +294,41 @@ export class NodeEvaluationFormComponent implements OnInit {
     return control ? control.invalid && control.touched : false;
   }
 
+  // Check if there are any unanswered questions that need user input
+  hasUnansweredQuestions(): boolean {
+    let hasUnanswered = false;
+
+    this.evaluation.methodology.sections.forEach(
+      (section: EvaluationSection) => {
+        section.categories.forEach((category: EvaluationCategory) => {
+          category.questions.forEach((questionId: string) => {
+            const question: EvaluationQuestion =
+              this.evaluation.question_data[questionId];
+            if (
+              question.answer?.result === undefined ||
+              question.answer?.result === null
+            ) {
+              hasUnanswered = true;
+            }
+          });
+        });
+      }
+    );
+
+    return hasUnanswered;
+  }
+
   // TrackBy functions for better performance
-  trackBySection(index: number, section: any): string {
+  trackBySection(index: number, section: EvaluationSection): string {
     return section.id;
   }
 
-  trackByCategory(index: number, category: any): string {
+  trackByCategory(index: number, category: EvaluationCategory): string {
     return category.id;
   }
 
-  trackByQuestion(index: number, question: any): string {
-    return question.id;
+  trackByQuestion(index: number, questionId: string): string {
+    return questionId;
   }
 
   trackByOption(index: number, option: any): string {
@@ -233,5 +340,10 @@ export class NodeEvaluationFormComponent implements OnInit {
       (total, section) => total + section.categories.length,
       0
     );
+  }
+
+  // Helper method to check if a question was answered by user
+  isUserAnsweredQuestion(question: EvaluationQuestion): boolean {
+    return !!question.answer?.user_id;
   }
 }

@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,23 +9,21 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
 import { NodeEvaluationFormComponent } from '../../components/node-evaluation-form/node-evaluation-form.component';
-import { NodeEvaluationViewerComponent } from '../../components/node-evaluation-viewer/node-evaluation-viewer.component';
 import { EvaluationService } from '../../services/evaluation.service';
 import {
   EvaluationMethodology,
   EvaluationResult,
-  EvaluationHistoryItem,
 } from '../../api/models/evaluation.model';
 import { MetadataService } from '../../services/metadata.service';
+import { AuthService } from '../../services/auth.service'; // Importar AuthService
+import { NodeEvaluationViewerComponent } from '../../components/node-evaluation-viewer/node-evaluation-viewer.component';
 
 @Component({
   selector: 'app-node-evaluation-page',
-  templateUrl: './node-evaluation-page.component.html',
-  styleUrls: ['./node-evaluation-page.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
-    MatTabsModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -35,40 +32,48 @@ import { MetadataService } from '../../services/metadata.service';
     NodeEvaluationFormComponent,
     NodeEvaluationViewerComponent,
   ],
+  templateUrl: './node-evaluation-page.component.html',
+  styleUrls: ['./node-evaluation-page.component.scss'],
 })
 export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
+  private evaluationService = inject(EvaluationService);
+  private metadataService = inject(MetadataService);
+  private authService = inject(AuthService); // Inyectar AuthService
+  private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   nodeId: string = '';
   methodologyId: string = '';
-  currentEvaluation: EvaluationMethodology | null = null;
-  evaluationHistory: EvaluationHistoryItem[] = [];
-  selectedEvaluationResult: EvaluationResult | null = null;
+  nodeData: any = null;
 
-  isLoading = false;
+  currentEvaluation: EvaluationResult | null = null;
   isSubmitting = false;
-  activeTab = 0;
+  isLoading = false;
+  isAuthenticated = false;
+  isFinalizing = false;
 
   private routeSub!: Subscription;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private evaluationService: EvaluationService,
-    private metadataService: MetadataService,
-    private snackBar: MatSnackBar
-  ) {}
-
   ngOnInit() {
+    // Verificar autenticación primero
+    this.checkAuthentication();
+
+    // Get node data from navigation state
+    this.nodeData = history.state?.nodeData || null;
+
     this.routeSub = this.route.params.subscribe((params) => {
       this.nodeId = params['node_id'];
       this.methodologyId = params['eval_id'];
 
-      if (this.nodeId && this.methodologyId) {
+      if (this.nodeId && this.methodologyId && this.isAuthenticated) {
         this.loadEvaluationData();
-        this.loadEvaluationHistory();
 
         this.metadataService.updateMetadata({
-          title: `Evaluación - Nodo ${this.nodeId}`,
-          description: `Realizar evaluación del nodo usando metodología ${this.methodologyId}`,
+          title: `Evaluación - ${this.getNodeDisplayName()}`,
+          description: `Realizar evaluación de ${this.getNodeDisplayName()} usando metodología ${
+            this.methodologyId
+          }`,
         });
       }
     });
@@ -80,14 +85,54 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  private checkAuthentication() {
+    this.isAuthenticated = this.authService.isLoggedIn();
+
+    if (!this.isAuthenticated) {
+      // Mostrar mensaje y redirigir después de un tiempo
+      this.snackBar.open(
+        'Debe iniciar sesión para realizar evaluaciones',
+        'Cerrar',
+        {
+          duration: 5000,
+        }
+      );
+
+      // Opcional: Redirigir automáticamente después de mostrar el mensaje
+      setTimeout(() => {
+        // this.redirectToLogin();
+      }, 3000);
+    }
+  }
+
+  private redirectToLogin() {
+    // Redirigir a login con return URL
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: this.router.url },
+    });
+  }
+
   loadEvaluationData() {
+    if (!this.isAuthenticated) {
+      this.redirectToLogin();
+      return;
+    }
+
     this.isLoading = true;
     this.evaluationService
       .startEvaluation(this.nodeId, this.methodologyId)
       .subscribe({
         next: (evaluation) => {
+          console.log(evaluation);
+
           this.currentEvaluation = evaluation;
           this.isLoading = false;
+
+          // Update metadata with evaluation name
+          this.metadataService.updateMetadata({
+            title: `Evaluación: ${evaluation.methodology.name}`,
+            description: evaluation.methodology.description,
+          });
         },
         error: (error) => {
           console.error('Error loading evaluation:', error);
@@ -99,80 +144,188 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadEvaluationHistory() {
-    this.evaluationService.getEvaluationHistory(this.nodeId).subscribe({
-      next: (history) => {
-        this.evaluationHistory = history
-          .filter((item) => item.methodology_id === this.methodologyId)
-          .sort(
-            (a, b) =>
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-          );
+  onEvaluationEdit() {
+    if (!this.isAuthenticated) {
+      this.snackBar.open(
+        'Su sesión ha expirado. Por favor, inicie sesión nuevamente.',
+        'Cerrar',
+        { duration: 5000 }
+      );
+      this.redirectToLogin();
+      return;
+    }
+    this.snackBar.open('Editar nuevamente.', 'Cerrar', { duration: 5000 });
+  }
+
+  onEvaluationSubmit(evaluation: EvaluationResult) {
+    if (!this.isAuthenticated) {
+      this.snackBar.open(
+        'Su sesión ha expirado. Por favor, inicie sesión nuevamente.',
+        'Cerrar',
+        { duration: 5000 }
+      );
+      this.redirectToLogin();
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.evaluationService.submitEvaluation(evaluation).subscribe({
+      next: (result) => {
+        this.isSubmitting = false;
+        this.snackBar.open('Evaluación procesada exitosamente', 'Cerrar', {
+          duration: 5000,
+        });
+
+        // Update current evaluation with results
+        this.currentEvaluation = result;
       },
       error: (error) => {
-        console.error('Error loading evaluation history:', error);
+        console.error('Error submitting evaluation:', error);
+        this.snackBar.open('Error al procesar la evaluación', 'Cerrar', {
+          duration: 5000,
+        });
+        this.isSubmitting = false;
       },
     });
   }
 
-  onEvaluationSubmit(evaluation: EvaluationMethodology) {
-    this.isSubmitting = true;
+  onEvaluationFinalize(evaluation: EvaluationResult) {
+    if (!this.isAuthenticated) {
+      this.snackBar.open(
+        'Su sesión ha expirado. Por favor, inicie sesión nuevamente.',
+        'Cerrar',
+        { duration: 5000 }
+      );
+      this.redirectToLogin();
+      return;
+    }
 
-    this.evaluationService
-      .submitEvaluation({
-        node_id: this.nodeId,
-        methodology_id: this.methodologyId,
-        evaluation: evaluation,
+    this.isFinalizing = true; // Set finalizing state
+
+    this.evaluationService.finishEvaluation(evaluation).subscribe({
+      next: (result) => {
+        this.isFinalizing = false;
+        this.snackBar.open('Evaluación finalizada exitosamente', 'Cerrar', {
+          duration: 5000,
+        });
+
+        // Update current evaluation with finalized results
+        this.currentEvaluation = result;
+
+        // Show success message
+        this.showFinalizedMessage();
+      },
+      error: (error) => {
+        console.error('Error finalizing evaluation:', error);
+        this.snackBar.open('Error al finalizar la evaluación', 'Cerrar', {
+          duration: 5000,
+        });
+        this.isFinalizing = false;
+      },
+    });
+  }
+
+  private showFinalizedMessage() {
+    this.snackBar
+      .open('Evaluación finalizada exitosamente', 'Ver Resultados', {
+        duration: 10000,
       })
-      .subscribe({
-        next: (result) => {
-          this.isSubmitting = false;
-          this.snackBar.open('Evaluación enviada exitosamente', 'Cerrar', {
-            duration: 5000,
-          });
-
-          // Update current evaluation with results
-          this.currentEvaluation = result.evaluation;
-
-          // Reload history to include the new evaluation
-          this.loadEvaluationHistory();
-
-          // Switch to history tab to see the result
-          this.activeTab = 1;
-        },
-        error: (error) => {
-          console.error('Error submitting evaluation:', error);
-          this.snackBar.open('Error al enviar la evaluación', 'Cerrar', {
-            duration: 5000,
-          });
-          this.isSubmitting = false;
-        },
+      .onAction()
+      .subscribe(() => {
+        // The viewer is already shown automatically due to is_finalized flag
+      });
+  }
+  private showSuccessMessage() {
+    this.snackBar
+      .open('Evaluación procesada exitosamente', '', {
+        duration: 10000,
+      })
+      .onAction()
+      .subscribe(() => {
+        this.goBackToNode();
       });
   }
 
-  viewEvaluationResult(evaluationId: string) {
-    this.evaluationService.getEvaluationResult(evaluationId).subscribe({
-      next: (result) => {
-        this.selectedEvaluationResult = result;
-      },
-      error: (error) => {
-        console.error('Error loading evaluation result:', error);
-        this.snackBar.open(
-          'Error al cargar el resultado de evaluación',
-          'Cerrar',
-          { duration: 5000 }
-        );
-      },
-    });
+  goBackToNode() {
+    // Navigate back to the node view
+    this.router.navigate(['/view', this.getNodeTypeRoute(), this.nodeId]);
   }
 
-  startNewEvaluation() {
-    this.selectedEvaluationResult = null;
-    this.loadEvaluationData();
-    this.activeTab = 0;
+  goToLogin() {
+    this.redirectToLogin();
   }
 
-  getMethodologyName(): string {
-    return this.currentEvaluation?.name || this.methodologyId;
+  private getNodeTypeRoute(): string {
+    const typeMap: { [key: string]: string } = {
+      Organization: 'organization',
+      Person: 'person',
+      Source: 'source',
+      Project: 'project',
+      Output: 'output',
+      Término: 'term',
+    };
+
+    if (this.nodeData?.labels && this.nodeData.labels.length > 0) {
+      const primaryLabel = this.nodeData.labels[0];
+      return typeMap[primaryLabel] || primaryLabel.toLowerCase();
+    }
+
+    return 'node';
+  }
+
+  getNodeDisplayName(): string {
+    if (this.nodeData) {
+      return (
+        this.nodeData.name ||
+        this.nodeData.title ||
+        this.nodeData.label ||
+        this.nodeId
+      );
+    }
+    return this.nodeId;
+  }
+
+  getNodeDescription(): string {
+    if (this.nodeData?.description) {
+      return this.nodeData.description;
+    }
+    return `Nodo ${this.nodeId}`;
+  }
+
+  getNodeProperties(): { key: string; value: any }[] {
+    if (!this.nodeData) return [];
+
+    const excludedKeys = [
+      '_',
+      'id',
+      'labels',
+      'elementId',
+      'identity',
+      'description',
+    ];
+    return Object.entries(this.nodeData)
+      .filter(
+        ([key]) => key.includes('identifier')
+        // ([key]) => !excludedKeys.some((excluded) => key.startsWith(excluded))
+      )
+      .map(([key, value]) => ({ key, value }))
+      .slice(0, 13);
+  }
+
+  isArray(value: any): boolean {
+    return Array.isArray(value);
+  }
+
+  isObject(value: any): boolean {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+  }
+
+  formatObject(obj: any): string {
+    return JSON.stringify(obj);
+  }
+
+  trackByProperty(index: number, property: any): string {
+    return property.key;
   }
 }

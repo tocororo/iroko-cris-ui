@@ -1,5 +1,5 @@
 {
-  "title": "Iroko",
+  "title": "Sceiba",
   "menu": [
     {
       "label": "Inicio",
@@ -34,12 +34,6 @@
           "description": "Investigadores y científicos",
           "icon": "people",
           "route": "/persons"
-        },
-        {
-          "label": "Catálogo",
-          "description": "Revistas, repositorios y fuentes de datos",
-          "icon": "source",
-          "route": "/sources"
         },
         {
           "label": "Resultados",

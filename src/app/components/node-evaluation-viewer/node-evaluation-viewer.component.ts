@@ -1,3 +1,4 @@
+// node-evaluation-viewer.component.ts
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +11,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Models
-import { EvaluationMethodology } from '../../api/models/evaluation.model';
+import {
+  EvaluationMethodology,
+  EvaluationResult,
+  EvaluationSection,
+  EvaluationCategory,
+  EvaluationQuestion,
+} from '../../api/models/evaluation.model';
 
 @Component({
   selector: 'app-node-evaluation-viewer',
@@ -29,7 +36,7 @@ import { EvaluationMethodology } from '../../api/models/evaluation.model';
   styleUrls: ['./node-evaluation-viewer.component.scss'],
 })
 export class NodeEvaluationViewerComponent implements OnInit {
-  @Input({ required: true }) evaluation!: EvaluationMethodology;
+  @Input({ required: true }) result!: EvaluationResult;
   @Input() showDetails = true;
   @Input() title = 'Resultados de Evaluación';
 
@@ -40,43 +47,51 @@ export class NodeEvaluationViewerComponent implements OnInit {
   }
 
   private initializePanelStates() {
-    if (this.evaluation?.sections) {
+    if (this.result.methodology?.sections) {
       // Open first section by default, close others
-      this.evaluation.sections.forEach((section, index) => {
-        this.panelOpenState[section.id] = index === 0;
-        section.categories.forEach((category) => {
-          this.panelOpenState[category.id] = false;
-        });
-      });
+      this.result.methodology.sections.forEach(
+        (section: EvaluationSection, index: number) => {
+          this.panelOpenState[section.id] = index === 0;
+          section.categories.forEach((category: EvaluationCategory) => {
+            this.panelOpenState[category.id] = false;
+          });
+        }
+      );
     }
   }
 
-  getQuestionResultDisplay(question: any): string {
-    if (question.result === undefined || question.result === null) {
+  getQuestionResultDisplay(question: EvaluationQuestion): string {
+    if (
+      question.answer?.result === undefined ||
+      question.answer?.result === null
+    ) {
       return 'No respondido';
     }
 
     switch (question.type) {
       case 'boolean':
-        return question.result ? 'Sí' : 'No';
+        return question.answer.result ? 'Sí' : 'No';
       case 'select':
         const option = question.selectOptions?.find(
-          (opt: any) => opt.value === question.result
+          (opt: any) => opt.value === question.answer?.result
         );
-        return option ? option.label : String(question.result);
+        return option ? option.label : String(question.answer.result);
       default:
-        return String(question.result);
+        return String(question.answer.result);
     }
   }
 
-  getQuestionResultIcon(question: any): string {
-    if (question.result === undefined || question.result === null) {
+  getQuestionResultIcon(question: EvaluationQuestion): string {
+    if (
+      question.answer?.result === undefined ||
+      question.answer?.result === null
+    ) {
       return 'help_outline';
     }
 
     switch (question.type) {
       case 'boolean':
-        return question.result ? 'check_circle' : 'cancel';
+        return question.answer.result ? 'check_circle' : 'cancel';
       case 'number':
         return 'tag';
       case 'select':
@@ -86,52 +101,68 @@ export class NodeEvaluationViewerComponent implements OnInit {
     }
   }
 
-  getQuestionResultColor(question: any): string {
-    if (question.result === undefined || question.result === null) {
+  getQuestionResultColor(question: EvaluationQuestion): string {
+    if (
+      question.answer?.result === undefined ||
+      question.answer?.result === null
+    ) {
       return 'warn';
     }
 
     switch (question.type) {
       case 'boolean':
-        return question.result ? 'primary' : 'warn';
+        return question.answer.result ? 'primary' : 'warn';
       default:
         return 'accent';
     }
   }
 
-  getSectionScore(section: any): number {
-    const questions = section.categories.flatMap((cat: any) => cat.questions);
-    const answered = questions.filter(
-      (q: any) => q.result !== undefined && q.result !== null
+  getSectionScore(section: EvaluationSection): number {
+    const questionIds = section.categories.flatMap(
+      (cat: EvaluationCategory) => cat.questions
     );
-    return questions.length > 0
-      ? (answered.length / questions.length) * 100
+    const answered = questionIds.filter((qId: string) => {
+      const question = this.result.question_data[qId];
+      return (
+        question.answer?.result !== undefined &&
+        question.answer?.result !== null
+      );
+    });
+    return questionIds.length > 0
+      ? (answered.length / questionIds.length) * 100
       : 0;
   }
 
   getOverallScore(): number {
-    if (!this.evaluation?.sections) return 0;
+    if (!this.result.methodology?.sections) return 0;
 
-    const allQuestions = this.evaluation.sections.flatMap((section) =>
-      section.categories.flatMap((category) => category.questions)
+    const allQuestionIds = this.result.methodology.sections.flatMap(
+      (section: EvaluationSection) =>
+        section.categories.flatMap(
+          (category: EvaluationCategory) => category.questions
+        )
     );
-    const answered = allQuestions.filter(
-      (q) => q.result !== undefined && q.result !== null
-    );
-    return allQuestions.length > 0
-      ? (answered.length / allQuestions.length) * 100
+    const answered = allQuestionIds.filter((qId: string) => {
+      const question = this.result.question_data[qId];
+      return (
+        question.answer?.result !== undefined &&
+        question.answer?.result !== null
+      );
+    });
+    return allQuestionIds.length > 0
+      ? (answered.length / allQuestionIds.length) * 100
       : 0;
   }
 
   getTotalCategories(): number {
-    return this.evaluation.sections.reduce(
+    return this.result.methodology.sections.reduce(
       (total, section) => total + section.categories.length,
       0
     );
   }
 
   getTotalQuestions(): number {
-    return this.evaluation.sections.reduce(
+    return this.result.methodology.sections.reduce(
       (total, section) =>
         total +
         section.categories.reduce(
@@ -143,15 +174,19 @@ export class NodeEvaluationViewerComponent implements OnInit {
   }
 
   getAnsweredQuestions(): number {
-    return this.evaluation.sections.reduce(
+    return this.result.methodology.sections.reduce(
       (total, section) =>
         total +
         section.categories.reduce(
           (catTotal, category) =>
             catTotal +
-            category.questions.filter(
-              (q) => q.result !== undefined && q.result !== null
-            ).length,
+            category.questions.filter((qId: string) => {
+              const question = this.result.question_data[qId];
+              return (
+                question.answer?.result !== undefined &&
+                question.answer?.result !== null
+              );
+            }).length,
           0
         ),
       0
@@ -159,15 +194,15 @@ export class NodeEvaluationViewerComponent implements OnInit {
   }
 
   // TrackBy functions for performance
-  trackBySection(index: number, section: any): string {
+  trackBySection(index: number, section: EvaluationSection): string {
     return section.id;
   }
 
-  trackByCategory(index: number, category: any): string {
+  trackByCategory(index: number, category: EvaluationCategory): string {
     return category.id;
   }
 
-  trackByQuestion(index: number, question: any): string {
-    return question.id;
+  trackByQuestion(index: number, questionId: string): string {
+    return questionId;
   }
 }

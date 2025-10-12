@@ -1,136 +1,167 @@
-<div class="evaluation-page-container">
+<div class="node-evaluation-page">
+  <!-- Header with Node Info and Back Button -->
   <div class="page-header">
     <div class="header-content">
-      <button mat-button routerLink=".." class="back-button">
-        <mat-icon>arrow_back</mat-icon>
-        Volver
-      </button>
-      <h1>Evaluación: {{ getMethodologyName() }}</h1>
-      <p>Nodo ID: {{ nodeId }}</p>
+      <div class="header-info">
+        <h1>
+          Evaluación @if (isAuthenticated && nodeData) { -
+          {{ getNodeDisplayName() }}}
+        </h1>
+        <p>
+          Metodología: {{ currentEvaluation?.methodology?.name }} v{{
+            currentEvaluation?.methodology?.version
+          }}
+        </p>
+      </div>
     </div>
   </div>
 
-  <mat-tab-group [(selectedIndex)]="activeTab" class="evaluation-tabs">
-    <!-- Tab 1: New Evaluation -->
-    <mat-tab label="Nueva Evaluación">
-      <div class="tab-content">
-        @if (isLoading) {
-        <div class="loading-container">
-          <mat-progress-spinner
-            diameter="40"
-            mode="indeterminate"
-          ></mat-progress-spinner>
-          <p>Cargando evaluación...</p>
-        </div>
-        } @if (currentEvaluation && !isLoading) {
-        <app-node-evaluation-form
-          [evaluation]="currentEvaluation"
-          [nodeId]="nodeId"
-          [isLoading]="isSubmitting"
-          (evaluationSubmit)="onEvaluationSubmit($event)"
-        >
-        </app-node-evaluation-form>
-        } @if (!currentEvaluation && !isLoading) {
-        <div class="no-data">
-          <mat-icon>error_outline</mat-icon>
-          <p>No se pudo cargar la evaluación</p>
-          <button mat-button (click)="loadEvaluationData()">
-            <mat-icon>refresh</mat-icon>
-            Reintentar
-          </button>
-        </div>
-        }
-      </div>
-    </mat-tab>
+  <!-- Authentication Required Message -->
+  @if (!isAuthenticated) {
+  <div class="authentication-required">
+    <mat-card class="auth-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon color="warn">lock</mat-icon>
+          Autenticación Requerida
+        </mat-card-title>
+        <mat-card-subtitle>
+          Se requiere iniciar sesión para realizar evaluaciones
+        </mat-card-subtitle>
+      </mat-card-header>
 
-    <!-- Tab 2: Evaluation History -->
-    <mat-tab label="Historial de Evaluaciones">
-      <div class="tab-content">
-        @if (evaluationHistory.length === 0) {
-        <div class="no-history">
-          <mat-icon>history</mat-icon>
-          <h3>No hay evaluaciones anteriores</h3>
-          <p>
-            Realiza una evaluación en la pestaña "Nueva Evaluación" para ver el
-            historial aquí.
-          </p>
-        </div>
-        } @if (evaluationHistory.length > 0) {
-        <div class="history-container">
-          <div class="history-list">
-            <h3>Evaluaciones Anteriores</h3>
-
-            <div class="history-actions">
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="startNewEvaluation()"
-              >
-                <mat-icon>add</mat-icon>
-                Nueva Evaluación
-              </button>
-            </div>
-
-            <div class="history-items">
-              <mat-card
-                *ngFor="let item of evaluationHistory"
-                class="history-item"
-                [class.selected]="
-                  selectedEvaluationResult?.timestamp === item.timestamp
-                "
-                (click)="viewEvaluationResult(item.id)"
-              >
-                <mat-card-content>
-                  <div class="history-item-header">
-                    <div class="item-info">
-                      <h4>{{ item.methodology_name }}</h4>
-                      <p>Evaluado por: {{ item.user_name }}</p>
-                      <p class="timestamp">
-                        {{ item.timestamp | date : "medium" }}
-                      </p>
-                    </div>
-
-                    <div
-                      class="item-score"
-                      *ngIf="item.overall_score !== undefined"
-                    >
-                      <span class="score-value">{{
-                        item.overall_score | number : "1.1-1"
-                      }}</span>
-                      <span class="score-label">Puntuación</span>
-                    </div>
-                  </div>
-
-                  <div class="history-item-actions">
-                    <button mat-button color="primary">
-                      <mat-icon>visibility</mat-icon>
-                      Ver Detalles
-                    </button>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
+      <mat-card-content>
+        <div class="auth-content">
+          <mat-icon class="auth-icon">security</mat-icon>
+          <div class="auth-message">
+            <h3>Acceso Restringido</h3>
+            <p>
+              Para realizar evaluaciones en el sistema, es necesario que inicie
+              sesión con su cuenta. Esto nos ayuda a mantener la integridad y
+              trazabilidad de las evaluaciones realizadas.
+            </p>
+            <ul class="auth-benefits">
+              <li>
+                <mat-icon>check_circle</mat-icon>
+                <span>Registro de evaluaciones realizadas</span>
+              </li>
+              <li>
+                <mat-icon>check_circle</mat-icon>
+                <span>Historial personal de actividades</span>
+              </li>
+              <li>
+                <mat-icon>check_circle</mat-icon>
+                <span>Acceso a funcionalidades avanzadas</span>
+              </li>
+            </ul>
           </div>
+        </div>
+      </mat-card-content>
 
-          <div class="history-details">
-            @if (selectedEvaluationResult) {
-            <app-node-evaluation-viewer
-              [evaluation]="selectedEvaluationResult.evaluation"
-              [showDetails]="true"
-            >
-            </app-node-evaluation-viewer>
-            } @if (!selectedEvaluationResult && evaluationHistory.length > 0) {
-            <div class="no-selection">
-              <mat-icon>info</mat-icon>
-              <p>
-                Selecciona una evaluación del historial para ver los detalles
-              </p>
+      <mat-card-actions class="auth-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="goToLogin()"
+          class="login-button"
+        >
+          <mat-icon>login</mat-icon>
+          Iniciar Sesión
+        </button>
+        <button mat-button routerLink="/register" class="register-button">
+          <mat-icon>person_add</mat-icon>
+          Crear Cuenta
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  }
+
+  <!-- Node Information (solo mostrar si está autenticado) -->
+  @if (isAuthenticated && nodeData) {
+  <div class="node-info-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          {{ getNodeDisplayName() }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ getNodeDescription() }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (getNodeProperties().length > 0) {
+        <div class="node-properties">
+          <div class="properties-grid">
+            <div class="property-item">
+              <span class="property-key">Id:</span>
+              <span class="property-value">{{ nodeId }}</span>
+            </div>
+            @for (property of getNodeProperties(); track trackByProperty($index,
+            property)) {
+            <div class="property-item">
+              <span class="property-key">{{ property.key }}:</span>
+              <span class="property-value">
+                @if (isArray(property.value)) {
+                {{ property.value.join(", ") }}
+                } @else if (isObject(property.value)) {
+                {{ formatObject(property.value) }}
+                } @else {
+                {{ property.value }}
+                }
+              </span>
             </div>
             }
           </div>
         </div>
         }
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  }
+
+  <!-- Evaluation Form (solo mostrar si está autenticado) -->
+  @if (isAuthenticated) {
+  <div class="evaluation-section">
+    @if (isLoading) {
+    <div class="loading-container">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <p>Cargando evaluación...</p>
+    </div>
+    } @if (currentEvaluation && !isLoading) {
+    <!-- Show Viewer if evaluation is finalized -->
+    @if (currentEvaluation.is_finalized) {
+    <app-node-evaluation-viewer
+      [result]="currentEvaluation"
+      [title]="'Evaluación Finalizada - ' + getNodeDisplayName()"
+      [showDetails]="true"
+    >
+    </app-node-evaluation-viewer>
+    } @else {
+    <!-- Show Form if evaluation is not finalized -->
+    <app-node-evaluation-form
+      [evaluation]="currentEvaluation"
+      [nodeId]="nodeId"
+      [isLoading]="isSubmitting"
+      [isFinalizing]="isFinalizing"
+      (evaluationSubmit)="onEvaluationSubmit($event)"
+      (evaluationFinalize)="onEvaluationFinalize($event)"
+    >
+    </app-node-evaluation-form>
+    } } @if (!currentEvaluation && !isLoading) {
+    <div class="no-data">
+      <mat-icon>error_outline</mat-icon>
+      <p>No se pudo cargar la evaluación</p>
+      <button mat-button (click)="loadEvaluationData()">
+        <mat-icon>refresh</mat-icon>
+        Reintentar
+      </button>
+    </div>
+    }
+  </div>
+  }
 </div>
