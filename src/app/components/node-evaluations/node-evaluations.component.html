@@ -1,3 +1,4 @@
+<!-- node-evaluations.component.html -->
 <div class="node-evaluations-container">
   @if (isLoadingHistory) {
   <div class="loading-container">
@@ -13,87 +14,66 @@
     <h3>No hay evaluaciones</h3>
   </div>
   } @if (!isLoadingHistory && evaluationHistory.length > 0) {
-  <div class="history-container">
-    <div class="history-sidebar">
-      <div class="history-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="startNewEvaluation()"
-          class="new-evaluation-btn"
-        >
-          <mat-icon>add</mat-icon>
-          Nueva Evaluación
-        </button>
-      </div>
-
-      <div class="history-list">
-        <h3>Evaluaciones Anteriores</h3>
-
-        <div class="history-items">
-          @for (item of evaluationHistory; track trackByHistoryItem($index,
-          item)) {
-          <mat-card
-            class="history-item"
-            [class.selected]="
-              selectedEvaluationResult?.timestamp === item.timestamp
-            "
-            (click)="viewEvaluationResult(item.id)"
-          >
-            <mat-card-content>
-              <div class="history-item-header">
-                <div class="item-info">
-                  <h4>{{ item.methodology_name }}</h4>
-                  <p class="user-info">Evaluado por: {{ item.user_name }}</p>
-                  <p class="timestamp">
-                    {{ item.timestamp | date : "medium" }}
-                  </p>
-                </div>
-
-                @if (item.overall_score !== undefined) {
-                <div class="item-score">
-                  <span class="score-value">{{
-                    item.overall_score | number : "1.1-1"
-                  }}</span>
-                  <span class="score-label">Puntuación</span>
-                </div>
-                }
-              </div>
-
-              <div class="history-item-actions">
-                <button mat-button color="primary" class="view-details-btn">
-                  <mat-icon>visibility</mat-icon>
-                  Ver Detalles
-                </button>
-              </div>
-            </mat-card-content>
-          </mat-card>
-          }
-        </div>
-      </div>
-    </div>
-
-    <div class="history-details">
-      @if (selectedEvaluationResult) {
-      <app-node-evaluation-viewer
-        [result]="selectedEvaluationResult"
-        [title]="
-          'Evaluación - ' +
-          (selectedEvaluationResult.timestamp | date : 'medium')
-        "
-        [showDetails]="true"
+  <div class="evaluations-gallery-container">
+    <h3>Evaluaciones Anteriores</h3>
+    <div class="evaluations-gallery">
+      @for (item of evaluationHistory; track trackByHistoryItem($index, item)) {
+      <mat-card
+        class="gallery-item"
+        [class.selected]="selectedEvaluation?.id === item.id"
+        (click)="viewEvaluationResult(item)"
       >
-      </app-node-evaluation-viewer>
-      } @if (!selectedEvaluationResult && evaluationHistory.length > 0) {
-      <div class="no-selection">
-        <mat-icon>info</mat-icon>
-        <h3>Selecciona una evaluación</h3>
-        <p>
-          Elige una evaluación del historial para ver los detalles completos
-        </p>
-      </div>
+        <mat-card-header>
+          <mat-card-title>{{
+            item.evaluation_data.methodology.name
+          }}</mat-card-title>
+          <mat-card-subtitle
+            >v{{ item.evaluation_data.methodology.version }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <div class="gallery-item-content">
+            <div class="item-info">
+              <p class="user-info">
+                Evaluado por: {{ item.user?.full_name }} ({{
+                  item.user?.email
+                }})
+              </p>
+              <p class="timestamp">
+                {{ item.timestamp | date : "medium" }}
+              </p>
+            </div>
+
+            @if (item.evaluation_data.methodology.answer?.recommendation) {
+            <div class="item-score">
+              <span class="score-label">{{
+                item.evaluation_data.methodology.answer?.recommendation
+              }}</span>
+            </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
       }
     </div>
+  </div>
+
+  <div class="selected-evaluation-container">
+    @if (selectedEvaluation && selectedEvaluationResult) {
+    <app-node-evaluation-viewer
+      [evaluation]="selectedEvaluation"
+      [result]="selectedEvaluationResult"
+      [title]="
+        'Evaluación: ' +
+        selectedEvaluation?.evaluation_data?.methodology?.name +
+        ' - ' +
+        (selectedEvaluation?.timestamp | date : 'medium')
+      "
+      [showDetails]="true"
+      [nodeData]="node"
+    >
+    </app-node-evaluation-viewer>
+    }
   </div>
   }
 </div>

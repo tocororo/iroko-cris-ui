@@ -134,11 +134,13 @@
     </div>
     } @if (currentEvaluation && !isLoading) {
     <!-- Show Viewer if evaluation is finalized -->
-    @if (currentEvaluation.is_finalized) {
+    @if (currentEvaluation.is_finalized && finishedEvaluation) {
     <app-node-evaluation-viewer
+      [evaluation]="finishedEvaluation"
       [result]="currentEvaluation"
       [title]="'Evaluación Finalizada - ' + getNodeDisplayName()"
       [showDetails]="true"
+      [nodeData]="nodeData"
     >
     </app-node-evaluation-viewer>
     } @else {

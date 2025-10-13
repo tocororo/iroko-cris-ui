@@ -29,12 +29,16 @@
       <!-- Tab 2: Evaluations -->
       <mat-tab label="Evaluaciones">
         <div class="tab-content">
-          <button mat-button (click)="openEvaluationSelection()">
+          <button mat-raised-button (click)="openEvaluationSelection()">
             <mat-icon>add</mat-icon>
             <!-- Note: 'new' isn't a standard Material icon -->
             Nueva Evaluación
           </button>
-          <app-node-evaluations [nodeId]="nodeId" [nodeType]="nodeType">
+          <app-node-evaluations
+            [nodeId]="nodeId"
+            [nodeType]="nodeType"
+            [node]="node"
+          >
           </app-node-evaluations>
         </div>
       </mat-tab>

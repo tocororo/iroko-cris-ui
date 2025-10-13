@@ -6,6 +6,7 @@ import {
   EvaluationResult,
   EvaluationRequest,
   EvaluationHistoryItem,
+  StoredEvaluation,
 } from '../api/models/evaluation.model';
 
 @Injectable({
@@ -52,15 +53,15 @@ export class EvaluationService {
   // Submit evaluation for processing
   finishEvaluation(
     evaluationRequest: EvaluationResult
-  ): Observable<EvaluationResult> {
-    return this.http.post<EvaluationResult>(
+  ): Observable<StoredEvaluation> {
+    return this.http.post<StoredEvaluation>(
       `${this.API_URL}/evaluate/store`,
       evaluationRequest
     );
   }
   // Get evaluation history for a node
-  getEvaluationHistory(nodeId: string): Observable<EvaluationHistoryItem[]> {
-    return this.http.get<EvaluationHistoryItem[]>(
+  getEvaluationHistory(nodeId: string): Observable<StoredEvaluation[]> {
+    return this.http.get<StoredEvaluation[]>(
       `${this.API_URL}/history/${nodeId}`
     );
   }

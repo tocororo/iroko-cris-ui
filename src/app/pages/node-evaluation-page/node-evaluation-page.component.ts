@@ -13,6 +13,7 @@ import { EvaluationService } from '../../services/evaluation.service';
 import {
   EvaluationMethodology,
   EvaluationResult,
+  StoredEvaluation,
 } from '../../api/models/evaluation.model';
 import { MetadataService } from '../../services/metadata.service';
 import { AuthService } from '../../services/auth.service'; // Importar AuthService
@@ -48,6 +49,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
   nodeData: any = null;
 
   currentEvaluation: EvaluationResult | null = null;
+  finishedEvaluation: StoredEvaluation | null = null;
   isSubmitting = false;
   isLoading = false;
   isAuthenticated = false;
@@ -211,7 +213,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
         });
 
         // Update current evaluation with finalized results
-        this.currentEvaluation = result;
+        this.finishedEvaluation = result;
 
         // Show success message
         this.showFinalizedMessage();

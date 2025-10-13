@@ -1,3 +1,4 @@
+/* node-evaluations.component.scss */
 .node-evaluations-container {
   padding: 16px;
 }
@@ -165,50 +166,54 @@
   }
 }
 
-.history-container {
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 24px;
-  min-height: 600px;
+// New Gallery Layout
+.evaluations-gallery-container {
+  margin-bottom: 24px;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
+  h3 {
+    margin: 0 0 16px 0;
+    color: #333;
+    font-size: 1.2rem;
   }
 }
 
-.history-sidebar {
-  .history-actions {
-    margin-bottom: 16px;
-
-    .new-evaluation-btn {
-      width: 100%;
-    }
-  }
-
-  .history-list {
-    h3 {
-      margin: 0 0 16px 0;
-      color: #333;
-      font-size: 1.2rem;
-    }
-  }
-}
-
-.history-items {
+.evaluations-gallery {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 500px;
-  overflow-y: auto;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 4px 16px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f5f5f5;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
 }
 
-.history-item {
+.gallery-item {
   cursor: pointer;
   transition: all 0.2s ease;
+  min-width: 280px;
+  max-width: 320px;
+  flex-shrink: 0;
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   &.selected {
@@ -216,21 +221,12 @@
     background-color: #f3f9ff;
   }
 
-  .history-item-header {
+  .gallery-item-content {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
+    flex-direction: column;
+    gap: 8px;
 
     .item-info {
-      flex: 1;
-
-      h4 {
-        margin: 0 0 4px 0;
-        font-size: 1rem;
-        color: #333;
-      }
-
       .user-info {
         margin: 0 0 4px 0;
         font-size: 0.85rem;
@@ -246,45 +242,31 @@
 
     .item-score {
       text-align: center;
-      padding: 8px;
+      padding: 6px 8px;
       background: #e3f2fd;
-      border-radius: 8px;
-      min-width: 60px;
-
-      .score-value {
-        display: block;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #1976d2;
-      }
+      border-radius: 6px;
+      margin-top: auto;
 
       .score-label {
-        font-size: 0.7rem;
-        color: #666;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #1976d2;
       }
-    }
-  }
-
-  .history-item-actions {
-    display: flex;
-    justify-content: flex-end;
-
-    .view-details-btn {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.85rem;
     }
   }
 }
 
-.history-details {
+.selected-evaluation-container {
+  min-height: 400px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 24px;
+
   .no-selection {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 80px 20px;
+    padding: 60px 20px;
     text-align: center;
     color: rgba(0, 0, 0, 0.5);
 
@@ -322,22 +304,57 @@
     gap: 8px;
   }
 
-  .history-container {
-    gap: 16px;
-  }
-
-  .history-item-header {
-    flex-direction: column;
-    gap: 8px;
-
-    .item-score {
-      align-self: flex-end;
-    }
-  }
-
   .workspace-header {
     h2 {
       font-size: 1.3rem;
     }
+  }
+
+  .evaluations-gallery {
+    gap: 12px;
+    padding: 6px 2px 12px 2px;
+  }
+
+  .gallery-item {
+    min-width: 250px;
+    max-width: 280px;
+  }
+
+  .selected-evaluation-container {
+    padding-top: 16px;
+
+    .no-selection {
+      padding: 40px 16px;
+    }
+  }
+}
+.gallery-item {
+  &.selected {
+    border: 2px solid #2196f3;
+    background-color: #f3f9ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  }
+}
+
+// Ensure the selected evaluation container has proper styling
+.selected-evaluation-container {
+  min-height: 400px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 24px;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-top: 16px;
+
+  // Remove the no-selection styles since we always have a selection now
+  .no-selection {
+    display: none;
+  }
+}
+
+// Make the first item stand out when loaded
+.evaluations-gallery {
+  .gallery-item:first-child {
+    border: 2px solid #e3f2fd;
   }
 }

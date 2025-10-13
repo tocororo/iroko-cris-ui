@@ -1,5 +1,5 @@
 <!-- node-evaluation-viewer.component.html -->
-<div class="evaluation-viewer-container">
+<div class="evaluation-viewer-container" id="evaluation-content">
   <mat-card>
     <mat-card-header>
       <mat-card-title>
@@ -7,25 +7,25 @@
         {{ title }}
       </mat-card-title>
       <mat-card-subtitle>
-        {{ result.methodology.name }} v{{ result.methodology.version }}
-        <div class="overall-score">
-          <div class="score-info">
-            <span class="score-text"
-              >Progreso: {{ getOverallScore() | number : "1.0-0" }}%</span
-            >
-            <span class="questions-count">
-              {{ getAnsweredQuestions() }} de
-              {{ getTotalQuestions() }} preguntas respondidas
-            </span>
-          </div>
-          <mat-progress-bar
-            mode="determinate"
-            [value]="getOverallScore()"
-            color="primary"
-          >
-          </mat-progress-bar>
-        </div>
+        <p>{{ result.methodology.name }} v{{ result.methodology.version }}</p>
+        <p class="user-info">
+          Evaluado por: {{ evaluation.user?.full_name }} ({{
+            evaluation.user?.email
+          }})
+        </p>
+        <p>Fecha: {{ result?.timestamp | date : "medium" }}</p>
       </mat-card-subtitle>
+
+      <!-- Export PDF Button -->
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="exportToPdf()"
+        class="export-pdf-btn"
+      >
+        <mat-icon>picture_as_pdf</mat-icon>
+        Exportar a PDF
+      </button>
     </mat-card-header>
 
     <mat-card-content>
@@ -55,7 +55,8 @@
             <span class="summary-label">Estructura</span>
             <span class="summary-value">
               {{ result.methodology.sections.length }} secciones,
-              {{ getTotalCategories() }} categorías
+              {{ getTotalCategories() }} categorías,
+              {{ getAnsweredQuestions() }} preguntas
             </span>
           </div>
         </div>

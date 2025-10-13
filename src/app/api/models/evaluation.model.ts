@@ -1,3 +1,5 @@
+import { User } from './auth.models';
+
 export interface Answer {
   result?: any;
   recommendation?: string;
@@ -78,9 +80,10 @@ export interface StoredEvaluation {
   id: string;
   node_id: string;
   user_id: string;
+  user?: User;
   methodology_id: string;
   timestamp: string;
-  evaluation_data: any; // JSON representation of EvaluationResult
+  evaluation_data: EvaluationResult; // JSON representation of EvaluationResult
   is_complete: boolean;
 }
 
