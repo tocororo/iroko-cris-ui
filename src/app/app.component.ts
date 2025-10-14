@@ -78,6 +78,24 @@ export class AppComponent implements OnInit {
       'sceiba',
       this.domSanitizer.bypassSecurityTrustResourceUrl('img/sceiba.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'sceibaletras',
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        'img/logo.sceiba.letras.svg'
+      )
+    );
+    this.matIconRegistry.addSvgIcon(
+      'facebook',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('img/facebook.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'twitter',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('img/twitter.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'github',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('img/github.svg')
+    );
     const media = inject(MediaMatcher);
 
     this._mobileQuery = media.matchMedia('(max-width: 600px)');

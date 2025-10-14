@@ -65,9 +65,9 @@
       [result]="selectedEvaluationResult"
       [title]="
         'Evaluación: ' +
-        selectedEvaluation?.evaluation_data?.methodology?.name +
+        selectedEvaluation.evaluation_data.methodology.name +
         ' - ' +
-        (selectedEvaluation?.timestamp | date : 'medium')
+        (selectedEvaluation.timestamp | date : 'medium')
       "
       [showDetails]="true"
       [nodeData]="node"

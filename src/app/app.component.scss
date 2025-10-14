@@ -1,8 +1,9 @@
 /* src/app/app.component.scss */
+/* src/app/app.component.scss */
 .app-footer {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
-  padding: 20px 0;
+  padding: 30px 0;
   margin-top: auto;
   width: 100%;
 
@@ -11,53 +12,90 @@
     margin: 0 auto;
     padding: 0 16px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
+    gap: 30px;
 
     @media (max-width: 768px) {
-      flex-direction: column;
-      text-align: center;
+      gap: 20px;
+      padding: 0 8px;
     }
   }
 
-  .footer-section {
+  .sceiba-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .sceiba-branding {
     display: flex;
     align-items: center;
     gap: 8px;
-
-    @media (max-width: 768px) {
-      justify-content: center;
-    }
   }
 
   .footer-logo {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     color: white;
   }
 
   .footer-text {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    font-weight: 600;
     opacity: 0.9;
   }
 
-  .footer-copyright {
-    font-size: 0.8rem;
-    opacity: 0.7;
+  .social-links {
+    display: flex;
+    gap: 12px;
+
+    a {
+      color: white;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    mat-icon {
+      width: 20px;
+      height: 20px;
+    }
   }
 
-  .footer-link {
-    color: white;
-    text-decoration: none;
-    font-size: 0.9rem;
-    opacity: 0.9;
-    transition: opacity 0.2s ease;
+  .organizations-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    @media (max-width: 768px) {
+      gap: 15px;
+    }
+  }
+
+  .org-image {
+    background-color: white;
+    padding: 8px;
+    border-radius: 4px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
-      opacity: 1;
-      text-decoration: underline;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      max-width: 80px;
+      height: auto;
+
+      &[alt="mes"] {
+        max-width: 140px;
+      }
     }
   }
 }
@@ -278,24 +316,58 @@ mat-toolbar {
     }
   }
 }
+/* Asegurar que el sidenav-content tenga al menos la altura del sidenav */
+mat-sidenav-container {
+  display: flex;
+  flex: 1;
 
-/* Sidenav improvements */
-mat-sidenav {
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  border-right: none;
+  mat-sidenav {
+    display: flex;
+    flex-direction: column;
 
-  @media (max-width: 768px) {
-    width: 280px;
+    mat-nav-list {
+      flex: 1;
+      overflow-y: auto; /* Solo scroll si es necesario */
+    }
   }
 
-  @media (min-width: 769px) {
-    width: 300px;
+  mat-sidenav-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%; /* Asegura altura mínima */
+
+    /* Contenedor del router-outlet */
+    .router-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 
+/* Estilos existentes mejorados */
 mat-sidenav-content {
   background-color: #f8f9fa;
   transition: margin 0.3s ease;
+
+  /* Asegurar que el contenido ocupe al menos el 100% del viewport menos el header y footer */
+  min-height: calc(
+    100vh - 64px - 120px
+  ); /* Ajusta según la altura de tu header y footer */
+
+  @media (max-width: 768px) {
+    min-height: calc(100vh - 56px - 100px); /* Alturas para móvil */
+  }
+}
+
+/* Forzar que el contenido del router ocupe todo el espacio disponible */
+router-outlet {
+  + * {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 /* Global search in mobile menu */

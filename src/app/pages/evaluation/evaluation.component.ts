@@ -153,7 +153,15 @@ export class EvaluationComponent implements OnInit {
 
   onNodeSelected(node: any) {
     if (this.methodologyId && node.id) {
-      this.router.navigate(['/eval', node.id, this.methodologyId]);
+      this.router.navigate(['/evaluate', node.id, this.methodologyId], {
+        state: {
+          dialogData: {
+            nodeId: node.id,
+            nodeType: this.methodology?.entity,
+            nodeData: node,
+          },
+        },
+      });
     }
   }
 

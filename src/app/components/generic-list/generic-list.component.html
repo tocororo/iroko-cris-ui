@@ -195,6 +195,7 @@
       }
 
       <!-- Advanced Query Controls -->
+      @if (showAdvancedQuery) {
       <div class="advanced-query-section">
         <button
           mat-button
@@ -208,7 +209,6 @@
           }
         </button>
 
-        @if (showAdvancedQuery) {
         <mat-expansion-panel [expanded]="true" class="advanced-query-panel">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -297,8 +297,8 @@
             </div>
           </div>
         </mat-expansion-panel>
-        }
       </div>
+      }
     </mat-card-content>
   </mat-card>
 
@@ -387,7 +387,7 @@
           <!-- View Details Action -->
           <div class="card-actions">
             <button mat-button color="primary" class="view-details-btn">
-              Ver Detalles
+              {{ detaillsText }}
               <mat-icon>arrow_forward</mat-icon>
             </button>
           </div>

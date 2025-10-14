@@ -18,12 +18,6 @@
           "route": "/mes"
         },
         {
-          "label": "Fuentes de Datos",
-          "description": "Revistas, repositorios y fuentes de datos",
-          "icon": "source",
-          "route": "/sources"
-        },
-        {
           "label": "Organizaciones",
           "description": "Instituciones y organizaciones de investigación",
           "icon": "corporate_fare",
@@ -46,6 +40,12 @@
           "description": "Términos y taxonomías",
           "icon": "tag",
           "route": "/vocabularies"
+        },
+        {
+          "label": "Catálogo",
+          "description": "Revistas, repositorios y fuentes de datos",
+          "icon": "source",
+          "route": "/sources"
         }
       ]
     },

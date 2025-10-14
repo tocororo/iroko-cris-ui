@@ -14,11 +14,13 @@
     <!-- Center Section: App Logo & Título -->
     <div class="app-branding flex items-center justify-center flex-1">
       <div class="flex items-center gap-3 app-branding">
-        <mat-icon svgIcon="sceiba" class="app-logo"></mat-icon>
+        <img
+          src="img/logo.sceiba.letras.svg"
+          alt="Sceiba"
+          width="115"
+          height="50"
+        />
         <!-- app.component.html -->
-        <h1 class="app-title m-0 text-xl font-semibold desktop-only">
-          {{ config.title }}
-        </h1>
       </div>
     </div>
     <!-- Update the user menu section in the toolbar -->
@@ -147,27 +149,74 @@
       </mat-nav-list>
       }
     </mat-sidenav>
-
     <mat-sidenav-content class="p-4 md:p-8 h-full">
-      <router-outlet></router-outlet>
+      <div class="router-container">
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
-
   <footer class="app-footer">
     <div class="footer-content">
-      <div class="footer-section">
-        <mat-icon svgIcon="sceiba" class="footer-logo"></mat-icon>
-        <span class="footer-text"
-          >Explorador del Grafo de Conocimiento Iroko</span
-        >
+      <!-- Sceiba Logo and Title -->
+      <div class="sceiba-section">
+        <div class="sceiba-branding">
+          <mat-icon svgIcon="sceiba" class="footer-logo"></mat-icon>
+          <span class="footer-text">Sceiba</span>
+        </div>
+
+        <!-- Social Links -->
+        <div class="social-links">
+          <a
+            mat-icon-button
+            href="https://www.facebook.com/sceiba/"
+            target="_blank"
+            matTooltip="Facebook"
+          >
+            <mat-icon svgIcon="facebook" class="mat-18"></mat-icon>
+          </a>
+          <a mat-icon-button href="https://github.com/tocororo" target="_blank">
+            <mat-icon svgIcon="github" class="mat-18">home</mat-icon>
+          </a>
+          <a
+            mat-icon-button
+            href="https://twitter.com/SceibaCu"
+            target="_blank"
+            matTooltip="Twitter"
+          >
+            <mat-icon svgIcon="twitter" class="mat-18"></mat-icon>
+          </a>
+        </div>
       </div>
-      <div class="footer-section">
-        <span class="footer-copyright">
-          &copy; 2025 Sceiba. Powered by Neo4j.
-        </span>
-      </div>
-      <div class="footer-section">
-        <a routerLink="/about" class="footer-link">Acerca de</a>
+
+      <!-- Organization Images -->
+      <div class="organizations-section">
+        <a href="https://www.upr.edu.cu/home/index" target="_blank">
+          <img
+            src="img/upr.png"
+            alt="upr"
+            width="69"
+            height="80"
+            class="org-image"
+          />
+        </a>
+        <a href="https://www.mes.gob.cu/" target="_blank">
+          <img
+            src="img/mes.png"
+            alt="mes"
+            width="135"
+            height="55"
+            class="org-image"
+          />
+        </a>
+        <a href="http://www.uh.cu/" target="_blank">
+          <img
+            src="img/uh.png"
+            alt="uh"
+            width="69"
+            height="80"
+            class="org-image"
+          />
+        </a>
       </div>
     </div>
   </footer>

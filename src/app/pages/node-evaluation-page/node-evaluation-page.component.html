@@ -142,7 +142,19 @@
       [showDetails]="true"
       [nodeData]="nodeData"
     >
-    </app-node-evaluation-viewer>
+    </app-node-evaluation-viewer
+    >'
+    <div class="action-buttons">
+      <button
+        mat-raised-button
+        color="accent"
+        type="button"
+        (click)="goBackToNode()"
+        class="finalize-button"
+      >
+        Ir a la página del nodo
+      </button>
+    </div>
     } @else {
     <!-- Show Form if evaluation is not finalized -->
     <app-node-evaluation-form

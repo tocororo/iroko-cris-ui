@@ -47,6 +47,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
   nodeId: string = '';
   methodologyId: string = '';
   nodeData: any = null;
+  nodeType: string = '';
 
   currentEvaluation: EvaluationResult | null = null;
   finishedEvaluation: StoredEvaluation | null = null;
@@ -62,7 +63,9 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
     this.checkAuthentication();
 
     // Get node data from navigation state
-    this.nodeData = history.state?.nodeData || null;
+    const dialogData = history.state?.dialogData || null;
+    this.nodeData = dialogData.nodeData;
+    this.nodeType = dialogData.nodeType;
 
     this.routeSub = this.route.params.subscribe((params) => {
       this.nodeId = params['node_id'];
@@ -213,6 +216,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
         });
 
         // Update current evaluation with finalized results
+        this.currentEvaluation = result.evaluation_data;
         this.finishedEvaluation = result;
 
         // Show success message
@@ -251,7 +255,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
 
   goBackToNode() {
     // Navigate back to the node view
-    this.router.navigate(['/view', this.getNodeTypeRoute(), this.nodeId]);
+    this.router.navigate(['/view', this.nodeType.toLowerCase(), this.nodeId]);
   }
 
   goToLogin() {
@@ -259,6 +263,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
   }
 
   private getNodeTypeRoute(): string {
+    this.finishedEvaluation?.evaluation_data.methodology.entity;
     const typeMap: { [key: string]: string } = {
       Organization: 'organization',
       Person: 'person',

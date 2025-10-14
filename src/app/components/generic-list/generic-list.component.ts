@@ -115,6 +115,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() fixedFilters: QueryFilter[] = [];
   @Output() nodeSelected = new EventEmitter<any>();
   @Input() searchIndex?: string;
+  @Input() detaillsText: string = 'Ver detalles';
 
   // Data state
   nodes: any[] = [];

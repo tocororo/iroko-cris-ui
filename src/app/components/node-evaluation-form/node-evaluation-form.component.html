@@ -42,12 +42,22 @@
         >
         </mat-progress-bar>
       </div>
-
       <form
         [formGroup]="evaluationForm"
         (ngSubmit)="onSubmit()"
         class="evaluation-form"
       >
+        <div class="form-edit-system">
+          <mat-slide-toggle
+            (change)="toggleEditSystemAnswers()"
+            [checked]="editSystemAnswers"
+            class="edit-toggle-button"
+            labelPosition="before"
+          >
+            Editar Respuestas del Sistema
+          </mat-slide-toggle>
+        </div>
+
         <!-- Sections Accordion -->
         <mat-accordion multi class="sections-accordion">
           @for (section of evaluation.methodology.sections; track
@@ -132,7 +142,7 @@
                       @if (question.type === 'boolean') { @if
                       (question.answer?.result === undefined ||
                       question.answer?.result === null ||
-                      isUserAnsweredQuestion(question)) {
+                      isUserAnsweredQuestion(question)|| editSystemAnswers) {
                       <mat-radio-group
                         [formControlName]="question.id"
                         class="boolean-control"
@@ -164,7 +174,7 @@
                       @if (question.type === 'number') { @if
                       (question.answer?.result === undefined ||
                       question.answer?.result === null ||
-                      isUserAnsweredQuestion(question)) {
+                      isUserAnsweredQuestion(question)|| editSystemAnswers) {
                       <mat-form-field
                         appearance="outline"
                         class="number-control"
@@ -204,7 +214,7 @@
                       @if (question.type === 'select') { @if
                       (question.answer?.result === undefined ||
                       question.answer?.result === null ||
-                      isUserAnsweredQuestion(question)) {
+                      isUserAnsweredQuestion(question)|| editSystemAnswers) {
                       <mat-form-field
                         appearance="outline"
                         class="select-control"
@@ -304,6 +314,15 @@
               }
             </button>
           </div>
+          @if (editSystemAnswers) {
+          <div class="edit-mode-indicator">
+            <mat-icon color="warn">warning</mat-icon>
+            <span
+              >Modo edición activo - Puede modificar respuestas del
+              sistema</span
+            >
+          </div>
+          }
 
           <div class="form-status">
             @if (!hasUnansweredQuestions()) {

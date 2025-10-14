@@ -156,6 +156,17 @@ export class NodeEvaluationViewerComponent implements OnInit {
       <div class="header">
         <h1>Evaluación</h1>
 
+        <div class=summary>
+        <h2>${this.getNodeDisplayName()}</h2>
+        <p><strong>Descripción:</strong> ${this.getNodeDescription()}</p>
+        ${this.getNodeProperties()
+          .map(
+            (elem) => `
+          <p><strong>${elem.key}:</strong> ${elem.value}</p>`
+          )
+          .join('')}
+
+      </div>
       <div class=summary>
         <h2>${this.result.methodology.name} v${
       this.result.methodology.version
@@ -177,18 +188,7 @@ export class NodeEvaluationViewerComponent implements OnInit {
         } secciones, ${this.getTotalCategories()} categorías, ${this.getAnsweredQuestions()} preguntas</p>
       </div>
 
-
-        <div class=summary>
-        <h2>${this.getNodeDisplayName()}</h2>
-        <p><strong>Descripción:</strong> ${this.getNodeDescription()}</p>
-        ${this.getNodeProperties()
-          .map(
-            (elem) => `
-          <p><strong>${elem.key}:</strong> ${elem.value}</p>`
-          )
-          .join('')}
-
-      </div></div>
+    </div>
 
 
       ${this.result.methodology.sections

@@ -32,6 +32,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // Models
 import {
@@ -61,6 +62,7 @@ import {
     MatProgressBarModule,
     MatCardModule,
     MatTooltipModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './node-evaluation-form.component.html',
   styleUrls: ['./node-evaluation-form.component.scss'],
@@ -78,6 +80,8 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   evaluationForm!: FormGroup;
   panelOpenState: { [key: string]: boolean } = {};
   hasBeenSubmitted = false;
+
+  editSystemAnswers = false;
 
   user_id: string | undefined = undefined;
 
@@ -108,7 +112,8 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
             if (
               question.answer?.result === undefined ||
               question.answer?.result === null ||
-              this.isUserAnsweredQuestion(question)
+              this.isUserAnsweredQuestion(question) ||
+              this.editSystemAnswers
             ) {
               const validators = [];
 
@@ -142,11 +147,28 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
     // Initialize panel states - open first section by default
     this.evaluation.methodology.sections.forEach(
       (section: EvaluationSection, index: number) => {
+        console.log(
+          `Section ${section.id} - index ${index} - open: ${index === 0}`
+        );
         this.panelOpenState[section.id] = index === 0; // Open first section
-        section.categories.forEach((category: EvaluationCategory) => {
-          this.panelOpenState[category.id] = false;
-        });
+        section.categories.forEach(
+          (category: EvaluationCategory, indexc: number) => {
+            this.panelOpenState[category.id] = index === 0 && indexc === 0;
+          }
+        );
       }
+    );
+  }
+  toggleEditSystemAnswers() {
+    this.editSystemAnswers = !this.editSystemAnswers;
+    // Rebuild form when toggling edit mode to include/exclude system answers
+    this.buildForm();
+  }
+  hasSystemAnswer(question: EvaluationQuestion): boolean {
+    return !!(
+      question.answer?.result !== undefined &&
+      question.answer?.result !== null &&
+      !this.isUserAnsweredQuestion(question)
     );
   }
 

@@ -77,8 +77,8 @@ export class NodeViewComponent implements OnInit {
 
       const displayName = this.typeDisplayNames[this.nodeType] || this.nodeType;
       this.metadataService.updateMetadata({
-        title: `Detalles de ${displayName}`,
-        description: `Ver detalles de ${displayName.toLowerCase()}`,
+        title: `${displayName}`,
+        description: `Información sobre el nodo ${this.nodeName} de tipo ${this.nodeType}`,
       });
     });
   }
@@ -114,7 +114,7 @@ export class NodeViewComponent implements OnInit {
     this.nodeName = node.name || node.title || node.id;
     this.node = node;
     this.metadataService.updateMetadata({
-      title: `Detalles de ${this.nodeName}`,
+      title: `${this.nodeName}`,
       description: `Información sobre el nodo ${this.nodeName} de tipo ${this.nodeType}`,
     });
   }

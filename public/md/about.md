@@ -1,19 +1,25 @@
-# Acerca del Explorador del Grafo de Conocimiento Iroko
+# Sceiba
 
-Iroko es una plataforma integral de grafo de conocimiento diseñada para explorar y analizar datos de investigación del ecosistema científico cubano.
+Sceiba es una plataforma desarrollada con el objetivo de contribuir a la mejora del control de calidad y el monitoreo de la publicaciones científicas a nivel nacional e institucional, aportando a la visibilidad internacional de las investigaciones científicas de las instituciones cubanas de educación superior. Tributa al mejoramiento de la calidad de la revista científica institucional, viabiliza la adopción del acceso abierto como modelo principal para la comunicación científica y el acceso a la información. Permite implementar un mejor flujo de comunicación, conectar a los actores principales, generalizar líneas de comportamiento y buenas prácticas para lograr los mayores beneficios.
 
-## Características
+Fue desarrollado originalmente en el marco del proyecto de colaboración nacional [VLIR JOINT 2019-01-27 (SCEIBA)](https://www.vliruos.be/en/projects/project/22?pid=4202) y el proyecto sectorial del [Ministerio de Educación Superior](https://www.mes.gob.cu/) titulado “Control de calidad y monitoreo de las publicaciones científicas a nivel nacional e institucional”, en los que participaron las siguientes universidades:
 
-- **Backend de Base de Datos en Grafo**: Impulsado por Neo4j para consultas eficientes de relaciones
-- **Búsqueda Avanzada**: Búsqueda de texto completo en todas las entidades y propiedades
-- **Visualización de Relaciones**: Explora conexiones entre investigadores, organizaciones y publicaciones
-- **Interfaz de Consultas Cypher**: Ejecuta consultas personalizadas en grafo para análisis avanzado
-- **Aplicación Web Progresiva (PWA)**: Funciona sin conexión y ofrece una experiencia similar a una aplicación nativa
-- **Diseño Responsivo**: Optimizado tanto para dispositivos móviles como de escritorio
+- Universidad de Pinar del Río (Cuba)
+- Universidad de La Habana (Cuba)
+- Universidad Nacional de La Molina (Perú)
+- Universidad San Ignacio Loyola (Perú)
+- Universidad de Hasselt (Bélgica)
+- Universidad de Amberes (Bélgica)
+
+Esta plataforma es de acceso gratuito y se distribuyen sus contenidos bajo la Licencia Creative Commons CC by 4.0. Su objetivo está orientado a aumentar la visibilidad de las publicaciones científicas del sistema de educación superior cubano, así como la implementación de servicios que permitan el monitoreo y evaluación de su calidad.
+
+El contenido del registro es dinámico y está en constante crecimiento pues está abierto a la incorporación de nuevas publicaciones científicas editadas por instituciones del Ministerio de Educación Superior.
+
+El sistema se desarrolla en código abierto accesible desde [Github](https://github.com/tocororo) y es desarrollado por un equipo de trabajo de la Universidad de Pinar del Río.
 
 ## Fuentes de Datos
 
-Iroko integra datos de múltiples fuentes:
+Sceiba integra datos de múltiples fuentes:
 
 - Revistas científicas y publicaciones
 - Bases de datos de organizaciones de investigación
@@ -34,10 +40,6 @@ Instituciones de investigación, universidades y organizaciones científicas con
 
 Científicos, académicos y colaboradores en investigación con información sobre sus afiliaciones, intereses de investigación y publicaciones.
 
-### Proyectos de Investigación
-
-Proyectos científicos y becas con detalles sobre financiamiento, participantes y resultados.
-
 ### Resultados de Investigación
 
 Publicaciones, artículos, conjuntos de datos y otros resultados de investigación con metadatos completos.
@@ -50,61 +52,23 @@ Revistas, repositorios y fuentes de información que contribuyen al grafo de con
 
 Vocabularios controlados, taxonomías y términos de clasificación para una categorización estandarizada.
 
-## Pila Tecnológica
+### Proyectos de Investigación (En Desarrollo)
 
-### Frontend
+Proyectos científicos y becas con detalles sobre financiamiento, participantes y resultados.
 
-- **Angular 20+**: Framework web moderno con TypeScript
-- **Angular Material**: Componentes de Material Design
-- **Tailwind CSS**: Framework CSS basado en utilidades
-- **PWA**: Service workers para funcionalidad sin conexión
+## Evaluaciones
 
-### Backend
+Implementa un sistema de evaluación de los distintos tipos de datos soportados.
+Las evaluaciones soportadas por el sistema son extensibles, lo que significa que pueden ser implementadas múltiples evaluaciones para los distintos tipos de datos.
 
-- **Neo4j**: Base de datos en grafo para gestión de relaciones
-- **API RESTful**: Punto de acceso para ejecución de consultas Cypher
-- **Python/FastAPI**: Servidor de API (servicio backend)
-
-### Funcionalidades Adicionales
+## Funcionalidades principales
 
 - **Búsqueda de Texto Completo**: Búsqueda integrada en todas las entidades
 - **Navegación en Grafo**: Exploración visual de relaciones
 - **Exportación de Datos**: Capacidad de exportar en formatos CSV y JSON
 - **Diseño Responsivo**: Enfoque orientado a dispositivos móviles
 
-## Compromiso con la Ciencia Abierta
-
-Iroko se construye sobre principios de ciencia abierta y tiene como objetivos:
-
-- Promover la transparencia en la investigación
-- Facilitar la colaboración entre investigadores
-- Proporcionar acceso abierto a la información de investigación
-- Apoyar a la comunidad científica cubana
-
-## Privacidad de Datos
-
-Estamos comprometidos con la protección de la privacidad de los usuarios y el cumplimiento de las regulaciones de protección de datos. Todos los datos personales se manejan conforme a nuestra política de privacidad.
-
-## Contribuciones
-
-Iroko es un proyecto de código abierto. Agradecemos las contribuciones de la comunidad:
-
-- Contribuciones de código
-- Mejoras en la documentación
-- Reportes de errores y solicitudes de nuevas funcionalidades
-- Mejoras en la calidad de los datos
-
-## Soporte
-
-Para soporte técnico o preguntas sobre la plataforma:
-
-- Consulte nuestra documentación
-- Abra un reporte en nuestro repositorio de GitHub
-- Contacte al equipo de desarrollo
-
 ---
 
-_Impulsado por Sceiba y la comunidad científica cubana_
-
-**Versión**: 1.0.0  
-**Última actualización**: ${new Date().toLocaleDateString()}
+**Versión**: 0.2.0  
+**Última actualización**: Octubre de 2027

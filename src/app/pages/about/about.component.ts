@@ -32,8 +32,8 @@ export class AboutComponent implements OnInit {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Acerca de Iroko',
-      description: 'Learn about the Explorador del Grafo de Conocimiento Iroko platform',
+      title: 'Acerca de Sceiba',
+      description: 'Acerca de Sceiba, publicaciones cientificas cubanas',
       authors: [],
       subjects: [],
     });

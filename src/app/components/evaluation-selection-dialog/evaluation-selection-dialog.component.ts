@@ -89,7 +89,7 @@ export class EvaluationSelectionDialogComponent implements OnInit {
       this.router.navigate(
         ['/evaluate', this.data.nodeId, this.selectedEvaluation.id],
         {
-          state: { nodeData: this.data.nodeData },
+          state: { dialogData: this.data },
         }
       );
     }
