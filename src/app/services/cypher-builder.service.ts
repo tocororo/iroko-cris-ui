@@ -385,4 +385,133 @@ export class CypherBuilderService {
       countTotal,
     };
   }
+
+  /**
+   * Builds a paginated relationships query with regular search (toLower + CONTAINS)
+   * @param nodeId The ID of the main node
+   * @param relationshipType The type of relationship to follow
+   * @param searchTerm The search term to filter related nodes
+   * @param direction The direction of the relationship
+   * @param nodeLabels The labels of the main node
+   * @param page The page number (0-based)
+   * @param pageSize The number of items per page
+   * @param searchProperties The properties to search in (defaults to common properties)
+   * @returns CypherQuery object
+   */
+  buildPaginatedRelationshipsQueryWithRegularSearch(
+    nodeId: string,
+    relationshipType: string,
+    searchTerm: string,
+    direction: 'INCOMING' | 'OUTGOING',
+    nodeLabels: string[] = [],
+    page: number = 0,
+    pageSize: number = 10,
+    searchProperties: string[] = ['name', 'description', 'id']
+  ): { query: string; parameters: any } {
+    const skip = page * pageSize;
+    const limit = pageSize;
+
+    // Build the main node match with labels
+    const mainNodeLabelClause =
+      nodeLabels.length > 0 ? `:${nodeLabels.join(':')}` : '';
+
+    // Build relationship pattern based on direction
+    let relationshipPattern: string;
+    if (direction === 'OUTGOING') {
+      relationshipPattern = `(n)-[r:${relationshipType}]->(related)`;
+    } else {
+      relationshipPattern = `(n)<-[r:${relationshipType}]-(related)`;
+    }
+
+    // Build search conditions for each property
+    const searchConditions = searchProperties
+      .map(
+        (prop) =>
+          `toLower(COALESCE(toString(related.${prop}), '')) CONTAINS toLower($searchTerm)`
+      )
+      .join(' OR ');
+
+    const searchWhereClause = searchConditions
+      ? `WHERE ${searchConditions}`
+      : '';
+
+    const query = `
+    MATCH (n${mainNodeLabelClause} {id: $nodeId})
+    MATCH ${relationshipPattern}
+    ${searchWhereClause}
+    RETURN related, r, labels(related) as relatedLabels, type(r) as relationshipType,
+           startNode(r) = n as isOutgoing, properties(r) as relationProperties
+    ORDER BY related.name, related.title, related.id
+    SKIP $skip
+    LIMIT $limit
+  `;
+
+    return {
+      query: query.trim(),
+      parameters: {
+        nodeId,
+        searchTerm,
+        skip,
+        limit,
+      },
+    };
+  }
+
+  /**
+   * Builds a count query for relationships with regular search
+   * @param nodeId The ID of the main node
+   * @param relationshipType The type of relationship to follow
+   * @param searchTerm The search term to filter related nodes
+   * @param direction The direction of the relationship
+   * @param nodeLabels The labels of the main node
+   * @param searchProperties The properties to search in
+   * @returns CypherQuery object
+   */
+  buildRelationshipCountQueryWithRegularSearch(
+    nodeId: string,
+    relationshipType: string,
+    searchTerm: string,
+    direction: 'INCOMING' | 'OUTGOING',
+    nodeLabels: string[] = [],
+    searchProperties: string[] = ['name', 'description', 'id']
+  ): { query: string; parameters: any } {
+    // Build the main node match with labels
+    const mainNodeLabelClause =
+      nodeLabels.length > 0 ? `:${nodeLabels.join(':')}` : '';
+
+    // Build relationship pattern based on direction
+    let relationshipPattern: string;
+    if (direction === 'OUTGOING') {
+      relationshipPattern = `(n)-[r:${relationshipType}]->(related)`;
+    } else {
+      relationshipPattern = `(n)<-[r:${relationshipType}]-(related)`;
+    }
+
+    // Build search conditions for each property
+    const searchConditions = searchProperties
+      .map(
+        (prop) =>
+          `toLower(COALESCE(toString(related.${prop}), '')) CONTAINS toLower($searchTerm)`
+      )
+      .join(' OR ');
+
+    const searchWhereClause = searchConditions
+      ? `WHERE ${searchConditions}`
+      : '';
+
+    const query = `
+    MATCH (n${mainNodeLabelClause} {id: $nodeId})
+    MATCH ${relationshipPattern}
+    ${searchWhereClause}
+    RETURN count(related) as count
+  `;
+
+    return {
+      query: query.trim(),
+      parameters: {
+        nodeId,
+        searchTerm,
+      },
+    };
+  }
 }

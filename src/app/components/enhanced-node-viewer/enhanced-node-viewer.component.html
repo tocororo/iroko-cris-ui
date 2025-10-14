@@ -65,7 +65,27 @@
 
           <div class="relationships-tab-content">
             <!-- Search Bar -->
-            @if (group.searchIndex) {
+            <div class="search-actions">
+              <!-- Export Button -->
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="exportCurrentView(group)"
+                [disabled]="isExporting || group.relationships.length === 0"
+                class="export-button"
+              >
+                <mat-icon *ngIf="!isExporting">download</mat-icon>
+                @if (isExporting){
+                <mat-progress-spinner
+                  diameter="16"
+                  mode="indeterminate"
+                  class="export-spinner"
+                ></mat-progress-spinner>
+                }
+                {{ isExporting ? "Exportando..." : "Exportar CSV" }}
+              </button>
+            </div>
+            @if (group.showSearch) {
             <div class="relationship-search-container">
               <mat-form-field
                 appearance="outline"
@@ -74,27 +94,30 @@
                 <mat-label>Buscar en {{ labelName(group.type) }}</mat-label>
                 <input
                   matInput
-                  [(ngModel)]="group.searchTerm"
-                  (keyup.enter)="
-                    onRelationshipSearch(group, group.searchTerm || '')
-                  "
+                  [formControl]="getSearchControl(group)"
                   placeholder="Escriba para buscar..."
                 />
+                @if (group.searchTerm) {
+
                 <button
                   mat-icon-button
                   matSuffix
-                  *ngIf="group.searchTerm"
                   (click)="clearRelationshipSearch(group)"
                 >
                   <mat-icon>clear</mat-icon>
                 </button>
-                <button
-                  mat-icon-button
+                }
+                <mat-icon matSuffix>search</mat-icon>
+
+                <!-- Loading indicator -->
+                @if (group.isLoading && group.isSearching) {
+                <mat-progress-spinner
                   matSuffix
-                  (click)="onRelationshipSearch(group, group.searchTerm || '')"
-                >
-                  <mat-icon>search</mat-icon>
-                </button>
+                  diameter="16"
+                  mode="indeterminate"
+                  class="search-spinner"
+                ></mat-progress-spinner>
+                }
               </mat-form-field>
             </div>
             } @if (group.isLoading) {
@@ -132,6 +155,7 @@
               (pageChange)="loadRelationshipPage(group, $event)"
             ></app-relationship-pagination>
             }
+            <!-- Export Button -->
 
             <div class="relationships-grid">
               @for (rel of getDisplayedRelationships(group); track rel.node.id)

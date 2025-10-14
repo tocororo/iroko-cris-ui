@@ -1,5 +1,4 @@
-// src/app/pages/vocabularies/vocabularies.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -7,25 +6,34 @@ import {
   GenericListComponent,
   ListColumn,
 } from '../../components/generic-list/generic-list.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-vocabularies',
   templateUrl: './vocabularies.component.html',
   styleUrls: ['./vocabularies.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  imports: [
+    CommonModule,
+    GenericListComponent,
+    RouterModule,
+    MatTabsModule,
+    MatCardModule,
+  ],
 })
-export class VocabulariesComponent {
-  vocabularyColumns: ListColumn[] = [
+export class VocabulariesComponent implements OnInit {
+  // Common columns for all term types
+  termColumns: ListColumn[] = [
     {
       name: 'id',
       label: 'ID',
       sortable: true,
-      filterable: true,
+      filterable: false,
       type: 'string',
     },
     {
       name: 'name',
-      label: 'Término',
+      label: 'Nombre',
       sortable: true,
       filterable: true,
       type: 'string',
@@ -38,49 +46,68 @@ export class VocabulariesComponent {
       type: 'string',
     },
     {
-      name: 'vocabulary',
-      label: 'Vocabulario',
+      name: 'identifier',
+      label: 'Identificador',
       sortable: true,
-      filterable: true,
+      filterable: false,
       type: 'string',
     },
+  ];
+
+  // Configuration for different term types
+  termTypes = [
     {
-      name: 'broader_terms',
-      label: 'Términos Más Generales',
-      sortable: false,
-      filterable: true,
-      type: 'array',
+      label: 'Todos los Términos',
+      type: 'Term',
+      searchIndex: 'termsSearch',
+      description: 'Explorar todos los términos del vocabulario',
     },
     {
-      name: 'narrower_terms',
-      label: 'Términos Más Específicos',
-      sortable: false,
-      filterable: true,
-      type: 'array',
+      label: 'Materias',
+      type: 'Subject',
+      searchIndex: 'subjectsSearch',
+      description: 'Términos de materias y temas',
     },
     {
-      name: 'related_terms',
-      label: 'Términos Relacionados',
-      sortable: false,
-      filterable: true,
-      type: 'array',
+      label: 'Índices',
+      type: 'Index',
+      searchIndex: 'indexesSearch',
+      description: 'Términos de índices y categorización',
+    },
+    {
+      label: 'Licencias',
+      type: 'Licence',
+      searchIndex: 'licencesSearch',
+      description: 'Términos de licencias y derechos',
     },
   ];
+
+  selectedTabIndex = 0;
 
   constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Vocabularios & Terms',
-      description:
-        'Explore controlled vocabularies, taxonomies, and classification terms',
+      title: 'Vocabularios',
+      description: 'Explore términos y vocabularios controlados del sistema',
       authors: [],
       subjects: [],
     });
   }
 
   onNodeSelected(node: any) {
-    console.log('Vocabulario term selected:', node);
-    // Navigate to term detail or show dialog
+    console.log('Término seleccionado:', node);
+  }
+
+  getCurrentTermType(): string {
+    return this.termTypes[this.selectedTabIndex].type;
+  }
+
+  getCurrentSearchIndex(): string | undefined {
+    return this.termTypes[this.selectedTabIndex].searchIndex;
+  }
+
+  getCurrentDescription(): string {
+    return this.termTypes[this.selectedTabIndex].description;
   }
 }

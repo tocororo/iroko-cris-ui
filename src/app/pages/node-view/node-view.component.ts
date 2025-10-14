@@ -51,7 +51,10 @@ export class NodeViewComponent implements OnInit {
     source: 'Source',
     project: 'Project',
     output: 'Output',
-    term: 'Término',
+    term: 'Term',
+    subject: 'Subject',
+    index: 'Index',
+    licence: 'Licence',
   };
 
   // Map entity types to display names

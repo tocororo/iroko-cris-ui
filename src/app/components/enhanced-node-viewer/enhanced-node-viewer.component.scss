@@ -223,3 +223,41 @@
 .relationships-grid {
   padding: 16px;
 }
+
+.search-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  gap: 16px;
+
+  .search-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #666;
+    flex: 1;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #2196f3;
+    }
+  }
+
+  .export-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+
+    .export-spinner {
+      margin-right: 8px;
+    }
+  }
+}

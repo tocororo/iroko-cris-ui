@@ -44,7 +44,7 @@ export class RelationshipPaginationComponent implements OnChanges {
   }
 
   private generatePageNumbers(): number[] {
-    const maxVisiblePages = 5;
+    const maxVisiblePages = 10;
     const pages: number[] = [];
 
     let startPage = Math.max(

@@ -38,7 +38,10 @@ export class RelationshipCardComponent {
     'Person',
     'Project',
     'Output',
-    'Término',
+    'Term',
+    'Subject',
+    'Index',
+    'Licence',
   ];
 
   // Get relationship properties
