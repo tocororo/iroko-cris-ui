@@ -21,7 +21,7 @@ export class OrganizationsComponent {
       name: 'id',
       label: 'ID',
       sortable: true,
-      filterable: true,
+      filterable: false,
       type: 'string',
     },
     {
@@ -35,21 +35,21 @@ export class OrganizationsComponent {
       name: 'organizationType',
       label: 'Tipos',
       sortable: true,
-      filterable: true,
+      filterable: false,
       type: 'array',
     },
     {
       name: 'status',
       label: 'Estado',
       sortable: true,
-      filterable: true,
+      filterable: false,
       type: 'string',
     },
     {
       name: 'acronyms',
       label: 'Siglas',
       sortable: false,
-      filterable: true,
+      filterable: false,
       type: 'array',
     },
     {
@@ -63,18 +63,6 @@ export class OrganizationsComponent {
 
   organizationFilters: ListFilter[] = [
     {
-      name: 'name',
-      label: 'Nombre',
-      type: 'text',
-      placeholder: 'Filtrar por nombre...',
-    },
-    {
-      name: 'status',
-      label: 'Estado',
-      type: 'select',
-      options: ['active', 'inactive', 'pending'],
-    },
-    {
       name: 'organizationType',
       label: 'Tipo de Organización',
       type: 'multiselect',
@@ -85,11 +73,6 @@ export class OrganizationsComponent {
         'Nonprofit',
         'Government',
       ],
-    },
-    {
-      name: 'established',
-      label: 'Año de Fundación',
-      type: 'date',
     },
   ];
 

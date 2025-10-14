@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { IconHelperComponent } from '../../app.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -21,10 +23,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatGridListModule,
     MatProgressSpinnerModule,
+    IconHelperComponent,
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   stats = [
+    {
+      label: 'Revistas MES',
+      count: 0,
+      icon: 'revistasmes',
+      route: '/mes',
+      color: 'primary',
+      type: 'Source',
+    },
     {
       label: 'Organizaciones',
       count: 0,
@@ -34,7 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Organization',
     },
     {
-      label: 'Investigadores',
+      label: 'Autores',
       count: 0,
       icon: 'people',
       route: '/persons',
@@ -48,14 +59,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       route: '/outputs',
       color: 'warn',
       type: 'Output',
-    },
-    {
-      label: 'Projects',
-      count: 0,
-      icon: 'folder',
-      route: '/projects',
-      color: 'primary',
-      type: 'Project',
     },
     {
       label: 'Fuentes de Datos',
@@ -121,27 +124,34 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private loadStatistics() {
     const queries = this.stats.map((stat) =>
-      this.irokoApiService.executeQuery({
-        query: `MATCH (n:${stat.type}) RETURN count(n) AS count`,
-        parameters: {},
-        readonly: true,
-      })
+      stat.route === '/mes'
+        ? this.irokoApiService.executeQuery({
+            query: `MATCH (n:Source) WHERE (EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))) RETURN count(n) AS count`,
+            parameters: {},
+            readonly: true,
+          })
+        : this.irokoApiService.executeQuery({
+            query: `MATCH (n:${stat.type}) RETURN count(n) AS count`,
+            parameters: {},
+            readonly: true,
+          })
     );
 
-    // Execute all queries in parallel
-    Promise.all(queries.map((q) => q.toPromise()))
-      .then((results) => {
+    // Using RxJS forkJoin instead of Promise.all
+    forkJoin(queries).subscribe({
+      next: (results) => {
         results.forEach((result, index) => {
           if (result && result.length > 0) {
             this.stats[index].count = result[0].count || 0;
           }
         });
         this.isLoading = false;
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Error loading statistics:', error);
         this.isLoading = false;
-      });
+      },
+    });
   }
 
   formatCount(count: number): string {

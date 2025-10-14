@@ -43,7 +43,7 @@
           <mat-card-content>
             <div class="stat-content">
               <div class="stat-icon">
-                <mat-icon>{{ stat.icon }}</mat-icon>
+                <app-icon-helper [iconName]="stat.icon"> </app-icon-helper>
               </div>
               <div class="stat-info">
                 <div class="stat-count">{{ formatCount(stat.count) }}</div>

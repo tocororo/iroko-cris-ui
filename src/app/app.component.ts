@@ -4,6 +4,7 @@ import {
   inject,
   signal,
   OnInit,
+  Input,
 } from '@angular/core';
 import {
   RouterModule,
@@ -30,6 +31,35 @@ import { RelationshipsLabelService } from './services/relationships-label.servic
 import { AuthService } from './services/auth.service'; // Add this import
 
 @Component({
+  selector: 'app-icon-helper',
+  template: `
+    @if (isSvgIcon(iconName)) {
+    <mat-icon [svgIcon]="iconName"></mat-icon>
+    } @else {
+    <mat-icon>{{ iconName }}</mat-icon>
+    }
+  `,
+  imports: [MatIconModule],
+})
+export class IconHelperComponent {
+  @Input() iconName!: string;
+
+  // Lista de iconos SVG registrados
+  svgIcons = [
+    'revistasmes',
+    'sceiba',
+    'sceibaletras',
+    'facebook',
+    'twitter',
+    'github',
+  ];
+
+  isSvgIcon(icon: string): boolean {
+    return this.svgIcons.includes(icon);
+  }
+}
+
+@Component({
   selector: 'app-root',
   imports: [
     CommonModule,
@@ -41,6 +71,7 @@ import { AuthService } from './services/auth.service'; // Add this import
     MatListModule,
     RouterModule,
     MatIconModule,
+    IconHelperComponent,
     // GlobalSearchComponent,
   ],
   templateUrl: './app.component.html',
@@ -83,6 +114,10 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl(
         'img/logo.sceiba.letras.svg'
       )
+    );
+    this.matIconRegistry.addSvgIcon(
+      'revistasmes',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('img/revistasmes.svg')
     );
     this.matIconRegistry.addSvgIcon(
       'facebook',

@@ -311,6 +311,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }.csv`;
     this.exportService.exportToCSV(exportData, filename);
   }
+
   async exportCurrentView(): Promise<void> {
     this.isExporting = true;
 

@@ -14,7 +14,7 @@
         {
           "label": "Revistas MES",
           "description": "Revistas científicas del Ministerio de Educación Superior",
-          "icon": "library_books",
+          "icon": "revistasmes",
           "route": "/mes"
         },
         {
@@ -24,7 +24,7 @@
           "route": "/organizations"
         },
         {
-          "label": "Investigadores",
+          "label": "Autores",
           "description": "Investigadores y científicos",
           "icon": "people",
           "route": "/persons"

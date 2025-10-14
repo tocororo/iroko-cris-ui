@@ -120,7 +120,12 @@
           class="menu-item"
         >
           @if (child.icon) {
-          <mat-icon matListIcon class="menu-icon">{{ child.icon }}</mat-icon>
+          <app-icon-helper
+            [iconName]="child.icon"
+            matListIcon
+            class="menu-icon"
+          >
+          </app-icon-helper>
           }
           <div matListItemTitle class="menu-label">{{ child.label }}</div>
           <div matListItemLine class="menu-description">
@@ -138,7 +143,8 @@
           class="menu-item"
         >
           @if (item.icon) {
-          <mat-icon matListIcon class="menu-icon">{{ item.icon }}</mat-icon>
+          <app-icon-helper [iconName]="item.icon" matListIcon class="menu-icon">
+          </app-icon-helper>
           }
           <div matListItemTitle class="menu-label">{{ item.label }}</div>
           <span matListItemLine class="menu-description">{{
