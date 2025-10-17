@@ -1,0 +1,28 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+
+@Component({
+  selector: 'app-node-properties',
+  templateUrl: './node-properties.component.html',
+  styleUrls: ['./node-properties.component.scss'],
+  imports: [CommonModule, NgxJsonViewerModule],
+})
+export class NodePropertiesComponent {
+  @Input() node: any;
+
+  getNodeProperties(): { key: string; value: any }[] {
+    if (!this.node) return [];
+    return Object.entries(this.node)
+      .filter(([key]) => !key.startsWith('_'))
+      .map(([key, value]) => ({ key, value }));
+  }
+
+  isArray(value: any): boolean {
+    return Array.isArray(value);
+  }
+
+  isObject(value: any): boolean {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+  }
+}

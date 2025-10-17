@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { MetadataService } from '../../services/metadata.service';
-import { EnhancedNodeViewerComponent } from '../../components/enhanced-node-viewer/enhanced-node-viewer.component';
+import { NodeViewerComponent } from '../../components/node-viewer/node-viewer.component';
 import { NodeEvaluationsComponent } from '../../components/node-evaluations/node-evaluations.component';
 import { Subscription } from 'rxjs';
 import { MatChipsModule } from '@angular/material/chips';
@@ -26,7 +26,7 @@ import { EvaluationSelectionDialogComponent } from '../../components/evaluation-
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    EnhancedNodeViewerComponent,
+    NodeViewerComponent,
     MatTabsModule,
     NodeEvaluationsComponent,
     MatChipsModule,

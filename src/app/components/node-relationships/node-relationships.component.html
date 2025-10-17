@@ -1,0 +1,18 @@
+@for (group of relationshipGroups; track group.type; let i = $index) {
+<ng-template mat-tab-label>
+  <mat-icon class="direction-icon">
+    {{ group.direction === "INCOMING" ? "arrow_back" : "arrow_forward" }}
+  </mat-icon>
+  {{ labelNameFn(group.type) }} ({{ group.totalCount }})
+</ng-template>
+
+<app-relationship-group
+  [group]="group"
+  [isExporting]="isExporting"
+  (nodeSelected)="onNodeSelected($event)"
+  (pageChange)="onPageChange(group, $event)"
+  (search)="onSearch(group, $event)"
+  (export)="onExport(group)"
+  (searchClear)="onSearchClear(group)"
+></app-relationship-group>
+}

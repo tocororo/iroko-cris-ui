@@ -1,0 +1,17 @@
+.relationship-search-container {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.relationship-search-field {
+  width: 100%;
+
+  .mat-form-field-wrapper {
+    margin-bottom: 0;
+  }
+}
+
+.search-spinner {
+  margin-right: 8px;
+}

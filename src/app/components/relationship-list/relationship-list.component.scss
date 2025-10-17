@@ -1,0 +1,49 @@
+.relationships-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: rgba(0, 0, 0, 0.6);
+
+  p {
+    margin-top: 16px;
+  }
+}
+
+.no-relationships {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: rgba(0, 0, 0, 0.5);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.relationships-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .relationships-grid {
+    grid-template-columns: 1fr;
+    padding: 8px;
+  }
+}

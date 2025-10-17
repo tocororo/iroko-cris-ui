@@ -1,0 +1,47 @@
+@if (loading) {
+<div class="loading-spinner">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+} @else if (node) {
+<div class="node-viewer">
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group [(selectedIndex)]="activeTab">
+        <!-- Properties Tab -->
+        <mat-tab label="Propiedades">
+          <app-node-properties [node]="node"></app-node-properties>
+        </mat-tab>
+
+        <!-- Relationships Tabs -->
+        @for (group of relationshipGroups; track group.type; let i = $index) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="direction-icon">
+              {{
+                group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
+              }}
+            </mat-icon>
+            {{ labelName(group.type) }} ({{ group.totalCount }})
+          </ng-template>
+
+          <app-relationship-group
+            [group]="group"
+            [isExporting]="isExporting"
+            (nodeSelected)="onRelatedNodeSelect($event)"
+            (pageChange)="onRelationshipPageChange(group, $event)"
+            (search)="onRelationshipSearch(group, $event)"
+            (export)="onRelationshipExport(group)"
+            (searchClear)="onSearchClear(group)"
+          ></app-relationship-group>
+        </mat-tab>
+        }
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+} @else {
+<div class="no-data">
+  <mat-icon>error_outline</mat-icon>
+  <p>Node not found</p>
+</div>
+}

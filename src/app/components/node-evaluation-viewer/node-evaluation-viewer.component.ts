@@ -194,9 +194,6 @@ export class NodeEvaluationViewerComponent implements OnInit {
       <div class="section">
         <h3>Sección: ${section.title}</h3>
         <p><strong>Descripción:</strong> ${section.description}</p>
-        <p class="score">Puntuación de sección: ${this.getSectionScore(
-          section
-        ).toFixed(0)}%</p>
 
         ${
           section.answer?.result
@@ -230,13 +227,13 @@ export class NodeEvaluationViewerComponent implements OnInit {
             ${
               category.answer?.recommendation
                 ? `<div class="recommendation"><strong>Recomendación de Categoría:</strong>
-                    <div class="recommendation-chips">
+                    <ul>
                       ${this.getRecommendationList(
                         category.answer.recommendation
                       )
-                        .map((rec) => `<span class="chip">${rec}</span>`)
+                        .map((rec) => `<li>${rec}</li>`)
                         .join('')}
-                    </div>
+                    </ul>
                    </div>`
                 : ''
             }
@@ -250,7 +247,6 @@ export class NodeEvaluationViewerComponent implements OnInit {
                   <p><strong>Respuesta:</strong> ${this.getQuestionResultDisplay(
                     question
                   )}</p>
-                  <p><strong>Tipo:</strong> ${question.type}</p>
                   ${
                     question.answer?.recommendation
                       ? `<div class="recommendation"><strong>Recomendación:</strong>

@@ -1,0 +1,37 @@
+@if (group.isLoading) {
+<div class="relationships-loading">
+  <mat-progress-spinner
+    diameter="40"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+  <p>
+    {{
+      group.isSearching ? "Buscando relaciones..." : "Cargando relaciones..."
+    }}
+  </p>
+</div>
+} @else if (group.relationships.length === 0) {
+<div class="no-relationships">
+  <mat-icon>link_off</mat-icon>
+  <p>
+    @if (group.searchTerm) { No se encontraron relaciones de
+    {{ group.type.toLowerCase() }} que coincidan con "{{ group.searchTerm }}" }
+    @else { No se encontraron relaciones de
+    {{ group.type.toLowerCase() }}
+    }
+  </p>
+</div>
+} @else {
+<div class="relationships-grid">
+  @for (rel of getDisplayedRelationships(); track rel.node.id) {
+  <app-relationship-card
+    [node]="rel.node"
+    [relationship]="rel.relationship"
+    [nodeLabels]="rel.nodeLabels"
+    [relationshipType]="group.type"
+    [direction]="group.direction"
+    (nodeSelected)="onNodeSelected($event)"
+  ></app-relationship-card>
+  }
+</div>
+}
