@@ -96,7 +96,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   loadCaptcha(): void {
     this.captchaLoading = true;
-    this.captchaData = null;
     this.imageLoading = true;
     this.cdRef.detectChanges();
 
@@ -108,7 +107,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.authService.getCaptcha().subscribe({
       next: (captcha) => {
-        console.log('CAPTCHA loaded successfully:', captcha.captcha_id);
+        console.log('CAPTCHA cargado exitosamente:', captcha.captcha_id);
         this.captchaData = captcha;
         this.captchaLoading = false;
         this.cdRef.detectChanges();
@@ -120,19 +119,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
         if (refreshTime > 0) {
           this.captchaSubscription = timer(refreshTime).subscribe(() => {
-            console.log('Auto-refreshing CAPTCHA...');
+            console.log('Actualizando CAPTCHA automáticamente...');
             this.refreshCaptcha();
           });
         }
       },
       error: (error) => {
-        console.error('CAPTCHA Load Error:', error);
+        console.error('Error al cargar CAPTCHA:', error);
         this.captchaLoading = false;
         this.imageLoading = false;
         this.cdRef.detectChanges();
         this.snackBar.open(
-          'Failed to load CAPTCHA. Please try again.',
-          'Close',
+          'Error al cargar el CAPTCHA. Por favor, inténtelo de nuevo.',
+          'Cerrar',
           { duration: 5000 }
         );
       },
@@ -140,33 +139,35 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   refreshCaptcha(): void {
-    console.log('Refreshing CAPTCHA...');
-
-    // Clear the current CAPTCHA data first
-    this.captchaData = null;
+    console.log('Actualizando CAPTCHA...');
+    this.captchaLoading = true;
     this.imageLoading = true;
     this.registerForm.patchValue({ captcha_text: '' });
 
-    // Force change detection to update the UI
+    // Force change detection to show loading state
     this.cdRef.detectChanges();
 
-    // Add a small delay to ensure UI updates before loading new CAPTCHA
+    // Use a small delay to ensure UI updates
     setTimeout(() => {
       this.loadCaptcha();
     }, 100);
   }
 
   onImageLoad(event: any): void {
-    console.log('CAPTCHA image loaded successfully');
+    console.log('Imagen CAPTCHA cargada exitosamente');
     this.imageLoading = false;
   }
 
   onImageError(event: any): void {
-    console.error('CAPTCHA image failed to load');
+    console.error('Error al cargar la imagen CAPTCHA');
     this.imageLoading = false;
-    this.snackBar.open('Failed to load CAPTCHA image. Refreshing...', 'Close', {
-      duration: 3000,
-    });
+    this.snackBar.open(
+      'Error al cargar la imagen CAPTCHA. Actualizando...',
+      'Cerrar',
+      {
+        duration: 3000,
+      }
+    );
     this.refreshCaptcha();
   }
 
@@ -181,19 +182,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
           if (!response.valid) {
             this.snackBar.open(
-              'CAPTCHA verification failed. Please try again.',
-              'Close',
+              'La verificación del CAPTCHA falló. Por favor, inténtelo de nuevo.',
+              'Cerrar',
               { duration: 5000 }
             );
             this.refreshCaptcha();
           } else {
-            console.log('CAPTCHA verified successfully');
+            console.log('CAPTCHA verificado exitosamente');
           }
         },
         error: () => {
           this.snackBar.open(
-            'CAPTCHA verification error. Please try again.',
-            'Close',
+            'Error en la verificación del CAPTCHA. Por favor, inténtelo de nuevo.',
+            'Cerrar',
             { duration: 5000 }
           );
           this.refreshCaptcha();
@@ -214,7 +215,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
       this.authService.register(registerData).subscribe({
         next: () => {
-          this.snackBar.open('Registration successful!', 'Close', {
+          this.snackBar.open('¡Registro exitoso!', 'Cerrar', {
             duration: 3000,
           });
           this.router.navigate(['/']);
@@ -222,8 +223,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.loading = false;
           const message =
-            error.error?.detail || 'Registration failed. Please try again.';
-          this.snackBar.open(message, 'Close', { duration: 5000 });
+            error.error?.detail ||
+            'El registro falló. Por favor, inténtelo de nuevo.';
+          this.snackBar.open(message, 'Cerrar', { duration: 5000 });
           this.refreshCaptcha();
         },
         complete: () => {
@@ -232,8 +234,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       });
     } else {
       this.snackBar.open(
-        'Please complete all required fields including CAPTCHA.',
-        'Close',
+        'Por favor, complete todos los campos obligatorios incluyendo el CAPTCHA.',
+        'Cerrar',
         { duration: 5000 }
       );
     }

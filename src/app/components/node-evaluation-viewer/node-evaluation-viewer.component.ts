@@ -153,111 +153,130 @@ export class NodeEvaluationViewerComponent implements OnInit {
 
   private generatePrintableContent(): string {
     return `
-      <div class="header">
-        <h1>Evaluación</h1>
+    <div class="header">
+      <h1>Evaluación</h1>
 
-        <div class=summary>
-        <h2>${this.getNodeDisplayName()}</h2>
-        <p><strong>Descripción:</strong> ${this.getNodeDescription()}</p>
-        ${this.getNodeProperties()
-          .map(
-            (elem) => `
-          <p><strong>${elem.key}:</strong> ${elem.value}</p>`
-          )
-          .join('')}
-
-      </div>
       <div class=summary>
-        <h2>${this.result.methodology.name} v${
-      this.result.methodology.version
-    }</h2>
-        <p><strong>Descripción:</strong> ${
-          this.result.methodology.description
-        }</p>
-        <p>
-          <strong>Evaluado por:</strong> ${this.evaluation?.user?.full_name} (${
-      this.evaluation?.user?.email
-    })
-        </p>
-        <p><strong>Fecha:</strong> ${new Date(
-          this.result?.timestamp ? this.result?.timestamp : ''
-        ).toLocaleDateString('medium')}</p>
-        <p><strong>Entidad:</strong> ${this.result.methodology.entity}</p>
-        <p><strong>Estructura:</strong> ${
-          this.result.methodology.sections.length
-        } secciones, ${this.getTotalCategories()} categorías, ${this.getAnsweredQuestions()} preguntas</p>
-      </div>
-
-    </div>
-
-
-      ${this.result.methodology.sections
+      <h2>${this.getNodeDisplayName()}</h2>
+      <p><strong>Descripción:</strong> ${this.getNodeDescription()}</p>
+      ${this.getNodeProperties()
         .map(
-          (section) => `
-        <div class="section">
-          <h3>Sección: ${section.title}</h3>
-          <p><strong>Descripción:</strong> ${section.description}</p>
-          <p class="score">Puntuación de sección: ${this.getSectionScore(
-            section
-          ).toFixed(0)}%</p>
-
-          ${
-            section.answer?.result
-              ? `<p><strong>Resultado:</strong> ${section.answer.result}</p>`
-              : ''
-          }
-          ${
-            section.answer?.recommendation
-              ? `<div class="recommendation"><strong>Recomendación:</strong> ${section.answer.recommendation}</div>`
-              : ''
-          }
-
-          ${section.categories
-            .map(
-              (category) => `
-            <div class="category">
-              <h4>Categoría: ${category.title}</h4>
-              <p><strong>Descripción:</strong> ${category.description}</p>
-
-              ${
-                category.answer?.result
-                  ? `<p><strong>Resultado:</strong> ${category.answer.result}</p>`
-                  : ''
-              }
-              ${
-                category.answer?.recommendation
-                  ? `<div class="recommendation"><strong>Recomendación:</strong> ${category.answer.recommendation}</div>`
-                  : ''
-              }
-
-              ${category.questions
-                .map((questionId) => {
-                  const question = this.result.question_data[questionId];
-                  return `
-                  <div class="question">
-                    <p><strong>Pregunta:</strong> ${question.desc}</p>
-                    <p><strong>Respuesta:</strong> ${this.getQuestionResultDisplay(
-                      question
-                    )}</p>
-                    <p><strong>Tipo:</strong> ${question.type}</p>
-                    ${
-                      question.answer?.recommendation
-                        ? `<div class="recommendation"><strong>Recomendación:</strong> ${question.answer.recommendation}</div>`
-                        : ''
-                    }
-                  </div>
-                `;
-                })
-                .join('')}
-            </div>
-          `
-            )
-            .join('')}
-        </div>
-      `
+          (elem) => `
+        <p><strong>${elem.key}:</strong> ${elem.value}</p>`
         )
         .join('')}
-    `;
+    </div>
+    <div class=summary>
+      <h2>${this.result.methodology.name} v${
+      this.result.methodology.version
+    }</h2>
+      <p><strong>Descripción:</strong> ${
+        this.result.methodology.description
+      }</p>
+      <p>
+        <strong>Evaluado por:</strong> ${this.evaluation?.user?.full_name} (${
+      this.evaluation?.user?.email
+    })
+      </p>
+      <p><strong>Fecha:</strong> ${new Date(
+        this.result?.timestamp ? this.result?.timestamp : ''
+      ).toLocaleDateString('medium')}</p>
+      <p><strong>Entidad:</strong> ${this.result.methodology.entity}</p>
+      <p><strong>Estructura:</strong> ${
+        this.result.methodology.sections.length
+      } secciones, ${this.getTotalCategories()} categorías, ${this.getAnsweredQuestions()} preguntas</p>
+    </div>
+  </div>
+
+    ${this.result.methodology.sections
+      .map(
+        (section) => `
+      <div class="section">
+        <h3>Sección: ${section.title}</h3>
+        <p><strong>Descripción:</strong> ${section.description}</p>
+        <p class="score">Puntuación de sección: ${this.getSectionScore(
+          section
+        ).toFixed(0)}%</p>
+
+        ${
+          section.answer?.result
+            ? `<p><strong>Resultado:</strong> ${section.answer.result}</p>`
+            : ''
+        }
+        ${
+          section.answer?.recommendation
+            ? `<div class="recommendation"><strong>Recomendación de Sección:</strong>
+                <ul>
+                  ${this.getRecommendationList(section.answer.recommendation)
+                    .map((rec) => `<li>${rec}</li>`)
+                    .join('')}
+                </ul>
+               </div>`
+            : ''
+        }
+
+        ${section.categories
+          .map(
+            (category) => `
+          <div class="category">
+            <h4>Categoría: ${category.title}</h4>
+            <p><strong>Descripción:</strong> ${category.description}</p>
+
+            ${
+              category.answer?.result
+                ? `<p><strong>Resultado:</strong> ${category.answer.result}</p>`
+                : ''
+            }
+            ${
+              category.answer?.recommendation
+                ? `<div class="recommendation"><strong>Recomendación de Categoría:</strong>
+                    <div class="recommendation-chips">
+                      ${this.getRecommendationList(
+                        category.answer.recommendation
+                      )
+                        .map((rec) => `<span class="chip">${rec}</span>`)
+                        .join('')}
+                    </div>
+                   </div>`
+                : ''
+            }
+
+            ${category.questions
+              .map((questionId) => {
+                const question = this.result.question_data[questionId];
+                return `
+                <div class="question">
+                  <p><strong>Pregunta:</strong> ${question.desc}</p>
+                  <p><strong>Respuesta:</strong> ${this.getQuestionResultDisplay(
+                    question
+                  )}</p>
+                  <p><strong>Tipo:</strong> ${question.type}</p>
+                  ${
+                    question.answer?.recommendation
+                      ? `<div class="recommendation"><strong>Recomendación:</strong>
+                          <ul>
+                            ${this.getRecommendationList(
+                              question.answer.recommendation
+                            )
+                              .map((rec) => `<li>${rec}</li>`)
+                              .join('')}
+                          </ul>
+                         </div>`
+                      : ''
+                  }
+                </div>
+              `;
+              })
+              .join('')}
+          </div>
+        `
+          )
+          .join('')}
+      </div>
+    `
+      )
+      .join('')}
+  `;
   }
 
   getNodeDisplayName(): string {
@@ -442,5 +461,40 @@ export class NodeEvaluationViewerComponent implements OnInit {
 
   trackByQuestion(index: number, questionId: string): string {
     return questionId;
+  }
+  // Add these methods to your NodeEvaluationViewerComponent
+
+  // Helper method to handle both string and array recommendations
+  getRecommendationList(
+    recommendation: string | string[] | undefined
+  ): string[] {
+    if (!recommendation) return [];
+
+    if (Array.isArray(recommendation)) {
+      return recommendation.filter((rec) => rec && rec.trim().length > 0);
+    }
+
+    // If it's a string, split by newlines or commas, or return as single item array
+    if (typeof recommendation === 'string') {
+      // Try splitting by newlines first
+      if (recommendation.includes('\n')) {
+        return recommendation
+          .split('\n')
+          .filter((rec) => rec.trim().length > 0);
+      }
+      // Then try commas
+      if (recommendation.includes(',')) {
+        return recommendation.split(',').filter((rec) => rec.trim().length > 0);
+      }
+      // Otherwise return as single item
+      return [recommendation.trim()];
+    }
+
+    return [];
+  }
+
+  // TrackBy function for recommendations
+  trackByRecommendation(index: number, item: string): string {
+    return `${index}-${item.substring(0, 20)}`; // Use first 20 chars for tracking
   }
 }

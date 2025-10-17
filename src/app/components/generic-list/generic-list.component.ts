@@ -38,7 +38,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
-import { IrokoApiService } from '../../services/iroko-api.service';
+import { CypherApiService } from '../../services/cypher-api.service';
 import {
   CypherBuilderService,
   QueryFilter,
@@ -154,7 +154,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   isExporting: boolean = false;
 
   constructor(
-    private irokoApiService: IrokoApiService,
+    private irokoApiService: CypherApiService,
     private cypherBuilder: CypherBuilderService,
     private exportService: ExportService,
     private router: Router,

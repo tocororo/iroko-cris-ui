@@ -16,7 +16,7 @@ import { MatListModule } from '@angular/material/list';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { IrokoApiService } from '../../services/iroko-api.service';
+import { CypherApiService } from '../../services/cypher-api.service';
 import { CypherBuilderService } from '../../services/cypher-builder.service';
 import { RelationshipCardComponent } from '../relationship-card/relationship-card.component';
 import { RelationshipPaginationComponent } from '../relationship-pagination/relationship-pagination.component';
@@ -85,7 +85,7 @@ export class EnhancedNodeViewerComponent implements OnInit {
   private searchSubscriptions: Subscription[] = [];
 
   constructor(
-    private irokoApiService: IrokoApiService,
+    private irokoApiService: CypherApiService,
     private cypherBuilder: CypherBuilderService,
     private labelService: RelationshipsLabelService,
     private snackBar: MatSnackBar

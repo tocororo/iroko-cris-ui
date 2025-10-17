@@ -115,10 +115,10 @@
               ></mat-progress-spinner>
               <span>Cargando CAPTCHA...</span>
             </div>
-            } @if (captchaData && !captchaLoading) {
+            } @if (!captchaLoading) {
             <div class="captcha-container">
+              @if (captchaData) {
               <div class="captcha-image-container">
-                <!-- Usar directamente los datos del CAPTCHA de la respuesta -->
                 <img
                   [src]="captchaData.captcha_image"
                   alt="CAPTCHA"
@@ -137,6 +137,7 @@
                   <mat-icon>refresh</mat-icon>
                 </button>
               </div>
+              }
 
               <mat-form-field
                 appearance="outline"

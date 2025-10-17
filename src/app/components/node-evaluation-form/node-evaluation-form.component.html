@@ -83,10 +83,20 @@
             <!-- Section Recommendation -->
             @if (section.answer?.recommendation) {
             <div class="section-recommendation">
-              <mat-icon color="warn">warning</mat-icon>
+              <mat-icon color="warn" class="recommendation-icon"
+                >warning</mat-icon
+              >
               <div class="recommendation-content">
-                <strong>Recomendación:</strong>
-                {{ section.answer?.recommendation }}
+                <strong class="recommendation-title"
+                  >Recomendación de {{ section.title }}:</strong
+                >
+                <ul class="recommendation-list">
+                  @for (rec of
+                  getRecommendationList(section.answer?.recommendation); track
+                  trackByRecommendation($index, rec)) {
+                  <li class="recommendation-item">{{ rec }}</li>
+                  }
+                </ul>
               </div>
             </div>
             }
@@ -106,18 +116,6 @@
                     {{ category.title }}
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-
-                <!-- Category Recommendation -->
-                @if (category.answer?.recommendation) {
-                <div class="category-recommendation">
-                  <mat-icon color="accent">recommend</mat-icon>
-                  <div class="recommendation-content">
-                    <strong>Recomendación:</strong>
-                    {{ category.answer?.recommendation }}
-                  </div>
-                </div>
-                }
-
                 <!-- Questions List -->
                 <div class="questions-container">
                   @for (questionId of category.questions; track
@@ -146,12 +144,13 @@
                       <mat-radio-group
                         [formControlName]="question.id"
                         class="boolean-control"
+                        type="boolean"
                         aria-label="{{ question.desc }}"
                       >
-                        <mat-radio-button value="true" color="primary"
+                        <mat-radio-button [value]="true" color="primary"
                           >Sí</mat-radio-button
                         >
-                        <mat-radio-button value="false" color="primary"
+                        <mat-radio-button [value]="false" color="primary"
                           >No</mat-radio-button
                         >
                       </mat-radio-group>
@@ -256,14 +255,43 @@
                         >lightbulb</mat-icon
                       >
                       <div class="recommendation-content">
-                        <strong>Recomendación:</strong>
-                        {{ question.answer?.recommendation }}
+                        <strong class="recommendation-title"
+                          >Recomendación:</strong
+                        >
+                        <ul class="recommendation-list">
+                          @for (rec of
+                          getRecommendationList(question.answer?.recommendation);
+                          track trackByRecommendation($index, rec)) {
+                          <li class="recommendation-item">{{ rec }}</li>
+                          }
+                        </ul>
                       </div>
                     </div>
                     }
                   </div>
                   }
                 </div>
+
+                <!-- Category Recommendation -->
+                @if (category.answer?.recommendation) {
+                <div class="category-recommendation">
+                  <mat-icon color="accent" class="recommendation-icon"
+                    >recommend</mat-icon
+                  >
+                  <div class="recommendation-content">
+                    <strong class="recommendation-title"
+                      >Recomendación de {{ category.title }}:</strong
+                    >
+                    <ul class="recommendation-list">
+                      @for (rec of
+                      getRecommendationList(category.answer?.recommendation);
+                      track trackByRecommendation($index, rec)) {
+                      <li class="recommendation-item">{{ rec }}</li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+                }
               </mat-expansion-panel>
               }
             </mat-accordion>

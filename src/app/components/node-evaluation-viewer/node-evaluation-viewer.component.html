@@ -92,16 +92,26 @@
             <div class="result-item">
               <mat-icon>score</mat-icon>
               <div class="result-content">
-                <strong>Resultado de la sección:</strong>
+                <strong>Resultado:</strong>
                 {{ section.answer?.result }}
               </div>
             </div>
             } @if (section.answer?.recommendation) {
             <div class="recommendation-item section-recommendation">
-              <mat-icon color="warn">warning</mat-icon>
+              <mat-icon color="warn" class="recommendation-icon"
+                >warning</mat-icon
+              >
               <div class="recommendation-content">
-                <strong>Recomendación:</strong>
-                {{ section.answer?.recommendation }}
+                <strong class="recommendation-title"
+                  >Recomendación de {{ section.title }}:</strong
+                >
+                <ul class="recommendation-list">
+                  @for (rec of
+                  getRecommendationList(section.answer?.recommendation); track
+                  trackByRecommendation($index, rec)) {
+                  <li class="recommendation-item text-wrap">{{ rec }}</li>
+                  }
+                </ul>
               </div>
             </div>
             }
@@ -132,16 +142,26 @@
                 <div class="result-item">
                   <mat-icon>score</mat-icon>
                   <div class="result-content">
-                    <strong>Resultado de la categoría:</strong>
+                    <strong>Resultado:</strong>
                     {{ category.answer?.result }}
                   </div>
                 </div>
                 } @if (category.answer?.recommendation) {
                 <div class="recommendation-item category-recommendation">
-                  <mat-icon color="accent">recommend</mat-icon>
+                  <mat-icon color="accent" class="recommendation-icon"
+                    >recommend</mat-icon
+                  >
                   <div class="recommendation-content">
-                    <strong>Recomendación:</strong>
-                    {{ category.answer?.recommendation }}
+                    <strong class="recommendation-title"
+                      >Recomendación de {{ category.title }}:</strong
+                    >
+                    <ul class="recommendation-list">
+                      @for (rec of
+                      getRecommendationList(category.answer?.recommendation);
+                      track trackByRecommendation($index, rec)) {
+                      <li class="recommendation-item">{{ rec }}</li>
+                      }
+                    </ul>
                   </div>
                 </div>
                 }
@@ -169,25 +189,31 @@
                       <span class="question-id">{{ question.id }}</span>
                     </div>
 
-                    <mat-chip
-                      [color]="getQuestionResultColor(question)"
-                      [matTooltip]="question.type"
-                      class="result-chip"
-                    >
+                    <span [matTooltip]="question.type" class="result-chip">
                       <mat-icon class="chip-icon">{{
                         getQuestionResultIcon(question)
                       }}</mat-icon>
                       {{ getQuestionResultDisplay(question) }}
-                    </mat-chip>
+                    </span>
                   </div>
 
                   <!-- Question Recommendation -->
                   @if (question.answer?.recommendation) {
                   <div class="recommendation-item question-recommendation">
-                    <mat-icon color="primary">lightbulb</mat-icon>
+                    <mat-icon color="primary" class="recommendation-icon"
+                      >lightbulb</mat-icon
+                    >
                     <div class="recommendation-content">
-                      <strong>Recomendación:</strong>
-                      {{ question.answer?.recommendation }}
+                      <strong class="recommendation-title"
+                        >Recomendación:</strong
+                      >
+                      <ul class="recommendation-list">
+                        @for (rec of
+                        getRecommendationList(question.answer?.recommendation);
+                        track trackByRecommendation($index, rec)) {
+                        <li class="recommendation-item">{{ rec }}</li>
+                        }
+                      </ul>
                     </div>
                   </div>
                   }

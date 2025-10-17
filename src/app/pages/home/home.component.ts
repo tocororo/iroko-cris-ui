@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
-import { IrokoApiService } from '../../services/iroko-api.service';
+import { CypherApiService } from '../../services/cypher-api.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       icon: 'people',
       route: '/persons',
       color: 'accent',
-      type: 'Person',
+      type: 'Author',
     },
     {
       label: 'Resultados de Investigación',
@@ -69,12 +69,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Source',
     },
     {
-      label: 'Vocabularios',
+      label: 'Términos de Vocabularios',
       count: 0,
       icon: 'tag',
       route: '/vocabularies',
       color: 'warn',
-      type: 'Término',
+      type: 'Term',
     },
   ];
 
@@ -103,14 +103,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private metadataService: MetadataService,
-    private irokoApiService: IrokoApiService
+    private irokoApiService: CypherApiService
   ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Explorador del Grafo de Conocimiento Iroko',
+      title: 'Sceiba - Publicaciones Científicas Cubanas',
       description:
-        'Explore research data, organizations, and publications in the Cuban research ecosystem',
+        ' Descubra publicaciones, organizaciones, investigadores y resultados de investigación cubanos',
       authors: [],
       subjects: [],
     });

@@ -8,7 +8,7 @@ import {
   distinctUntilChanged,
   switchMap,
 } from 'rxjs';
-import { IrokoApiService } from './iroko-api.service';
+import { CypherApiService } from './cypher-api.service';
 
 export interface SearchResult {
   id: string;
@@ -41,7 +41,7 @@ export class SearchService {
   isLoading$ = this.isLoading.asObservable();
 
   constructor(
-    private irokoApiService: IrokoApiService,
+    private irokoApiService: CypherApiService,
     private http: HttpClient
   ) {}
 

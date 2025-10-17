@@ -184,6 +184,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
 
         // Update current evaluation with results
         this.currentEvaluation = result;
+        console.log(this.currentEvaluation);
       },
       error: (error) => {
         console.error('Error submitting evaluation:', error);

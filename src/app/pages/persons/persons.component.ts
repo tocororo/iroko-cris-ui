@@ -78,9 +78,9 @@ export class PersonsComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Investigadores',
+      title: 'Autores',
       description:
-        'Explore researchers, scientists, and contributors in the knowledge graph',
+        'Investigadores, científicos y colaboradores de diversas instituciones y disciplinas. ',
       authors: [],
       subjects: [],
     });

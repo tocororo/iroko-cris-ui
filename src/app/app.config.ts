@@ -15,7 +15,7 @@ import {
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideMarkdown } from 'ngx-markdown';
 
-import { IrokoApiService } from './services/iroko-api.service';
+import { CypherApiService } from './services/cypher-api.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { cachingInterceptor } from './interceptors/caching.interceptor';
 import { jwtInterceptor } from './interceptors/jwt.interceptor'; // Updated import
@@ -37,7 +37,7 @@ export const appConfig: ApplicationConfig = {
       ])
     ),
     provideMarkdown(),
-    IrokoApiService,
+    CypherApiService,
     {
       provide: ErrorHandler,
       useClass: ErrorHandlerService,

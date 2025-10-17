@@ -48,6 +48,7 @@ export class NodeViewComponent implements OnInit {
   private nodeTypes: { [key: string]: string } = {
     organization: 'Organization',
     person: 'Person',
+    author: 'Autor',
     source: 'Source',
     project: 'Project',
     output: 'Output',
@@ -61,6 +62,7 @@ export class NodeViewComponent implements OnInit {
   private typeDisplayNames: { [key: string]: string } = {
     Organization: 'Organización',
     Person: 'Investigador',
+    Author: 'Autor',
     Source: 'Fuente',
     Project: 'Proyecto',
     Output: 'Resultado de Investigación',

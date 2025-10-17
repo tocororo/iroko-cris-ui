@@ -42,6 +42,7 @@ import {
   EvaluationSection,
   EvaluationCategory,
 } from '../../api/models/evaluation.model';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-node-evaluation-form',
@@ -63,6 +64,7 @@ import {
     MatCardModule,
     MatTooltipModule,
     MatSlideToggleModule,
+    MatChipsModule,
   ],
   templateUrl: './node-evaluation-form.component.html',
   styleUrls: ['./node-evaluation-form.component.scss'],
@@ -97,7 +99,21 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
       this.buildForm();
     }
   }
+  private getInitialValue(question: EvaluationQuestion): any {
+    const result = question.answer?.result;
 
+    // Handle null/undefined
+    if (result === undefined || result === null) {
+      return '';
+    }
+
+    // Ensure boolean values remain as booleans
+    if (question.type === 'boolean') {
+      return Boolean(result); // This handles both actual booleans and string 'true'/'false'
+    }
+
+    return result;
+  }
   private buildForm() {
     const formControls: { [key: string]: [any, any[]?] } = {};
 
@@ -133,7 +149,7 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
               }
 
               formControls[question.id] = [
-                question.answer?.result || '',
+                this.getInitialValue(question),
                 validators,
               ];
             }
@@ -172,6 +188,20 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
     );
   }
 
+  private getFormVal(formValue: any, question: EvaluationQuestion) {
+    if (question.type === 'boolean') {
+      // Handle both string and boolean values
+      if (formValue === 'true' || formValue === true) return true;
+      if (formValue === 'false' || formValue === false) return false;
+      return formValue; // return as-is if it doesn't match expected values
+    } else if (question.type === 'number') {
+      // Convert string numbers to actual numbers
+      return formValue !== '' ? Number(formValue) : formValue;
+    } else {
+      return formValue;
+    }
+  }
+
   onSubmit() {
     if (this.evaluationForm.valid) {
       // Create a deep copy of the evaluation to avoid mutation
@@ -189,7 +219,10 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
             ...updatedEvaluation.question_data[questionId],
             answer: {
               ...updatedEvaluation.question_data[questionId].answer,
-              result: formValue,
+              result: this.getFormVal(
+                formValue,
+                updatedEvaluation.question_data[questionId]
+              ),
               // Add user_id only for user-answered questions (not pre-filled)
               user_id: this.user_id,
             },
@@ -367,5 +400,40 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   // Helper method to check if a question was answered by user
   isUserAnsweredQuestion(question: EvaluationQuestion): boolean {
     return !!question.answer?.user_id;
+  }
+  // Add these methods to your component class
+
+  // Helper method to handle both string and array recommendations
+  getRecommendationList(
+    recommendation: string | string[] | undefined
+  ): string[] {
+    if (!recommendation) return [];
+
+    if (Array.isArray(recommendation)) {
+      return recommendation.filter((rec) => rec && rec.trim().length > 0);
+    }
+
+    // If it's a string, split by newlines or commas, or return as single item array
+    if (typeof recommendation === 'string') {
+      // Try splitting by newlines first
+      if (recommendation.includes('\n')) {
+        return recommendation
+          .split('\n')
+          .filter((rec) => rec.trim().length > 0);
+      }
+      // Then try commas
+      if (recommendation.includes(',')) {
+        return recommendation.split(',').filter((rec) => rec.trim().length > 0);
+      }
+      // Otherwise return as single item
+      return [recommendation.trim()];
+    }
+
+    return [];
+  }
+
+  // TrackBy function for recommendations
+  trackByRecommendation(index: number, item: string): string {
+    return `${index}-${item.substring(0, 20)}`; // Use first 20 chars for tracking
   }
 }

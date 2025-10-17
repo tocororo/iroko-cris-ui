@@ -12,6 +12,8 @@ import {
   CaptchaResponse,
 } from '../api/models/auth.models';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +21,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly API_URL = '/api/v1';
+  private readonly API_URL = `${environment.apiUrl}/${environment.apiVersion}`;
   private readonly TOKEN_KEY = 'access_token';
   private readonly USER_KEY = 'current_user';
   private readonly REMEMBER_KEY = 'remember_me';
@@ -134,7 +136,7 @@ export class AuthService {
 
   // CAPTCHA methods
   getCaptcha(): Observable<CaptchaResponse> {
-    return this.http.get<CaptchaResponse>(`${this.API_URL}/auth/captcha`);
+    return this.http.get<CaptchaResponse>(`${this.API_URL}/auth/captcha/`);
   }
 
   verifyCaptcha(

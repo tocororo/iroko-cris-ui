@@ -6,12 +6,13 @@ import {
   CypherQuery,
   FullTextCypherQuery,
 } from '../api/models/cypher-query.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class IrokoApiService {
-  private apiUrl = '/api/v1/cypher';
+export class CypherApiService {
+  private apiUrl = `${environment.apiUrl}/${environment.apiVersion}/cypher`;
 
   constructor(private http: HttpClient) {}
 

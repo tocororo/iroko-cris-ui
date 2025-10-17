@@ -2,7 +2,7 @@ import { User } from './auth.models';
 
 export interface Answer {
   result?: any;
-  recommendation?: string;
+  recommendation?: string[];
   user_id?: string;
 }
 

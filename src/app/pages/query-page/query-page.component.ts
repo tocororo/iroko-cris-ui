@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IrokoApiService } from '../../services/iroko-api.service';
+import { CypherApiService } from '../../services/cypher-api.service';
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
 import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
@@ -67,7 +67,7 @@ export class QueryPageComponent {
   ];
 
   constructor(
-    private apiService: IrokoApiService,
+    private apiService: CypherApiService,
     private metadataService: MetadataService,
     private authService: AuthService // Add this
   ) {}
