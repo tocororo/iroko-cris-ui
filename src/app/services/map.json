@@ -3,7 +3,7 @@
   "description": "Full Mapping.",
   "entities": [
     {
-      "name": "Source",
+      "name": "Publication",
       "mapping": {
         "required": [
           "identifiers",
@@ -12,7 +12,7 @@
           "source_status",
           "source_type"
         ],
-        "_class": "Source",
+        "_class": "Publication",
         "properties": {
           "id": "id",
           "identifiers": {
@@ -117,7 +117,7 @@
       "name": "Person",
       "mapping": {
         "required": ["identifiers", "id", "name"],
-        "_class": "Source",
+        "_class": "Publication",
         "properties": {
           "id": "id",
           "identifiers": {
@@ -345,7 +345,7 @@
           "source_repo": {
             "__relation": "uuid",
             "__predicate": "COLLECTED_FROM",
-            "__target": "Source",
+            "__target": "Publication",
             "uuid": "id",
             "name": "name"
           },

@@ -1,19 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "id": "local://iroko/source-v1.0.0.json",
-  "title": "Schema Source",
+  "title": "Schema Publication",
   "type": "object",
   "additionalProperties": true,
-  "required": [
-    "identifiers",
-    "id",
-    "title",
-    "source_status",
-    "source_type"
-  ],
+  "required": ["identifiers", "id", "title", "source_status", "source_type"],
   "properties": {
     "id": {
-      "description": "Source UUID , pid_type = srcid",
+      "description": "Publication UUID , pid_type = srcid",
       "type": "string"
     },
     "identifiers": {
@@ -21,10 +15,7 @@
       "items": {
         "additionalProperties": false,
         "type": "object",
-        "required": [
-          "idtype",
-          "value"
-        ],
+        "required": ["idtype", "value"],
         "properties": {
           "idtype": {
             "description": "el tipo de identificador",
@@ -96,11 +87,7 @@
     },
     "source_status": {
       "type": "string",
-      "enum": [
-        "APPROVED",
-        "TO_REVIEW",
-        "UNOFFICIAL"
-      ]
+      "enum": ["APPROVED", "TO_REVIEW", "UNOFFICIAL"]
     },
     "repository_status": {
       "type": "string",
@@ -252,4 +239,3 @@
     }
   }
 }
-

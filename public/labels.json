@@ -1,0 +1,489 @@
+{
+  "nodes": {
+    "organization": {
+      "label": "Organization",
+      "display": "Organización",
+      "properties": [
+        {
+          "name": "name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "organizationType",
+          "label": "Tipo",
+          "sortable": true,
+          "filterable": false,
+          "type": "array"
+        },
+        {
+          "name": "status",
+          "label": "Estado",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        },
+        {
+          "name": "acronyms",
+          "label": "Siglas",
+          "sortable": false,
+          "filterable": false,
+          "type": "array"
+        },
+        {
+          "name": "established",
+          "label": "Fundado",
+          "sortable": true,
+          "filterable": false,
+          "type": "date"
+        }
+      ]
+    },
+    "person": {
+      "label": "Person",
+      "display": "Persona",
+      "properties": [
+        {
+          "name": "name",
+          "label": "Nombre Completo",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "label": "Apellido",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "email_addresses",
+          "label": "Direcciones de Correo",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "research_interests",
+          "label": "Intereses de Investigación",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "academic_titles",
+          "label": "Títulos Académicos",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "affiliations",
+          "label": "Afiliaciones",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "gender",
+          "label": "Género",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        }
+      ]
+    },
+    "author": {
+      "label": "Autor",
+      "display": "Investigador",
+      "properties": [
+        {
+          "name": "name",
+          "label": "Nombre Completo",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "label": "Apellido",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "email_addresses",
+          "label": "Direcciones de Correo",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "research_interests",
+          "label": "Intereses de Investigación",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "academic_titles",
+          "label": "Títulos Académicos",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "affiliations",
+          "label": "Afiliaciones",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "gender",
+          "label": "Género",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        }
+      ]
+    },
+    "publication": {
+      "label": "Publication",
+      "display": "Publicación",
+      "properties": [
+        {
+          "name": "name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "source_type",
+          "label": "Tipo",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "source_status",
+          "label": "Estado",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "repository_status",
+          "label": "Estado del Repositorio",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "label": "URLs",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "start_year",
+          "label": "Año de Inicio",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "end_year",
+          "label": "Año de Finalización",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "frequency",
+          "label": "Frecuencia",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        }
+      ]
+    },
+    "project": {
+      "label": "Project",
+      "display": "Proyecto",
+      "properties": [
+        {
+          "name": "id",
+          "label": "ID",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "label": "Título",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "creator",
+          "label": "Investigador Principal",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "fundingReference",
+          "label": "Financiamiento",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "language",
+          "label": "Idiomas",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "publisher",
+          "label": "Editor",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        }
+      ]
+    },
+    "output": {
+      "label": "Output",
+      "display": "Resultado de Investigación",
+      "properties": [
+        {
+          "name": "title",
+          "label": "Título",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "creators",
+          "label": "Autores",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "description",
+          "label": "Resumen",
+          "sortable": false,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "publication_date",
+          "label": "Fecha de Publicación",
+          "sortable": true,
+          "filterable": true,
+          "type": "date"
+        },
+        {
+          "name": "publisher",
+          "label": "Editor",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "types",
+          "label": "Tipos de Documento",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "language",
+          "label": "Idioma",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "keywords",
+          "label": "Palabras Clave",
+          "sortable": false,
+          "filterable": true,
+          "type": "array"
+        },
+        {
+          "name": "source_repo",
+          "label": "Repositorio Fuente",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        }
+      ]
+    },
+    "term": {
+      "label": "Term",
+      "display": "Término",
+      "properties": [
+        {
+          "name": "id",
+          "label": "ID",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "label": "Descripción",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "identifier",
+          "label": "Identificador",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        }
+      ]
+    },
+    "subject": {
+      "label": "Subject",
+      "display": "Materia",
+      "properties": [
+        {
+          "name": "id",
+          "label": "ID",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "label": "Descripción",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "identifier",
+          "label": "Identificador",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        }
+      ]
+    },
+    "index": {
+      "label": "Index",
+      "display": "Índice",
+      "properties": [
+        {
+          "name": "id",
+          "label": "ID",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "label": "Descripción",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "identifier",
+          "label": "Identificador",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        }
+      ]
+    },
+    "licence": {
+      "label": "Licence",
+      "display": "Licencia",
+      "properties": [
+        {
+          "name": "id",
+          "label": "ID",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "label": "Descripción",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "identifier",
+          "label": "Identificador",
+          "sortable": true,
+          "filterable": false,
+          "type": "string"
+        }
+      ]
+    },
+    "language": {
+      "label": "Language",
+      "display": "Idioma",
+      "properties": []
+    }
+  },
+  "relationships": {
+    "COLLECTED_FROM": "Recolección",
+    "HAS_LICENCE": "Licencia",
+    "HAS_SUBJECT": "Materia",
+    "IN_INDEX": "Indización",
+    "SOURCE_CREATED_IN": "Organización",
+    "RELATED_ORGANIZATION": "Organizaciones Relacionadas",
+    "HAS_LANGUAGE": "Idiomas",
+    "REDIRECTED_ORGANIZATION": "Redireccionadas"
+  },
+  "searchIndices": {
+    "COLLECTED_FROM": "outputSearch",
+    "RELATED_ORGANIZATION": "organizationSearch"
+  }
+}

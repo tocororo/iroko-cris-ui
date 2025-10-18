@@ -45,7 +45,7 @@
           "label": "Catálogo",
           "description": "Revistas, repositorios y fuentes de datos",
           "icon": "source",
-          "route": "/sources"
+          "route": "/publications"
         }
       ]
     },

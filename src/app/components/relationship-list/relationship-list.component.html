@@ -27,8 +27,9 @@
   <app-relationship-card
     [node]="rel.node"
     [relationship]="rel.relationship"
-    [nodeLabels]="rel.nodeLabels"
+    [nodeLabels]="rel.nodeLabelsDisplay"
     [relationshipType]="group.type"
+    [properties]="rel.properties"
     [direction]="group.direction"
     (nodeSelected)="onNodeSelected($event)"
   ></app-relationship-card>

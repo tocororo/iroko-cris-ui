@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       icon: 'revistasmes',
       route: '/mes',
       color: 'primary',
-      type: 'Source',
+      type: 'Publication',
     },
     {
       label: 'Organizaciones',
@@ -63,10 +63,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       label: 'Fuentes de Datos',
       count: 0,
-      icon: 'source',
-      route: '/sources',
+      icon: 'publication',
+      route: '/publications',
       color: 'accent',
-      type: 'Source',
+      type: 'Publication',
     },
     {
       label: 'Términos de Vocabularios',
@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       label: 'Browse Catalog',
       description: 'Explore by categories',
       icon: 'explore',
-      route: '/sources',
+      route: '/publications',
     },
   ];
 
@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const queries = this.stats.map((stat) =>
       stat.route === '/mes'
         ? this.irokoApiService.executeQuery({
-            query: `MATCH (n:Source) WHERE (EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))) RETURN count(n) AS count`,
+            query: `MATCH (n:Publication) WHERE (EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))) RETURN count(n) AS count`,
             parameters: {},
             readonly: true,
           })

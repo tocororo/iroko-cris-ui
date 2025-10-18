@@ -6,6 +6,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { ListColumn } from '../../services/labels.service';
 
 @Component({
   selector: 'app-relationship-card',
@@ -26,6 +27,7 @@ export class RelationshipCardComponent {
   @Input() relationship: any;
   @Input() nodeLabels: string[] = [];
   @Input() relationshipType: string = '';
+  @Input() properties: ListColumn[] = [];
   @Input() direction: 'INCOMING' | 'OUTGOING' = 'OUTGOING';
   @Output() nodeSelected = new EventEmitter<any>();
 
@@ -33,7 +35,7 @@ export class RelationshipCardComponent {
 
   // Allowed node types for view details
   private readonly allowedNodeTypes = [
-    'Source',
+    'Publication',
     'Organization',
     'Person',
     'Project',
@@ -66,19 +68,31 @@ export class RelationshipCardComponent {
     return this.getRelationshipProperties().length > 0;
   }
 
-  // Get node properties (existing method)
   getNodeProperties(): { key: string; value: any }[] {
     if (!this.node) return [];
 
-    return Object.entries(this.node)
-      .filter(
-        ([key]) =>
-          !key.startsWith('_') &&
-          key !== 'labels' &&
-          key !== 'identity' &&
-          key !== 'elementId'
-      )
-      .map(([key, value]) => ({ key, value }));
+    if (this.properties.length > 0) {
+      const result: { key: string; value: any }[] = [];
+      this.properties.forEach((element) => {
+        if (element.name in this.node) {
+          result.push({
+            key: element.label,
+            value: this.node[element.name],
+          });
+        }
+      });
+      return result;
+    } else {
+      return Object.entries(this.node)
+        .filter(
+          ([key]) =>
+            !key.startsWith('_') &&
+            key !== 'labels' &&
+            key !== 'identity' &&
+            key !== 'elementId'
+        )
+        .map(([key, value]) => ({ key, value }));
+    }
   }
 
   isArray(value: any): boolean {

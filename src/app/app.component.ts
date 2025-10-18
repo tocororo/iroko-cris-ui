@@ -27,7 +27,7 @@ import { MetadataService, PageMetadata } from './services/metadata.service';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { filter, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { RelationshipsLabelService } from './services/relationships-label.service';
+import { LabelsService } from './services/labels.service';
 import { AuthService } from './services/auth.service'; // Add this import
 
 @Component({
@@ -101,7 +101,7 @@ export class AppComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private metadataService: MetadataService,
-    private labelService: RelationshipsLabelService,
+    private labelService: LabelsService,
     private authService: AuthService, // Add this
     private router: Router
   ) {
@@ -162,7 +162,7 @@ export class AppComponent implements OnInit {
       this.currentPageTitle = metadata.title || 'Iroko';
     });
 
-    this.labelService.loadRelData().subscribe();
+    this.labelService.loadData().subscribe();
 
     // Subscribe to auth state changes
     this.authService.currentUser$.subscribe((user) => {
@@ -203,7 +203,7 @@ export class AppComponent implements OnInit {
 
     const titleMap: { [key: string]: string } = {
       '': 'Inicio',
-      sources: 'Sources',
+      publications: 'Publicaciones',
       organizations: 'Organizaciones',
       persons: 'People',
       projects: 'Projects',

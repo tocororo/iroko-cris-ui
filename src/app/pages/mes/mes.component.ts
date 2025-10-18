@@ -6,8 +6,8 @@ import { MetadataService } from '../../services/metadata.service';
 import {
   AdvancedQueryOptions,
   GenericListComponent,
-  ListColumn,
 } from '../../components/generic-list/generic-list.component';
+import { LabelsService, ListColumn } from '../../services/labels.service';
 
 @Component({
   selector: 'app-mes',
@@ -16,85 +16,17 @@ import {
   imports: [CommonModule, GenericListComponent, RouterModule],
 })
 export class MesComponent {
-  mesColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'title',
-      label: 'Título de la Revista',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Nombre Corto',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'issn',
-      label: 'ISSN',
-      sortable: false,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'rnps',
-      label: 'RNPS',
-      sortable: false,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'seriadas_cubanas',
-      label: 'Seriadas Cubanas',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'source_status',
-      label: 'Estado',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'start_year',
-      label: 'Año de Inicio',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'frequency',
-      label: 'Frecuencia',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'organizations',
-      label: 'Organizaciones Editoras',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-  ];
+  mesColumns: ListColumn[] = [];
 
   mesAdvancedQuery: AdvancedQueryOptions = {
     customWhereClause:
       "EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))",
   };
 
-  constructor(private metadataService: MetadataService) {}
+  constructor(
+    private metadataService: MetadataService,
+    private labelService: LabelsService
+  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
@@ -102,6 +34,10 @@ export class MesComponent {
       description: 'Revistas científicas del Ministerio de Educación Superior',
       authors: [],
       subjects: [],
+    });
+
+    this.labelService.loadData().subscribe((labels) => {
+      this.mesColumns = labels.nodes['publication'].properties;
     });
   }
 

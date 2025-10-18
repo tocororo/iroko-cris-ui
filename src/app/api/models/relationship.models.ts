@@ -1,3 +1,5 @@
+import { ListColumn } from '../../services/labels.service';
+
 export interface RelationshipGroup {
   type: string;
   relationships: RelationshipData[];
@@ -16,6 +18,8 @@ export interface RelationshipData {
   node: any;
   relationship: any;
   nodeLabels: string[];
+  nodeLabelsDisplay: string[];
+  properties: ListColumn[];
 }
 
 export interface RelationshipSearchEvent {

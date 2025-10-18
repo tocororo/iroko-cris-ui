@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { LabelsService, ListColumn } from '../../services/labels.service';
 
 @Component({
   selector: 'app-vocabularies',
@@ -23,36 +21,7 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class VocabulariesComponent implements OnInit {
   // Common columns for all term types
-  termColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: false,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Nombre',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'description',
-      label: 'Descripción',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'identifier',
-      label: 'Identificador',
-      sortable: true,
-      filterable: false,
-      type: 'string',
-    },
-  ];
+  termColumns: ListColumn[] = [];
 
   // Configuration for different term types
   termTypes = [
@@ -84,7 +53,10 @@ export class VocabulariesComponent implements OnInit {
 
   selectedTabIndex = 0;
 
-  constructor(private metadataService: MetadataService) {}
+  constructor(
+    private metadataService: MetadataService,
+    private labelService: LabelsService
+  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
@@ -92,6 +64,9 @@ export class VocabulariesComponent implements OnInit {
       description: 'Explore términos y vocabularios controlados del sistema',
       authors: [],
       subjects: [],
+    });
+    this.labelService.loadData().subscribe((labels) => {
+      this.termColumns = labels.nodes['term'].properties;
     });
   }
 

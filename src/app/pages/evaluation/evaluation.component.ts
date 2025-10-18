@@ -14,10 +14,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { EvaluationService } from '../../services/evaluation.service';
 import { EvaluationMethodology } from '../../api/models/evaluation.model';
 import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
+import { LabelsService, ListColumn } from '../../services/labels.service';
 
 @Component({
   selector: 'app-evaluation',
@@ -39,42 +37,20 @@ import {
 })
 export class EvaluationComponent implements OnInit {
   methodologyId: string = '';
-  methodology: EvaluationMethodology | null = null;
+  methodology: EvaluationMethodology = {
+    id: '',
+    name: '',
+    version: '',
+    description: '',
+    entity: '',
+    sections: [],
+  };
   searchResults: any[] = [];
   isLoading = false;
   isSearching = false;
 
   searchForm: FormGroup;
-  searchColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Nombre',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'title',
-      label: 'Título',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'description',
-      label: 'Descripción',
-      sortable: false,
-      filterable: true,
-      type: 'string',
-    },
-  ];
+  searchColumns: ListColumn[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -82,7 +58,8 @@ export class EvaluationComponent implements OnInit {
     private evaluationService: EvaluationService,
     private metadataService: MetadataService,
     private snackBar: MatSnackBar,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private labelService: LabelsService
   ) {
     this.searchForm = this.fb.group({
       searchTerm: [''],
@@ -92,7 +69,33 @@ export class EvaluationComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.methodologyId = params['eval_id'];
-      this.loadMethodology();
+      this.isLoading = true;
+      this.evaluationService.getMethodology(this.methodologyId).subscribe({
+        next: (methodology) => {
+          this.methodology = methodology;
+          this.isLoading = false;
+
+          this.metadataService.updateMetadata({
+            title: `Evaluación - ${methodology.name}`,
+            description: methodology.description,
+          });
+          this.labelService.loadData().subscribe((labels) => {
+            this.searchColumns =
+              labels.nodes[
+                this.methodology.entity.toLocaleLowerCase()
+              ].properties;
+          });
+        },
+        error: (error) => {
+          console.error('Error loading methodology:', error);
+          this.snackBar.open(
+            'Error al cargar la metodología de evaluación',
+            'Cerrar',
+            { duration: 5000 }
+          );
+          this.isLoading = false;
+        },
+      });
     });
 
     // Setup search debounce
@@ -108,29 +111,7 @@ export class EvaluationComponent implements OnInit {
       });
   }
 
-  loadMethodology() {
-    this.isLoading = true;
-    this.evaluationService.getMethodology(this.methodologyId).subscribe({
-      next: (methodology) => {
-        this.methodology = methodology;
-        this.isLoading = false;
-
-        this.metadataService.updateMetadata({
-          title: `Evaluación - ${methodology.name}`,
-          description: methodology.description,
-        });
-      },
-      error: (error) => {
-        console.error('Error loading methodology:', error);
-        this.snackBar.open(
-          'Error al cargar la metodología de evaluación',
-          'Cerrar',
-          { duration: 5000 }
-        );
-        this.isLoading = false;
-      },
-    });
-  }
+  loadMethodology() {}
 
   performSearch(searchTerm: string) {
     this.isSearching = true;

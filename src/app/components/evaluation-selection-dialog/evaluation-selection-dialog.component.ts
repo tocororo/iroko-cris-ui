@@ -102,7 +102,7 @@ export class EvaluationSelectionDialogComponent implements OnInit {
 
   getEvaluationIcon(entityType: string): string {
     const iconMap: { [key: string]: string } = {
-      Source: 'source',
+      Publication: 'publication',
       Organization: 'corporate_fare',
       Person: 'people',
       Project: 'folder',

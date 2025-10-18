@@ -57,11 +57,11 @@
       "additionalProperties": false,
       "properties": {
         "uuid": {
-          "description": "Source UUID from which the document was harvest",
+          "description": "Publication UUID from which the document was harvest",
           "type": "string"
         },
         "name": {
-          "description": "Source Name from which the document was harvest",
+          "description": "Publication Name from which the document was harvest",
           "type": "string"
         }
       }
@@ -161,9 +161,7 @@
             }
           }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       }
     },
     "keywords": {
@@ -312,9 +310,7 @@
             }
           }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       }
     },
     "references": {
@@ -386,9 +382,5 @@
       "type": "string"
     }
   },
-  "required": [
-    "id",
-    "source_repo",
-    "title"
-  ]
+  "required": ["id", "source_repo", "title"]
 }

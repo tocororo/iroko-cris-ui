@@ -1,4 +1,3 @@
-// src/app/pages/projects/projects.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -7,34 +6,34 @@ import { GenericListComponent } from '../../components/generic-list/generic-list
 import { LabelsService, ListColumn } from '../../services/labels.service';
 
 @Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
+  selector: 'app-publications',
+  templateUrl: './publications.component.html',
+  styleUrls: ['./publications.component.scss'],
   imports: [CommonModule, GenericListComponent, RouterModule],
 })
-export class ProjectsComponent {
-  projectColumns: ListColumn[] = [];
+export class PublicationsComponent {
+  sourceColumns: ListColumn[] = [];
 
   constructor(
     private metadataService: MetadataService,
     private labelService: LabelsService
   ) {}
+
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Proyectos de Investigación',
+      title: 'Fuentes de Datos',
       description:
-        'Explore research projects and initiatives in the knowledge graph',
+        'Explora revistas, repositorios y fuentes de datos en el grafos de conocimiento',
       authors: [],
       subjects: [],
     });
-
     this.labelService.loadData().subscribe((labels) => {
-      this.projectColumns = labels.nodes['project'].properties;
+      this.sourceColumns = labels.nodes['publication'].properties;
     });
   }
 
   onNodeSelected(node: any) {
-    console.log('Project selected:', node);
-    // Navigate to project detail or show dialog
+    console.log('Publication selected:', node);
+    // Navigate to source detail or show dialog
   }
 }

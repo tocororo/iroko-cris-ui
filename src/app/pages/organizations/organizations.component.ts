@@ -5,9 +5,9 @@ import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import {
   GenericListComponent,
-  ListColumn,
   ListFilter,
 } from '../../components/generic-list/generic-list.component';
+import { LabelsService, ListColumn } from '../../services/labels.service';
 
 @Component({
   selector: 'app-organizations',
@@ -16,50 +16,7 @@ import {
   imports: [CommonModule, GenericListComponent, RouterModule],
 })
 export class OrganizationsComponent {
-  organizationColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: false,
-      type: 'string',
-    },
-    {
-      name: 'name',
-      label: 'Name',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'organizationType',
-      label: 'Tipos',
-      sortable: true,
-      filterable: false,
-      type: 'array',
-    },
-    {
-      name: 'status',
-      label: 'Estado',
-      sortable: true,
-      filterable: false,
-      type: 'string',
-    },
-    {
-      name: 'acronyms',
-      label: 'Siglas',
-      sortable: false,
-      filterable: false,
-      type: 'array',
-    },
-    {
-      name: 'established',
-      label: 'Fundado',
-      sortable: true,
-      filterable: false,
-      type: 'date',
-    },
-  ];
+  organizationColumns: ListColumn[] = [];
 
   organizationFilters: ListFilter[] = [
     {
@@ -75,8 +32,10 @@ export class OrganizationsComponent {
       ],
     },
   ];
-
-  constructor(private metadataService: MetadataService) {}
+  constructor(
+    private metadataService: MetadataService,
+    private labelService: LabelsService
+  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
@@ -84,6 +43,9 @@ export class OrganizationsComponent {
       description: 'Explore organizations in the knowledge graph',
       authors: [],
       subjects: [],
+    });
+    this.labelService.loadData().subscribe((labels) => {
+      this.organizationColumns = labels.nodes['organization'].properties;
     });
   }
 

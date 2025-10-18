@@ -19,7 +19,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CypherApiService } from '../../services/cypher-api.service';
 import { CypherBuilderService } from '../../services/cypher-builder.service';
-import { RelationshipsLabelService } from '../../services/relationships-label.service';
+import {
+  LabelsData,
+  LabelsService,
+  ListColumn,
+} from '../../services/labels.service';
 import { NodePropertiesComponent } from '../node-properties/node-properties.component';
 import { RelationshipGroup } from '../../api/models/relationship.models';
 import { RelationshipGroupComponent } from '../relationship-group/relationship-group.component';
@@ -53,17 +57,19 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   activeTab = 0;
   relationshipSearchIndices: { [key: string]: string } = {};
   isExporting = false;
+  labelsData!: LabelsData;
 
   constructor(
     private irokoApiService: CypherApiService,
     private cypherBuilder: CypherBuilderService,
-    private labelService: RelationshipsLabelService,
+    private labelService: LabelsService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    this.labelService.loadRelData().subscribe((metadata) => {
-      this.relationshipSearchIndices = metadata.searchIndices;
+    this.labelService.loadData().subscribe((labels) => {
+      this.labelsData = this.labelService.getLabelsData();
+      this.relationshipSearchIndices = this.labelsData.searchIndices;
       this.loadNode();
     });
   }
@@ -107,8 +113,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       next: (result) => {
         if (result && result.length > 0) {
           this.node = result[0].n;
-          this.nodeLoaded.emit(this.node);
           this.processAllRelationships(result);
+          this.nodeLoaded.emit(this.node);
         } else {
           console.warn('EnhancedNodeViewerComponent - No node found');
         }
@@ -128,7 +134,11 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     const relationshipMap = new Map<string, RelationshipGroup>();
 
     result.forEach((row: any) => {
-      if (row.relationshipType && row.related) {
+      if (
+        row.relationshipType &&
+        row.related &&
+        row.relationshipType in this.labelsData.relationships
+      ) {
         const direction: 'INCOMING' | 'OUTGOING' = row.isOutgoing
           ? 'OUTGOING'
           : 'INCOMING';
@@ -154,6 +164,9 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             node: row.related,
             relationship: row.relationProperties,
             nodeLabels: row.relatedLabels || [],
+            nodeLabelsDisplay:
+              this.getGroupNodeLabelsDisplay(row.relatedLabels) || [],
+            properties: this.getGroupNodeProperties(row.relatedLabels),
           });
         }
 
@@ -170,7 +183,25 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       }
     });
   }
+  private getGroupNodeProperties(nodeLabels: string[]): ListColumn[] {
+    for (const label of nodeLabels) {
+      if (label.toLocaleLowerCase() in this.labelsData.nodes) {
+        return this.labelsData.nodes[label.toLocaleLowerCase()].properties;
+      }
+    }
+    return []; // no match found
+  }
+  private getGroupNodeLabelsDisplay(nodeLabels: string[]) {
+    if (!this.labelsData || !this.labelsData.nodes) {
+      return [...nodeLabels];
+    }
 
+    const nodes = this.labelsData.nodes;
+    return nodeLabels.map((label) => {
+      const key = label.toLowerCase();
+      return key in nodes ? nodes[key].display : label;
+    });
+  }
   private loadRelationshipCount(group: RelationshipGroup): Promise<void> {
     return new Promise((resolve) => {
       let countQuery;
@@ -361,8 +392,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     });
   }
 
-  labelName(name: string): string {
-    return this.labelService.getLabel(name);
+  relationshipLabel(name: string): string {
+    return this.labelService.getRelationshipLabel(name);
   }
 
   // Export functionality (keep existing implementation)

@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { QueryPageComponent } from './pages/query-page/query-page.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { HomeComponent } from './pages/home/home.component';
-import { SourcesComponent } from './pages/sources/sources.component';
+import { PublicationsComponent } from './pages/publications/sources.component';
 import { MesComponent } from './pages/mes/mes.component';
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
 import { PersonsComponent } from './pages/persons/persons.component';
@@ -28,8 +28,8 @@ export const routes: Routes = [
     data: { title: 'Inicio' },
   },
   {
-    path: 'sources',
-    component: SourcesComponent,
+    path: 'publications',
+    component: PublicationsComponent,
     data: { title: 'Fuentes de Datos' },
   },
   {

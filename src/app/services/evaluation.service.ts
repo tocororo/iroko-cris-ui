@@ -9,12 +9,14 @@ import {
   StoredEvaluation,
 } from '../api/models/evaluation.model';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class EvaluationService {
   private http = inject(HttpClient);
-  private readonly API_URL = '/api/v1/evals';
+  private API_URL = `${environment.apiUrl}/${environment.apiVersion}/evals`;
 
   // Get all available evaluation methodologies
   getMethodologies(): Observable<EvaluationMethodology[]> {

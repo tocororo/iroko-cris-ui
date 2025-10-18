@@ -3,10 +3,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
-import {
-  GenericListComponent,
-  ListColumn,
-} from '../../components/generic-list/generic-list.component';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
+import { LabelsService, ListColumn } from '../../services/labels.service';
 
 @Component({
   selector: 'app-outputs',
@@ -15,80 +13,12 @@ import {
   imports: [CommonModule, GenericListComponent, RouterModule],
 })
 export class OutputsComponent {
-  outputColumns: ListColumn[] = [
-    {
-      name: 'id',
-      label: 'ID',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'title',
-      label: 'Título',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'creators',
-      label: 'Autores',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'description',
-      label: 'Resumen',
-      sortable: false,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'publication_date',
-      label: 'Fecha de Publicación',
-      sortable: true,
-      filterable: true,
-      type: 'date',
-    },
-    {
-      name: 'publisher',
-      label: 'Editor',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'types',
-      label: 'Tipos de Documento',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'language',
-      label: 'Idioma',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-    {
-      name: 'keywords',
-      label: 'Palabras Clave',
-      sortable: false,
-      filterable: true,
-      type: 'array',
-    },
-    {
-      name: 'source_repo',
-      label: 'Repositorio Fuente',
-      sortable: true,
-      filterable: true,
-      type: 'string',
-    },
-  ];
+  outputColumns: ListColumn[] = [];
 
-  constructor(private metadataService: MetadataService) {}
+  constructor(
+    private metadataService: MetadataService,
+    private labelService: LabelsService
+  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({
@@ -97,6 +27,9 @@ export class OutputsComponent {
         'Explore research publications, articles, and scientific outputs in the knowledge graph',
       authors: [],
       subjects: [],
+    });
+    this.labelService.loadData().subscribe((labels) => {
+      this.outputColumns = labels.nodes['output'].properties;
     });
   }
 

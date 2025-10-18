@@ -21,7 +21,7 @@
                 group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
               }}
             </mat-icon>
-            {{ labelName(group.type) }} ({{ group.totalCount }})
+            {{ relationshipLabel(group.type) }} ({{ group.totalCount }})
           </ng-template>
 
           <app-relationship-group

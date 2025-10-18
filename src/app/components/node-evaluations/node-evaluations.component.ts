@@ -109,7 +109,7 @@ export class NodeEvaluationsComponent implements OnInit, OnDestroy {
 
   getEvaluationIcon(entityType: string): string {
     const iconMap: { [key: string]: string } = {
-      Source: 'source',
+      Publication: 'publication',
       Organization: 'corporate_fare',
       Person: 'people',
       Project: 'folder',

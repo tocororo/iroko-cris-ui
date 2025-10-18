@@ -45,14 +45,7 @@ import {
 } from '../../services/cypher-builder.service';
 import { ExportService } from '../../services/export.service';
 import { Router } from '@angular/router';
-
-export interface ListColumn {
-  name: string;
-  label: string;
-  sortable?: boolean;
-  filterable?: boolean;
-  type?: 'string' | 'number' | 'date' | 'array';
-}
+import { LabelsService, ListColumn } from '../../services/labels.service';
 
 export interface ListFilter {
   name: string;
@@ -117,6 +110,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() searchIndex?: string;
   @Input() detaillsText: string = 'Ver detalles';
 
+  entityTypeDisplay = '';
+
   // Data state
   nodes: any[] = [];
   totalCount = 0;
@@ -158,7 +153,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     private cypherBuilder: CypherBuilderService,
     private exportService: ExportService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private labelService: LabelsService
   ) {
     this.searchControl = this.fb.control('');
     this.sortControl = this.fb.control('');
@@ -166,11 +162,15 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    this.initializeSorting();
-    this.initializeFilters();
-    this.setupSearchDebounce();
-    this.initializeAdvancedQuery();
-    this.loadPage(0);
+    this.labelService.loadData().subscribe((labels) => {
+      this.entityTypeDisplay =
+        labels.nodes[this.entityType.toLocaleLowerCase()].display;
+      this.initializeSorting();
+      this.initializeFilters();
+      this.setupSearchDebounce();
+      this.initializeAdvancedQuery();
+      this.loadPage(0);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -268,7 +268,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
     const typeMap: { [key: string]: string } = {
       Organization: 'organization',
       Person: 'person',
-      Source: 'source',
+      Publication: 'publication',
       Project: 'project',
       Output: 'output',
       Término: 'term',

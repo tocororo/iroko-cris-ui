@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { EvaluationSelectionDialogComponent } from '../../components/evaluation-selection-dialog/evaluation-selection-dialog.component';
+import { LabelsService } from '../../services/labels.service';
 
 @Component({
   selector: 'app-node-view',
@@ -36,54 +37,34 @@ import { EvaluationSelectionDialogComponent } from '../../components/evaluation-
 })
 export class NodeViewComponent implements OnInit {
   nodeType: string = '';
+  nodeDisplayType: string = '';
   nodeId: string = '';
   nodeName: string = '';
   node: any = null;
   activeTab = 0;
   private dialog = inject(MatDialog);
 
+  loading = true;
+
   private routeSub!: Subscription;
-
-  // Map entity types to display names
-  private nodeTypes: { [key: string]: string } = {
-    organization: 'Organization',
-    person: 'Person',
-    author: 'Autor',
-    source: 'Source',
-    project: 'Project',
-    output: 'Output',
-    term: 'Term',
-    subject: 'Subject',
-    index: 'Index',
-    licence: 'Licence',
-  };
-
-  // Map entity types to display names
-  private typeDisplayNames: { [key: string]: string } = {
-    Organization: 'Organización',
-    Person: 'Investigador',
-    Author: 'Autor',
-    Source: 'Fuente',
-    Project: 'Proyecto',
-    Output: 'Resultado de Investigación',
-    Term: 'Término',
-  };
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private labelService: LabelsService,
     private metadataService: MetadataService
   ) {}
 
   ngOnInit() {
-    this.routeSub = this.route.params.subscribe((params) => {
-      this.nodeType = this.nodeTypes[params['type']];
-      this.nodeId = params['id'];
-
-      const displayName = this.typeDisplayNames[this.nodeType] || this.nodeType;
-      this.metadataService.updateMetadata({
-        title: `${displayName}`,
-        description: `Información sobre el nodo ${this.nodeName} de tipo ${this.nodeType}`,
+    this.labelService.loadData().subscribe((labels) => {
+      this.routeSub = this.route.params.subscribe((params) => {
+        this.nodeType = labels.nodes[params['type']].label;
+        this.nodeId = params['id'];
+        this.nodeDisplayType = labels.nodes[params['type']].display;
+        this.metadataService.updateMetadata({
+          title: `${this.nodeName}`,
+          description: `Información sobre el nodo ${this.nodeName} de tipo ${this.nodeDisplayType}`,
+        });
       });
     });
   }
@@ -94,34 +75,16 @@ export class NodeViewComponent implements OnInit {
     }
   }
 
-  goBack() {
-    const listRoute = this.getListRoute();
-    this.router.navigate([listRoute]);
-  }
-
-  private getListRoute(): string {
-    const routeMap: { [key: string]: string } = {
-      Organization: '/organizations',
-      Person: '/persons',
-      Source: '/sources',
-      Project: '/projects',
-      Output: '/outputs',
-      Término: '/vocabularies',
-    };
-    return routeMap[this.nodeType] || '/';
-  }
-
-  getBreadcrumbLabel(): string {
-    return this.typeDisplayNames[this.nodeType] || this.nodeType;
-  }
-
   onNodeLoaded(node: any): void {
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
+
     this.nodeName = node.name || node.title || node.id;
     this.node = node;
     this.metadataService.updateMetadata({
       title: `${this.nodeName}`,
       description: `Información sobre el nodo ${this.nodeName} de tipo ${this.nodeType}`,
     });
+    this.loading = false;
   }
 
   onRelatedNodeSelect(nodeData: any): void {

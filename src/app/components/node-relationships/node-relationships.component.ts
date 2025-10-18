@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RelationshipGroupComponent } from '../relationship-group/relationship-group.component';
 import { RelationshipGroup } from '../../api/models/relationship.models';
+import { LabelsService } from '../../services/labels.service';
 
 @Component({
   selector: 'app-node-relationships',

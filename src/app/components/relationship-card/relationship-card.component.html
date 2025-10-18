@@ -56,7 +56,8 @@
     }
 
     <!-- Node Properties -->
-    <div class="properties-section" *ngIf="getNodeProperties().length > 0">
+    @if (getNodeProperties().length > 0) {
+    <div class="properties-section">
       <h4 class="section-title">Propiedades</h4>
       <div class="properties-grid">
         <div *ngFor="let prop of getNodeProperties()" class="property-item">
@@ -88,6 +89,7 @@
         </div>
       </div>
     </div>
+    }
 
     <!-- No Properties Message -->
     @if(getNodeProperties().length === 0 && !hasRelationshipProperties()){
