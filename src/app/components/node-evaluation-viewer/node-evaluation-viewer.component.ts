@@ -19,6 +19,7 @@ import {
   EvaluationCategory,
   EvaluationQuestion,
   StoredEvaluation,
+  Answer,
 } from '../../api/models/evaluation.model';
 
 @Component({
@@ -80,55 +81,102 @@ export class NodeEvaluationViewerComponent implements OnInit {
             <head>
               <title>Evaluación - ${this.result.methodology.name}</title>
               <style>
-                body {
-                  font-family: Arial, sans-serif;
-                  margin: 20px;
-                  color: #333;
-                }
-                .header {
-                  border-bottom: 2px solid #2196f3;
-                  padding-bottom: 15px;
-                  margin-bottom: 20px;
-                }
-                .summary {
-                  background: #f8f9fa;
-                  padding: 15px;
-                  border-radius: 8px;
-                  margin-bottom: 20px;
-                }
-                .section {
-                  margin-bottom: 20px;
-                  border: 1px solid #ddd;
-                  border-radius: 8px;
-                  padding: 15px;
-                }
-                .category {
-                  margin: 10px 0;
-                  padding: 10px;
-                  background: #f5f5f5;
-                  border-radius: 6px;
-                }
-                .question {
-                  margin: 8px 0;
-                  padding: 8px;
-                  border-left: 3px solid #4caf50;
-                  background: white;
-                }
-                .score {
-                  color: #2196f3;
-                  font-weight: bold;
-                }
-                .recommendation {
-                  background: #fff3e0;
-                  padding: 8px;
-                  border-left: 4px solid #ff9800;
-                  margin: 5px 0;
-                }
-                @media print {
-                  body { margin: 0; }
-                  .no-print { display: none; }
-                }
-              </style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    color: #333;
+    line-height: 1.5;
+    font-size: 12pt;
+  }
+  .header {
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+  .header h1 {
+    margin: 0 0 10px 0;
+    color: #222;
+  }
+  .summary {
+    background: #f9f9f9;
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+  }
+  .summary h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 14pt;
+  }
+  .general-result {
+    background: #f0f7ff;
+    border-color: #d0e3f0;
+  }
+  .section {
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    background: #fff;
+  }
+  .section h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 6px;
+  }
+  .category {
+    margin: 15px 0;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 5px;
+    border: 1px solid #f0f0f0;
+  }
+  .category h4 {
+    margin-top: 0;
+    color: #34495e;
+  }
+  .question {
+    margin: 10px 0;
+    padding: 10px;
+    background: #ffffff;
+    border-left: 3px solid #666;
+    border: 1px solid #f5f5f5;
+  }
+  .recommendation {
+    background: #fdf6f0;
+    padding: 10px;
+    border-left: 3px solid #888;
+    margin: 10px 0;
+    border-radius: 4px;
+  }
+  .recommendation ul {
+    margin: 6px 0 0 20px;
+    padding: 0;
+  }
+  .recommendation li {
+    margin-bottom: 4px;
+  }
+  strong {
+    font-weight: 600;
+  }
+  @media print {
+    body {
+      margin: 10mm;
+      font-size: 11pt;
+    }
+    .no-print {
+      display: none;
+    }
+    h1, h2, h3, h4 {
+      page-break-after: avoid;
+    }
+    .section {
+      page-break-inside: avoid;
+    }
+  }
+</style>
             </head>
             <body>
               ${printContent}
@@ -150,129 +198,168 @@ export class NodeEvaluationViewerComponent implements OnInit {
       });
     }
   }
-
   private generatePrintableContent(): string {
-    return `
-    <div class="header">
-      <h1>Evaluación</h1>
+    const formatDate = (timestamp: string | undefined): string => {
+      if (!timestamp) return '—';
+      return new Date(timestamp).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+    };
 
-      <div class=summary>
-      <h2>${this.getNodeDisplayName()}</h2>
-      <p><strong>Descripción:</strong> ${this.getNodeDescription()}</p>
-      ${this.getNodeProperties()
-        .map(
-          (elem) => `
-        <p><strong>${elem.key}:</strong> ${elem.value}</p>`
-        )
-        .join('')}
-    </div>
-    <div class=summary>
-      <h2>${this.result.methodology.name} v${
+    // === Bloque de Resultado y Recomendación General ===
+    let generalResultBlock = '';
+    if (
+      this.result.methodology.answer?.result !== undefined ||
+      this.result.methodology.answer?.recommendation
+    ) {
+      generalResultBlock = `
+        <div class="summary general-result">
+          <h2>Resultado y Recomendación General</h2>
+          ${
+            this.result.methodology.answer?.result !== undefined
+              ? `<p><strong>Resultado General:</strong> ${this.result.methodology.answer.result}</p>`
+              : ''
+          }
+          ${
+            this.result.methodology.answer?.recommendation
+              ? `<div class="recommendation general">
+                  <strong>Recomendación General:</strong>
+                  <ul>
+                    ${this.getRecommendationList(
+                      this.result.methodology.answer.recommendation
+                    )
+                      .map((rec) => `<li>${rec}</li>`)
+                      .join('')}
+                  </ul>
+                 </div>`
+              : ''
+          }
+        </div>
+      `;
+    }
+
+    return `
+      <div class="header">
+        <h1>Evaluación</h1>
+
+        <div class="summary">
+          <h2>${this.getNodeDisplayName()}</h2>
+          <p><strong>Descripción:</strong> ${this.getNodeDescription()}</p>
+          ${this.getNodeProperties()
+            .map((elem) => `<p><strong>${elem.key}:</strong> ${elem.value}</p>`)
+            .join('')}
+        </div>
+
+        <div class="summary">
+          <h2>${this.result.methodology.name} v${
       this.result.methodology.version
     }</h2>
-      <p><strong>Descripción:</strong> ${
-        this.result.methodology.description
-      }</p>
-      <p>
-        <strong>Evaluado por:</strong> ${this.evaluation?.user?.full_name} (${
-      this.evaluation?.user?.email
-    })
-      </p>
-      <p><strong>Fecha:</strong> ${new Date(
-        this.result?.timestamp ? this.result?.timestamp : ''
-      ).toLocaleDateString('medium')}</p>
-      <p><strong>Entidad:</strong> ${this.result.methodology.entity}</p>
-      <p><strong>Estructura:</strong> ${
-        this.result.methodology.sections.length
-      } secciones, ${this.getTotalCategories()} categorías, ${this.getAnsweredQuestions()} preguntas</p>
-    </div>
-  </div>
+          <p><strong>Descripción:</strong> ${
+            this.result.methodology.description
+          }</p>
+          <p><strong>Evaluado por:</strong> ${
+            this.evaluation?.user?.full_name || '—'
+          } (${this.evaluation?.user?.email || '—'})</p>
+          <p><strong>Fecha:</strong> ${formatDate(this.result?.timestamp)}</p>
+          <p><strong>Entidad:</strong> ${this.result.methodology.entity}</p>
+          <p><strong>Estructura:</strong> ${
+            this.result.methodology.sections.length
+          } secciones, ${this.getTotalCategories()} categorías, ${this.getAnsweredQuestions()} preguntas</p>
+        </div>
 
-    ${this.result.methodology.sections
-      .map(
-        (section) => `
-      <div class="section">
-        <h3>Sección: ${section.title}</h3>
-        <p><strong>Descripción:</strong> ${section.description}</p>
+        ${generalResultBlock}
+      </div>
 
-        ${
-          section.answer?.result
-            ? `<p><strong>Resultado:</strong> ${section.answer.result}</p>`
-            : ''
-        }
-        ${
-          section.answer?.recommendation
-            ? `<div class="recommendation"><strong>Recomendación de Sección:</strong>
-                <ul>
-                  ${this.getRecommendationList(section.answer.recommendation)
-                    .map((rec) => `<li>${rec}</li>`)
-                    .join('')}
-                </ul>
-               </div>`
-            : ''
-        }
-
-        ${section.categories
-          .map(
-            (category) => `
-          <div class="category">
-            <h4>Categoría: ${category.title}</h4>
-            <p><strong>Descripción:</strong> ${category.description}</p>
-
+      ${this.result.methodology.sections
+        .map(
+          (section) => `
+          <div class="section">
+            <h3>Sección: ${section.title}</h3>
+            <p><strong>Descripción:</strong> ${section.description}</p>
             ${
-              category.answer?.result
-                ? `<p><strong>Resultado:</strong> ${category.answer.result}</p>`
+              section.answer?.result
+                ? `<p><strong>Resultado:</strong> ${section.answer.result}</p>`
                 : ''
             }
             ${
-              category.answer?.recommendation
-                ? `<div class="recommendation"><strong>Recomendación de Categoría:</strong>
+              section.answer?.recommendation
+                ? `<div class="recommendation">
+                    <strong>Recomendación de Sección:</strong>
                     <ul>
                       ${this.getRecommendationList(
-                        category.answer.recommendation
+                        section.answer.recommendation
                       )
                         .map((rec) => `<li>${rec}</li>`)
                         .join('')}
                     </ul>
-                   </div>`
+                  </div>`
                 : ''
             }
 
-            ${category.questions
-              .map((questionId) => {
-                const question = this.result.question_data[questionId];
-                return `
-                <div class="question">
-                  <p><strong>Pregunta:</strong> ${question.desc}</p>
-                  <p><strong>Respuesta:</strong> ${this.getQuestionResultDisplay(
-                    question
-                  )}</p>
+            ${section.categories
+              .map(
+                (category) => `
+                <div class="category">
+                  <h4>Categoría: ${category.title}</h4>
+                  <p><strong>Descripción:</strong> ${category.description}</p>
                   ${
-                    question.answer?.recommendation
-                      ? `<div class="recommendation"><strong>Recomendación:</strong>
+                    category.answer?.result
+                      ? `<p><strong>Resultado:</strong> ${category.answer.result}</p>`
+                      : ''
+                  }
+                  ${
+                    category.answer?.recommendation
+                      ? `<div class="recommendation">
+                          <strong>Recomendación de Categoría:</strong>
                           <ul>
                             ${this.getRecommendationList(
-                              question.answer.recommendation
+                              category.answer.recommendation
                             )
                               .map((rec) => `<li>${rec}</li>`)
                               .join('')}
                           </ul>
-                         </div>`
+                        </div>`
                       : ''
                   }
+
+                  ${category.questions
+                    .map((questionId) => {
+                      const question = this.result.question_data[questionId];
+                      return `
+                      <div class="question">
+                        <p><strong>Pregunta:</strong> ${question.desc}</p>
+                        <p><strong>Respuesta:</strong> ${this.getQuestionResultDisplay(
+                          question
+                        )}</p>
+                        ${
+                          question.answer?.recommendation
+                            ? `<div class="recommendation">
+                                <strong>Recomendación:</strong>
+                                <ul>
+                                  ${this.getRecommendationList(
+                                    question.answer.recommendation
+                                  )
+                                    .map((rec) => `<li>${rec}</li>`)
+                                    .join('')}
+                                </ul>
+                              </div>`
+                            : ''
+                        }
+                      </div>
+                    `;
+                    })
+                    .join('')}
                 </div>
-              `;
-              })
+              `
+              )
               .join('')}
           </div>
         `
-          )
-          .join('')}
-      </div>
-    `
-      )
-      .join('')}
-  `;
+        )
+        .join('')}
+    `;
   }
 
   getNodeDisplayName(): string {
@@ -492,5 +579,15 @@ export class NodeEvaluationViewerComponent implements OnInit {
   // TrackBy function for recommendations
   trackByRecommendation(index: number, item: string): string {
     return `${index}-${item.substring(0, 20)}`; // Use first 20 chars for tracking
+  }
+  showRecommendations(answer: Answer | undefined) {
+    if (answer) {
+      return (
+        answer.recommendation !== undefined &&
+        answer.recommendation !== null &&
+        answer.recommendation.length > 0
+      );
+    }
+    return false;
   }
 }

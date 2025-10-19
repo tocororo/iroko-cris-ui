@@ -62,6 +62,37 @@
         </div>
       </div>
 
+      <!-- Top-Level Methodology Result & Recommendation -->
+      @if (result.methodology.answer?.result !== undefined ||
+      result.methodology.answer?.recommendation) {
+      <div class="methodology-results">
+        @if (result.methodology.answer?.result !== undefined) {
+        <div class="result-item">
+          <mat-icon>score</mat-icon>
+          <div class="result-content">
+            <strong>Resultado General:</strong>
+            {{ result.methodology.answer?.result }}
+          </div>
+        </div>
+        } @if (showRecommendations(result.methodology.answer)) {
+        <div class="recommendation-item methodology-recommendation">
+          <mat-icon color="primary" class="recommendation-icon"
+            >lightbulb</mat-icon
+          >
+          <div class="recommendation-content">
+            <strong class="recommendation-title">Recomendación General:</strong>
+            <ul class="recommendation-list">
+              @for (rec of
+              getRecommendationList(result.methodology.answer?.recommendation);
+              track trackByRecommendation($index, rec)) {
+              <li class="recommendation-item">{{ rec }}</li>
+              }
+            </ul>
+          </div>
+        </div>
+        }
+      </div>
+      }
       <!-- Sections Accordion -->
       <mat-accordion multi class="sections-accordion">
         @for (section of result.methodology.sections; track
@@ -96,15 +127,13 @@
                 {{ section.answer?.result }}
               </div>
             </div>
-            } @if (section.answer?.recommendation) {
+            } @if (showRecommendations(section.answer)) {
             <div class="recommendation-item section-recommendation">
               <mat-icon color="warn" class="recommendation-icon"
                 >warning</mat-icon
               >
               <div class="recommendation-content">
-                <strong class="recommendation-title"
-                  >Recomendación de {{ section.title }}:</strong
-                >
+                <strong class="recommendation-title">Recomendación:</strong>
                 <ul class="recommendation-list">
                   @for (rec of
                   getRecommendationList(section.answer?.recommendation); track
@@ -146,15 +175,13 @@
                     {{ category.answer?.result }}
                   </div>
                 </div>
-                } @if (category.answer?.recommendation) {
+                } @if (showRecommendations(category.answer)) {
                 <div class="recommendation-item category-recommendation">
                   <mat-icon color="accent" class="recommendation-icon"
                     >recommend</mat-icon
                   >
                   <div class="recommendation-content">
-                    <strong class="recommendation-title"
-                      >Recomendación de {{ category.title }}:</strong
-                    >
+                    <strong class="recommendation-title">Recomendación:</strong>
                     <ul class="recommendation-list">
                       @for (rec of
                       getRecommendationList(category.answer?.recommendation);
@@ -198,7 +225,7 @@
                   </div>
 
                   <!-- Question Recommendation -->
-                  @if (question.answer?.recommendation) {
+                  @if (showRecommendations(question.answer)) {
                   <div class="recommendation-item question-recommendation">
                     <mat-icon color="primary" class="recommendation-icon"
                       >lightbulb</mat-icon

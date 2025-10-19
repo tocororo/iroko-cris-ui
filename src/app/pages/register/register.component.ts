@@ -64,14 +64,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
         full_name: [''],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        captcha_text: ['', Validators.required],
+        // captcha_text: ['', Validators.required],
       },
       { validators: this.passwordMatchValidator }
     );
   }
 
   ngOnInit(): void {
-    this.loadCaptcha();
+    // this.loadCaptcha();
   }
 
   ngOnDestroy(): void {
@@ -203,14 +203,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid && this.captchaData) {
+    if (this.registerForm.valid) {
+      // && this.captchaData) {
       this.loading = true;
       const { confirmPassword, ...userData } = this.registerForm.value;
 
       const registerData = {
         ...userData,
-        captcha_token: this.captchaData.captcha_id,
-        captcha_text: userData.captcha_text,
+        // captcha_token: this.captchaData.captcha_id,
+        // captcha_text: userData.captcha_text,
       };
 
       this.authService.register(registerData).subscribe({
