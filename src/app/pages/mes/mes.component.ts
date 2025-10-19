@@ -7,7 +7,11 @@ import {
   AdvancedQueryOptions,
   GenericListComponent,
 } from '../../components/generic-list/generic-list.component';
-import { LabelsService, ListColumn } from '../../services/labels.service';
+import {
+  LabelsService,
+  ListColumn,
+  ListFilter,
+} from '../../services/labels.service';
 
 @Component({
   selector: 'app-mes',
@@ -17,6 +21,8 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
 })
 export class MesComponent {
   mesColumns: ListColumn[] = [];
+
+  filters: ListFilter[] = [];
 
   mesAdvancedQuery: AdvancedQueryOptions = {
     customWhereClause:
@@ -38,6 +44,7 @@ export class MesComponent {
 
     this.labelService.loadData().subscribe((labels) => {
       this.mesColumns = labels.nodes['publication'].properties;
+      this.filters = labels.nodes['publication'].filters;
     });
   }
 

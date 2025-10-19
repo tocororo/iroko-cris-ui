@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://localhost:8443/api',
+  apiUrl: 'https://sceiba.mes.gob.cu/api',
   apiVersion: 'v1',
 };

@@ -30,7 +30,7 @@ export const routes: Routes = [
   {
     path: 'publications',
     component: PublicationsComponent,
-    data: { title: 'Fuentes de Datos' },
+    data: { title: 'Publicaciones' },
   },
   {
     path: 'mes',

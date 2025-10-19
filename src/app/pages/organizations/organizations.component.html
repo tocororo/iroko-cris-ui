@@ -5,6 +5,7 @@
     <p>Organizaciones e instituciones de investigación cubanas</p>
   </div>
 
+  @if (filters && filters.length > 0) {
   <app-generic-list
     entityType="Organization"
     [columns]="organizationColumns"
@@ -13,7 +14,19 @@
     [defaultSortOrder]="'ASC'"
     [pageSize]="10"
     (nodeSelected)="onNodeSelected($event)"
-    [filters]="organizationFilters"
+    [filters]="filters"
   >
-  </app-generic-list>
+  </app-generic-list
+  >} @else {
+  <app-generic-list
+    entityType="Organization"
+    [columns]="organizationColumns"
+    label="Organizaciones"
+    [defaultSort]="'name'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+  >
+  </app-generic-list
+  >}
 </div>

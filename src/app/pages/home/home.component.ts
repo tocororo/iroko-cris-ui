@@ -29,7 +29,7 @@ import { forkJoin } from 'rxjs';
 export class HomeComponent implements OnInit, OnDestroy {
   stats = [
     {
-      label: 'Revistas MES',
+      label: 'Revistas del MES',
       count: 0,
       icon: 'revistasmes',
       route: '/mes',
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Output',
     },
     {
-      label: 'Fuentes de Datos',
+      label: 'Publicaciones',
       count: 0,
       icon: 'publication',
       route: '/publications',

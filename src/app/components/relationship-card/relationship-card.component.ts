@@ -68,10 +68,14 @@ export class RelationshipCardComponent {
     return this.getRelationshipProperties().length > 0;
   }
 
+  hasNodeProperties() {
+    return this.getNodeProperties().length > 0;
+  }
   getNodeProperties(): { key: string; value: any }[] {
     if (!this.node) return [];
+    const props = Array.isArray(this.properties) ? this.properties : [];
 
-    if (this.properties.length > 0) {
+    if (props.length > 0) {
       const result: { key: string; value: any }[] = [];
       this.properties.forEach((element) => {
         if (element.name in this.node) {

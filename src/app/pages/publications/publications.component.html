@@ -8,6 +8,19 @@
     </p>
   </div>
 
+  @if (filters && filters.length > 0) {
+  <app-generic-list
+    entityType="Publication"
+    [columns]="sourceColumns"
+    label="Sources"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    (nodeSelected)="onNodeSelected($event)"
+    [filters]="filters"
+  >
+  </app-generic-list>
+  } @else {
   <app-generic-list
     entityType="Publication"
     [columns]="sourceColumns"
@@ -18,4 +31,5 @@
     (nodeSelected)="onNodeSelected($event)"
   >
   </app-generic-list>
+  }
 </div>

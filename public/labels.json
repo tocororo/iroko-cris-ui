@@ -39,6 +39,20 @@
           "filterable": false,
           "type": "date"
         }
+      ],
+      "filters": [
+        {
+          "name": "organizationType",
+          "label": "Tipo de Organización",
+          "type": "multiselect",
+          "options": [
+            "Education",
+            "Healthcare",
+            "Company",
+            "Nonprofit",
+            "Government"
+          ]
+        }
       ]
     },
     "person": {
@@ -210,6 +224,41 @@
           "sortable": true,
           "filterable": true,
           "type": "string"
+        }
+      ],
+      "filters": [
+        {
+          "name": "relatedOrganizations",
+          "label": "Organizaciones",
+          "type": "relationship",
+          "relationshipConfig": {
+            "relationshipType": "SOURCE_CREATED_IN",
+            "relationshipDirection": "OUT",
+            "targetLabel": "Organization",
+            "placeholder": "Organizaciones..."
+          }
+        },
+        {
+          "name": "relatedSubjects",
+          "label": "Materias",
+          "type": "relationship",
+          "relationshipConfig": {
+            "relationshipType": "HAS_SUBJECT",
+            "relationshipDirection": "OUT",
+            "targetLabel": "Subject",
+            "placeholder": "Materias..."
+          }
+        },
+        {
+          "name": "relatedIndex",
+          "label": "Índices",
+          "type": "relationship",
+          "relationshipConfig": {
+            "relationshipType": "IN_INDEX",
+            "relationshipDirection": "OUT",
+            "targetLabel": "Index",
+            "placeholder": "Índices..."
+          }
         }
       ]
     },

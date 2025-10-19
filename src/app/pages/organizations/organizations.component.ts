@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
 import {
-  GenericListComponent,
+  LabelsService,
+  ListColumn,
   ListFilter,
-} from '../../components/generic-list/generic-list.component';
-import { LabelsService, ListColumn } from '../../services/labels.service';
+} from '../../services/labels.service';
 
 @Component({
   selector: 'app-organizations',
@@ -18,20 +19,7 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
 export class OrganizationsComponent {
   organizationColumns: ListColumn[] = [];
 
-  organizationFilters: ListFilter[] = [
-    {
-      name: 'organizationType',
-      label: 'Tipo de Organización',
-      type: 'multiselect',
-      options: [
-        'Education',
-        'Healthcare',
-        'Company',
-        'Nonprofit',
-        'Government',
-      ],
-    },
-  ];
+  filters: ListFilter[] = [];
   constructor(
     private metadataService: MetadataService,
     private labelService: LabelsService
@@ -46,6 +34,7 @@ export class OrganizationsComponent {
     });
     this.labelService.loadData().subscribe((labels) => {
       this.organizationColumns = labels.nodes['organization'].properties;
+      this.filters = labels.nodes['organization'].filters;
     });
   }
 

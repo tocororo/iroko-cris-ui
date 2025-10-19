@@ -52,6 +52,8 @@ export class EvaluationComponent implements OnInit {
   searchForm: FormGroup;
   searchColumns: ListColumn[] = [];
 
+  displayNodeType = 'Nodo';
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -84,6 +86,8 @@ export class EvaluationComponent implements OnInit {
               labels.nodes[
                 this.methodology.entity.toLocaleLowerCase()
               ].properties;
+            this.displayNodeType =
+              labels.nodes[this.methodology.entity.toLocaleLowerCase()].display;
           });
         },
         error: (error) => {
@@ -152,7 +156,7 @@ export class EvaluationComponent implements OnInit {
   }
 
   getEntityType(): string {
-    return this.methodology?.entity || 'Node';
+    return this.displayNodeType;
   }
 
   // Helper functions in component

@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import { GenericListComponent } from '../../components/generic-list/generic-list.component';
-import { LabelsService, ListColumn } from '../../services/labels.service';
+import {
+  LabelsService,
+  ListColumn,
+  ListFilter,
+} from '../../services/labels.service';
 
 @Component({
   selector: 'app-publications',
@@ -13,6 +17,7 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
 })
 export class PublicationsComponent {
   sourceColumns: ListColumn[] = [];
+  filters: ListFilter[] = [];
 
   constructor(
     private metadataService: MetadataService,
@@ -21,7 +26,7 @@ export class PublicationsComponent {
 
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Fuentes de Datos',
+      title: 'Publicaciones',
       description:
         'Explora revistas, repositorios y fuentes de datos en el grafos de conocimiento',
       authors: [],
@@ -29,6 +34,7 @@ export class PublicationsComponent {
     });
     this.labelService.loadData().subscribe((labels) => {
       this.sourceColumns = labels.nodes['publication'].properties;
+      this.filters = labels.nodes['publication'].filters;
     });
   }
 

@@ -12,12 +12,30 @@ export interface ListColumn {
   type?: 'string' | 'number' | 'date' | 'array';
 }
 
+export interface RelationshipFilterConfig {
+  relationshipType: string;
+  relationshipDirection: 'IN' | 'OUT';
+  targetLabel: string;
+  alias?: string;
+  placeholder?: string;
+}
+
+export interface ListFilter {
+  name: string;
+  label: string;
+  type: 'text' | 'select' | 'multiselect' | 'date' | 'boolean' | 'relationship';
+  placeholder?: string;
+  options?: string[]; // For select/multiselect types
+  relationshipConfig: RelationshipFilterConfig;
+}
+
 export interface LabelsData {
   nodes: {
     [key: string]: {
       label: string;
       display: string;
       properties: ListColumn[];
+      filters: ListFilter[];
     };
   };
   relationships: { [key: string]: string };

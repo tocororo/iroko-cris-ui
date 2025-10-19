@@ -1,0 +1,67 @@
+<!-- relationship-filter.component.html -->
+<div class="relationship-filter">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      [formControl]="searchControl"
+      (input)="onSearchInput($event)"
+      [placeholder]="placeholder"
+      [matAutocomplete]="auto"
+    />
+
+    @if (isLoading) {
+    <mat-progress-spinner
+      class="loading-spinner"
+      diameter="20"
+      mode="indeterminate"
+    >
+    </mat-progress-spinner>
+    }
+
+    <mat-icon matPrefix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="onOptionSelected($event.option.value)"
+  >
+    @for (option of options; track option.id) {
+    <mat-option [value]="option">
+      {{ option.name }}
+    </mat-option>
+    } @if (options.length === 0 && searchControl.value &&
+    searchControl.value.length >= 2 && !isLoading) {
+    <mat-option disabled>
+      <div class="no-results">
+        No se encontraron resultados para "{{ searchControl.value }}"
+      </div>
+    </mat-option>
+    }
+  </mat-autocomplete>
+
+  @if (selectedRelationships.length > 0) {
+  <div class="chips-container">
+    @for (relationship of selectedRelationships; track relationship.id) {
+    <mat-chip
+      class="relationship-chip"
+      (removed)="removeRelationship(relationship)"
+    >
+      {{ relationship.name }}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    }
+
+    <button mat-button color="warn" (click)="clearAll()" class="clear-all-btn">
+      <mat-icon>clear_all</mat-icon>
+      Limpiar
+    </button>
+  </div>
+  } @if (hasError) {
+  <div class="error-message">
+    Error al cargar los datos. Intente nuevamente.
+  </div>
+  }
+</div>

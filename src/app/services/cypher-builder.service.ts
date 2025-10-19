@@ -514,4 +514,40 @@ export class CypherBuilderService {
       },
     };
   }
+
+  buildRelatedEntitiesSearchQuery(
+    entityType: string,
+    relationshipConfig: {
+      relationshipType: string;
+      relationshipDirection: 'IN' | 'OUT';
+      targetLabel: string;
+      alias?: string;
+    },
+    searchTerm: string,
+    limit: number = 10
+  ): { query: string; parameters: any } {
+    const direction =
+      relationshipConfig.relationshipDirection === 'IN' ? '<' : '';
+    const arrow = relationshipConfig.relationshipDirection === 'OUT' ? '>' : '';
+    const targetLabel = relationshipConfig.targetLabel
+      ? `:${relationshipConfig.targetLabel}`
+      : '';
+    const alias = relationshipConfig.alias || 'related';
+
+    const query = `
+      MATCH (n:${entityType})${direction}-[:${relationshipConfig.relationshipType}]-${arrow}(${alias}${targetLabel})
+      WHERE toLower(${alias}.name) CONTAINS toLower($searchTerm)
+      RETURN ${alias}
+      ORDER BY ${alias}.name
+      LIMIT $limit
+    `;
+
+    return {
+      query,
+      parameters: {
+        searchTerm,
+        limit,
+      },
+    };
+  }
 }

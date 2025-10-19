@@ -7,7 +7,7 @@
       de Cuba.
     </p>
   </div>
-
+  @if (filters && filters.length > 0) {
   <app-generic-list
     entityType="Publication"
     [columns]="mesColumns"
@@ -17,6 +17,21 @@
     [pageSize]="10"
     [advancedQueryOptions]="mesAdvancedQuery"
     (nodeSelected)="onNodeSelected($event)"
+    [filters]="filters"
   >
   </app-generic-list>
+  } @else {
+  <app-generic-list
+    entityType="Publication"
+    [columns]="mesColumns"
+    label="MES Journals"
+    [defaultSort]="'title'"
+    [defaultSortOrder]="'ASC'"
+    [pageSize]="10"
+    [advancedQueryOptions]="mesAdvancedQuery"
+    (nodeSelected)="onNodeSelected($event)"
+    [filters]="filters"
+  >
+  </app-generic-list>
+  }
 </div>

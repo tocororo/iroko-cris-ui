@@ -1,0 +1,44 @@
+// relationship-filter.component.scss
+.relationship-filter {
+  width: 100%;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.relationship-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.loading-spinner {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.no-results {
+  padding: 8px 16px;
+  color: rgba(0, 0, 0, 0.54);
+  font-style: italic;
+}
