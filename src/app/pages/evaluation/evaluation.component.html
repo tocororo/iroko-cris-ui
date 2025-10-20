@@ -59,12 +59,13 @@
         </mat-card-header>
 
         <app-generic-list
-          [entityType]="getEntityType()"
+          [entityType]="this.methodology.entity"
           [columns]="searchColumns"
           [pageSize]="10"
           (nodeSelected)="onNodeSelected($event)"
           [fixedFilters]="[]"
           [detaillsText]="'Evaluar'"
+          [filters]="filters"
         >
         </app-generic-list>
       </mat-card>

@@ -163,9 +163,6 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
     // Initialize panel states - open first section by default
     this.evaluation.methodology.sections.forEach(
       (section: EvaluationSection, index: number) => {
-        console.log(
-          `Section ${section.id} - index ${index} - open: ${index === 0}`
-        );
         this.panelOpenState[section.id] = index === 0; // Open first section
         section.categories.forEach(
           (category: EvaluationCategory, indexc: number) => {

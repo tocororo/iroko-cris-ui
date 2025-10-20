@@ -72,7 +72,6 @@ export class AuthService {
             response.user,
             credentials.remember_me || false
           );
-          console.log(response);
 
           this.decodeTokenAndSetRoles(response.access_token);
         })
@@ -96,8 +95,6 @@ export class AuthService {
       .pipe(
         tap({
           next: (response) => {
-            console.log('Registration API Response:', response);
-
             // Check if response has the expected structure
             if (!response.access_token) {
               console.error(
@@ -116,7 +113,6 @@ export class AuthService {
               );
             }
 
-            console.log('Registration successful, setting auth data...');
             this.setAuthData(response.access_token, response.user, true);
             this.decodeTokenAndSetRoles(response.access_token);
           },

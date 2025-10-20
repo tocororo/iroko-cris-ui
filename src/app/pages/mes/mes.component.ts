@@ -49,7 +49,6 @@ export class MesComponent {
   }
 
   onNodeSelected(node: any) {
-    console.log('MES journal selected:', node);
     // Navigate to journal detail or show dialog
   }
 }

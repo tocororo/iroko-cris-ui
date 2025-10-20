@@ -15,7 +15,11 @@ import { EvaluationService } from '../../services/evaluation.service';
 import { EvaluationMethodology } from '../../api/models/evaluation.model';
 import { MetadataService } from '../../services/metadata.service';
 import { GenericListComponent } from '../../components/generic-list/generic-list.component';
-import { LabelsService, ListColumn } from '../../services/labels.service';
+import {
+  LabelsService,
+  ListColumn,
+  ListFilter,
+} from '../../services/labels.service';
 
 @Component({
   selector: 'app-evaluation',
@@ -54,6 +58,8 @@ export class EvaluationComponent implements OnInit {
 
   displayNodeType = 'Nodo';
 
+  filters: ListFilter[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -88,6 +94,8 @@ export class EvaluationComponent implements OnInit {
               ].properties;
             this.displayNodeType =
               labels.nodes[this.methodology.entity.toLocaleLowerCase()].display;
+            this.filters =
+              labels.nodes[this.methodology.entity.toLocaleLowerCase()].filters;
           });
         },
         error: (error) => {

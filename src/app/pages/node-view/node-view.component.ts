@@ -76,8 +76,6 @@ export class NodeViewComponent implements OnInit {
   }
 
   onNodeLoaded(node: any): void {
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
-
     this.nodeName = node.name || node.title || node.id;
     this.node = node;
     this.metadataService.updateMetadata({

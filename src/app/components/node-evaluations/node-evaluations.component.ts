@@ -83,6 +83,8 @@ export class NodeEvaluationsComponent implements OnInit, OnDestroy {
             this.selectEvaluation(this.evaluationHistory[0]);
           }
 
+          // console.log(this.selectedEvaluation);
+          // console.log(this.selectedEvaluationResult);
           this.isLoadingHistory = false;
         },
         error: (error) => {

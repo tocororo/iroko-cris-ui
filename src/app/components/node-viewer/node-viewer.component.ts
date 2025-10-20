@@ -79,8 +79,6 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('EnhancedNodeViewerComponent - Input changes:', changes);
-
     if (
       (changes['nodeId'] && changes['nodeId'].currentValue) ||
       (changes['nodeType'] && changes['nodeType'].currentValue)
@@ -96,18 +94,12 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('EnhancedNodeViewerComponent - Loading node:', {
-      nodeId: this.nodeId,
-      nodeType: this.nodeType,
-    });
-
     this.loading = true;
 
     const queryData = this.cypherBuilder.buildNodeWithRelationshipsQuery(
       this.nodeId,
       [this.nodeType]
     );
-    console.log(queryData);
 
     this.irokoApiService.executeQuery(queryData).subscribe({
       next: (result) => {

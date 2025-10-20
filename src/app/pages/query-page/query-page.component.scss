@@ -1,12 +1,49 @@
+// ====== Variables ======
+$primary-dark: #006d33;
+$primary-darker: #00461e;
+$primary-medium: #2e7d32;
+$error-color: #c62828;
+$error-bg: #ffebee;
+$error-border: #ffcdd2;
+
+$border-color: #e0e0e0;
+$bg-light: #f8f9fa;
+$bg-panel: #fafafa;
+$bg-grid: #f0f0f0;
+$bg-hover: #f8f9fa;
+$bg-active: #e8f5e8;
+
+$text-primary: #333;
+$text-secondary: #666;
+$text-muted: #999;
+
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1200px;
+
+// ====== Mixins & Placeholders ======
+%reset-card {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@mixin mat-icon-size($size) {
+  font-size: $size;
+  width: $size;
+  height: $size;
+}
+
+// ====== Main Styles ======
 .query-page-container {
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 0;
-  background: #f8f9fa;
+  background: $bg-light;
 
   .page-header {
-    background: linear-gradient(135deg, #006d33 0%, #00461e 100%);
+    background: linear-gradient(135deg, $primary-dark 0%, $primary-darker 100%);
     color: white;
     padding: 24px 32px;
     display: flex;
@@ -18,7 +55,7 @@
       flex: 1;
 
       h1 {
-        margin: 0 0 8px 0;
+        margin: 0 0 8px;
         color: white;
         font-size: 2.25rem;
         font-weight: 700;
@@ -57,7 +94,7 @@
     height: calc(100vh - 140px);
     overflow: hidden;
 
-    @media (max-width: 1200px) {
+    @media (max-width: $breakpoint-desktop) {
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
       height: auto;
@@ -67,36 +104,33 @@
 
   .query-input-section {
     background: white;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid $border-color;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow-y: auto;
 
-    @media (max-width: 1200px) {
+    @media (max-width: $breakpoint-desktop) {
       height: auto;
       max-height: 70vh;
       border-right: none;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid $border-color;
     }
 
     .query-card {
-      margin: 0;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-      border-bottom: 1px solid #e0e0e0;
+      @extend %reset-card;
+      border-bottom: 1px solid $border-color;
       flex: 1;
 
-      @media (max-width: 1200px) {
+      @media (max-width: $breakpoint-desktop) {
         flex: none;
       }
 
       ::ng-deep {
         .mat-mdc-card-header {
           padding: 24px 24px 16px;
-          background: #fafafa;
-          border-bottom: 1px solid #e0e0e0;
+          background: $bg-panel;
+          border-bottom: 1px solid $border-color;
 
           .mat-mdc-card-title {
             display: flex;
@@ -106,12 +140,12 @@
             font-weight: 600;
 
             mat-icon {
-              color: #006d33;
+              color: $primary-dark;
             }
           }
 
           .mat-mdc-card-subtitle {
-            color: #666;
+            color: $text-secondary;
           }
         }
 
@@ -119,7 +153,7 @@
           padding: 24px;
           height: calc(100% - 80px);
 
-          @media (max-width: 1200px) {
+          @media (max-width: $breakpoint-desktop) {
             height: auto;
             min-height: 300px;
           }
@@ -128,13 +162,11 @@
     }
 
     .examples-panel {
-      margin: 0;
-      border-radius: 0;
-      border: none;
-      border-bottom: 1px solid #e0e0e0;
+      @extend %reset-card;
+      border-bottom: 1px solid $border-color;
 
-      // Make sure expansion panel is always visible on mobile
-      @media (max-width: 768px) {
+      // Mobile override
+      @media (max-width: $breakpoint-tablet) {
         .mat-expansion-panel {
           border: none !important;
         }
@@ -143,7 +175,7 @@
       ::ng-deep {
         .mat-expansion-panel-header {
           padding: 16px 24px;
-          background: #fafafa;
+          background: $bg-panel;
           height: auto !important;
           min-height: 64px;
 
@@ -161,15 +193,13 @@
             font-size: 1rem;
 
             mat-icon {
-              color: #006d33;
-              font-size: 20px;
-              width: 20px;
-              height: 20px;
+              color: $primary-dark;
+              @include mat-icon-size(20px);
             }
           }
 
           .mat-panel-description {
-            color: #666;
+            color: $text-secondary;
             margin: 0;
             font-size: 0.9rem;
           }
@@ -186,7 +216,7 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 1px;
-        background: #f0f0f0;
+        background: $bg-grid;
 
         .example-item {
           background: white;
@@ -196,25 +226,26 @@
           display: flex;
           align-items: flex-start;
           gap: 16px;
-          border-bottom: 1px solid #f0f0f0;
+          border-bottom: 1px solid $bg-grid;
 
           &:last-child {
             border-bottom: none;
           }
 
           &:hover {
-            background: #f8f9fa;
+            background: $bg-hover;
             transform: translateX(4px);
           }
 
           &:active {
-            background: #e8f5e8;
+            background: $bg-active;
           }
 
           mat-icon {
-            color: #006d33;
+            color: $primary-dark;
             flex-shrink: 0;
             margin-top: 2px;
+            @include mat-icon-size(20px);
           }
 
           .example-content {
@@ -225,19 +256,19 @@
 
             strong {
               font-weight: 600;
-              color: #333;
+              color: $text-primary;
               font-size: 0.95rem;
               line-height: 1.3;
             }
 
             span {
               font-size: 0.8rem;
-              color: #666;
+              color: $text-secondary;
               font-family: "Courier New", monospace;
-              background: #f8f9fa;
+              background: $bg-light;
               padding: 6px 8px;
               border-radius: 4px;
-              border-left: 3px solid #006d33;
+              border-left: 3px solid $primary-dark;
               line-height: 1.4;
               word-break: break-word;
               overflow-wrap: break-word;
@@ -249,12 +280,12 @@
   }
 
   .results-section {
-    background: #f8f9fa;
+    background: $bg-light;
     height: 100%;
     overflow-y: auto;
     position: relative;
 
-    @media (max-width: 1200px) {
+    @media (max-width: $breakpoint-desktop) {
       height: auto;
       min-height: 40vh;
     }
@@ -282,23 +313,21 @@
         padding: 60px 40px;
 
         mat-icon {
-          font-size: 64px;
-          width: 64px;
-          height: 64px;
+          @include mat-icon-size(64px);
           margin-bottom: 20px;
-          color: #006d33;
+          color: $primary-dark;
           opacity: 0.7;
         }
 
         h3 {
-          margin: 0 0 12px 0;
-          color: #333;
+          margin: 0 0 12px;
+          color: $text-primary;
           font-size: 1.5rem;
         }
 
         p {
           margin: 0;
-          color: #666;
+          color: $text-secondary;
           font-size: 1.1rem;
         }
       }
@@ -307,7 +336,7 @@
     .results-header {
       background: white;
       padding: 24px 32px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid $border-color;
 
       .results-info {
         display: flex;
@@ -320,10 +349,10 @@
           align-items: center;
           gap: 12px;
           font-size: 1.5rem;
-          color: #2e7d32;
+          color: $primary-medium;
 
           mat-icon {
-            color: #2e7d32;
+            color: $primary-medium;
           }
         }
 
@@ -335,13 +364,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #666;
+            color: $text-secondary;
             font-size: 0.9rem;
 
             mat-icon {
-              font-size: 18px;
-              width: 18px;
-              height: 18px;
+              @include mat-icon-size(18px);
             }
           }
         }
@@ -349,13 +376,10 @@
     }
 
     .results-card {
-      margin: 0;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
+      @extend %reset-card;
       height: calc(100% - 120px);
 
-      @media (max-width: 1200px) {
+      @media (max-width: $breakpoint-desktop) {
         height: auto;
         min-height: 300px;
       }
@@ -374,29 +398,26 @@
       flex-direction: column;
 
       .error-header {
-        background: #ffebee;
+        background: $error-bg;
         padding: 24px 32px;
-        border-bottom: 1px solid #ffcdd2;
+        border-bottom: 1px solid $error-border;
         display: flex;
         align-items: center;
         gap: 12px;
 
         h2 {
           margin: 0;
-          color: #c62828;
+          color: $error-color;
           font-size: 1.5rem;
         }
 
         mat-icon {
-          color: #c62828;
+          color: $error-color;
         }
       }
 
       .error-card {
-        margin: 0;
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
+        @extend %reset-card;
         flex: 1;
 
         ::ng-deep {
@@ -420,22 +441,20 @@
         max-width: 400px;
 
         mat-icon {
-          font-size: 80px;
-          width: 80px;
-          height: 80px;
+          @include mat-icon-size(80px);
           margin-bottom: 20px;
           color: #ccc;
         }
 
         h3 {
-          margin: 0 0 12px 0;
-          color: #666;
+          margin: 0 0 12px;
+          color: $text-secondary;
           font-size: 1.5rem;
         }
 
         p {
-          margin: 0 0 8px 0;
-          color: #999;
+          margin: 0 0 8px;
+          color: $text-muted;
           line-height: 1.5;
         }
 
@@ -448,8 +467,8 @@
   }
 }
 
-// Enhanced Mobile Responsive Design
-@media (max-width: 768px) {
+// ====== Mobile Responsive (768px and below) ======
+@media (max-width: $breakpoint-tablet) {
   .query-page-container {
     .page-header {
       padding: 20px 16px;
@@ -515,9 +534,7 @@
               font-size: 0.9rem;
 
               mat-icon {
-                font-size: 18px;
-                width: 18px;
-                height: 18px;
+                @include mat-icon-size(18px);
               }
             }
 
@@ -537,9 +554,7 @@
             gap: 12px;
 
             mat-icon {
-              font-size: 18px;
-              width: 18px;
-              height: 18px;
+              @include mat-icon-size(18px);
             }
 
             .example-content {
@@ -587,9 +602,7 @@
           padding: 40px 20px;
 
           mat-icon {
-            font-size: 48px;
-            width: 48px;
-            height: 48px;
+            @include mat-icon-size(48px);
           }
 
           h3 {
@@ -607,9 +620,7 @@
 
         .empty-content {
           mat-icon {
-            font-size: 60px;
-            width: 60px;
-            height: 60px;
+            @include mat-icon-size(60px);
           }
 
           h3 {
@@ -625,7 +636,7 @@
   }
 }
 
-// Extra small devices
+// ====== Extra Small Devices (480px and below) ======
 @media (max-width: 480px) {
   .query-page-container {
     .query-input-section {
@@ -652,18 +663,19 @@
   }
 }
 
-// Ensure expansion panel is always properly styled
+// ====== Global Angular Material Overrides ======
+// Only where necessary
 ::ng-deep {
   .mat-expansion-panel:not([class*="mat-elevation-z"]) {
     box-shadow: none !important;
   }
 
   .mat-expansion-panel-header:hover {
-    background: #f0f0f0 !important;
+    background: $bg-grid !important;
   }
 }
 
-// Add to existing styles
+// ====== Access Denied Message ======
 .access-denied-message {
   max-width: 600px;
   margin: 40px auto;
@@ -673,9 +685,7 @@
     padding: 40px 20px;
 
     mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
+      @include mat-icon-size(64px);
       margin-bottom: 16px;
     }
 
