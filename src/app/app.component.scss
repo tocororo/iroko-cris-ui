@@ -34,7 +34,11 @@
     align-items: center;
     gap: 8px;
   }
-
+  .app-version {
+      font-size: 0.75rem;
+      text-align: center;
+      font-family: monospace;
+  }
   .footer-logo {
     width: 24px;
     height: 24px;

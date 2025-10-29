@@ -26,6 +26,7 @@ export class RelationshipCardComponent {
   @Input() node: any;
   @Input() relationship: any;
   @Input() nodeLabels: string[] = [];
+  @Input() nodeLabelsDisplay: string[] = [];
   @Input() relationshipType: string = '';
   @Input() properties: ListColumn[] = [];
   @Input() direction: 'INCOMING' | 'OUTGOING' = 'OUTGOING';
@@ -120,8 +121,8 @@ export class RelationshipCardComponent {
   }
 
   getNodeType(): string {
-    if (this.nodeLabels && this.nodeLabels.length > 0) {
-      return this.nodeLabels.join(', ');
+    if (this.nodeLabelsDisplay && this.nodeLabelsDisplay.length > 0) {
+      return this.nodeLabelsDisplay.join(', ');
     }
 
     if (this.node?.labels && Array.isArray(this.node.labels)) {
@@ -135,13 +136,10 @@ export class RelationshipCardComponent {
     return 'Node';
   }
 
-  getPrimaryNodeType(): string {
-    const nodeType = this.getNodeType();
-    return nodeType.split(',')[0].trim();
-  }
 
   shouldShowViewDetails(): boolean {
-    const primaryType = this.getPrimaryNodeType();
+    const primaryType = this.nodeLabels[0];
+
     return this.allowedNodeTypes.includes(primaryType);
   }
 
@@ -154,7 +152,7 @@ export class RelationshipCardComponent {
   onViewDetails(event: Event): void {
     event.stopPropagation();
 
-    const primaryType = this.getPrimaryNodeType().toLowerCase();
+    const primaryType = this.nodeLabels[0].toLowerCase();
     const nodeId = this.node.id;
 
     if (nodeId && primaryType) {

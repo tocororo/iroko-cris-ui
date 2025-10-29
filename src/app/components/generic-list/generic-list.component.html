@@ -11,7 +11,7 @@
             matInput
             [formControl]="searchControl"
             (input)="onSearchChange($event)"
-            placeholder="Buscar across all properties"
+            placeholder="Buscar por nombre"
           />
           <mat-icon matPrefix>search</mat-icon>
 
@@ -179,6 +179,7 @@
                 <app-relationship-filter
                   [config]="filter.relationshipConfig"
                   [label]="filter.label"
+                  [initialIds]="activeFilters[filter.name] || []"
                   (selectionChange)="
                     onRelationshipFilterChange(filter.name, $event)
                   "
@@ -190,17 +191,6 @@
               }
             </div>
 
-            <div class="filter-actions">
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="applyFilters()"
-                [disabled]="filterForm.invalid"
-              >
-                <mat-icon>check</mat-icon>
-                Aplicar Filtros
-              </button>
-            </div>
           </form>
         </div>
         }

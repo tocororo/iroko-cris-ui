@@ -20,8 +20,10 @@ import {
   Observable,
   Subject,
   Subscription,
+  catchError,
   debounceTime,
   distinctUntilChanged,
+  of,
 } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,6 +39,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { map, forkJoin } from 'rxjs';
 
 import { CypherApiService } from '../../services/cypher-api.service';
 import {
@@ -44,7 +49,6 @@ import {
   QueryFilter,
 } from '../../services/cypher-builder.service';
 import { ExportService } from '../../services/export.service';
-import { Router } from '@angular/router';
 import {
   LabelsService,
   ListColumn,
@@ -52,7 +56,6 @@ import {
 } from '../../services/labels.service';
 import {
   RelationshipFilterComponent,
-  SelectedRelationship,
 } from '../relationship-filter/relationship-filter.component';
 
 export interface SortOption {
@@ -116,7 +119,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   // Data state
   nodes: any[] = [];
   totalCount = 0;
-  currentPage = 0;
   isLoading = false;
   hasError = false;
   errorMessage = '';
@@ -141,12 +143,15 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   showSortOrder = false;
 
   // Pagination
+  currentPage = 0;
   totalPages = 0;
   paginationRange: number[] = [];
 
   // Debounce for search
   private searchTerms = new Subject<string>();
+  private filterChanges = new Subject<void>();
   private searchSubscription?: Subscription;
+  private filterSubscription?: Subscription;
   isExporting: boolean = false;
 
   constructor(
@@ -154,6 +159,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     private cypherBuilder: CypherBuilderService,
     private exportService: ExportService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private labelService: LabelsService
   ) {
@@ -170,7 +176,12 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.initializeFilters();
       this.setupSearchDebounce();
       this.initializeAdvancedQuery();
-      this.loadPage(0);
+      this.readFromUrl();
+
+      // Ensure URL is synchronized after initialization
+      setTimeout(() => {
+        this.updateUrl();
+      });
     });
   }
 
@@ -186,38 +197,69 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.searchSubscription?.unsubscribe();
+    this.filterSubscription?.unsubscribe();
   }
 
+  // Fix the filter form initialization
   private initializeFilters() {
-    // Clear existing form controls
     const formGroup: { [key: string]: any } = {};
 
     this.filters.forEach((filter) => {
+      let defaultValue: any;
+
       switch (filter.type) {
         case 'text':
-          formGroup[filter.name] = this.fb.control('');
-          break;
         case 'select':
-          formGroup[filter.name] = this.fb.control('');
+        case 'date':
+          defaultValue = '';
           break;
         case 'multiselect':
-          formGroup[filter.name] = this.fb.control([]);
-          break;
-        case 'date':
-          formGroup[filter.name] = this.fb.control('');
+        case 'relationship':
+          defaultValue = [];
           break;
         case 'boolean':
-          formGroup[filter.name] = this.fb.control(false);
+          defaultValue = false;
           break;
-        case 'relationship':
-          // For relationship filters, we store the selected relationships
-          formGroup[filter.name] = this.fb.control([]);
-          break;
+        default:
+          defaultValue = '';
       }
+
+      formGroup[filter.name] = this.fb.control(defaultValue);
     });
 
     this.filterForm = this.fb.group(formGroup);
     this.activeFilters = {};
+
+    // Setup automatic filter application
+    this.setupFilterAutoApply();
+  }
+
+  private setupFilterAutoApply() {
+    this.filterSubscription?.unsubscribe();
+    this.filterSubscription = this.filterForm.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(
+          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+        )
+      )
+      .subscribe(() => {
+        // Don't auto-apply for relationship filters (they have their own apply)
+        const hasRelationshipChanges = Object.keys(
+          this.filterForm.controls
+        ).some((key) => {
+          const filterDef = this.filters.find((f) => f.name === key);
+          return (
+            filterDef?.type === 'relationship' &&
+            JSON.stringify(this.filterForm.get(key)?.value) !==
+              JSON.stringify(this.activeFilters[key])
+          );
+        });
+
+        if (!hasRelationshipChanges) {
+          this.applyFilters();
+        }
+      });
   }
 
   private initializeAdvancedQuery() {
@@ -251,19 +293,20 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.showSortOrder = !!initialSortAttr;
   }
   private setupSearchDebounce() {
+    this.searchSubscription?.unsubscribe();
     this.searchSubscription = this.searchTerms
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((searchTerm) => {
         this.searchTerm = searchTerm;
 
         this.loadPage(0);
+        this.updateUrl();
       });
 
     this.searchControl.valueChanges.subscribe((value) => {
       this.searchTerms.next(value || '');
     });
   }
-
   applyFilters() {
     this.activeFilters = {};
 
@@ -271,15 +314,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       const control = this.filterForm.get(key);
       const filterDef = this.filters.find((f) => f.name === key);
 
-      if (
-        control &&
-        control.value !== null &&
-        control.value !== undefined &&
-        control.value !== ''
-      ) {
-        // For arrays, only include if not empty
-        if (Array.isArray(control.value)) {
-          if (control.value.length > 0) {
+      if (control && this.hasFilterValue(control.value)) {
+        if (filterDef?.type === 'relationship') {
+          if (Array.isArray(control.value) && control.value.length > 0) {
             this.activeFilters[key] = control.value;
           }
         } else {
@@ -289,12 +326,48 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.loadPage(0);
+
+    // Ensure URL is updated after filters are applied
+    setTimeout(() => {
+      this.updateUrl();
+    });
   }
 
   clearFilters() {
-    this.filterForm.reset();
+    // Reset all form controls first
+    Object.keys(this.filterForm.controls).forEach((key) => {
+      const control = this.filterForm.get(key);
+      if (control) {
+        control.setValue(this.getDefaultValueForFilter(key));
+      }
+    });
+
+    // Clear active filters
     this.activeFilters = {};
+
+    // Reload data
     this.loadPage(0);
+
+    // Force URL update with empty filters
+    this.updateUrl();
+  }
+
+  private getDefaultValueForFilter(filterName: string): any {
+    const filter = this.filters.find((f) => f.name === filterName);
+    if (!filter) return '';
+
+    switch (filter.type) {
+      case 'multiselect':
+      case 'relationship':
+        return [];
+      case 'boolean':
+        return false;
+      case 'select':
+      case 'text':
+      case 'date':
+      default:
+        return '';
+    }
   }
 
   hasActiveFilters(): boolean {
@@ -336,42 +409,14 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     try {
       let exportObservable: Observable<Blob>;
 
-      if (this.searchIndex && this.searchTerm) {
-        const whereClause = this.buildWhereClause(true); // skip search conditions
-        const orderClause = this.buildOrderClause();
-        const returnClause = this.buildReturnClause();
-        const searchIndex = this.searchIndex || 'generalSearch';
-        const searchTerm = this.buildSearchTerm(this.searchTerm);
-        const parameters = this.buildParameters(true); // skip search parameter
+      // Always use the same approach for export - build complete query with relationships
+      const { query, parameters } = this.buildCompleteQuery(0, 0, false, true); // true = for export
 
-        exportObservable = this.irokoApiService.exportFullTextQueryToCsv({
-          searchIndex,
-          searchTerm,
-          whereClause,
-          returnClause,
-          orderClause,
-          parameters,
-        });
-      } else {
-        const whereClause = this.buildWhereClause();
-        const orderClause = this.buildOrderClause();
-        const returnClause = this.buildReturnClause();
-
-        const query = `
-          MATCH (n:${this.entityType})
-          ${whereClause}
-          ${returnClause}
-          ${orderClause}
-        `;
-
-        const parameters = this.buildParameters();
-
-        exportObservable = this.irokoApiService.exportQueryToCsv({
-          query,
-          parameters,
-          readonly: true,
-        });
-      }
+      exportObservable = this.irokoApiService.exportQueryToCsv({
+        query,
+        parameters,
+        readonly: true,
+      });
 
       // Subscribe to the Observable to handle the Blob
       exportObservable.subscribe({
@@ -394,13 +439,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         error: (error) => {
           console.error('Export failed:', error);
           this.isExporting = false;
-          // TODO: Show user-friendly error message (e.g., via toast)
         },
       });
     } catch (error) {
       console.error('Export preparation failed:', error);
       this.isExporting = false;
-      // TODO: Notify user of failure
     }
   }
 
@@ -416,12 +459,27 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
       this.nodes = await this.fetchNodes(page * this.pageSize, this.pageSize);
       this.updatePagination();
+
+      // Update URL after successful load
+      this.updateUrl();
     } catch (error) {
       console.error('Error loading page:', error);
       this.hasError = true;
-      this.errorMessage = 'Ha ocurrido un error al intentar cargar los datos. ';
+      this.errorMessage = 'Ha ocurrido un error al intentar cargar los datos.';
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  private getErrorMessage(error: any): string {
+    if (error.status === 0) {
+      return 'Error de conexión. Verifique su conexión a internet.';
+    } else if (error.status === 404) {
+      return 'Recurso no encontrado.';
+    } else if (error.status >= 500) {
+      return 'Error del servidor. Intente nuevamente más tarde.';
+    } else {
+      return 'Ha ocurrido un error al intentar cargar los datos.';
     }
   }
 
@@ -640,9 +698,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           const alias = relationshipConfig.alias || `related${index}`;
 
           // Add WHERE conditions for relationship filters
-          filterValue.forEach((rel: SelectedRelationship, relIndex: number) => {
+          // console.warn(filterValue);
+
+          filterValue.forEach((rel, relIndex: number) => {
             const relParamName = `${alias}Id${relIndex}`;
-            params[relParamName] = rel.id; // Use ID for the query, not name
+            params[relParamName] = rel; // Use ID for the query, not name
           });
         }
       }
@@ -889,14 +949,16 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   private buildCompleteQuery(
     offset: number,
     limit: number,
-    isCount: boolean = false
+    isCount: boolean = false,
+    forExport: boolean = false
   ): { query: string; parameters: any } {
     const baseWhereClause = this.buildWhereClause();
     const orderClause = isCount ? '' : this.buildOrderClause();
     const returnClause = isCount
       ? 'RETURN count(n) AS count'
       : this.buildReturnClause();
-    const paginationClause = isCount ? '' : `SKIP $offset LIMIT $limit`;
+      const paginationClause =
+        isCount || forExport ? '' : `SKIP $offset LIMIT $limit`;
 
     // Build relationship patterns and conditions ONLY if there are active relationship filters
     const { relationshipMatches, relationshipConditions } =
@@ -933,7 +995,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       ...this.buildRelationshipFilterParameters(),
     };
 
-    if (!isCount) {
+    if (!isCount && !forExport) {
       parameters.offset = offset;
       parameters.limit = limit;
     }
@@ -974,7 +1036,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
           // Add WHERE condition for the specific related nodes
           const relConditions = filterValue
-            .map((rel: SelectedRelationship, relIndex: number) => {
+            .map((rel, relIndex: number) => {
               const relParamName = `${alias}Id${relIndex}`;
               return `${alias}.id = $${relParamName}`;
             })
@@ -1012,6 +1074,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   private updatePagination() {
     this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
+    if (this.currentPage >= this.totalPages) {
+      this.currentPage = Math.max(0, this.totalPages - 1);
+    }
     const startPage = Math.max(0, this.currentPage - 2);
     const endPage = Math.min(this.totalPages, startPage + 5);
 
@@ -1052,6 +1117,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.searchControl.setValue('');
     this.searchTerm = '';
     this.loadPage(0);
+
+    // Ensure URL is updated even when search is cleared
+    setTimeout(() => {
+      this.updateUrl();
+    });
   }
 
   onSortChange() {
@@ -1068,11 +1138,21 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     this.loadPage(0);
+
+    // Ensure URL update
+    setTimeout(() => {
+      this.updateUrl();
+    });
   }
 
   toggleSortOrder() {
     this.sortBy.direction = this.sortBy.direction === 'ASC' ? 'DESC' : 'ASC';
     this.loadPage(0);
+
+    // Ensure URL update
+    setTimeout(() => {
+      this.updateUrl();
+    });
   }
 
   getSortIcon(): string {
@@ -1099,6 +1179,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   onPageChange(page: number) {
     this.loadPage(page);
+    this.updateUrl();
   }
 
   onNodeSelect(node: any) {
@@ -1147,10 +1228,231 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return !!this.customWhereClause || this.customParameters.length > 0;
   }
 
-  onRelationshipFilterChange(
-    filterName: string,
-    selectedRelationships: SelectedRelationship[]
-  ) {
-    this.filterForm.get(filterName)?.setValue(selectedRelationships);
+  onRelationshipFilterChange(filterName: string, selectedIds: string[]) {
+    // Update the form control with the selected IDs
+    this.filterForm.get(filterName)?.setValue(selectedIds);
+
+    // Manually update activeFilters since the form valueChanges might be debounced
+    if (selectedIds.length > 0) {
+      this.activeFilters[filterName] = selectedIds;
+    } else {
+      delete this.activeFilters[filterName];
+    }
+
+    this.loadPage(0);
+
+    // Ensure URL update
+    setTimeout(() => {
+      this.updateUrl();
+    });
+  }
+
+  private readFromUrl(): void {
+    const params = this.route.snapshot.queryParams;
+
+    // Read page (must be done first potentially affecting loadPage offset)
+    let urlPage = 0;
+    if (params['page'] !== undefined) {
+      const page = parseInt(params['page'], 10);
+      if (!isNaN(page) && page >= 0) {
+        this.currentPage = page; // Set internal state
+      }
+    }
+
+    // Read search term
+    if (params['search']) {
+      this.searchTerm = params['search'];
+      this.searchControl.setValue(this.searchTerm);
+    }
+
+    // Read sort
+    if (params['sort']) {
+      const sortParts = params['sort'].split(':');
+      if (sortParts.length === 2) {
+        const attribute = sortParts[0];
+        const direction = sortParts[1].toUpperCase();
+        if (direction === 'ASC' || direction === 'DESC') {
+          // Validate against columns if necessary
+          const columnExists = this.columns.some(
+            (col) => col.name === attribute
+          );
+          if (columnExists) {
+            this.sortBy = { attribute, direction: direction as 'ASC' | 'DESC' };
+            this.sortControl.setValue(attribute);
+            this.showSortOrder = true;
+          }
+        }
+      }
+    }
+
+    // Read filters
+    this.filters.forEach((filter) => {
+      const paramName = `filter_${filter.name}`;
+      if (params[paramName] !== undefined) {
+        let value = params[paramName];
+        if (filter.type === 'multiselect' || filter.type === 'relationship') {
+          if (typeof value === 'string' && value.includes(',')) {
+            value = value.split(',').map((v) => v.trim());
+          } else if (typeof value === 'string') {
+            value = [value];
+          }
+        }
+
+        if (value && (!Array.isArray(value) || value.length > 0)) {
+          if (filter.type === 'relationship' && Array.isArray(value)) {
+            this.activeFilters[filter.name] = value;
+            // // Value is an array of IDs. Need to fetch names.
+            // // Create an Observable to fetch names for these IDs.
+            // const fetchNames$ = this.fetchNamesForIds(
+            //   value,
+            //   filter.relationshipConfig.targetLabel
+            // ).pipe(
+            //   map((names) => ({
+            //     filterName: filter.name,
+            //     resolvedObjects: names,
+            //   }))
+            // );
+            // relationshipRequests.push(fetchNames$);
+          } else {
+            // Set value directly for other types and update activeFilters
+            this.filterForm.get(filter.name)?.setValue(value);
+            this.activeFilters[filter.name] = value;
+          }
+        }
+      }
+    });
+
+    // // Execute all relationship name fetch requests
+    // if (relationshipRequests.length > 0) {
+    //   forkJoin(relationshipRequests).subscribe((results) => {
+    //     results.forEach((result) => {
+    //       // Set the resolved {id, name} objects in the form control
+    //       this.filterForm
+    //         .get(result.filterName)
+    //         ?.setValue(result.resolvedObjects);
+    //       // Update activeFilters with just the IDs
+    //       this.activeFilters[result.filterName] = result.resolvedObjects.map(
+    //         (obj) => obj.id
+    //       );
+    //     });
+    //     // Load the page after resolving relationships
+    //     this.loadPage(0);
+    //   });
+    // } else {
+    //   // If no relationship filters to resolve, load the page immediately
+    //   this.loadPage(0);
+    // }
+    this.loadPage(this.currentPage);
+  }
+
+  // // Helper function to fetch names for given IDs
+  // private fetchNamesForIds(
+  //   ids: string[],
+  //   targetLabel: string
+  // ): Observable<SelectedRelationship[]> {
+  //   if (ids.length === 0) {
+  //     return of([]);
+  //   }
+  //   // Build the query to fetch names based on IDs
+  //   const query = `
+  //     MATCH (node:${targetLabel})
+  //     WHERE node.id IN $ids
+  //     RETURN node.id AS id, node.name AS name
+  //   `;
+  //   const parameters = { ids: ids };
+
+  //   return this.irokoApiService
+  //     .executeQuery({
+  //       query,
+  //       parameters,
+  //       readonly: true,
+  //     })
+  //     .pipe(
+  //       map((results: any[]) => {
+  //         // Transform results to SelectedRelationship format
+  //         return results.map((item) => ({ id: item.id, name: item.name }));
+  //       }),
+  //       catchError((error) => {
+  //         console.error(
+  //           'Error fetching names for relationship filter IDs:',
+  //           error
+  //         );
+  //         // Return empty array or handle error as needed
+  //         return of([]);
+  //       })
+  //     );
+  // }
+
+  private updateUrl(): void {
+    const queryParams: any = {};
+
+    // Add page (only if not first page)
+    if (this.currentPage > 0) {
+      queryParams.page = this.currentPage;
+    } else {
+      // Remove page param if it's the first page
+      queryParams.page = null;
+    }
+
+    // Add search term (only if exists)
+    if (this.searchTerm) {
+      queryParams.search = this.searchTerm;
+    } else {
+      // Remove search param if empty
+      queryParams.search = null;
+    }
+
+    // Add sort (only if exists)
+    if (this.sortBy.attribute) {
+      queryParams.sort = `${this.sortBy.attribute}:${this.sortBy.direction}`;
+    } else {
+      queryParams.sort = null;
+    }
+
+    // Add active filters (only non-empty ones)
+    let hasActiveFilters = false;
+    Object.keys(this.activeFilters).forEach((key) => {
+      const value = this.activeFilters[key];
+      const filterDef = this.filters.find((f) => f.name === key);
+
+      if (this.hasFilterValue(value)) {
+        if (Array.isArray(value) && value.length > 0) {
+          if (filterDef?.type === 'relationship') {
+            queryParams[`filter_${key}`] = value.join(',');
+          } else {
+            queryParams[`filter_${key}`] = value.join(',');
+          }
+          hasActiveFilters = true;
+        } else if (!Array.isArray(value)) {
+          queryParams[`filter_${key}`] = value;
+          hasActiveFilters = true;
+        }
+      } else {
+        // Remove filter param if empty
+        queryParams[`filter_${key}`] = null;
+      }
+    });
+
+    // If no active filters and we have filter params in URL, ensure they're removed
+    if (!hasActiveFilters) {
+      this.filters.forEach((filter) => {
+        queryParams[`filter_${filter.name}`] = null;
+      });
+    }
+
+    // Update the URL
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge', // Keep other query params
+      replaceUrl: true,
+    });
+  }
+
+  private hasFilterValue(value: any): boolean {
+    if (value === null || value === undefined || value === '') return false;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'boolean') return true; // Boolean filters are always considered to have value
+    return true;
   }
 }

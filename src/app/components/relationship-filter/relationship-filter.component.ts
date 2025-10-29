@@ -1,34 +1,32 @@
-// relationship-filter.component.ts
 import {
   Component,
   Input,
   Output,
   EventEmitter,
   OnInit,
-  OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
   switchMap,
   catchError,
+  map,
 } from 'rxjs/operators';
 import { CypherApiService } from '../../services/cypher-api.service';
-import { RelationshipFilterConfig } from '../../services/labels.service';
 
-export interface SelectedRelationship {
+interface DisplayItem {
   id: string;
   name: string;
 }
@@ -40,11 +38,9 @@ export interface SelectedRelationship {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatChipsModule,
     MatIconModule,
     MatAutocompleteModule,
@@ -52,37 +48,51 @@ export interface SelectedRelationship {
     MatProgressSpinnerModule,
   ],
 })
-export class RelationshipFilterComponent implements OnInit, OnDestroy {
-  @Input() config!: RelationshipFilterConfig;
+export class RelationshipFilterComponent implements OnInit, OnChanges {
+  @Input() config!: any;
   @Input() label: string = 'Filtrar por relación';
-  @Output() selectionChange = new EventEmitter<SelectedRelationship[]>();
+  @Input() initialIds: string[] = [];
+  @Output() selectionChange = new EventEmitter<string[]>();
 
   searchControl = new FormControl('');
-  selectedRelationships: SelectedRelationship[] = [];
-  options: SelectedRelationship[] = [];
+  selectedIds: string[] = [];
+  displayItems: DisplayItem[] = [];
+  options: DisplayItem[] = [];
   isLoading = false;
   hasError = false;
-
-  private searchTerms = new Subject<string>();
-  private destroy$ = new Subject<void>();
 
   constructor(private cypherApiService: CypherApiService) {}
 
   ngOnInit() {
     this.setupSearch();
+    if (this.initialIds?.length > 0) {
+      this.fetchNamesForIds(this.initialIds);
+    }
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['initialIds'] && !changes['initialIds'].firstChange) {
+      const newIds = changes['initialIds'].currentValue || [];
+      const currentIds = this.selectedIds;
+
+      // Only update if IDs actually changed
+      if (JSON.stringify(newIds) !== JSON.stringify(currentIds)) {
+        this.selectedIds = [...newIds];
+        if (newIds.length > 0) {
+          this.fetchNamesForIds(newIds);
+        } else {
+          this.displayItems = [];
+        }
+      }
+    }
   }
 
   private setupSearch() {
-    this.searchTerms
+    this.searchControl.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((term) => this.searchRelationships(term))
+        switchMap((term) => this.searchRelationships(term || ''))
       )
       .subscribe({
         next: (results) => {
@@ -98,9 +108,7 @@ export class RelationshipFilterComponent implements OnInit, OnDestroy {
       });
   }
 
-  private searchRelationships(
-    searchTerm: string
-  ): Observable<SelectedRelationship[]> {
+  private searchRelationships(searchTerm: string): Observable<DisplayItem[]> {
     if (!searchTerm || searchTerm.length < 2) {
       return of([]);
     }
@@ -108,31 +116,9 @@ export class RelationshipFilterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.hasError = false;
 
-    const query = this.buildSearchQuery(searchTerm);
-
-    return this.cypherApiService
-      .executeQuery({
-        query: query.query,
-        parameters: query.parameters,
-        readonly: true,
-      })
-      .pipe(
-        catchError((error) => {
-          console.error('Search query error:', error);
-          this.hasError = true;
-          return of([]);
-        })
-      );
-  }
-
-  private buildSearchQuery(searchTerm: string): {
-    query: string;
-    parameters: any;
-  } {
     const targetLabel = this.config.targetLabel
       ? `:${this.config.targetLabel}`
       : '';
-
     const query = `
       MATCH (node${targetLabel})
       WHERE toLower(node.name) CONTAINS toLower($searchTerm)
@@ -141,38 +127,85 @@ export class RelationshipFilterComponent implements OnInit, OnDestroy {
       LIMIT 10
     `;
 
-    return {
-      query,
-      parameters: { searchTerm },
-    };
+    return this.cypherApiService
+      .executeQuery({
+        query,
+        parameters: { searchTerm },
+        readonly: true,
+      })
+      .pipe(
+        map((results: any[]) =>
+          results.map((item) => ({ id: item.id, name: item.name }))
+        ),
+        catchError((error) => {
+          console.error('Search query error:', error);
+          this.hasError = true;
+          return of([]);
+        })
+      );
+  }
+
+  private fetchNamesForIds(ids: string[]) {
+    if (!ids.length) {
+      this.displayItems = [];
+      return;
+    }
+
+    const query = `
+      MATCH (node:${this.config.targetLabel})
+      WHERE node.id IN $ids
+      RETURN node.id AS id, node.name AS name
+      ORDER BY node.name
+    `;
+
+    this.cypherApiService
+      .executeQuery({
+        query,
+        parameters: { ids },
+        readonly: true,
+      })
+      .subscribe({
+        next: (results: any[]) => {
+          this.displayItems = results.map((item) => ({
+            id: item.id,
+            name: item.name,
+          }));
+        },
+        error: (error) => {
+          console.error('Error fetching names:', error);
+          this.hasError = true;
+        },
+      });
   }
 
   onSearchInput(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-    this.searchTerms.next(value);
+    // Trigger search through valueChanges
   }
 
-  onOptionSelected(option: SelectedRelationship) {
-    if (!this.selectedRelationships.find((item) => item.id === option.id)) {
-      this.selectedRelationships.push(option);
-      this.selectionChange.emit(this.selectedRelationships);
+  onOptionSelected(option: DisplayItem) {
+    if (!this.selectedIds.includes(option.id)) {
+      this.selectedIds.push(option.id);
+      this.displayItems.push(option);
+      this.selectionChange.emit([...this.selectedIds]);
     }
     this.searchControl.setValue('');
     this.options = [];
   }
 
-  removeRelationship(relationship: SelectedRelationship) {
-    const index = this.selectedRelationships.indexOf(relationship);
+  removeRelationship(item: DisplayItem) {
+    const index = this.selectedIds.indexOf(item.id);
     if (index >= 0) {
-      this.selectedRelationships.splice(index, 1);
-      this.selectionChange.emit(this.selectedRelationships);
+      this.selectedIds.splice(index, 1);
+      this.displayItems.splice(index, 1);
+      this.selectionChange.emit([...this.selectedIds]);
     }
   }
 
   clearAll() {
-    this.selectedRelationships = [];
-    this.selectionChange.emit(this.selectedRelationships);
-    this.searchControl.setValue('');
+    this.selectedIds = [];
+    this.displayItems = [];
+    this.selectionChange.emit([]);
   }
 
   get placeholder(): string {

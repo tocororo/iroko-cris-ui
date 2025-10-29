@@ -174,6 +174,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
         group.showSearch = true;
       }
     });
+    console.warn(this.relationshipGroups);
+
   }
   private getGroupNodeProperties(nodeLabels: string[]): ListColumn[] {
     for (const label of nodeLabels) {

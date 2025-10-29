@@ -29,6 +29,7 @@ import { filter, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { LabelsService } from './services/labels.service';
 import { AuthService } from './services/auth.service'; // Add this import
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-icon-helper',
@@ -43,6 +44,7 @@ import { AuthService } from './services/auth.service'; // Add this import
 })
 export class IconHelperComponent {
   @Input() iconName!: string;
+
 
   // Lista de iconos SVG registrados
   svgIcons = [
@@ -84,6 +86,7 @@ export class AppComponent implements OnInit {
 
   config: Config = { title: 'Iroko', menu: [] };
   currentPageTitle = 'Iroko';
+  appVersion: string = '';
   metadata: PageMetadata = {
     title: '',
     abstract: '',
@@ -105,6 +108,7 @@ export class AppComponent implements OnInit {
     private authService: AuthService, // Add this
     private router: Router
   ) {
+    this.appVersion = environment.appVersion;
     this.matIconRegistry.addSvgIcon(
       'sceiba',
       this.domSanitizer.bypassSecurityTrustResourceUrl('img/sceiba.svg')

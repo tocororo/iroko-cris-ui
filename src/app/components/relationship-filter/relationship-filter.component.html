@@ -40,9 +40,9 @@
     }
   </mat-autocomplete>
 
-  @if (selectedRelationships.length > 0) {
+  @if (displayItems.length > 0) {
   <div class="chips-container">
-    @for (relationship of selectedRelationships; track relationship.id) {
+    @for (relationship of displayItems; track relationship.id) {
     <mat-chip
       class="relationship-chip"
       (removed)="removeRelationship(relationship)"
