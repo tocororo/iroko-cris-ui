@@ -60,7 +60,7 @@ export class SearchResultsComponent implements OnInit {
     this.searchService.globalSearch(this.searchTerm).subscribe({
       next: (data) => {
         this.results = data.map((item: any) => ({
-          id: item.node.properties.id || item.node.identity,
+          iroko_uuid: item.node.properties.iroko_uuid || item.node.identity,
           type: item.type,
           label:
             item.node.properties.name ||
@@ -88,6 +88,6 @@ export class SearchResultsComponent implements OnInit {
   }
 
   navigateToResult(result: SearchResult) {
-    this.router.navigate([`/${result.type.toLowerCase()}s`, result.id]);
+    this.router.navigate([`/${result.type.toLowerCase()}s`, result.iroko_uuid]);
   }
 }

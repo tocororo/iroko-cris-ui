@@ -227,7 +227,7 @@
               <textarea
                 matInput
                 [(ngModel)]="customWhereClause"
-                placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {id: 'MES'}))"
+                placeholder="Ej: EXISTS((n)-[:RELATED_TO]->(:Organization {siglas: 'MES'}))"
                 rows="3"
               ></textarea>
               <mat-hint>
@@ -357,7 +357,7 @@
     <!-- Node Cards -->
     @if (nodes.length > 0) {
     <div class="cards-grid">
-      @for (node of nodes; track node.id) {
+      @for (node of nodes; track node.iroko_uuid) {
       <mat-card class="node-card" (click)="onNodeSelect(node)">
         <mat-card-content>
           <!-- Node Header -->

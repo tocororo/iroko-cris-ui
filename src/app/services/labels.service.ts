@@ -38,7 +38,8 @@ export interface LabelsData {
       filters: ListFilter[];
     };
   };
-  relationships: { [key: string]: string };
+  relationshipsAsTabs: { [key: string]: string };
+  relationshipsAsProp: { [key: string]: string };
   searchIndices: { [key: string]: string };
 }
 
@@ -48,7 +49,8 @@ export interface LabelsData {
 export class LabelsService {
   private labelsData: LabelsData = {
     nodes: {},
-    relationships: {},
+    relationshipsAsTabs: {},
+    relationshipsAsProp: {},
     searchIndices: {},
   };
 
@@ -60,7 +62,8 @@ export class LabelsService {
     return this.http.get('/labels.json').pipe(
       tap((data: any) => {
         this.labelsData.nodes = data.nodes;
-        this.labelsData.relationships = data.relationships;
+        this.labelsData.relationshipsAsTabs = data.relationshipsAsTabs;
+        this.labelsData.relationshipsAsProp = data.relationshipsAsProp;
         this.labelsData.searchIndices = data.searchIndices;
         this.labelsLoaded.next(true);
       })
@@ -74,7 +77,11 @@ export class LabelsService {
   }
 
   getRelationshipLabel(key: string): string {
-    return this.labelsData.relationships[key] || key;
+    return (
+      this.labelsData.relationshipsAsTabs[key] ||
+      this.labelsData.relationshipsAsProp[key] ||
+      key
+    );
   }
 
   getNodeByPath(path: string) {

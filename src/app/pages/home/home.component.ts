@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const queries = this.stats.map((stat) =>
       stat.route === '/mes'
         ? this.irokoApiService.executeQuery({
-            query: `MATCH (n:Publication) WHERE (EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))) RETURN count(n) AS count`,
+            query: `MATCH (n:Publication) WHERE (EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {iroko_uuid: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))) RETURN count(n) AS count`,
             parameters: {},
             readonly: true,
           })

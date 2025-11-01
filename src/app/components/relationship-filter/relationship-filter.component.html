@@ -26,7 +26,7 @@
     #auto="matAutocomplete"
     (optionSelected)="onOptionSelected($event.option.value)"
   >
-    @for (option of options; track option.id) {
+    @for (option of options; track option.iroko_uuid) {
     <mat-option [value]="option">
       {{ option.name }}
     </mat-option>
@@ -42,7 +42,7 @@
 
   @if (displayItems.length > 0) {
   <div class="chips-container">
-    @for (relationship of displayItems; track relationship.id) {
+    @for (relationship of displayItems; track relationship.iroko_uuid) {
     <mat-chip
       class="relationship-chip"
       (removed)="removeRelationship(relationship)"

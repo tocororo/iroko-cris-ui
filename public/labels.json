@@ -267,7 +267,7 @@
       "display": "Proyecto",
       "properties": [
         {
-          "name": "id",
+          "name": "iroko_uuid",
           "label": "ID",
           "sortable": true,
           "filterable": true,
@@ -384,7 +384,7 @@
       "display": "Término",
       "properties": [
         {
-          "name": "id",
+          "name": "iroko_uuid",
           "label": "ID",
           "sortable": true,
           "filterable": false,
@@ -418,7 +418,7 @@
       "display": "Materia",
       "properties": [
         {
-          "name": "id",
+          "name": "iroko_uuid",
           "label": "ID",
           "sortable": true,
           "filterable": false,
@@ -452,7 +452,7 @@
       "display": "Índice",
       "properties": [
         {
-          "name": "id",
+          "name": "iroko_uuid",
           "label": "ID",
           "sortable": true,
           "filterable": false,
@@ -486,7 +486,7 @@
       "display": "Licencia",
       "properties": [
         {
-          "name": "id",
+          "name": "iroko_uuid",
           "label": "ID",
           "sortable": true,
           "filterable": false,
@@ -521,15 +521,18 @@
       "properties": []
     }
   },
-  "relationships": {
+  "relationshipsAsTabs": {
     "COLLECTED_FROM": "Recolección",
-    "HAS_LICENCE": "Licencia",
     "HAS_SUBJECT": "Materia",
     "IN_INDEX": "Indización",
     "SOURCE_CREATED_IN": "Organización",
     "RELATED_ORGANIZATION": "Organizaciones Relacionadas",
     "HAS_LANGUAGE": "Idiomas",
     "REDIRECTED_ORGANIZATION": "Redireccionadas"
+  },
+  "relationshipsAsProp": {
+    "HAS_IDENTIFIER": "Identificadores",
+    "HAS_LICENCE": "Licencias"
   },
   "searchIndices": {
     "COLLECTED_FROM": "outputSearch",

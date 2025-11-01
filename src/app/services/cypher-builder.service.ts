@@ -94,14 +94,16 @@ export class CypherBuilderService {
     const alias = 'n';
 
     const query = `
-      MATCH (${alias}${labelString ? ':' + labelString : ''} {id: $id})
+      MATCH (${alias}${
+      labelString ? ':' + labelString : ''
+    } {iroko_uuid: $iroko_uuid})
       OPTIONAL MATCH (${alias})-[r]-(related)
       RETURN ${alias}, type(r) as relationshipType, collect(related) as relatedNodes
     `;
 
     return {
       query,
-      parameters: { id: nodeId },
+      parameters: { iroko_uuid: nodeId },
     };
   }
 
@@ -110,7 +112,7 @@ export class CypherBuilderService {
     relationshipType?: string
   ): { query: string; parameters: any } {
     let query = `
-      MATCH (n {id: $id})-[r${
+      MATCH (n {iroko_uuid: $iroko_uuid})-[r${
         relationshipType ? ':' + relationshipType : ''
       }]-(related)
       RETURN type(r) as relationshipType, r, properties(r) as relationProperties, related
@@ -119,7 +121,7 @@ export class CypherBuilderService {
 
     return {
       query,
-      parameters: { id: nodeId },
+      parameters: { iroko_uuid: nodeId },
     };
   }
   buildSearchQuery(
@@ -161,7 +163,9 @@ export class CypherBuilderService {
     const alias = 'n';
 
     const query = `
-      MATCH (${alias}${labelString ? ':' + labelString : ''} {id: $id})
+      MATCH (${alias}${
+      labelString ? ':' + labelString : ''
+    } {iroko_uuid: $iroko_uuid})
       OPTIONAL MATCH (${alias})-[r]-(related)
       RETURN ${alias},
              type(r) as relationshipType,
@@ -175,7 +179,7 @@ export class CypherBuilderService {
 
     return {
       query,
-      parameters: { id: nodeId },
+      parameters: { iroko_uuid: nodeId },
     };
   }
 
@@ -192,11 +196,11 @@ export class CypherBuilderService {
     if (direction === 'OUTGOING') {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})-[r:${relationshipType}]->(related)`;
+      } {iroko_uuid: $iroko_uuid})-[r:${relationshipType}]->(related)`;
     } else {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})<-[r:${relationshipType}]-(related)`;
+      } {iroko_uuid: $iroko_uuid})<-[r:${relationshipType}]-(related)`;
     }
 
     const query = `
@@ -206,7 +210,7 @@ export class CypherBuilderService {
 
     return {
       query,
-      parameters: { id: nodeId },
+      parameters: { iroko_uuid: nodeId },
     };
   }
 
@@ -225,17 +229,17 @@ export class CypherBuilderService {
     if (direction === 'OUTGOING') {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})-[r:${relationshipType}]->(related)`;
+      } {iroko_uuid: $iroko_uuid})-[r:${relationshipType}]->(related)`;
     } else {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})<-[r:${relationshipType}]-(related)`;
+      } {iroko_uuid: $iroko_uuid})<-[r:${relationshipType}]-(related)`;
     }
 
     const query = `
       ${matchClause}
       RETURN related, r, properties(r) as relationProperties, labels(related) as relatedLabels
-      ORDER BY related.name, related.id
+      ORDER BY related.name, related.iroko_uuid
       SKIP $skip
       LIMIT $limit
     `;
@@ -243,7 +247,7 @@ export class CypherBuilderService {
     return {
       query,
       parameters: {
-        id: nodeId,
+        iroko_uuid: nodeId,
         skip: page * pageSize,
         limit: pageSize,
       },
@@ -267,11 +271,11 @@ export class CypherBuilderService {
     if (direction === 'OUTGOING') {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})-[r:${relationshipType}]->(related)`;
+      } {iroko_uuid: $iroko_uuid})-[r:${relationshipType}]->(related)`;
     } else {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})<-[r:${relationshipType}]-(related)`;
+      } {iroko_uuid: $iroko_uuid})<-[r:${relationshipType}]-(related)`;
     }
 
     // let query = '';
@@ -294,7 +298,7 @@ export class CypherBuilderService {
     //   query = `
     //     ${matchClause}
     //     RETURN related, r, labels(related) as relatedLabels
-    //     ORDER BY related.name, related.id
+    //     ORDER BY related.name, related.iroko_uuid
     //     SKIP $skip
     //     LIMIT $limit
     //   `;
@@ -304,7 +308,7 @@ export class CypherBuilderService {
       'RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score';
     let orderClause = 'ORDER BY score DESC, related.name';
     const parameters: any = {
-      id: nodeId,
+      iroko_uuid: nodeId,
       skip: page * pageSize,
       limit: pageSize,
     };
@@ -338,11 +342,11 @@ export class CypherBuilderService {
     if (direction === 'OUTGOING') {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})-[r:${relationshipType}]->(related)`;
+      } {iroko_uuid: $iroko_uuid})-[r:${relationshipType}]->(related)`;
     } else {
       matchClause = `MATCH (${alias}${
         labelString ? ':' + labelString : ''
-      } {id: $id})<-[r:${relationshipType}]-(related)`;
+      } {iroko_uuid: $iroko_uuid})<-[r:${relationshipType}]-(related)`;
     }
 
     // let query = '';
@@ -368,7 +372,7 @@ export class CypherBuilderService {
       'RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score';
     let orderClause = 'ORDER BY score DESC, related.name';
 
-    const parameters: any = { id: nodeId };
+    const parameters: any = { iroko_uuid: nodeId };
 
     if (searchTerm) {
       parameters.searchTerm = `${searchTerm}*`;
@@ -406,7 +410,7 @@ export class CypherBuilderService {
     nodeLabels: string[] = [],
     page: number = 0,
     pageSize: number = 10,
-    searchProperties: string[] = ['name', 'description', 'id']
+    searchProperties: string[] = ['name', 'description', 'iroko_uuid']
   ): { query: string; parameters: any } {
     const skip = page * pageSize;
     const limit = pageSize;
@@ -436,12 +440,12 @@ export class CypherBuilderService {
       : '';
 
     const query = `
-    MATCH (n${mainNodeLabelClause} {id: $nodeId})
+    MATCH (n${mainNodeLabelClause} {iroko_uuid: $nodeId})
     MATCH ${relationshipPattern}
     ${searchWhereClause}
     RETURN related, r, labels(related) as relatedLabels, type(r) as relationshipType,
            startNode(r) = n as isOutgoing, properties(r) as relationProperties
-    ORDER BY related.name, related.title, related.id
+    ORDER BY related.name, related.title, related.iroko_uuid
     SKIP $skip
     LIMIT $limit
   `;
@@ -473,7 +477,7 @@ export class CypherBuilderService {
     searchTerm: string,
     direction: 'INCOMING' | 'OUTGOING',
     nodeLabels: string[] = [],
-    searchProperties: string[] = ['name', 'description', 'id']
+    searchProperties: string[] = ['name', 'description', 'iroko_uuid']
   ): { query: string; parameters: any } {
     // Build the main node match with labels
     const mainNodeLabelClause =
@@ -500,7 +504,7 @@ export class CypherBuilderService {
       : '';
 
     const query = `
-    MATCH (n${mainNodeLabelClause} {id: $nodeId})
+    MATCH (n${mainNodeLabelClause} {iroko_uuid: $nodeId})
     MATCH ${relationshipPattern}
     ${searchWhereClause}
     RETURN count(related) as count

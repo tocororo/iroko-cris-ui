@@ -26,7 +26,7 @@ export class MesComponent {
 
   mesAdvancedQuery: AdvancedQueryOptions = {
     customWhereClause:
-      "EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {id: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))",
+      "EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {iroko_uuid: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))",
   };
 
   constructor(

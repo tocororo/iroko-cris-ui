@@ -1,0 +1,59 @@
+
+<div class="relationships-grid">
+  @for (rel of getDisplayedRelationships(group); track rel.node.iroko_uuid) {
+    <mat-card class=""><mat-card-content>
+      <div class="properties-grid">
+    @if (group.type=="HAS_IDENTIFIER") {
+      @for (prop of getNodeProperties(rel.node); track prop.key) {
+      <div class="property-item">
+        <strong class="property-label">{{ prop.key }}:</strong>
+        <span class="property-value">
+          {{ prop.value }}
+        </span>
+      </div>}
+    }
+    @else {
+      @for (prop of getNodeProperties(rel.node); track prop.key) {
+        <div class="property-item">
+        <strong class="property-label">{{ prop.key }}:</strong>
+        <div class="property-value-container">
+          @if (isArray(prop.value)) {
+          <div class="array-container">
+            <ul class="array-list">
+              @for (item of prop.value; track item) {
+              <li class="array-list-item">
+                <span class="array-item-content">{{ item }}</span>
+              </li>
+              }
+            </ul>
+          </div>
+          } @else if (isObject(prop.value)) {
+          <div class="json-container">
+            <ngx-json-viewer
+              [json]="prop.value"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </div>
+          } @else {
+          <span class="property-value">
+            {{ prop.value }}
+          </span>
+          }
+        </div></div>
+      }
+    }</div>
+  </mat-card-content></mat-card>
+
+    <!-- <app-relationship-card
+    [node]="rel.node"
+    [relationship]="rel.relationship"
+    [nodeLabels]="rel.nodeLabels"
+    [nodeLabelsDisplay]="rel.nodeLabelsDisplay"
+    [relationshipType]="group.type"
+    [properties]="rel.properties"
+    [direction]="group.direction"]
+  ></app-relationship-card> -->
+  }
+</div>
+
+

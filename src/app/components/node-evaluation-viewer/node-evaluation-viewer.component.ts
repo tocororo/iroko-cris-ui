@@ -368,7 +368,7 @@ export class NodeEvaluationViewerComponent implements OnInit {
         this.nodeData.name ||
         this.nodeData.title ||
         this.nodeData.label ||
-        this.nodeData.id
+        this.nodeData.iroko_uuid
       );
     }
     return this.result.node_id;

@@ -115,7 +115,7 @@ export class RelationshipCardComponent {
       this.node.name ||
       this.node.title ||
       this.node.label ||
-      this.node.id ||
+      this.node.iroko_uuid ||
       'Unnamed'
     );
   }
@@ -144,7 +144,7 @@ export class RelationshipCardComponent {
   }
 
   onNodeClick(): void {
-    if (this.node && this.node.id) {
+    if (this.node && this.node.iroko_uuid) {
       this.nodeSelected.emit(this.node);
     }
   }
@@ -153,7 +153,7 @@ export class RelationshipCardComponent {
     event.stopPropagation();
 
     const primaryType = this.nodeLabels[0].toLowerCase();
-    const nodeId = this.node.id;
+    const nodeId = this.node.iroko_uuid;
 
     if (nodeId && primaryType) {
       this.router.navigate(['/view', primaryType, nodeId]);

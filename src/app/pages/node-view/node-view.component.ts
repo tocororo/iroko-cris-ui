@@ -59,7 +59,7 @@ export class NodeViewComponent implements OnInit {
     this.labelService.loadData().subscribe((labels) => {
       this.routeSub = this.route.params.subscribe((params) => {
         this.nodeType = labels.nodes[params['type']].label;
-        this.nodeId = params['id'];
+        this.nodeId = params['iroko_uuid'];
         this.nodeDisplayType = labels.nodes[params['type']].display;
         this.metadataService.updateMetadata({
           title: `${this.nodeName}`,
@@ -76,7 +76,7 @@ export class NodeViewComponent implements OnInit {
   }
 
   onNodeLoaded(node: any): void {
-    this.nodeName = node.name || node.title || node.id;
+    this.nodeName = node.name || node.title || node.iroko_uuid;
     this.node = node;
     this.metadataService.updateMetadata({
       title: `${this.nodeName}`,

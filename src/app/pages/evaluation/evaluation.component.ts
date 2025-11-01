@@ -145,11 +145,11 @@ export class EvaluationComponent implements OnInit {
   }
 
   onNodeSelected(node: any) {
-    if (this.methodologyId && node.id) {
-      this.router.navigate(['/evaluate', node.id, this.methodologyId], {
+    if (this.methodologyId && node.iroko_uuid) {
+      this.router.navigate(['/evaluate', node.iroko_uuid, this.methodologyId], {
         state: {
           dialogData: {
-            nodeId: node.id,
+            nodeId: node.iroko_uuid,
             nodeType: this.methodology?.entity,
             nodeData: node,
           },

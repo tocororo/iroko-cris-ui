@@ -27,7 +27,7 @@ import {
 import { CypherApiService } from '../../services/cypher-api.service';
 
 interface DisplayItem {
-  id: string;
+  iroko_uuid: string;
   name: string;
 }
 
@@ -122,7 +122,7 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
     const query = `
       MATCH (node${targetLabel})
       WHERE toLower(node.name) CONTAINS toLower($searchTerm)
-      RETURN node.id AS id, node.name AS name
+      RETURN node.iroko_uuid AS iroko_uuid, node.name AS name
       ORDER BY node.name
       LIMIT 10
     `;
@@ -135,7 +135,7 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
       })
       .pipe(
         map((results: any[]) =>
-          results.map((item) => ({ id: item.id, name: item.name }))
+          results.map((item) => ({ iroko_uuid: item.iroko_uuid, name: item.name }))
         ),
         catchError((error) => {
           console.error('Search query error:', error);
@@ -153,8 +153,8 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
 
     const query = `
       MATCH (node:${this.config.targetLabel})
-      WHERE node.id IN $ids
-      RETURN node.id AS id, node.name AS name
+      WHERE node.iroko_uuid IN $ids
+      RETURN node.iroko_uuid AS iroko_uuid, node.name AS name
       ORDER BY node.name
     `;
 
@@ -167,7 +167,7 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
       .subscribe({
         next: (results: any[]) => {
           this.displayItems = results.map((item) => ({
-            id: item.id,
+            iroko_uuid: item.iroko_uuid,
             name: item.name,
           }));
         },
@@ -184,8 +184,8 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
   }
 
   onOptionSelected(option: DisplayItem) {
-    if (!this.selectedIds.includes(option.id)) {
-      this.selectedIds.push(option.id);
+    if (!this.selectedIds.includes(option.iroko_uuid)) {
+      this.selectedIds.push(option.iroko_uuid);
       this.displayItems.push(option);
       this.selectionChange.emit([...this.selectedIds]);
     }
@@ -194,7 +194,7 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
   }
 
   removeRelationship(item: DisplayItem) {
-    const index = this.selectedIds.indexOf(item.id);
+    const index = this.selectedIds.indexOf(item.iroko_uuid);
     if (index >= 0) {
       this.selectedIds.splice(index, 1);
       this.displayItems.splice(index, 1);

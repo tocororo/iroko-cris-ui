@@ -306,7 +306,7 @@ export class NodeEvaluationPageComponent implements OnInit, OnDestroy {
 
     const excludedKeys = [
       '_',
-      'id',
+      'iroko_uuid',
       'labels',
       'elementId',
       'identity',

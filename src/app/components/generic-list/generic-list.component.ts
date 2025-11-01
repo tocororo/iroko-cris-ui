@@ -282,7 +282,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const initialSortAttr =
       this.defaultSort && sortableColumns.includes(this.defaultSort)
         ? this.defaultSort
-        : sortableColumns[0] || 'id';
+        : sortableColumns[0] || 'iroko_uuid';
 
     this.sortBy = {
       attribute: initialSortAttr,
@@ -1038,7 +1038,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           const relConditions = filterValue
             .map((rel, relIndex: number) => {
               const relParamName = `${alias}Id${relIndex}`;
-              return `${alias}.id = $${relParamName}`;
+              return `${alias}.iroko_uuid = $${relParamName}`;
             })
             .join(' OR ');
 
@@ -1053,12 +1053,12 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   private extractNodeData(nodeWrapper: any): any {
     if (nodeWrapper && nodeWrapper.properties) {
       return {
-        id: nodeWrapper.elementId || nodeWrapper.properties.id,
+        id: nodeWrapper.elementId || nodeWrapper.properties.iroko_uuid,
         ...nodeWrapper.properties,
       };
     }
 
-    if (nodeWrapper && nodeWrapper.id) {
+    if (nodeWrapper && nodeWrapper.iroko_uuid) {
       return nodeWrapper;
     }
 
@@ -1183,7 +1183,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onNodeSelect(node: any) {
-    this.router.navigate(['/view', this.entityType.toLowerCase(), node.id]);
+    this.router.navigate([
+      '/view',
+      this.entityType.toLowerCase(),
+      node.iroko_uuid,
+    ]);
     this.nodeSelected.emit(node);
   }
 
@@ -1221,7 +1225,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getNodeDisplayName(node: any): string {
-    return node.name || node.title || node.label || node.id || 'Unnamed';
+    return (
+      node.name || node.title || node.label || node.iroko_uuid || 'Unnamed'
+    );
   }
 
   hasAdvancedQuery(): boolean {

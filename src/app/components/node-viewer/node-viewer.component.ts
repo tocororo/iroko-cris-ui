@@ -27,6 +27,8 @@ import {
 import { NodePropertiesComponent } from '../node-properties/node-properties.component';
 import { RelationshipGroup } from '../../api/models/relationship.models';
 import { RelationshipGroupComponent } from '../relationship-group/relationship-group.component';
+import { NodeRelationshipsAsPropertiesComponent } from '../node-relationships-as-properties/node-relationships-as-properties.component';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-node-viewer',
@@ -43,6 +45,8 @@ import { RelationshipGroupComponent } from '../relationship-group/relationship-g
     MatProgressSpinnerModule,
     NodePropertiesComponent,
     RelationshipGroupComponent,
+    NodeRelationshipsAsPropertiesComponent,
+    MatExpansionModule
   ],
 })
 export class NodeViewerComponent implements OnInit, OnDestroy {
@@ -52,7 +56,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   @Output() nodeSelected = new EventEmitter<any>();
 
   node: any;
-  relationshipGroups: RelationshipGroup[] = [];
+  relationshipTabsGroups: RelationshipGroup[] = [];
+  relationshipPropGroups: RelationshipGroup[] = [];
   loading = false;
   activeTab = 0;
   relationshipSearchIndices: { [key: string]: string } = {};
@@ -70,7 +75,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     this.labelService.loadData().subscribe((labels) => {
       this.labelsData = this.labelService.getLabelsData();
       this.relationshipSearchIndices = this.labelsData.searchIndices;
-      this.loadNode();
+      // this.loadNode();
     });
   }
 
@@ -123,14 +128,12 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   }
 
   private processAllRelationships(result: any[]) {
+    this.relationshipTabsGroups = [];
+    this.relationshipPropGroups = [];
     const relationshipMap = new Map<string, RelationshipGroup>();
 
     result.forEach((row: any) => {
-      if (
-        row.relationshipType &&
-        row.related &&
-        row.relationshipType in this.labelsData.relationships
-      ) {
+      if (row.relationshipType && row.related) {
         const direction: 'INCOMING' | 'OUTGOING' = row.isOutgoing
           ? 'OUTGOING'
           : 'INCOMING';
@@ -165,17 +168,26 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
         group.totalCount++;
       }
     });
+    relationshipMap.forEach((value: RelationshipGroup, key: string) => {
+      if (value.type in this.labelsData.relationshipsAsTabs) {
+        this.relationshipTabsGroups.push(value);
+        console.warn("AAA");
+      }
+      if (value.type in this.labelsData.relationshipsAsProp) {
+        this.relationshipPropGroups.push(value);
+      }
+    });
 
-    this.relationshipGroups = Array.from(relationshipMap.values());
+    // this.relationshipTabsGroups = Array.from(relationshipMap.values());
 
-    this.relationshipGroups.forEach((group) => {
+    this.relationshipTabsGroups.forEach((group) => {
       if (group.totalCount > group.pageSize || group.searchIndex) {
         this.loadRelationshipCount(group);
         group.showSearch = true;
       }
     });
-    console.warn(this.relationshipGroups);
-
+    console.warn(this.relationshipTabsGroups);
+    console.warn(this.relationshipPropGroups);
   }
   private getGroupNodeProperties(nodeLabels: string[]): ListColumn[] {
     for (const label of nodeLabels) {
@@ -350,7 +362,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   }
 
   onRelatedNodeSelect(nodeData: any): void {
-    if (nodeData && nodeData.id) {
+    if (nodeData && nodeData.iroko_uuid) {
       const nodeLabels = nodeData.labels || nodeData.nodeLabels || [];
       const primaryType = nodeLabels.length > 0 ? nodeLabels[0] : 'node';
 
@@ -496,7 +508,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     const returnClause = this.buildExportReturnClause();
 
     return `
-      MATCH (parent${mainNodeLabelClause} {id: $nodeId})
+      MATCH (parent${mainNodeLabelClause} {iroko_uuid: $nodeId})
       MATCH ${relationshipPattern}
       ${whereClause}
       ${returnClause}
@@ -511,7 +523,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     const conditions: string[] = [];
 
     if (group.searchTerm && !skipSearch && !group.searchIndex) {
-      const searchProperties = ['name', 'description', 'id'];
+      const searchProperties = ['name', 'description', 'iroko_uuid'];
       const searchConditions = searchProperties
         .map(
           (prop) =>
@@ -535,7 +547,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   }
 
   private buildExportOrderClause(): string {
-    return `ORDER BY n.name, n.title, n.id`;
+    return `ORDER BY n.name, n.title, n.iroko_uuid`;
   }
 
   private buildExportParameters(

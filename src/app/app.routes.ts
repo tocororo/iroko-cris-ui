@@ -73,7 +73,7 @@ export const routes: Routes = [
     data: { title: 'Resultados de Búsqueda' },
   },
   {
-    path: 'view/:type/:id',
+    path: 'view/:type/:iroko_uuid',
     component: NodeViewComponent,
     data: { title: 'Detalles del Nodo' },
   },

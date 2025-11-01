@@ -11,7 +11,7 @@ import {
 import { CypherApiService } from './cypher-api.service';
 
 export interface SearchResult {
-  id: string;
+  iroko_uuid: string;
   type: string;
   label: string;
   description?: string;
