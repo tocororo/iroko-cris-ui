@@ -294,4 +294,12 @@ export class AuthService {
   canManageUsers(): boolean {
     return this.hasPermission('users:manage') || this.hasRole('admin');
   }
+
+  canEditNode(): boolean {
+    return (
+      this.hasPermission('node:edit') ||
+      this.hasRole('curator') ||
+      this.hasRole('admin')
+    );
+  }
 }

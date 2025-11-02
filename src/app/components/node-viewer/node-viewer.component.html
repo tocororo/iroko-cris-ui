@@ -42,7 +42,7 @@
           <app-relationship-group
             [group]="group"
             [isExporting]="isExporting"
-            (nodeSelected)="onRelatedNodeSelect($event)"
+            (nodeSelected)="onRelatedNodeSelect(group, $event)"
             (pageChange)="onRelationshipPageChange(group, $event)"
             (search)="onRelationshipSearch(group, $event)"
             (export)="onRelationshipExport(group)"

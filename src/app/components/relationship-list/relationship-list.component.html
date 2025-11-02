@@ -23,7 +23,7 @@
 </div>
 } @else {
 <div class="relationships-grid">
-  @for (rel of getDisplayedRelationships(); track rel.node.iroko_uuid) {
+  @for (rel of getDisplayedRelationships(); track rel.node.iroko_uuid || $index) {
   <app-relationship-card
     [node]="rel.node"
     [relationship]="rel.relationship"

@@ -34,8 +34,11 @@ export class NodeRelationshipsComponent implements OnDestroy {
   @Output() relationshipExport = new EventEmitter<RelationshipGroup>();
   @Output() searchClear = new EventEmitter<RelationshipGroup>();
 
-  onNodeSelected(nodeData: any): void {
-    this.nodeSelected.emit(nodeData);
+  onNodeSelected(group: RelationshipGroup, nodeData: any): void {
+    let a = { node: nodeData, group: group };
+    console.warn(a);
+
+    this.nodeSelected.emit(a);
   }
 
   onPageChange(group: RelationshipGroup, page: number): void {

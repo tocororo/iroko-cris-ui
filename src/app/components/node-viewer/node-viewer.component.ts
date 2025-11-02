@@ -6,6 +6,7 @@ import {
   EventEmitter,
   SimpleChanges,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -15,7 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { CypherApiService } from '../../services/cypher-api.service';
 import { CypherBuilderService } from '../../services/cypher-builder.service';
@@ -29,6 +31,9 @@ import { RelationshipGroup } from '../../api/models/relationship.models';
 import { RelationshipGroupComponent } from '../relationship-group/relationship-group.component';
 import { NodeRelationshipsAsPropertiesComponent } from '../node-relationships-as-properties/node-relationships-as-properties.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { NodeEditService } from '../../services/node-edit.service';
+import { RelationshipDeleteRequest } from '../../api/models/node-edit.model';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-node-viewer',
@@ -43,10 +48,12 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
     MatIconModule,
     MatListModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatDialogModule,
     NodePropertiesComponent,
     RelationshipGroupComponent,
     NodeRelationshipsAsPropertiesComponent,
-    MatExpansionModule
+    MatExpansionModule,
   ],
 })
 export class NodeViewerComponent implements OnInit, OnDestroy {
@@ -64,18 +71,17 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   isExporting = false;
   labelsData!: LabelsData;
 
-  constructor(
-    private irokoApiService: CypherApiService,
-    private cypherBuilder: CypherBuilderService,
-    private labelService: LabelsService,
-    private snackBar: MatSnackBar
-  ) {}
+  private dialog = inject(MatDialog);
+  private irokoApiService = inject(CypherApiService);
+  private cypherBuilder = inject(CypherBuilderService);
+  private labelService = inject(LabelsService);
+  private snackBar = inject(MatSnackBar);
+  private editService = inject(NodeEditService);
 
   ngOnInit() {
     this.labelService.loadData().subscribe((labels) => {
       this.labelsData = this.labelService.getLabelsData();
       this.relationshipSearchIndices = this.labelsData.searchIndices;
-      // this.loadNode();
     });
   }
 
@@ -171,14 +177,11 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     relationshipMap.forEach((value: RelationshipGroup, key: string) => {
       if (value.type in this.labelsData.relationshipsAsTabs) {
         this.relationshipTabsGroups.push(value);
-        console.warn("AAA");
       }
       if (value.type in this.labelsData.relationshipsAsProp) {
         this.relationshipPropGroups.push(value);
       }
     });
-
-    // this.relationshipTabsGroups = Array.from(relationshipMap.values());
 
     this.relationshipTabsGroups.forEach((group) => {
       if (group.totalCount > group.pageSize || group.searchIndex) {
@@ -186,9 +189,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
         group.showSearch = true;
       }
     });
-    console.warn(this.relationshipTabsGroups);
-    console.warn(this.relationshipPropGroups);
   }
+
   private getGroupNodeProperties(nodeLabels: string[]): ListColumn[] {
     for (const label of nodeLabels) {
       if (label.toLocaleLowerCase() in this.labelsData.nodes) {
@@ -197,6 +199,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     }
     return []; // no match found
   }
+
   private getGroupNodeLabelsDisplay(nodeLabels: string[]) {
     if (!this.labelsData || !this.labelsData.nodes) {
       return [...nodeLabels];
@@ -208,6 +211,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       return key in nodes ? nodes[key].display : label;
     });
   }
+
   private loadRelationshipCount(group: RelationshipGroup): Promise<void> {
     return new Promise((resolve) => {
       let countQuery;
@@ -361,16 +365,60 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     });
   }
 
-  onRelatedNodeSelect(nodeData: any): void {
-    if (nodeData && nodeData.iroko_uuid) {
-      const nodeLabels = nodeData.labels || nodeData.nodeLabels || [];
-      const primaryType = nodeLabels.length > 0 ? nodeLabels[0] : 'node';
+  onRelatedNodeSelect(group: RelationshipGroup, node: any): void {
+    console.warn(node);
+    console.warn('AAAAAAAAAAAAAAAAA');
 
-      this.nodeSelected.emit({
-        node: nodeData,
-        type: primaryType,
+    if (node && node.iroko_uuid && group.type) {
+      const nodeName = node.name || node.iroko_uuid;
+      const relationshipType = group.type;
+
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Eliminar Relación',
+          message: `¿Está seguro de que desea eliminar la relación "${group.type}" con el nodo "${nodeName}"?`,
+          confirmText: 'Eliminar',
+          cancelText: 'Cancelar',
+          confirmColor: 'warn',
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          const relationship: RelationshipDeleteRequest = {
+            from_uuid: this.nodeId,
+            to_uuid: node.iroko_uuid,
+            relation_type: group.type,
+          };
+          this.deleteRelationship(relationship);
+        }
       });
     }
+  }
+
+  private deleteRelationship(relationship: RelationshipDeleteRequest): void {
+    this.editService.deleteRelationship(relationship).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.snackBar.open('Relación eliminada correctamente', 'Cerrar', {
+            duration: 5000,
+          });
+          // Reload the node to reflect the changes
+          this.loadNode();
+        } else {
+          this.snackBar.open(`Error: ${response.message}`, 'Cerrar', {
+            duration: 5000,
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting relationship:', error);
+        this.snackBar.open('Error al eliminar la relación', 'Cerrar', {
+          duration: 5000,
+        });
+      },
+    });
   }
 
   // Event handlers for relationships component

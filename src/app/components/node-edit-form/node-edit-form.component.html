@@ -1,0 +1,225 @@
+<!-- src/app/components/node-edit-form/node-edit-form.component.html -->
+<div class="node-edit-form">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>edit</mat-icon>
+        Editar Nodo: {{ getNodeDisplayName(node) }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Tipo: {{ nodeType }} | UUID: {{ node.iroko_uuid }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-accordion multi>
+        <!-- Properties Section -->
+        <mat-expansion-panel expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>tune</mat-icon>
+              Propiedades
+            </mat-panel-title>
+            <mat-panel-description>
+              Editar las propiedades del nodo
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="editForm" class="properties-form">
+            <div class="properties-grid">
+              @for (controlName of getFormControlNames(); track controlName) {
+                <mat-form-field appearance="outline" class="property-field">
+                  <mat-label>{{ controlName }}</mat-label>
+
+                  @switch (getPropertyType(editForm.get(controlName)?.value)) {
+                    @case ('string') {
+                      <!-- Text Input -->
+                      <input matInput [formControlName]="controlName"
+                             [placeholder]="'Ingrese ' + controlName">
+                    }
+                    @case ('number') {
+                      <!-- Number Input -->
+                      <input matInput type="number" [formControlName]="controlName"
+                             [placeholder]="'Ingrese ' + controlName">
+                    }
+                    @case ('boolean') {
+                      <!-- Boolean Select -->
+                      <mat-select [formControlName]="controlName">
+                        <mat-option [value]="true">Sí</mat-option>
+                        <mat-option [value]="false">No</mat-option>
+                      </mat-select>
+                    }
+                    @case ('array') {
+                      <!-- Array Input (comma separated) -->
+                      <input matInput [formControlName]="controlName"
+                             [placeholder]="'Valores separados por comas'">
+                    }
+                    @case ('object') {
+                      <!-- Object Input (JSON) -->
+                      <textarea matInput [formControlName]="controlName"
+                                rows="3" [placeholder]="'JSON object'"></textarea>
+                    }
+                  }
+
+                  @if (editForm.get(controlName)?.hasError('required')) {
+                    <mat-error>Este campo es requerido</mat-error>
+                  }
+                  @if (editForm.get(controlName)?.hasError('maxlength')) {
+                    <mat-error>El texto es demasiado largo</mat-error>
+                  }
+                </mat-form-field>
+              }
+            </div>
+
+            <div class="form-actions">
+              <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+              </button>
+              <button mat-raised-button color="primary" (click)="onSaveProperties()" [disabled]="isSubmitting">
+                @if (!isSubmitting) {
+                  <mat-icon>save</mat-icon>
+                } @else {
+                  <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                }
+                Guardar Propiedades
+              </button>
+            </div>
+          </form>
+        </mat-expansion-panel>
+
+        <!-- Relationships Section -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>link</mat-icon>
+              Relaciones
+            </mat-panel-title>
+            <mat-panel-description>
+              Añadir nuevas relaciones
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="relationshipsForm" class="relationships-form">
+            <div class="relationship-fields">
+              <mat-form-field appearance="outline">
+                <mat-label>Tipo de Relación</mat-label>
+                <mat-select formControlName="relationshipType" required>
+                  @for (type of availableRelationshipTypes; track type) {
+                    <mat-option [value]="type">{{ type }}</mat-option>
+                  }
+                </mat-select>
+                @if (relationshipsForm.get('relationshipType')?.hasError('required')) {
+                  <mat-error>El tipo de relación es requerido</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Nodo Destino</mat-label>
+                <input type="text" matInput
+                       formControlName="targetNode"
+                       [matAutocomplete]="auto"
+                       [placeholder]="'Buscar nodo...'">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="getNodeRelationDisplayName">
+                  @for (nodeOption of availableNodes; track nodeOption.iroko_uuid || $index) {
+                    <mat-option [value]="nodeOption">
+                      {{ getNodeRelationDisplayName(nodeOption) }}
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+                <mat-icon matSuffix>search</mat-icon>
+                @if (relationshipsForm.get('targetNode')?.hasError('required')) {
+                  <mat-error>El nodo destino es requerido</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <!-- Display selected node info below the autocomplete -->
+            @if (relationshipsForm.get('targetNode')?.value && relationshipsForm.get('targetNode')?.value.iroko_uuid) {
+              <div class="selected-node-info">
+                <p><strong>Nodo Seleccionado:</strong> {{ getNodeRelationDisplayName(relationshipsForm.get('targetNode')?.value) }}</p>
+                <p><strong>Iroko UUID:</strong> {{ relationshipsForm.get('targetNode')?.value.iroko_uuid }}</p>
+              </div>
+            }
+
+            <!-- Relationship Properties Section -->
+            <div class="relationship-properties-section">
+              <div class="section-header">
+                <h4>Propiedades de la Relación</h4>
+                <button mat-raised-button type="button" color="primary"
+                        (click)="addRelationshipProperty()">
+                  <mat-icon>add</mat-icon>
+                  Añadir Propiedad
+                </button>
+              </div>
+
+              <div formArrayName="relationshipProperties" class="properties-array">
+                @for (property of relationshipPropertiesArray.controls; track $index; let i = $index) {
+                  <div [formGroupName]="i" class="property-row">
+                    <mat-form-field appearance="outline" class="property-key">
+                      <mat-label>Clave</mat-label>
+                      <input matInput formControlName="key" placeholder="Nombre de la propiedad">
+                      @if (relationshipPropertiesArray.at(i).get('key')?.hasError('required')) {
+                        <mat-error>La clave es requerida</mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="property-type">
+                      <mat-label>Tipo</mat-label>
+                      <mat-select formControlName="type">
+                        @for (type of propertyTypes; track type.value) {
+                          <mat-option [value]="type.value">{{ type.label }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="property-value">
+                      <mat-label>Valor</mat-label>
+
+                      @switch (relationshipPropertiesArray.at(i).get('type')?.value) {
+                        @case ('string') {
+                          <input matInput formControlName="value" placeholder="Valor de texto">
+                        }
+                        @case ('number') {
+                          <input matInput type="number" formControlName="value" placeholder="Valor numérico">
+                        }
+                        @case ('boolean') {
+                          <mat-select formControlName="value">
+                            <mat-option [value]="true">Verdadero</mat-option>
+                            <mat-option [value]="false">Falso</mat-option>
+                          </mat-select>
+                        }
+                      }
+                    </mat-form-field>
+
+                    <button mat-icon-button type="button" color="warn"
+                            (click)="removeRelationshipProperty(i)" class="remove-button">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+
+              @if (relationshipPropertiesArray.length === 0) {
+                <div class="no-properties">
+                  <p>No se han añadido propiedades para esta relación.</p>
+                </div>
+              }
+            </div>
+
+            <div class="form-actions">
+              <button mat-raised-button color="accent" (click)="onAddRelationship()" [disabled]="isSubmitting">
+                @if (!isSubmitting) {
+                  <mat-icon>add_link</mat-icon>
+                } @else {
+                  <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                }
+                Añadir Relación
+              </button>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
+</div>

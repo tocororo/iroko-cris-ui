@@ -27,6 +27,7 @@ import {
 import { CacheService } from './services/cache.service';
 import { AuthService } from './services/auth.service';
 import { EvaluationService } from './services/evaluation.service';
+import { NodeEditService } from './services/node-edit.service';
 
 // TODO: check and test the cache before use...
 
@@ -90,6 +91,7 @@ export const appConfig: ApplicationConfig = {
     CypherApiService,
     AuthService,
     EvaluationService,
+    NodeEditService,
 
     // Global error handler
     {

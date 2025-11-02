@@ -357,7 +357,7 @@
     <!-- Node Cards -->
     @if (nodes.length > 0) {
     <div class="cards-grid">
-      @for (node of nodes; track node.iroko_uuid) {
+      @for (node of nodes; track node.iroko_uuid  || $index) {
       <mat-card class="node-card" (click)="onNodeSelect(node)">
         <mat-card-content>
           <!-- Node Header -->

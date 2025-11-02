@@ -1,6 +1,6 @@
 
 <div class="relationships-grid">
-  @for (rel of getDisplayedRelationships(group); track rel.node.iroko_uuid) {
+  @for (rel of getDisplayedRelationships(group); track rel.node.iroko_uuid || $index) {
     <mat-card class=""><mat-card-content>
       <div class="properties-grid">
     @if (group.type=="HAS_IDENTIFIER") {

@@ -1,0 +1,30 @@
+<!-- src/app/pages/node-edit/node-edit.component.html -->
+<div class="node-edit-page">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      <p>Cargando nodo...</p>
+    </div>
+  } @else if (node && isAuthenticated) {
+    <app-node-edit-form
+      [node]="node"
+      [nodeType]="nodeType"
+      (saved)="onEditSaved()"
+      (cancelled)="onEditCancelled()">
+    </app-node-edit-form>
+  } @else if (!isAuthenticated) {
+    <div class="authentication-required">
+      <mat-card>
+        <mat-card-content>
+          <div class="auth-content">
+            <mat-icon class="auth-icon">lock</mat-icon>
+            <div class="auth-message">
+              <h3>Autenticación Requerida</h3>
+              <p>Debe iniciar sesión para editar nodos. La edición requiere permisos especiales.</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

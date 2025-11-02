@@ -1,0 +1,73 @@
+// src/app/pages/node-edit/node-edit.component.scss
+.node-edit-page {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  p {
+    margin-top: 16px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.authentication-required {
+  margin-bottom: 24px;
+
+  .auth-card {
+    border-left: 4px solid #f44336;
+
+    .auth-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 16px 0;
+
+      .auth-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #f44336;
+        flex-shrink: 0;
+      }
+
+      .auth-message {
+        flex: 1;
+
+        h3 {
+          margin: 0 0 12px 0;
+          color: #f44336;
+          font-size: 1.5rem;
+        }
+
+        p {
+          margin: 0 0 20px 0;
+          color: #666;
+          line-height: 1.6;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .node-edit-page {
+    padding: 8px;
+  }
+
+  .auth-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px !important;
+  }
+}

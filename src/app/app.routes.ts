@@ -20,6 +20,7 @@ import { RoleGuard } from './guards/role.guard';
 import { EvaluationsComponent } from './pages/evaluations/evaluations.component';
 import { EvaluationComponent } from './pages/evaluation/evaluation.component';
 import { NodeEvaluationPageComponent } from './pages/node-evaluation-page/node-evaluation-page.component';
+import { NodeEditComponent } from './pages/node-edit/node-edit.component';
 
 export const routes: Routes = [
   {
@@ -62,8 +63,8 @@ export const routes: Routes = [
     component: QueryPageComponent,
     data: {
       title: 'Consulta Cypher',
-      roles: ['admin', 'researcher', 'viewer'], // Only these roles can access
-      permissions: ['query:execute'], // And must have this permission
+      roles: ['admin', 'curator'], // Only these roles can access
+      // permissions: ['query:execute'], // And must have this permission
     },
     canActivate: [AuthGuard, RoleGuard],
   },
@@ -76,6 +77,16 @@ export const routes: Routes = [
     path: 'view/:type/:iroko_uuid',
     component: NodeViewComponent,
     data: { title: 'Detalles del Nodo' },
+  },
+  {
+    path: 'edit/:type/:iroko_uuid',
+    component: NodeEditComponent,
+    data: {
+      title: 'Editar Nodo',
+      roles: ['admin', 'curator'],
+      // permissions: ['node:edit']
+    },
+    canActivate: [AuthGuard, RoleGuard],
   },
   {
     path: 'about',

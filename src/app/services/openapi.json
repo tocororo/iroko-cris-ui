@@ -3,6 +3,146 @@
   "info": { "title": "Iroko API", "version": "0.1.0" },
   "servers": [{ "url": "/api" }],
   "paths": {
+    "/v1/cypher/edit/node/properties": {
+      "patch": {
+        "tags": ["cypher", "cypher-edit"],
+        "summary": "Update Node Properties",
+        "description": "Update properties of a node by iroko_uuid",
+        "operationId": "update_node_properties_v1_cypher_edit_node_properties_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NodePropertyUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EditResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
+    "/v1/cypher/edit/relationships": {
+      "post": {
+        "tags": ["cypher", "cypher-edit"],
+        "summary": "Create Or Update Relationship",
+        "description": "Create or update a relationship between two nodes",
+        "operationId": "create_or_update_relationship_v1_cypher_edit_relationships_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RelationshipUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EditResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      },
+      "delete": {
+        "tags": ["cypher", "cypher-edit"],
+        "summary": "Delete Relationship",
+        "description": "Delete a relationship between two nodes",
+        "operationId": "delete_relationship_v1_cypher_edit_relationships_delete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelationshipDeleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EditResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
+    "/v1/cypher/edit/node/full": {
+      "put": {
+        "tags": ["cypher", "cypher-edit"],
+        "summary": "Full Node Edit",
+        "description": "Comprehensive node edit: update properties and relationships in a single transaction",
+        "operationId": "full_node_edit_v1_cypher_edit_node_full_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NodeEditRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EditResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
     "/v1/cypher/query": {
       "post": {
         "tags": ["cypher"],
@@ -125,7 +265,7 @@
     },
     "/v1/auth/captcha/": {
       "get": {
-        "tags": ["authentication", "captcha"],
+        "tags": ["authentication"],
         "summary": "Generate Captcha",
         "description": "Generate a new CAPTCHA challenge",
         "operationId": "generate_captcha_v1_auth_captcha__get",
@@ -141,9 +281,27 @@
         }
       }
     },
+    "/v1/auth/captcha": {
+      "get": {
+        "tags": ["authentication"],
+        "summary": "Generate Captcha",
+        "description": "Generate a new CAPTCHA challenge",
+        "operationId": "generate_captcha_v1_auth_captcha_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CaptchaResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/auth/captcha/validate": {
       "post": {
-        "tags": ["authentication", "captcha"],
+        "tags": ["authentication"],
         "summary": "Validate Captcha",
         "description": "Validate a CAPTCHA challenge",
         "operationId": "validate_captcha_v1_auth_captcha_validate_post",
@@ -179,7 +337,7 @@
     },
     "/v1/auth/captcha/cleanup": {
       "post": {
-        "tags": ["authentication", "captcha"],
+        "tags": ["authentication"],
         "summary": "Cleanup Captchas",
         "description": "Clean up expired CAPTCHA challenges (admin endpoint)",
         "operationId": "cleanup_captchas_v1_auth_captcha_cleanup_post",
@@ -525,7 +683,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/EvaluationMethodology-Output"
+                    "$ref": "#/components/schemas/Methodology-Output"
                   },
                   "type": "array",
                   "title": "Response List Methodologies V1 Evals Methodologies Get"
@@ -555,9 +713,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EvaluationMethodology-Output"
-                }
+                "schema": { "$ref": "#/components/schemas/Methodology-Output" }
               }
             }
           },
@@ -573,11 +729,11 @@
       }
     },
     "/v1/evals/evaluate/{methodology_id}/{node_id}": {
-      "post": {
+      "get": {
         "tags": ["evaluations"],
         "summary": "Evaluate Node",
         "description": "Evaluate a node using the specified methodology",
-        "operationId": "evaluate_node_v1_evals_evaluate__methodology_id___node_id__post",
+        "operationId": "evaluate_node_v1_evals_evaluate__methodology_id___node_id__get",
         "security": [{ "OAuth2PasswordBearer": [] }],
         "parameters": [
           {
@@ -613,6 +769,45 @@
             }
           }
         }
+      }
+    },
+    "/v1/evals/evaluate/complete": {
+      "post": {
+        "tags": ["evaluations"],
+        "summary": "Complete Evaluation",
+        "description": "Complete an evaluation by providing missing answers and store the result.\nThis is the second step where users provide missing answers.",
+        "operationId": "complete_evaluation_v1_evals_evaluate_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluationResult-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationResult-Output"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
       }
     },
     "/v1/evals/evaluate/store": {
@@ -658,7 +853,6 @@
         "summary": "Get Evaluation History",
         "description": "Get evaluation history for a node",
         "operationId": "get_evaluation_history_v1_evals_history__node_id__get",
-        "security": [{ "OAuth2PasswordBearer": [] }],
         "parameters": [
           {
             "name": "node_id",
@@ -700,22 +894,44 @@
         }
       }
     },
-    "/v1/evals/complete": {
-      "post": {
-        "tags": ["evaluations"],
-        "summary": "Complete Evaluation",
-        "description": "Complete an evaluation by providing missing answers and store the result.\nThis is the second step where users provide missing answers.",
-        "operationId": "complete_evaluation_v1_evals_complete_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EvaluationResult-Input"
+    "/v1/crawler/tasks": {
+      "get": {
+        "tags": ["crawler"],
+        "summary": "List Tasks",
+        "description": "List all available crawler tasks",
+        "operationId": "list_tasks_v1_crawler_tasks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "type": "string" },
+                  "type": "array",
+                  "title": "Response List Tasks V1 Crawler Tasks Get"
+                }
               }
             }
-          },
-          "required": true
+          }
         },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
+    "/v1/crawler/tasks/{task_id}/execute": {
+      "post": {
+        "tags": ["crawler"],
+        "summary": "Execute Task",
+        "description": "Execute a crawler task",
+        "operationId": "execute_task_v1_crawler_tasks__task_id__execute_post",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Task Id" }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -729,13 +945,213 @@
               }
             }
           }
+        }
+      }
+    },
+    "/v1/crawler/tasks/{task_id}/status": {
+      "get": {
+        "tags": ["crawler"],
+        "summary": "Get Task Status",
+        "description": "Get the status of a task",
+        "operationId": "get_task_status_v1_crawler_tasks__task_id__status_get",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Task Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TaskExecution" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/crawler/tasks/{task_id}/stop": {
+      "post": {
+        "tags": ["crawler"],
+        "summary": "Stop Task",
+        "description": "Stop a running task",
+        "operationId": "stop_task_v1_crawler_tasks__task_id__stop_post",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Task Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/crawler/stats": {
+      "get": {
+        "tags": ["crawler"],
+        "summary": "Get Crawler Stats",
+        "description": "Get crawler statistics",
+        "operationId": "get_crawler_stats_v1_crawler_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CrawlerStats" }
+              }
+            }
+          }
         },
         "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
+    "/v1/crawler/executions": {
+      "get": {
+        "tags": ["crawler"],
+        "summary": "List Executions",
+        "description": "List recent task executions",
+        "operationId": "list_executions_v1_crawler_executions_get",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10, "title": "Limit" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TaskExecution" },
+                  "title": "Response List Executions V1 Crawler Executions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{rest_of_path}": {
+      "options": {
+        "summary": "Preflight Handler",
+        "operationId": "preflight_handler__rest_of_path__options",
+        "parameters": [
+          {
+            "name": "rest_of_path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Rest Of Path" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Preflight Handler  Rest Of Path  Options"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
       }
     }
   },
   "components": {
     "schemas": {
+      "Answer": {
+        "properties": {
+          "result": {
+            "anyOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Result"
+          },
+          "recommendation": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Recommendation"
+          },
+          "user_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "title": "Answer"
+      },
       "Body_login_for_access_token_v1_auth_token_post": {
         "properties": {
           "grant_type": {
@@ -775,33 +1191,60 @@
         "required": ["captcha_id", "captcha_image", "expires_at"],
         "title": "CaptchaResponse"
       },
-      "CategoryResult": {
+      "Category": {
         "properties": {
           "title": { "type": "string", "title": "Title" },
           "id": { "type": "string", "title": "Id" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
           "questions": {
-            "items": { "$ref": "#/components/schemas/QuestionResult" },
+            "items": { "type": "string" },
             "type": "array",
             "title": "Questions",
             "default": []
           },
-          "recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Recommendation"
-          },
-          "result": {
+          "answer": {
             "anyOf": [
-              { "type": "boolean" },
-              { "type": "number" },
-              { "type": "string" },
+              { "$ref": "#/components/schemas/Answer" },
               { "type": "null" }
-            ],
-            "title": "Result"
+            ]
           }
         },
         "type": "object",
         "required": ["title", "id"],
-        "title": "CategoryResult"
+        "title": "Category"
+      },
+      "CrawlerStats": {
+        "properties": {
+          "total_tasks": { "type": "integer", "title": "Total Tasks" },
+          "active_tasks": { "type": "integer", "title": "Active Tasks" },
+          "successful_executions": {
+            "type": "integer",
+            "title": "Successful Executions"
+          },
+          "failed_executions": {
+            "type": "integer",
+            "title": "Failed Executions"
+          },
+          "last_execution": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Last Execution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_tasks",
+          "active_tasks",
+          "successful_executions",
+          "failed_executions"
+        ],
+        "title": "CrawlerStats",
+        "description": "Crawler statistics"
       },
       "CypherQuery": {
         "properties": {
@@ -828,64 +1271,30 @@
           "readonly": true
         }
       },
-      "EvaluationMethodology-Input": {
+      "EditResponse": {
         "properties": {
-          "id": { "type": "string", "title": "Id" },
-          "name": { "type": "string", "title": "Name" },
-          "version": { "type": "string", "title": "Version" },
-          "description": { "type": "string", "title": "Description" },
-          "entity": { "type": "string", "title": "Entity" },
-          "sections": {
-            "items": { "$ref": "#/components/schemas/MethodologySection" },
-            "type": "array",
-            "title": "Sections"
+          "success": { "type": "boolean", "title": "Success" },
+          "message": { "type": "string", "title": "Message" },
+          "updated_properties": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Updated Properties"
+          },
+          "updated_relationships": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Updated Relationships"
+          },
+          "deleted_relationships": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Deleted Relationships"
           }
         },
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "version",
-          "description",
-          "entity",
-          "sections"
-        ],
-        "title": "EvaluationMethodology"
-      },
-      "EvaluationMethodology-Output": {
-        "properties": {
-          "id": { "type": "string", "title": "Id" },
-          "name": { "type": "string", "title": "Name" },
-          "version": { "type": "string", "title": "Version" },
-          "description": { "type": "string", "title": "Description" },
-          "entity": { "type": "string", "title": "Entity" },
-          "sections": {
-            "items": { "$ref": "#/components/schemas/MethodologySection" },
-            "type": "array",
-            "title": "Sections"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "version",
-          "description",
-          "entity",
-          "sections"
-        ],
-        "title": "EvaluationMethodology"
+        "required": ["success", "message"],
+        "title": "EditResponse"
       },
       "EvaluationResult-Input": {
         "properties": {
-          "methodology": {
-            "$ref": "#/components/schemas/EvaluationMethodology-Input"
-          },
-          "sections": {
-            "items": { "$ref": "#/components/schemas/SectionResult-Input" },
-            "type": "array",
-            "title": "Sections"
-          },
+          "methodology": { "$ref": "#/components/schemas/Methodology-Input" },
           "node_id": { "type": "string", "title": "Node Id" },
           "timestamp": {
             "type": "string",
@@ -904,29 +1313,25 @@
             "title": "Is Complete",
             "default": false
           },
-          "final_score": {
-            "anyOf": [{ "type": "number" }, { "type": "null" }],
-            "title": "Final Score"
+          "is_finalized": {
+            "type": "boolean",
+            "title": "Is Finalized",
+            "default": false
           },
-          "overall_recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Overall Recommendation"
+          "question_data": {
+            "additionalProperties": { "$ref": "#/components/schemas/Question" },
+            "type": "object",
+            "title": "Question Data",
+            "default": {}
           }
         },
         "type": "object",
-        "required": ["methodology", "sections", "node_id", "timestamp"],
+        "required": ["methodology", "node_id", "timestamp"],
         "title": "EvaluationResult"
       },
       "EvaluationResult-Output": {
         "properties": {
-          "methodology": {
-            "$ref": "#/components/schemas/EvaluationMethodology-Output"
-          },
-          "sections": {
-            "items": { "$ref": "#/components/schemas/SectionResult-Output" },
-            "type": "array",
-            "title": "Sections"
-          },
+          "methodology": { "$ref": "#/components/schemas/Methodology-Output" },
           "node_id": { "type": "string", "title": "Node Id" },
           "timestamp": {
             "type": "string",
@@ -945,17 +1350,20 @@
             "title": "Is Complete",
             "default": false
           },
-          "final_score": {
-            "anyOf": [{ "type": "number" }, { "type": "null" }],
-            "title": "Final Score"
+          "is_finalized": {
+            "type": "boolean",
+            "title": "Is Finalized",
+            "default": false
           },
-          "overall_recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Overall Recommendation"
+          "question_data": {
+            "additionalProperties": { "$ref": "#/components/schemas/Question" },
+            "type": "object",
+            "title": "Question Data",
+            "default": {}
           }
         },
         "type": "object",
-        "required": ["methodology", "sections", "node_id", "timestamp"],
+        "required": ["methodology", "node_id", "timestamp"],
         "title": "EvaluationResult"
       },
       "FullTextCypherQuery": {
@@ -1012,86 +1420,173 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
-      "MethodologyCategory": {
+      "Methodology-Input": {
         "properties": {
-          "title": { "type": "string", "title": "Title" },
           "id": { "type": "string", "title": "Id" },
-          "questions": {
-            "items": { "type": "string" },
+          "name": { "type": "string", "title": "Name" },
+          "version": { "type": "string", "title": "Version" },
+          "description": { "type": "string", "title": "Description" },
+          "entity": { "type": "string", "title": "Entity" },
+          "rules": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Rules"
+          },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/Section-Input" },
             "type": "array",
-            "title": "Questions",
-            "default": []
+            "title": "Sections"
           },
-          "recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Recommendation"
-          },
-          "result": {
+          "answer": {
             "anyOf": [
-              { "type": "boolean" },
-              { "type": "number" },
-              { "type": "string" },
+              { "$ref": "#/components/schemas/Answer" },
               { "type": "null" }
-            ],
-            "title": "Result"
+            ]
           }
         },
         "type": "object",
-        "required": ["title", "id"],
-        "title": "MethodologyCategory"
+        "required": [
+          "id",
+          "name",
+          "version",
+          "description",
+          "entity",
+          "sections"
+        ],
+        "title": "Methodology"
       },
-      "MethodologySection": {
+      "Methodology-Output": {
         "properties": {
-          "title": { "type": "string", "title": "Title" },
           "id": { "type": "string", "title": "Id" },
-          "description": {
+          "name": { "type": "string", "title": "Name" },
+          "version": { "type": "string", "title": "Version" },
+          "description": { "type": "string", "title": "Description" },
+          "entity": { "type": "string", "title": "Entity" },
+          "rules": {
             "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Description"
+            "title": "Rules"
           },
-          "categories": {
-            "items": { "$ref": "#/components/schemas/MethodologyCategory" },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/Section-Output" },
             "type": "array",
-            "title": "Categories",
-            "default": []
+            "title": "Sections"
           },
-          "recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Recommendation"
-          },
-          "result": {
+          "answer": {
             "anyOf": [
-              { "type": "boolean" },
-              { "type": "number" },
-              { "type": "string" },
+              { "$ref": "#/components/schemas/Answer" },
               { "type": "null" }
-            ],
-            "title": "Result"
+            ]
           }
         },
         "type": "object",
-        "required": ["title", "id"],
-        "title": "MethodologySection"
+        "required": [
+          "id",
+          "name",
+          "version",
+          "description",
+          "entity",
+          "sections"
+        ],
+        "title": "Methodology"
       },
-      "QuestionResult": {
+      "NodeEditRequest": {
+        "properties": {
+          "iroko_uuid": { "type": "string", "title": "Iroko Uuid" },
+          "properties": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Properties"
+          },
+          "relationships": {
+            "items": { "$ref": "#/components/schemas/RelationshipUpdate" },
+            "type": "array",
+            "title": "Relationships"
+          }
+        },
+        "type": "object",
+        "required": ["iroko_uuid", "properties", "relationships"],
+        "title": "NodeEditRequest"
+      },
+      "NodePropertyUpdate": {
+        "properties": {
+          "iroko_uuid": { "type": "string", "title": "Iroko Uuid" },
+          "properties": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Properties"
+          }
+        },
+        "type": "object",
+        "required": ["iroko_uuid", "properties"],
+        "title": "NodePropertyUpdate"
+      },
+      "Question": {
         "properties": {
           "id": { "type": "string", "title": "Id" },
-          "result": {
+          "type": { "$ref": "#/components/schemas/QuestionType" },
+          "desc": { "type": "string", "title": "Desc" },
+          "min": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Min"
+          },
+          "max": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Max"
+          },
+          "selectOptions": {
             "anyOf": [
-              { "type": "boolean" },
-              { "type": "number" },
-              { "type": "string" },
+              {
+                "items": {
+                  "additionalProperties": { "type": "string" },
+                  "type": "object"
+                },
+                "type": "array"
+              },
               { "type": "null" }
             ],
-            "title": "Result"
+            "title": "Selectoptions"
           },
-          "recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Recommendation"
+          "answer": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/Answer" },
+              { "type": "null" }
+            ]
           }
         },
         "type": "object",
-        "required": ["id"],
-        "title": "QuestionResult"
+        "required": ["id", "type", "desc"],
+        "title": "Question"
+      },
+      "QuestionType": {
+        "type": "string",
+        "enum": ["boolean", "number", "select"],
+        "title": "QuestionType"
+      },
+      "RelationshipDeleteRequest": {
+        "properties": {
+          "from_uuid": { "type": "string", "title": "From Uuid" },
+          "to_uuid": { "type": "string", "title": "To Uuid" },
+          "relation_type": { "type": "string", "title": "Relation Type" }
+        },
+        "type": "object",
+        "required": ["from_uuid", "to_uuid", "relation_type"],
+        "title": "RelationshipDeleteRequest"
+      },
+      "RelationshipUpdate": {
+        "properties": {
+          "from_uuid": { "type": "string", "title": "From Uuid" },
+          "to_uuid": { "type": "string", "title": "To Uuid" },
+          "relation_type": { "type": "string", "title": "Relation Type" },
+          "properties": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Properties"
+          }
+        },
+        "type": "object",
+        "required": ["from_uuid", "to_uuid", "relation_type"],
+        "title": "RelationshipUpdate"
       },
       "RoleCreate": {
         "properties": {
@@ -1129,7 +1624,7 @@
         "required": ["name", "id", "permissions"],
         "title": "RoleResponse"
       },
-      "SectionResult-Input": {
+      "Section-Input": {
         "properties": {
           "title": { "type": "string", "title": "Title" },
           "id": { "type": "string", "title": "Id" },
@@ -1138,30 +1633,23 @@
             "title": "Description"
           },
           "categories": {
-            "items": { "$ref": "#/components/schemas/CategoryResult" },
+            "items": { "$ref": "#/components/schemas/Category" },
             "type": "array",
             "title": "Categories",
             "default": []
           },
-          "recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Recommendation"
-          },
-          "result": {
+          "answer": {
             "anyOf": [
-              { "type": "boolean" },
-              { "type": "number" },
-              { "type": "string" },
+              { "$ref": "#/components/schemas/Answer" },
               { "type": "null" }
-            ],
-            "title": "Result"
+            ]
           }
         },
         "type": "object",
         "required": ["title", "id"],
-        "title": "SectionResult"
+        "title": "Section"
       },
-      "SectionResult-Output": {
+      "Section-Output": {
         "properties": {
           "title": { "type": "string", "title": "Title" },
           "id": { "type": "string", "title": "Id" },
@@ -1170,34 +1658,33 @@
             "title": "Description"
           },
           "categories": {
-            "items": { "$ref": "#/components/schemas/CategoryResult" },
+            "items": { "$ref": "#/components/schemas/Category" },
             "type": "array",
             "title": "Categories",
             "default": []
           },
-          "recommendation": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
-            "title": "Recommendation"
-          },
-          "result": {
+          "answer": {
             "anyOf": [
-              { "type": "boolean" },
-              { "type": "number" },
-              { "type": "string" },
+              { "$ref": "#/components/schemas/Answer" },
               { "type": "null" }
-            ],
-            "title": "Result"
+            ]
           }
         },
         "type": "object",
         "required": ["title", "id"],
-        "title": "SectionResult"
+        "title": "Section"
       },
       "StoredEvaluation": {
         "properties": {
           "id": { "type": "string", "format": "uuid", "title": "Id" },
           "node_id": { "type": "string", "title": "Node Id" },
           "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
+          "user": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/UserResponse" },
+              { "type": "null" }
+            ]
+          },
           "methodology_id": { "type": "string", "title": "Methodology Id" },
           "timestamp": {
             "type": "string",
@@ -1205,9 +1692,7 @@
             "title": "Timestamp"
           },
           "evaluation_data": {
-            "additionalProperties": true,
-            "type": "object",
-            "title": "Evaluation Data"
+            "$ref": "#/components/schemas/EvaluationResult-Output"
           },
           "is_complete": { "type": "boolean", "title": "Is Complete" }
         },
@@ -1222,6 +1707,52 @@
           "is_complete"
         ],
         "title": "StoredEvaluation"
+      },
+      "TaskExecution": {
+        "properties": {
+          "execution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Execution Id"
+          },
+          "task_id": { "type": "string", "title": "Task Id" },
+          "status": { "$ref": "#/components/schemas/TaskStatus" },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Completed At"
+          },
+          "error_message": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Error Message"
+          },
+          "execution_log": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Execution Log"
+          },
+          "results": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": ["execution_id", "task_id", "status", "started_at"],
+        "title": "TaskExecution",
+        "description": "Record of a task execution"
+      },
+      "TaskStatus": {
+        "type": "string",
+        "enum": ["pending", "running", "completed", "failed", "cancelled"],
+        "title": "TaskStatus"
       },
       "Token": {
         "properties": {

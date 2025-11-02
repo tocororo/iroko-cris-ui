@@ -113,6 +113,17 @@
       <mat-icon>arrow_forward</mat-icon>
       Ver Detalles
     </button>
+    @if(canEdit()){
+    <button
+      mat-button
+      color="warn"
+      (click)="onNodeClick()"
+      class="view-details-btn"
+    >
+      <mat-icon>delete</mat-icon>
+      Eliminar
+    </button>
+  }
   </mat-card-actions>
   }
 </mat-card>

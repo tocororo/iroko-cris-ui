@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ListColumn } from '../../services/labels.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-relationship-card',
@@ -32,6 +33,7 @@ export class RelationshipCardComponent {
   @Input() direction: 'INCOMING' | 'OUTGOING' = 'OUTGOING';
   @Output() nodeSelected = new EventEmitter<any>();
 
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   // Allowed node types for view details
@@ -136,7 +138,6 @@ export class RelationshipCardComponent {
     return 'Node';
   }
 
-
   shouldShowViewDetails(): boolean {
     const primaryType = this.nodeLabels[0];
 
@@ -179,5 +180,8 @@ export class RelationshipCardComponent {
       return value.substring(0, 150) + '...';
     }
     return value;
+  }
+  canEdit() {
+    return this.authService.canEditNode();
   }
 }

@@ -16,6 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { EvaluationSelectionDialogComponent } from '../../components/evaluation-selection-dialog/evaluation-selection-dialog.component';
 import { LabelsService } from '../../services/labels.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-node-view',
@@ -47,6 +48,7 @@ export class NodeViewComponent implements OnInit {
   loading = true;
 
   private routeSub!: Subscription;
+  private authService = inject(AuthService);
 
   constructor(
     private route: ActivatedRoute,
@@ -105,5 +107,11 @@ export class NodeViewComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('Evaluation selection dialog closed', result);
     });
+  }
+  openEditPage() {
+    this.router.navigate(['/edit', this.nodeType, this.nodeId]);
+  }
+  canEdit(){
+    return this.authService.canEditNode();
   }
 }
