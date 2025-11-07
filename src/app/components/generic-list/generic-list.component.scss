@@ -3,8 +3,12 @@
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
-}
+  overflow-x: hidden; /* Prevent horizontal scroll */
 
+  @media (max-width: 768px) {
+    padding: 8px;
+  }
+}
 /* Controls */
 .controls-card {
   margin-bottom: 16px;
@@ -15,6 +19,53 @@
   gap: 16px;
   align-items: flex-start;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+
+    .search-field,
+    .sort-controls,
+    .export-section {
+      width: 100%;
+    }
+
+    .sort-controls {
+      display: flex;
+      gap: 8px;
+
+      .sort-field {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.export-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+
+  .export-btn {
+    white-space: nowrap;
+  }
+
+  .export-info {
+    small {
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  @media (max-width: 768px) {
+    align-items: stretch;
+
+    .export-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 }
 
 .search-field {
@@ -116,28 +167,50 @@
 /* Results Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
   margin: 16px 0;
+
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Node Card */
 .node-card {
+  max-width: 100%;
+  overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: fit-content;
+  transition: box-shadow 0.2s ease, transform 0.2s ease; /* Smooth transition */
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    .view-details-btn {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    transform: translateY(-2px); /* Optional: slight lift */
+  }
 
-    .entity-type-chip {
-      opacity: 1;
-      transform: translateX(0);
+  .node-properties {
+    .property-row {
+      display: flex;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      min-width: 0; /* Prevent flex item overflow */
+
+      .property-label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.7);
+        min-width: 120px;
+        flex-shrink: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .property-value {
+        color: rgba(0, 0, 0, 0.8);
+        word-break: break-word;
+        flex: 1;
+        min-width: 0; /* Prevent flex item overflow */
+      }
     }
   }
 }
@@ -261,18 +334,10 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .generic-list-container {
-    padding: 8px;
-  }
-
   .node-viewer-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-  }
-
-  .controls-row {
-    flex-direction: column;
   }
 
   .search-field {
@@ -285,10 +350,6 @@
     .sort-field {
       flex: 1;
     }
-  }
-
-  .cards-grid {
-    grid-template-columns: 1fr;
   }
 
   .property-row {
@@ -346,6 +407,30 @@
 
 .advanced-query-content {
   padding: 16px 0;
+  max-width: 100%;
+  overflow: hidden;
+
+  .parameter-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+
+    mat-form-field {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+
+      mat-form-field {
+        min-width: auto;
+      }
+    }
+  }
 }
 
 .full-width {
@@ -450,6 +535,7 @@ code {
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
+  overflow: hidden; /* Prevent content from overflowing */
 }
 
 .filters-form {
@@ -458,9 +544,53 @@ code {
 
 .filters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
+
+  /* Ensure relationship filters take full width */
+  .filter-field:has(app-relationship-filter) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Improved Relationship Filter Container */
+app-relationship-filter {
+  display: block;
+  width: 100%;
+
+  .relationship-filter {
+    width: 100%;
+    max-width: 100%;
+
+    .attribute-filter-section {
+      max-width: 100%;
+      overflow: hidden;
+
+      .attribute-fields {
+        .attribute-row {
+          .attribute-controls {
+            flex-wrap: wrap;
+            gap: 8px;
+
+            .operator-field {
+              min-width: 100px;
+              flex-shrink: 0;
+            }
+
+            .value-field {
+              flex: 1;
+              min-width: 150px;
+            }
+
+            .clear-attribute-btn {
+              flex-shrink: 0;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .filter-field {
@@ -483,6 +613,32 @@ code {
 @media (max-width: 768px) {
   .filters-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  app-relationship-filter {
+    .relationship-filter {
+      .attribute-filter-section {
+        .attribute-fields {
+          .attribute-row {
+            .attribute-controls {
+              flex-direction: column;
+              align-items: stretch;
+
+              .operator-field,
+              .value-field {
+                width: 100%;
+              }
+
+              .clear-attribute-btn {
+                align-self: flex-end;
+                margin-top: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   .filters-header {
@@ -494,14 +650,6 @@ code {
   .clear-filters-btn {
     align-self: flex-end;
   }
-}
-
-/* Enhanced controls layout */
-.controls-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  flex-wrap: wrap;
 }
 
 .search-field {
@@ -520,10 +668,6 @@ code {
 }
 
 @media (max-width: 768px) {
-  .controls-row {
-    flex-direction: column;
-  }
-
   .search-field {
     min-width: 100%;
   }

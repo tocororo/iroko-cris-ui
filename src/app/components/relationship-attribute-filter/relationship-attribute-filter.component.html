@@ -1,0 +1,21 @@
+<!-- src/app/components/relationship-attribute-filter/relationship-attribute-filter.component.html -->
+<div class="relationship-attribute-filter">
+  <div class="filter-fields">
+    <mat-form-field appearance="outline" class="value-field">
+      <mat-label>{{ label }}</mat-label>
+      <input matInput [formControl]="valueControl" [placeholder]="placeholder">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="operator-field">
+      <mat-label>Operador</mat-label>
+      <mat-select [formControl]="operatorControl">
+        <mat-option *ngFor="let op of operators" [value]="op.value">
+          {{ op.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-icon-button color="warn" (click)="clearFilter()" class="clear-button">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,44 +1,197 @@
-// relationship-filter.component.scss
+/* src/app/components/relationship-filter/relationship-filter.component.scss */
 .relationship-filter {
-  width: 100%;
-}
-
-.search-container {
-  position: relative;
-}
-
-.search-field {
-  width: 100%;
-}
-
-.chips-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+
+  .node-selection-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .search-field {
+      width: 100%;
+    }
+
+    .selected-chips {
+      .mat-mdc-chip-set {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+
+        .mat-mdc-chip {
+          font-size: 12px;
+          height: 24px;
+          min-height: 24px;
+
+          .mdc-evolution-chip__action--primary {
+            padding: 0 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .attribute-filter-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    background: #fafafa;
+
+    .section-header {
+      margin-bottom: 8px;
+
+      h4 {
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    }
+
+    .attribute-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .attribute-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 0;
+
+        .attribute-label {
+          font-size: 0.75rem;
+          font-weight: 500;
+          color: rgba(0, 0, 0, 0.6);
+          min-width: 80px;
+          flex-shrink: 0;
+        }
+
+        .attribute-controls {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex: 1;
+
+          .operator-field {
+            width: 80px;
+
+            .mat-mdc-form-field-infix {
+              min-height: 40px;
+              padding-top: 8px;
+              padding-bottom: 8px;
+            }
+
+            .mat-mdc-select-value {
+              font-size: 0.8rem;
+            }
+          }
+
+          .value-field {
+            flex: 1;
+
+            .mat-mdc-form-field-infix {
+              min-height: 40px;
+              padding-top: 8px;
+              padding-bottom: 8px;
+            }
+
+            input {
+              font-size: 0.8rem;
+            }
+            &.date-field {
+              min-width: 180px;
+            }
+          }
+
+          .clear-attribute-btn {
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+
+            .mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+              line-height: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+
+    .clear-all-btn {
+      font-size: 0.8rem;
+      line-height: 1;
+
+      .mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Compact styles for smaller screens
+@media (max-width: 768px) {
+  .relationship-filter {
+    .attribute-filter-section {
+      .attribute-fields {
+        .attribute-row {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 4px;
+
+          .attribute-label {
+            min-width: auto;
+            font-size: 0.7rem;
+          }
+
+          .attribute-controls {
+            .operator-field {
+              width: 70px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Extra compact variant for dense layouts
+.relationship-filter.compact {
   gap: 8px;
-  margin-top: 8px;
-}
 
-.relationship-chip {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
+  .node-selection-section {
+    gap: 6px;
+  }
 
-.loading-spinner {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-}
+  .attribute-filter-section {
+    padding: 8px;
 
-.error-message {
-  color: #f44336;
-  font-size: 0.75rem;
-  margin-top: 4px;
-}
-
-.no-results {
-  padding: 8px 16px;
-  color: rgba(0, 0, 0, 0.54);
-  font-style: italic;
+    .attribute-fields {
+      .attribute-row {
+        .attribute-controls {
+          .operator-field,
+          .value-field {
+            .mat-mdc-form-field-infix {
+              min-height: 36px;
+            }
+            &.date-field {
+              min-width: 180px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

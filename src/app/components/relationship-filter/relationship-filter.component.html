@@ -1,67 +1,156 @@
-<!-- relationship-filter.component.html -->
+<!-- src/app/components/relationship-filter/relationship-filter.component.html -->
 <div class="relationship-filter">
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>{{ label }}</mat-label>
-    <input
-      matInput
-      [formControl]="searchControl"
-      (input)="onSearchInput($event)"
-      [placeholder]="placeholder"
-      [matAutocomplete]="auto"
-    />
+  <!-- Node Selection Section -->
+  <div class="node-selection-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ label }}</mat-label>
+      <input
+        type="text"
+        title="label"
+        matInput
+        [formControl]="searchControl"
+        (input)="onSearchInput($event)"
+        [placeholder]="placeholder"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="getDisplayName"
+        (optionSelected)="onOptionSelected($event)"
+      >
+        @for (option of options; track option.iroko_uuid || $index) {
+        <mat-option [value]="option">
+          {{ option.name }}
+        </mat-option>
+        }
+      </mat-autocomplete>
+      <mat-icon matSuffix>search</mat-icon>
+      @if (isLoading) {
+      <mat-progress-spinner matSuffix diameter="20"></mat-progress-spinner>
+      }
+    </mat-form-field>
 
-    @if (isLoading) {
-    <mat-progress-spinner
-      class="loading-spinner"
-      diameter="20"
-      mode="indeterminate"
-    >
-    </mat-progress-spinner>
+    <!-- Selected Items Chips -->
+    @if (displayItems.length > 0) {
+    <div class="selected-chips">
+      <mat-chip-listbox>
+        @for (item of displayItems; track item.iroko_uuid || $index) {
+        <mat-chip (removed)="removeRelationship(item)">
+          {{ item.name }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        }
+      </mat-chip-listbox>
+    </div>
     }
+  </div>
 
-    <mat-icon matPrefix>search</mat-icon>
-  </mat-form-field>
+  <!-- Attribute Filter Section -->
+  @if (hasAttributeConfig()) {
+  <div class="attribute-filter-section">
+    <div class="section-header">
+      <h4>Filtros de atributos</h4>
+    </div>
 
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    (optionSelected)="onOptionSelected($event.option.value)"
-  >
-    @for (option of options; track option.iroko_uuid || $index) {
-    <mat-option [value]="option">
-      {{ option.name }}
-    </mat-option>
-    } @if (options.length === 0 && searchControl.value &&
-    searchControl.value.length >= 2 && !isLoading) {
-    <mat-option disabled>
-      <div class="no-results">
-        No se encontraron resultados para "{{ searchControl.value }}"
+    <div class="attribute-fields">
+      @for (attributeConfig of getAttributeConfigs(); track
+      attributeConfig.attribute || $index) {
+      <div class="attribute-row">
+        <div class="attribute-label">{{ attributeConfig.label }}</div>
+        <div class="attribute-controls">
+          <mat-form-field appearance="outline" class="operator-field">
+            <mat-select
+              [formControl]="getOperatorControl(attributeConfig.attribute)"
+            >
+              @for (op of operators; track op.value || $index) {
+              <mat-option [value]="op.value">{{ op.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Text Input -->
+          @if (attributeConfig.type === 'text') {
+          <mat-form-field appearance="outline" class="value-field">
+            <mat-label>{{
+              attributeConfig.placeholder || attributeConfig.label
+            }}</mat-label>
+            <input
+              matInput
+              title="label"
+              [formControl]="getValueControl(attributeConfig.attribute)"
+              [placeholder]="
+                attributeConfig.placeholder || attributeConfig.label
+              "
+            />
+          </mat-form-field>
+          }
+
+          <!-- Number Input -->
+          @if (attributeConfig.type === 'number') {
+          <mat-form-field appearance="outline" class="value-field">
+            <mat-label>{{
+              attributeConfig.placeholder || attributeConfig.label
+            }}</mat-label>
+            <input
+              matInput
+              type="number"
+              title="label"
+              [formControl]="getValueControl(attributeConfig.attribute)"
+              [placeholder]="
+                attributeConfig.placeholder || attributeConfig.label
+              "
+            />
+          </mat-form-field>
+          }
+
+          <!-- Date Input -->
+          @if (attributeConfig.type === 'date') {
+          <mat-form-field appearance="outline" class="value-field">
+            <mat-label>{{
+              attributeConfig.placeholder || attributeConfig.label
+            }}</mat-label>
+            <input
+              title="date"
+              matInput
+              [matDatepicker]="picker"
+              [formControl]="getValueControl(attributeConfig.attribute)"
+              [placeholder]="
+                attributeConfig.placeholder || attributeConfig.label
+              "
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          }
+
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="clearAttributeFilter(attributeConfig.attribute)"
+            class="clear-attribute-btn"
+            matTooltip="Limpiar filtro"
+          >
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
       </div>
-    </mat-option>
-    }
-  </mat-autocomplete>
+      }
+    </div>
+  </div>
+  }
 
-  @if (displayItems.length > 0) {
-  <div class="chips-container">
-    @for (relationship of displayItems; track relationship.iroko_uuid || $index) {
-    <mat-chip
-      class="relationship-chip"
-      (removed)="removeRelationship(relationship)"
-    >
-      {{ relationship.name }}
-      <button matChipRemove>
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </mat-chip>
-    }
-
+  <!-- Clear All Button -->
+  @if (selectedIds.length > 0) {
+  <div class="actions">
     <button mat-button color="warn" (click)="clearAll()" class="clear-all-btn">
       <mat-icon>clear_all</mat-icon>
-      Limpiar
+      Limpiar todo
     </button>
-  </div>
-  } @if (hasError) {
-  <div class="error-message">
-    Error al cargar los datos. Intente nuevamente.
   </div>
   }
 </div>

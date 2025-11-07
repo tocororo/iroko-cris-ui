@@ -1,0 +1,30 @@
+/* src/app/components/relationship-attribute-filter/relationship-attribute-filter.component.scss */
+.relationship-attribute-filter {
+  .filter-fields {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 8px;
+    align-items: start;
+  }
+
+  .operator-field {
+    min-width: 140px;
+  }
+
+  .value-field {
+    min-width: 150px;
+  }
+
+  .clear-button {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .relationship-attribute-filter {
+    .filter-fields {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+}

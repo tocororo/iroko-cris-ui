@@ -18,6 +18,31 @@ export interface RelationshipFilterConfig {
   targetLabel: string;
   alias?: string;
   placeholder?: string;
+  attributeConfig?: RelationshipAttributeConfig[];
+}
+
+export interface RelationshipAttributeConfig {
+  label: string;
+  attribute: string;
+  operator:
+    | 'EQUALS'
+    | 'GREATER_THAN'
+    | 'LESS_THAN'
+    | 'GREATER_EQUAL'
+    | 'LESS_EQUAL';
+  placeholder?: string;
+  default: any;
+  type: 'text' | 'number' | 'date';
+}
+
+export interface DisplayItem {
+  iroko_uuid: string;
+  name: string;
+}
+
+export interface FilterValue {
+  ids: string[];
+  attributeValues?: { [key: string]: { value: any; operator: string } };
 }
 
 export interface ListFilter {
@@ -26,7 +51,7 @@ export interface ListFilter {
   type: 'text' | 'select' | 'multiselect' | 'date' | 'boolean' | 'relationship';
   placeholder?: string;
   options?: string[]; // For select/multiselect types
-  relationshipConfig: RelationshipFilterConfig;
+  relationshipConfig?: RelationshipFilterConfig;
 }
 
 export interface LabelsData {

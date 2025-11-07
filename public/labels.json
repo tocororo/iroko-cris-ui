@@ -257,7 +257,17 @@
             "relationshipType": "IN_INDEX",
             "relationshipDirection": "OUT",
             "targetLabel": "Index",
-            "placeholder": "Índices..."
+            "placeholder": "Índices...",
+            "attributeConfig": [
+              {
+                "label": "Año",
+                "attribute": "date",
+                "operator": "EQUALS",
+                "placeholder": "Año",
+                "default": "2025",
+                "type": "number"
+              }
+            ]
           }
         }
       ]

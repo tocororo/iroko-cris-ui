@@ -45,6 +45,7 @@ export class MesComponent {
     this.labelService.loadData().subscribe((labels) => {
       this.mesColumns = labels.nodes['publication'].properties;
       this.filters = labels.nodes['publication'].filters;
+      console.log(this.filters);
     });
   }
 

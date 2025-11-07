@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnChanges,
   SimpleChanges,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -50,13 +51,12 @@ import {
 } from '../../services/cypher-builder.service';
 import { ExportService } from '../../services/export.service';
 import {
+  FilterValue,
   LabelsService,
   ListColumn,
   ListFilter,
 } from '../../services/labels.service';
-import {
-  RelationshipFilterComponent,
-} from '../relationship-filter/relationship-filter.component';
+import { RelationshipFilterComponent } from '../relationship-filter/relationship-filter.component';
 
 export interface SortOption {
   attribute: string;
@@ -119,7 +119,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   // Data state
   nodes: any[] = [];
   totalCount = 0;
-  isLoading = false;
+  _isLoading = false;
   hasError = false;
   errorMessage = '';
 
@@ -131,6 +131,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   filterForm: FormGroup;
   activeFilters: { [key: string]: any } = {};
   showFilters = false;
+  activeFilterCount = 0;
 
   // Advanced query state
   showAdvancedQuery = false;
@@ -146,6 +147,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   currentPage = 0;
   totalPages = 0;
   paginationRange: number[] = [];
+  paginationInfoText = 'Cargando...';
 
   // Debounce for search
   private searchTerms = new Subject<string>();
@@ -161,7 +163,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private labelService: LabelsService
+    private labelService: LabelsService,
+    private cdr: ChangeDetectorRef
   ) {
     this.searchControl = this.fb.control('');
     this.sortControl = this.fb.control('');
@@ -325,6 +328,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
+    this.updateActiveFilterCount();
+
     this.loadPage(0);
 
     // Ensure URL is updated after filters are applied
@@ -344,6 +349,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
     // Clear active filters
     this.activeFilters = {};
+
+    this.updateActiveFilterCount();
 
     // Reload data
     this.loadPage(0);
@@ -370,6 +377,13 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+    this.cdr.detectChanges();
+  }
+  private updateActiveFilterCount() {
+    this.activeFilterCount = Object.keys(this.activeFilters).length;
+  }
   hasActiveFilters(): boolean {
     return Object.keys(this.activeFilters).length > 0;
   }
@@ -444,6 +458,18 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     } catch (error) {
       console.error('Export preparation failed:', error);
       this.isExporting = false;
+    }
+  }
+
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
+
+  set isLoading(value: boolean) {
+    if (this._isLoading !== value) {
+      this._isLoading = value;
+      // Use markForCheck instead of detectChanges for better performance
+      this.cdr.markForCheck();
     }
   }
 
@@ -591,6 +617,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       return await this.fetchTotalCountWithBasicSearch();
     }
   }
+
   private async fetchTotalCountWithBasicSearch(): Promise<number> {
     const { query, parameters } = this.buildCompleteQuery(0, 0, true);
 
@@ -613,6 +640,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const escapedTerm = term.replace(/[\\"']/g, '\\$&');
     return `${escapedTerm}*`;
   }
+
   private buildMainQuery(
     offset: number,
     limit: number,
@@ -690,25 +718,50 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
       if (
         filterDef?.type === 'relationship' &&
-        Array.isArray(filterValue) &&
-        filterValue.length > 0
+        filterValue &&
+        filterValue.ids &&
+        filterValue.ids.length > 0
       ) {
         const relationshipConfig = (filterDef as any).relationshipConfig;
         if (relationshipConfig) {
           const alias = relationshipConfig.alias || `related${index}`;
 
-          // Add WHERE conditions for relationship filters
-          // console.warn(filterValue);
-
-          filterValue.forEach((rel, relIndex: number) => {
+          // Add node ID parameters
+          filterValue.ids.forEach((rel: string, relIndex: number) => {
             const relParamName = `${alias}Id${relIndex}`;
-            params[relParamName] = rel; // Use ID for the query, not name
+            params[relParamName] = rel;
           });
+
+          // Add relationship attribute parameter if present
+          if (filterValue.attributeValues) {
+            Object.entries(filterValue.attributeValues).forEach(
+              ([attribute, attrConfig]: [string, any]) => {
+                const attrParamName = `relAttr${index}_${attribute}`;
+                const value = attrConfig.value;
+                params[attrParamName] = value;
+              }
+            );
+          }
         }
       }
     });
+    console.log(params);
 
     return params;
+  }
+
+  private isNumeric(value: any): boolean {
+    return !isNaN(parseFloat(value)) && isFinite(value);
+  }
+
+  getRelationshipFilterInitialValue(filterName: string): any {
+    const activeFilter = this.activeFilters[filterName];
+    if (activeFilter) {
+      return activeFilter;
+    }
+
+    // Return empty structure if no active filter
+    return { ids: [] };
   }
 
   private buildArrayFilterCondition(
@@ -957,8 +1010,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const returnClause = isCount
       ? 'RETURN count(n) AS count'
       : this.buildReturnClause();
-      const paginationClause =
-        isCount || forExport ? '' : `SKIP $offset LIMIT $limit`;
+    const paginationClause =
+      isCount || forExport ? '' : `SKIP $offset LIMIT $limit`;
 
     // Build relationship patterns and conditions ONLY if there are active relationship filters
     const { relationshipMatches, relationshipConditions } =
@@ -989,6 +1042,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       ${orderClause}
       ${paginationClause}
     `.trim();
+    console.log(query);
 
     const parameters = {
       ...this.buildParameters(),
@@ -1014,11 +1068,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       const filterValue = this.activeFilters[filterName];
       const filterDef = this.filters.find((f) => f.name === filterName);
 
-      // Only process relationship filters that have selected values
       if (
         filterDef?.type === 'relationship' &&
-        Array.isArray(filterValue) &&
-        filterValue.length > 0
+        filterValue &&
+        filterValue.ids &&
+        filterValue.ids.length > 0
       ) {
         const relationshipConfig = (filterDef as any).relationshipConfig;
         if (relationshipConfig) {
@@ -1030,24 +1084,63 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
             ? `:${relationshipConfig.targetLabel}`
             : '';
           const alias = relationshipConfig.alias || `related${index}`;
+          const relAlias = `rel${index}`;
 
-          // Add MATCH pattern
-          relationshipMatches += `\nMATCH (n)${direction}-[:${relationshipConfig.relationshipType}]-${arrow}(${alias}${targetLabel})`;
+          // Add MATCH pattern with relationship alias
+          relationshipMatches += `\nMATCH (n)${direction}-[${relAlias}:${relationshipConfig.relationshipType}]-${arrow}(${alias}${targetLabel})`;
 
-          // Add WHERE condition for the specific related nodes
-          const relConditions = filterValue
-            .map((rel, relIndex: number) => {
+          // Add WHERE conditions for the specific related nodes
+          const relConditions = filterValue.ids
+            .map((rel: string, relIndex: number) => {
               const relParamName = `${alias}Id${relIndex}`;
               return `${alias}.iroko_uuid = $${relParamName}`;
             })
             .join(' OR ');
 
           relationshipConditions.push(`(${relConditions})`);
+
+          // Add relationship attribute conditions if present
+          if (filterValue.attributeValues) {
+            Object.entries(filterValue.attributeValues).forEach(
+              ([attribute, attrConfig]: [string, any]) => {
+                const attrParamName = `relAttr${index}_${attribute}`;
+                const attrCondition = this.buildRelationshipAttributeCondition(
+                  relAlias,
+                  attribute,
+                  attrConfig.operator || 'EQUALS',
+                  attrParamName
+                );
+                relationshipConditions.push(`(${attrCondition})`);
+              }
+            );
+          }
         }
       }
     });
 
     return { relationshipMatches, relationshipConditions };
+  }
+
+  private buildRelationshipAttributeCondition(
+    relAlias: string,
+    attribute: string,
+    operator: string,
+    paramName: string
+  ): string {
+    switch (operator) {
+      case 'EQUALS':
+        return `${relAlias}.${attribute} = $${paramName}`;
+      case 'GREATER_THAN':
+        return `${relAlias}.${attribute} > $${paramName}`;
+      case 'LESS_THAN':
+        return `${relAlias}.${attribute} < $${paramName}`;
+      case 'GREATER_EQUAL':
+        return `${relAlias}.${attribute} >= $${paramName}`;
+      case 'LESS_EQUAL':
+        return `${relAlias}.${attribute} <= $${paramName}`;
+      default:
+        return `${relAlias}.${attribute} = $${paramName}`;
+    }
   }
 
   private extractNodeData(nodeWrapper: any): any {
@@ -1084,6 +1177,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     for (let i = startPage; i < endPage; i++) {
       this.paginationRange.push(i);
     }
+    this.updatePaginationInfo();
   }
 
   // Advanced Query Methods
@@ -1163,16 +1257,16 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return this.sortBy.direction === 'ASC' ? 'Ascendente' : 'Descendente';
   }
 
-  getPaginationInfo(): string {
+  updatePaginationInfo() {
     if (this.totalCount === 0) {
-      return 'No se encontraron resultados.';
+      this.paginationInfoText = 'No se encontraron resultados.';
     }
 
     const startIdx = this.currentPage * this.pageSize + 1;
     const endIdx = Math.min(startIdx + this.nodes.length - 1, this.totalCount);
     const totalPages = this.totalPages;
 
-    return `Mostrando ${startIdx}–${endIdx} de ${
+    this.paginationInfoText = `Mostrando ${startIdx}–${endIdx} de ${
       this.totalCount
     } elementos — Página ${this.currentPage + 1} de ${totalPages}`;
   }
@@ -1234,21 +1328,28 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return !!this.customWhereClause || this.customParameters.length > 0;
   }
 
-  onRelationshipFilterChange(filterName: string, selectedIds: string[]) {
-    // Update the form control with the selected IDs
-    this.filterForm.get(filterName)?.setValue(selectedIds);
+  onRelationshipFilterChange(filterName: string, filterValue: any) {
+    console.log(
+      'Selection relationship filter changed',
+      filterName,
+      filterValue
+    );
 
-    // Manually update activeFilters since the form valueChanges might be debounced
-    if (selectedIds.length > 0) {
-      this.activeFilters[filterName] = selectedIds;
+    // Update the form control with the selected IDs
+    this.filterForm.get(filterName)?.setValue(filterValue);
+
+    // Update activeFilters
+    if (
+      filterValue &&
+      (filterValue.ids.length > 0 || filterValue.attributeValue)
+    ) {
+      this.activeFilters[filterName] = filterValue;
     } else {
       delete this.activeFilters[filterName];
     }
 
-    this.loadPage(0);
-
-    // Ensure URL update
-    setTimeout(() => {
+    Promise.resolve().then(() => {
+      this.loadPage(0);
       this.updateUrl();
     });
   }
@@ -1256,12 +1357,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   private readFromUrl(): void {
     const params = this.route.snapshot.queryParams;
 
-    // Read page (must be done first potentially affecting loadPage offset)
-    let urlPage = 0;
+    // Read page
     if (params['page'] !== undefined) {
       const page = parseInt(params['page'], 10);
       if (!isNaN(page) && page >= 0) {
-        this.currentPage = page; // Set internal state
+        this.currentPage = page;
       }
     }
 
@@ -1278,7 +1378,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         const attribute = sortParts[0];
         const direction = sortParts[1].toUpperCase();
         if (direction === 'ASC' || direction === 'DESC') {
-          // Validate against columns if necessary
           const columnExists = this.columns.some(
             (col) => col.name === attribute
           );
@@ -1293,34 +1392,61 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
     // Read filters
     this.filters.forEach((filter) => {
-      const paramName = `filter_${filter.name}`;
-      if (params[paramName] !== undefined) {
-        let value = params[paramName];
-        if (filter.type === 'multiselect' || filter.type === 'relationship') {
-          if (typeof value === 'string' && value.includes(',')) {
-            value = value.split(',').map((v) => v.trim());
-          } else if (typeof value === 'string') {
-            value = [value];
-          }
+      if (filter.type === 'relationship') {
+        // Handle relationship filters - read IDs and attributes separately
+        const idsParam = params[`filter_${filter.name}_ids`];
+
+        const filterValue: FilterValue = { ids: [], attributeValues: {} };
+
+        if (idsParam) {
+          filterValue.ids = idsParam.split(',').map((v: string) => v.trim());
         }
 
-        if (value && (!Array.isArray(value) || value.length > 0)) {
-          if (filter.type === 'relationship' && Array.isArray(value)) {
-            this.activeFilters[filter.name] = value;
-            // // Value is an array of IDs. Need to fetch names.
-            // // Create an Observable to fetch names for these IDs.
-            // const fetchNames$ = this.fetchNamesForIds(
-            //   value,
-            //   filter.relationshipConfig.targetLabel
-            // ).pipe(
-            //   map((names) => ({
-            //     filterName: filter.name,
-            //     resolvedObjects: names,
-            //   }))
-            // );
-            // relationshipRequests.push(fetchNames$);
-          } else {
-            // Set value directly for other types and update activeFilters
+        if (
+          filter.relationshipConfig &&
+          filter.relationshipConfig.attributeConfig
+        ) {
+          filter.relationshipConfig.attributeConfig.forEach((element) => {
+            let pvalue = `filter_${filter.name}_attr_${element.attribute}_value`;
+            let poperator = `filter_${filter.name}_attr_${element.attribute}_operator`;
+            if (params[pvalue] && params[poperator]) {
+              let attributeValue = params[pvalue];
+              switch (element.type) {
+                case 'number':
+                  attributeValue = Number(params[pvalue]);
+                  break;
+                case 'date':
+                  attributeValue = new Date(params[pvalue]).toISOString();
+                  break;
+                // text type doesn't need conversion
+              }
+              (filterValue.attributeValues ||
+                (filterValue.attributeValues = {}))[element.attribute] = {
+                value: attributeValue,
+                operator: params[poperator],
+              };
+            }
+          });
+        }
+        console.log(filterValue);
+
+        if (filterValue.ids.length > 0) {
+          this.activeFilters[filter.name] = filterValue;
+          this.filterForm.get(filter.name)?.setValue(filterValue);
+        }
+      } else {
+        const paramName = `filter_${filter.name}`;
+        if (params[paramName] !== undefined) {
+          let value = params[paramName];
+          if (filter.type === 'multiselect') {
+            if (typeof value === 'string' && value.includes(',')) {
+              value = value.split(',').map((v: string) => v.trim());
+            } else if (typeof value === 'string') {
+              value = [value];
+            }
+          }
+
+          if (value && (!Array.isArray(value) || value.length > 0)) {
             this.filterForm.get(filter.name)?.setValue(value);
             this.activeFilters[filter.name] = value;
           }
@@ -1328,26 +1454,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    // // Execute all relationship name fetch requests
-    // if (relationshipRequests.length > 0) {
-    //   forkJoin(relationshipRequests).subscribe((results) => {
-    //     results.forEach((result) => {
-    //       // Set the resolved {id, name} objects in the form control
-    //       this.filterForm
-    //         .get(result.filterName)
-    //         ?.setValue(result.resolvedObjects);
-    //       // Update activeFilters with just the IDs
-    //       this.activeFilters[result.filterName] = result.resolvedObjects.map(
-    //         (obj) => obj.id
-    //       );
-    //     });
-    //     // Load the page after resolving relationships
-    //     this.loadPage(0);
-    //   });
-    // } else {
-    //   // If no relationship filters to resolve, load the page immediately
-    //   this.loadPage(0);
-    // }
     this.loadPage(this.currentPage);
   }
 
@@ -1396,7 +1502,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.currentPage > 0) {
       queryParams.page = this.currentPage;
     } else {
-      // Remove page param if it's the first page
       queryParams.page = null;
     }
 
@@ -1404,7 +1509,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.searchTerm) {
       queryParams.search = this.searchTerm;
     } else {
-      // Remove search param if empty
       queryParams.search = null;
     }
 
@@ -1415,42 +1519,53 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       queryParams.sort = null;
     }
 
-    // Add active filters (only non-empty ones)
+    // Add active filters (including relationship filters with attributes)
     let hasActiveFilters = false;
-    Object.keys(this.activeFilters).forEach((key) => {
-      const value = this.activeFilters[key];
+    Object.keys(this.activeFilters).forEach((key, index) => {
+      const filterValue = this.activeFilters[key];
       const filterDef = this.filters.find((f) => f.name === key);
 
-      if (this.hasFilterValue(value)) {
-        if (Array.isArray(value) && value.length > 0) {
-          if (filterDef?.type === 'relationship') {
-            queryParams[`filter_${key}`] = value.join(',');
-          } else {
-            queryParams[`filter_${key}`] = value.join(',');
+      if (this.hasFilterValue(filterValue)) {
+        if (filterDef?.type === 'relationship') {
+          // Handle relationship filters - store IDs and attributes separately
+          if (filterValue.ids && filterValue.ids.length > 0) {
+            queryParams[`filter_${key}_ids`] = filterValue.ids.join(',');
+            hasActiveFilters = true;
+
+            // Store attribute filter if present
+            if (filterValue.attributeValues) {
+              Object.entries(filterValue.attributeValues).forEach(
+                ([attribute, attrConfig]: [string, any]) => {
+                  const value = attrConfig.value;
+                  const operator = attrConfig.operator || 'EQUALS';
+                  queryParams[`filter_${key}_attr_${attribute}_value`] = value;
+                  queryParams[`filter_${key}_attr_${attribute}_operator`] =
+                    operator;
+                }
+              );
+            }
           }
+        } else if (Array.isArray(filterValue) && filterValue.length > 0) {
+          queryParams[`filter_${key}`] = filterValue.join(',');
           hasActiveFilters = true;
-        } else if (!Array.isArray(value)) {
-          queryParams[`filter_${key}`] = value;
+        } else if (!Array.isArray(filterValue)) {
+          queryParams[`filter_${key}`] = filterValue;
           hasActiveFilters = true;
         }
       } else {
-        // Remove filter param if empty
+        // Remove filter params if empty
         queryParams[`filter_${key}`] = null;
+        queryParams[`filter_${key}_ids`] = null;
+        queryParams[`filter_${key}_attr_value`] = null;
+        queryParams[`filter_${key}_attr_operator`] = null;
       }
     });
-
-    // If no active filters and we have filter params in URL, ensure they're removed
-    if (!hasActiveFilters) {
-      this.filters.forEach((filter) => {
-        queryParams[`filter_${filter.name}`] = null;
-      });
-    }
 
     // Update the URL
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
-      queryParamsHandling: 'merge', // Keep other query params
+      queryParamsHandling: 'merge',
       replaceUrl: true,
     });
   }
