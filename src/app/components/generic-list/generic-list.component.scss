@@ -508,6 +508,44 @@ code {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+
+  .filters-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+}
+
+.filter-field-with-remove {
+  margin-bottom: 16px;
+}
+
+.filter-control-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  .full-width {
+    flex: 1;
+  }
+}
+
+.remove-filter-btn {
+  margin-top: 4px;
+  flex-shrink: 0;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.boolean-filter-wrapper {
+  display: flex;
+  align-items: center;
+  min-height: 56px; /* Match form field height */
+  padding: 0 8px;
+  flex: 1;
 }
 
 .filters-toggle {
@@ -556,6 +594,7 @@ code {
 
 /* Improved Relationship Filter Container */
 app-relationship-filter {
+  flex: 1;
   display: block;
   width: 100%;
 
@@ -605,8 +644,9 @@ app-relationship-filter {
 .filter-actions {
   display: flex;
   justify-content: flex-end;
-  border-top: 1px solid #e0e0e0;
+  margin-top: 16px;
   padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
 }
 
 /* Responsive adjustments for filters */
@@ -645,6 +685,26 @@ app-relationship-filter {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+
+    .filters-header-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .filter-control-wrapper {
+    flex-direction: column;
+    gap: 8px;
+
+    .remove-filter-btn {
+      align-self: flex-end;
+      margin-top: 0;
+    }
+  }
+
+  .boolean-filter-wrapper {
+    min-height: auto;
+    padding: 8px 0;
   }
 
   .clear-filters-btn {
@@ -681,5 +741,62 @@ app-relationship-filter {
     margin-left: 0;
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Add these styles to your existing SCSS */
+
+.filter-management {
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.manage-filters-btn {
+  margin-bottom: 12px;
+}
+
+.active-filters-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  background-color: #e3f2fd;
+  color: #1976d2;
+
+  &.mat-mdc-chip-disabled {
+    opacity: 0.6;
+  }
+}
+
+/* Ensure the filters grid adapts to dynamic filters */
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+
+  /* Ensure relationship filters take full width */
+  .filter-field:has(app-relationship-filter) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-management {
+    padding: 8px;
+  }
+
+  .active-filters-chips {
+    gap: 4px;
+  }
+
+  .filter-chip {
+    font-size: 0.8em;
   }
 }

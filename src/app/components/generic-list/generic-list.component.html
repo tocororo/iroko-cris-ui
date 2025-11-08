@@ -3,190 +3,162 @@
   <!-- Search, Sort, and Export Controls -->
   <mat-card class="controls-card">
     <mat-card-content>
-      <div class="controls-row">
-        <!-- Search Field -->
-        <mat-form-field appearance="outline" class="search-field">
-          <mat-label>Buscar...</mat-label>
-          <input
-            matInput
-            [formControl]="searchControl"
-            (input)="onSearchChange($event)"
-            placeholder="Buscar por nombre"
-          />
-          <mat-icon matPrefix>search</mat-icon>
-
-          @if (hasSearchTerm()) {
-          <button
-            mat-icon-button
-            matSuffix
-            (click)="clearSearch()"
-            matTooltip="Clear search"
-          >
-            <mat-icon>clear</mat-icon>
-          </button>
-          }
-        </mat-form-field>
-
-        <!-- Sort Controls -->
-        <div class="sort-controls">
-          <mat-form-field appearance="outline" class="sort-field">
-            <mat-label>Ordenar por</mat-label>
-            <mat-select
-              [formControl]="sortControl"
-              (selectionChange)="onSortChange()"
-            >
-              <mat-option value="none">Ordenar por...</mat-option>
-              @for (column of columns; track column.name) { @if (column.sortable
-              !== false) {
-              <mat-option [value]="column.name">
-                Ordenar por {{ column.label }}
-              </mat-option>
-              } }
-            </mat-select>
-          </mat-form-field>
-
-          @if (showSortOrder) {
-          <button
-            mat-icon-button
-            class="sort-order-btn"
-            (click)="toggleSortOrder()"
-            [matTooltip]="getSortTooltip()"
-          >
-            <mat-icon>{{ getSortIcon() }}</mat-icon>
-          </button>
-          }
-        </div>
-
-        <!-- Export Button -->
-        <div class="export-section">
-          <button
-            mat-raised-button
-            color="accent"
-            (click)="exportCurrentView()"
-            [disabled]="isExporting || totalCount === 0"
-            class="export-btn"
-          >
-            <mat-icon>download</mat-icon>
-            {{ isExporting ? "Exportando..." : "Exportar CSV" }}
-          </button>
-
-          <div class="export-info" *ngIf="totalCount > 0">
-            <small>Exportar los {{ totalCount }} elementos</small>
-          </div>
-        </div>
-      </div>
-
       <!-- Filter Controls -->
-      @if (filters && filters.length > 0) {
+      @if (filters) {
       <div class="filters-section">
         <div class="filters-header">
           <button mat-button (click)="toggleFilters()" class="filters-toggle">
             <mat-icon>filter_list</mat-icon>
             Filtros @if (hasActiveFilters()) {
-            <mat-chip class="active-filter-chip">{{
-              activeFilterCount
-            }}</mat-chip>
+            <mat-chip class="active-filter-chip">
+              {{ activeFilterCount }}
+            </mat-chip>
             }
           </button>
 
-          @if (hasActiveFilters()) {
-          <button
-            mat-button
-            color="warn"
-            (click)="clearFilters()"
-            class="clear-filters-btn"
-          >
-            <mat-icon>clear</mat-icon>
-            Limpiar Filtros
-          </button>
-          }
+          <div class="filters-header-actions">
+            @if (hasActiveFilters()) {
+            <button
+              mat-button
+              color="warn"
+              (click)="clearFilters()"
+              class="clear-filters-btn"
+            >
+              <mat-icon>clear</mat-icon>
+              Limpiar Valores
+            </button>
+            }
+
+            <button
+              mat-button
+              (click)="openFilterDialog()"
+              class="manage-filters-btn"
+            >
+              <mat-icon>tune</mat-icon>
+              Gestionar Filtros
+            </button>
+          </div>
         </div>
 
-        @if (showFilters) {
+        @if (showFilters && filters.length > 0) {
         <div class="filters-content">
           <form [formGroup]="filterForm" class="filters-form">
             <div class="filters-grid">
               @for (filter of filters; track filter.name) {
-              <div class="filter-field">
-                <!-- Text Filter -->
-                @if (filter.type === 'text') {
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>{{ filter.label }}</mat-label>
-                  <input
-                    title="text"
-                    matInput
-                    [formControlName]="filter.name"
-                    [placeholder]="filter.placeholder || filter.label"
-                  />
-                </mat-form-field>
-                }
+              <div class="filter-field-with-remove">
+                <!-- Filter Component with Remove Button -->
+                <div class="filter-control-wrapper">
+                  <!-- Text Filter -->
+                  @if (filter.type === 'text') {
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>{{ filter.label }}</mat-label>
+                    <input
+                      title="text"
+                      matInput
+                      [formControlName]="filter.name"
+                      [placeholder]="filter.placeholder || filter.label"
+                    />
+                  </mat-form-field>
+                  }
 
-                <!-- Select Filter -->
-                @if (filter.type === 'select') {
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>{{ filter.label }}</mat-label>
-                  <mat-select [formControlName]="filter.name">
-                    <mat-option value="">Todos</mat-option>
-                    @for (option of filter.options; track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-                }
+                  <!-- Select Filter -->
+                  @if (filter.type === 'select') {
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>{{ filter.label }}</mat-label>
+                    <mat-select [formControlName]="filter.name">
+                      <mat-option value="">Todos</mat-option>
+                      @for (option of filter.options; track option) {
+                      <mat-option [value]="option">{{ option }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                  }
 
-                <!-- Multi-Select Filter -->
-                @if (filter.type === 'multiselect') {
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>{{ filter.label }}</mat-label>
-                  <mat-select [formControlName]="filter.name" multiple>
-                    @for (option of filter.options; track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-                }
+                  <!-- Multi-Select Filter -->
+                  @if (filter.type === 'multiselect') {
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>{{ filter.label }}</mat-label>
+                    <mat-select [formControlName]="filter.name" multiple>
+                      @for (option of filter.options; track option) {
+                      <mat-option [value]="option">{{ option }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                  }
 
-                <!-- Date Filter -->
-                @if (filter.type === 'date') {
-                <mat-form-field appearance="outline" class="full-width">
-                  <input
-                    matInput
-                    title="date"
-                    [formControlName]="filter.name"
-                    [matDatepicker]="picker"
-                    [placeholder]="filter.placeholder || 'Seleccionar fecha'"
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="picker"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                }
+                  <!-- Date Filter -->
+                  @if (filter.type === 'date') {
+                  <mat-form-field appearance="outline" class="full-width">
+                    <input
+                      matInput
+                      title="date"
+                      [formControlName]="filter.name"
+                      [matDatepicker]="picker"
+                      [placeholder]="filter.placeholder || 'Seleccionar fecha'"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  }
 
-                <!-- Boolean Filter -->
-                @if (filter.type === 'boolean') {
-                <mat-checkbox [formControlName]="filter.name" color="primary">
-                  {{ filter.label }}
-                </mat-checkbox>
-                }
+                  <!-- Boolean Filter -->
+                  @if (filter.type === 'boolean') {
+                  <div class="boolean-filter-wrapper">
+                    <mat-checkbox
+                      [formControlName]="filter.name"
+                      color="primary"
+                    >
+                      {{ filter.label }}
+                    </mat-checkbox>
+                  </div>
+                  }
 
-                <!-- Relationship Filter -->
-                @if (filter.type === 'relationship') {
-                <app-relationship-filter
-                  [filter]="filter"
-                  [initialValue]="
-                    getRelationshipFilterInitialValue(filter.name)
-                  "
-                  (selectionChange)="
-                    onRelationshipFilterChange(filter.name, $event)
-                  "
-                >
-                </app-relationship-filter>
-                }
+                  <!-- Relationship Filter -->
+                  @if (filter.type === 'relationship') {
+                  <app-relationship-filter
+                    [filter]="filter"
+                    [initialValue]="
+                      getRelationshipFilterInitialValue(filter.name)
+                    "
+                    (selectionChange)="
+                      onRelationshipFilterChange(filter.name, $event)
+                    "
+                  >
+                  </app-relationship-filter>
+                  }
+
+                  <!-- Remove Filter Button -->
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    class="remove-filter-btn"
+                    (click)="removeFilter(filter.name)"
+                    [disabled]="filters.length < 1"
+                    matTooltip="Eliminar filtro"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
               </div>
               }
             </div>
+
+            <!-- Apply Filters Button (for relationship filters) -->
+            @if (hasRelationshipFilters()) {
+            <div class="filter-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="applyFilters()"
+              >
+                <mat-icon>check</mat-icon>
+                Aplicar Filtros
+              </button>
+            </div>
+            }
           </form>
         </div>
         }
@@ -303,7 +275,59 @@
 
   <!-- Pagination Info -->
   <div class="pagination-info">
-    <span class="info-text">{{ paginationInfoText }}</span>
+    <div class="controls-row">
+      <div appearance="outline" class="search-field">
+        <span>{{ paginationInfoText }}</span>
+      </div>
+
+      <!-- Sort Controls -->
+      <div class="sort-controls">
+        <mat-form-field appearance="outline" class="sort-field">
+          <mat-label>Ordenar por</mat-label>
+          <mat-select
+            [formControl]="sortControl"
+            (selectionChange)="onSortChange()"
+          >
+            <mat-option value="none">Ordenar por...</mat-option>
+            @for (column of columns; track column.name) { @if (column.sortable
+            !== false) {
+            <mat-option [value]="column.name">
+              Ordenar por {{ column.label }}
+            </mat-option>
+            } }
+          </mat-select>
+        </mat-form-field>
+
+        @if (showSortOrder) {
+        <button
+          mat-icon-button
+          class="sort-order-btn"
+          (click)="toggleSortOrder()"
+          [matTooltip]="getSortTooltip()"
+        >
+          <mat-icon>{{ getSortIcon() }}</mat-icon>
+        </button>
+        }
+      </div>
+
+      <!-- Export Button -->
+      <div class="export-section">
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="exportCurrentView()"
+          [disabled]="isExporting || totalCount === 0"
+          class="export-btn"
+        >
+          <mat-icon>download</mat-icon>
+          {{ isExporting ? "Exportando..." : "Exportar CSV" }}
+        </button>
+
+        <div class="export-info" *ngIf="totalCount > 0">
+          <small>Exportar los {{ totalCount }} elementos</small>
+        </div>
+      </div>
+    </div>
   </div>
 
   <mat-divider></mat-divider>

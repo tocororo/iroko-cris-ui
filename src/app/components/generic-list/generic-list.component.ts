@@ -58,6 +58,9 @@ import {
 } from '../../services/labels.service';
 import { RelationshipFilterComponent } from '../relationship-filter/relationship-filter.component';
 
+import { MatDialog } from '@angular/material/dialog';
+import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
+
 export interface SortOption {
   attribute: string;
   direction: 'ASC' | 'DESC';
@@ -111,7 +114,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() advancedQueryOptions?: AdvancedQueryOptions;
   @Input() fixedFilters: QueryFilter[] = [];
   @Output() nodeSelected = new EventEmitter<any>();
-  @Input() searchIndex?: string;
   @Input() detaillsText: string = 'Ver detalles';
 
   entityTypeDisplay = '';
@@ -156,6 +158,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   private filterSubscription?: Subscription;
   isExporting: boolean = false;
 
+  availableFilters: ListFilter[] = [];
+  selectedFilters: Set<string> = new Set();
+
   constructor(
     private irokoApiService: CypherApiService,
     private cypherBuilder: CypherBuilderService,
@@ -164,7 +169,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private labelService: LabelsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public dialog: MatDialog
   ) {
     this.searchControl = this.fb.control('');
     this.sortControl = this.fb.control('');
@@ -176,6 +182,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.entityTypeDisplay =
         labels.nodes[this.entityType.toLocaleLowerCase()].display;
       this.initializeSorting();
+      this.generateAutomaticFilters();
       this.initializeFilters();
       this.setupSearchDebounce();
       this.initializeAdvancedQuery();
@@ -189,7 +196,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['filters']) {
+    if (changes['filters'] || changes['columns']) {
       this.initializeFilters();
     }
     if (changes['advancedQueryOptions'] || changes['fixedFilters']) {
@@ -203,7 +210,110 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.filterSubscription?.unsubscribe();
   }
 
-  // Fix the filter form initialization
+  private generateAutomaticFilters(): void {
+    const autoFilters: ListFilter[] = [];
+    const explicitFilters = [...(this.filters || [])];
+
+    // Generate filters for columns that don't have explicit filters
+    this.columns.forEach((column) => {
+      if (
+        column.filterable !== false &&
+        !explicitFilters.some((f) => f.name === column.name) &&
+        ['string', 'number', 'date'].includes(column.type || 'string')
+      ) {
+        const autoFilter: ListFilter = {
+          name: column.name,
+          label: column.label,
+          type: this.getAutoFilterType(column.type || 'string'),
+          placeholder: `Filtrar por ${column.label}`,
+        };
+
+        // Add auto-generated filters at the top
+        autoFilters.push(autoFilter);
+      }
+    });
+
+    // Combine: auto filters first, then explicit filters
+    this.availableFilters = [...autoFilters, ...explicitFilters];
+
+    // Initialize selectedFilters with all current filters plus the 'name' filter
+    const initialSelectedFilters = new Set(this.filters.map((f) => f.name));
+
+    // Automatically add the 'name' filter if it exists in availableFilters
+    const nameFilter = this.availableFilters.find((f) => f.name === 'name');
+    if (nameFilter) {
+      initialSelectedFilters.add('name');
+    }
+
+    this.selectedFilters = initialSelectedFilters;
+    this.updateSelectedFilters(Array.from(this.selectedFilters));
+  }
+
+  private getAutoFilterType(columnType: string): ListFilter['type'] {
+    switch (columnType) {
+      case 'date':
+        return 'date';
+      case 'number':
+        return 'text'; // Could be enhanced to number-specific filter
+      case 'array':
+        return 'multiselect'; // For array types
+      default:
+        return 'text';
+    }
+  }
+
+  openFilterDialog(): void {
+    const dialogRef = this.dialog.open(FilterDialogComponent, {
+      data: {
+        availableFilters: this.availableFilters,
+        selectedFilters: Array.from(this.selectedFilters),
+        columns: this.columns,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.updateSelectedFilters(result);
+      }
+    });
+  }
+
+  getFilterLabel(filterName: string): string {
+    const filter = this.availableFilters.find((f) => f.name === filterName);
+    return filter?.label || filterName;
+  }
+
+  private updateSelectedFilters(selectedFilterNames: string[]): void {
+    this.selectedFilters = new Set(selectedFilterNames);
+
+    // Update the filters array to only include selected filters
+    this.filters = this.availableFilters.filter((filter) =>
+      this.selectedFilters.has(filter.name)
+    );
+
+    // Reinitialize filters and clear any active filters for removed filters
+    this.initializeFilters();
+
+    // Clear active filters for filters that were removed
+    Object.keys(this.activeFilters).forEach((filterName) => {
+      if (!this.selectedFilters.has(filterName)) {
+        delete this.activeFilters[filterName];
+      }
+    });
+
+    this.updateActiveFilterCount();
+    this.loadPage(0);
+  }
+
+  removeFilter(filterName: string): void {
+    this.selectedFilters.delete(filterName);
+    this.updateSelectedFilters(Array.from(this.selectedFilters));
+  }
+
+  isFilterActive(filterName: string): boolean {
+    return this.selectedFilters.has(filterName);
+  }
+
   private initializeFilters() {
     const formGroup: { [key: string]: any } = {};
 
@@ -295,6 +405,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.sortControl.setValue(initialSortAttr);
     this.showSortOrder = !!initialSortAttr;
   }
+
   private setupSearchDebounce() {
     this.searchSubscription?.unsubscribe();
     this.searchSubscription = this.searchTerms
@@ -310,10 +421,18 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.searchTerms.next(value || '');
     });
   }
+
   applyFilters() {
     this.activeFilters = {};
 
+    // Only process filters that are currently selected
+    const activeFilterNames = new Set(this.filters.map((f) => f.name));
+
     Object.keys(this.filterForm.controls).forEach((key) => {
+      if (!activeFilterNames.has(key)) {
+        return; // Skip if filter is not selected
+      }
+
       const control = this.filterForm.get(key);
       const filterDef = this.filters.find((f) => f.name === key);
 
@@ -329,7 +448,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.updateActiveFilterCount();
-
     this.loadPage(0);
 
     // Ensure URL is updated after filters are applied
@@ -359,6 +477,10 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.updateUrl();
   }
 
+  hasRelationshipFilters(): boolean {
+    return this.filters.some((filter) => filter.type === 'relationship');
+  }
+
   private getDefaultValueForFilter(filterName: string): any {
     const filter = this.filters.find((f) => f.name === filterName);
     if (!filter) return '';
@@ -381,9 +503,11 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.showFilters = !this.showFilters;
     this.cdr.detectChanges();
   }
+
   private updateActiveFilterCount() {
     this.activeFilterCount = Object.keys(this.activeFilters).length;
   }
+
   hasActiveFilters(): boolean {
     return Object.keys(this.activeFilters).length > 0;
   }
@@ -392,7 +516,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return Object.keys(this.activeFilters).length;
   }
 
-  // Export Methods
   exportToCSV(): void {
     if (this.nodes.length === 0) {
       console.warn('No data to export');
@@ -497,104 +620,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  private getErrorMessage(error: any): string {
-    if (error.status === 0) {
-      return 'Error de conexión. Verifique su conexión a internet.';
-    } else if (error.status === 404) {
-      return 'Recurso no encontrado.';
-    } else if (error.status >= 500) {
-      return 'Error del servidor. Intente nuevamente más tarde.';
-    } else {
-      return 'Ha ocurrido un error al intentar cargar los datos.';
-    }
-  }
-
   private async fetchNodes(offset: number, limit: number): Promise<any[]> {
-    if (this.searchIndex && this.searchTerm) {
-      return await this.fetchNodesWithIndex(offset, limit);
-    } else {
-      return await this.fetchNodesWithBasicSearch(offset, limit);
-    }
-  }
-
-  private async fetchNodesWithIndex(
-    offset: number,
-    limit: number
-  ): Promise<any[]> {
-    const whereClause = this.buildWhereClause(true); // Pass flag to skip search conditions
-    const orderClause = this.buildOrderClause();
-    const returnClause = this.buildReturnClause();
-    const searchIndex = this.searchIndex || 'generalSearch';
-    const searchTerm = this.buildSearchTerm(this.searchTerm);
-    // Build the full-text search query
-    const query = `
-      CALL db.index.fulltext.queryNodes("${this.searchIndex}", $searchTerm)
-      YIELD node, score
-      WITH node AS n, score
-      ${whereClause}
-      ${returnClause}
-      ${orderClause}
-      SKIP $offset
-      LIMIT $limit
-    `;
-
-    const parameters = {
-      ...this.buildParameters(true), // Pass flag to skip search parameter
-      offset,
-      limit,
-    };
-
-    const result = await this.irokoApiService
-      .executeFullTextQuery({
-        searchIndex,
-        searchTerm,
-        whereClause,
-        returnClause,
-        orderClause,
-        parameters,
-      })
-      .toPromise();
-
-    return (result || []).map((item: any) =>
-      this.extractNodeData(item.n || item)
-    );
-  }
-
-  private async fetchTotalCountWithIndex(): Promise<number> {
-    const whereClause = this.buildWhereClause(true);
-    const searchIndex = this.searchIndex || 'generalSearch';
-    const searchTerm = this.buildSearchTerm(this.searchTerm);
-    const countTotal = true;
-    const query = `
-      CALL db.index.fulltext.queryNodes("${this.searchIndex}", $searchTerm)
-      YIELD node, score
-      WITH node AS n, score
-      ${whereClause}
-      RETURN count(n) AS count
-    `;
-
-    const parameters = {
-      ...this.buildParameters(true),
-      searchTerm: this.buildSearchTerm(this.searchTerm),
-    };
-
-    const result = await this.irokoApiService
-      .executeFullTextQuery({
-        searchIndex,
-        searchTerm,
-        whereClause,
-        parameters,
-        countTotal,
-      })
-      .toPromise();
-
-    return result?.[0]?.count || 0;
-  }
-
-  private async fetchNodesWithBasicSearch(
-    offset: number,
-    limit: number
-  ): Promise<any[]> {
     const { query, parameters } = this.buildCompleteQuery(offset, limit);
 
     const result = await this.irokoApiService
@@ -611,14 +637,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private async fetchTotalCount(): Promise<number> {
-    if (this.searchIndex && this.searchTerm) {
-      return await this.fetchTotalCountWithIndex();
-    } else {
-      return await this.fetchTotalCountWithBasicSearch();
-    }
-  }
-
-  private async fetchTotalCountWithBasicSearch(): Promise<number> {
     const { query, parameters } = this.buildCompleteQuery(0, 0, true);
 
     const result = await this.irokoApiService
@@ -630,83 +648,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       .toPromise();
 
     return result?.[0]?.count || 0;
-  }
-
-  // Enhanced search term building for full-text search
-  private buildSearchTerm(term: string): string {
-    if (!term.trim()) return '';
-
-    // Add wildcard for partial matching and boost recent results
-    const escapedTerm = term.replace(/[\\"']/g, '\\$&');
-    return `${escapedTerm}*`;
-  }
-
-  private buildMainQuery(
-    offset: number,
-    limit: number,
-    isCount: boolean = false
-  ): { query: string; parameters: any } {
-    const whereClause = this.buildWhereClause();
-    const orderClause = isCount ? '' : this.buildOrderClause();
-    const returnClause = isCount
-      ? 'RETURN count(n) AS count'
-      : this.buildReturnClause();
-    const paginationClause = isCount ? '' : `SKIP $offset LIMIT $limit`;
-
-    // Build relationship MATCH patterns for relationship filters
-    const relationshipMatches = this.buildRelationshipMatchPatterns();
-
-    const query = `
-      MATCH (n:${this.entityType})
-      ${relationshipMatches}
-      ${whereClause}
-      ${returnClause}
-      ${orderClause}
-      ${paginationClause}
-    `;
-
-    const parameters = {
-      ...this.buildParameters(),
-      ...this.buildRelationshipFilterParameters(),
-    };
-
-    if (!isCount) {
-      parameters.offset = offset;
-      parameters.limit = limit;
-    }
-
-    return { query, parameters };
-  }
-
-  private buildRelationshipMatchPatterns(): string {
-    let relationshipMatches = '';
-
-    Object.keys(this.activeFilters).forEach((filterName, index) => {
-      const filterValue = this.activeFilters[filterName];
-      const filterDef = this.filters.find((f) => f.name === filterName);
-
-      if (
-        filterDef?.type === 'relationship' &&
-        Array.isArray(filterValue) &&
-        filterValue.length > 0
-      ) {
-        const relationshipConfig = (filterDef as any).relationshipConfig;
-        if (relationshipConfig) {
-          const direction =
-            relationshipConfig.relationshipDirection === 'IN' ? '<' : '';
-          const arrow =
-            relationshipConfig.relationshipDirection === 'OUT' ? '>' : '';
-          const targetLabel = relationshipConfig.targetLabel
-            ? `:${relationshipConfig.targetLabel}`
-            : '';
-          const alias = relationshipConfig.alias || `related${index}`;
-
-          relationshipMatches += `\nMATCH (n)${direction}-[:${relationshipConfig.relationshipType}]-${arrow}(${alias}${targetLabel})`;
-        }
-      }
-    });
-
-    return relationshipMatches;
   }
 
   private buildRelationshipFilterParameters(): any {
@@ -750,10 +691,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return params;
   }
 
-  private isNumeric(value: any): boolean {
-    return !isNaN(parseFloat(value)) && isFinite(value);
-  }
-
   getRelationshipFilterInitialValue(filterName: string): any {
     const activeFilter = this.activeFilters[filterName];
     if (activeFilter) {
@@ -782,11 +719,12 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         return `ANY(selectedValue IN $${paramName} WHERE selectedValue IN n.${filterName})`;
     }
   }
+
   private buildWhereClause(skipSearch: boolean = false): string {
     const conditions: string[] = [];
 
     // Search condition (only for basic search)
-    if (this.searchTerm && !skipSearch && !this.searchIndex) {
+    if (this.searchTerm && !skipSearch) {
       const searchableColumns = this.columns
         .filter((col) => col.filterable !== false)
         .map((col) => col.name);
@@ -800,11 +738,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           .join(' OR ');
         conditions.push(`(${searchConditions})`);
       }
-    }
-
-    // For index search, we need to filter by entity type
-    if (this.searchIndex && this.searchTerm) {
-      conditions.push(`n:${this.entityType}`);
     }
 
     // Fixed filters
@@ -931,7 +864,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const params: any = {};
 
     // Search parameter (only for basic search)
-    if (this.searchTerm && !skipSearch && !this.searchIndex) {
+    if (this.searchTerm && !skipSearch) {
       params.searchTerm = this.searchTerm;
     }
 
@@ -1166,10 +1099,13 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updatePagination() {
-    this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
+    const calculatedPages = Math.ceil(this.totalCount / this.pageSize);
+    this.totalPages = Math.max(1, calculatedPages) || 1; // Ensure at least 1 page
+
     if (this.currentPage >= this.totalPages) {
       this.currentPage = Math.max(0, this.totalPages - 1);
     }
+
     const startPage = Math.max(0, this.currentPage - 2);
     const endPage = Math.min(this.totalPages, startPage + 5);
 
@@ -1456,44 +1392,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
     this.loadPage(this.currentPage);
   }
-
-  // // Helper function to fetch names for given IDs
-  // private fetchNamesForIds(
-  //   ids: string[],
-  //   targetLabel: string
-  // ): Observable<SelectedRelationship[]> {
-  //   if (ids.length === 0) {
-  //     return of([]);
-  //   }
-  //   // Build the query to fetch names based on IDs
-  //   const query = `
-  //     MATCH (node:${targetLabel})
-  //     WHERE node.id IN $ids
-  //     RETURN node.id AS id, node.name AS name
-  //   `;
-  //   const parameters = { ids: ids };
-
-  //   return this.irokoApiService
-  //     .executeQuery({
-  //       query,
-  //       parameters,
-  //       readonly: true,
-  //     })
-  //     .pipe(
-  //       map((results: any[]) => {
-  //         // Transform results to SelectedRelationship format
-  //         return results.map((item) => ({ id: item.id, name: item.name }));
-  //       }),
-  //       catchError((error) => {
-  //         console.error(
-  //           'Error fetching names for relationship filter IDs:',
-  //           error
-  //         );
-  //         // Return empty array or handle error as needed
-  //         return of([]);
-  //       })
-  //     );
-  // }
 
   private updateUrl(): void {
     const queryParams: any = {};

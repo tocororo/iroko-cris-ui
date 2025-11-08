@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Gestionar Filtros</h2>
+<mat-dialog-content>
+  <div class="filter-dialog-content">
+    <p>Selecciona los filtros que quieres mostrar:</p>
+
+    <div class="filters-list">
+      @for (filter of data.availableFilters; track filter.name) {
+      <div class="filter-item">
+        <mat-checkbox
+          [checked]="isSelected(filter.name)"
+          (change)="onFilterToggle($event, filter.name)"
+          class="filter-checkbox"
+        >
+          <div class="filter-info">
+            <span class="filter-label">{{ filter.label }}</span>
+            <span class="filter-type"
+              >({{ getFilterTypeLabel(filter.type) }})</span
+            >
+          </div>
+        </mat-checkbox>
+      </div>
+      }
+    </div>
+
+    @if (data.availableFilters.length === 0) {
+    <div class="no-filters">
+      <mat-icon>filter_alt_off</mat-icon>
+      <p>No hay filtros disponibles</p>
+    </div>
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()">
+    Aplicar ({{ selectedFilters.size }})
+  </button>
+</mat-dialog-actions>
