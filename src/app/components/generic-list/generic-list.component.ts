@@ -125,8 +125,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   hasError = false;
   errorMessage = '';
 
-  // Search and sort state
-  searchTerm = '';
+  // sort state
   sortBy: SortOption = { attribute: '', direction: 'ASC' };
 
   // Filter state
@@ -141,7 +140,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   customParameters: { key: string; value: any }[] = [];
 
   // UI state
-  searchControl: FormControl<string | null>;
   sortControl: FormControl<string | null>;
   showSortOrder = false;
 
@@ -152,9 +150,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   paginationInfoText = 'Cargando...';
 
   // Debounce for search
-  private searchTerms = new Subject<string>();
   private filterChanges = new Subject<void>();
-  private searchSubscription?: Subscription;
+  private filterSubjects = new Map<string, Subject<any>>();
   private filterSubscription?: Subscription;
   isExporting: boolean = false;
 
@@ -172,7 +169,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     private cdr: ChangeDetectorRef,
     public dialog: MatDialog
   ) {
-    this.searchControl = this.fb.control('');
     this.sortControl = this.fb.control('');
     this.filterForm = this.fb.group({});
   }
@@ -184,7 +180,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.initializeSorting();
       this.generateAutomaticFilters();
       this.initializeFilters();
-      this.setupSearchDebounce();
       this.initializeAdvancedQuery();
       this.readFromUrl();
 
@@ -206,8 +201,14 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.searchSubscription?.unsubscribe();
     this.filterSubscription?.unsubscribe();
+
+    // Clean up all filter subjects
+    this.filterSubjects.forEach((subject) => {
+      subject.complete();
+      subject.unsubscribe();
+    });
+    this.filterSubjects.clear();
   }
 
   private generateAutomaticFilters(): void {
@@ -229,7 +230,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         };
 
         // Add auto-generated filters at the top
-        autoFilters.push(autoFilter);
+        autoFilters.unshift(autoFilter);
       }
     });
 
@@ -246,6 +247,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.selectedFilters = initialSelectedFilters;
+
+    // Update the filters with the selected ones
     this.updateSelectedFilters(Array.from(this.selectedFilters));
   }
 
@@ -349,30 +352,54 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   private setupFilterAutoApply() {
     this.filterSubscription?.unsubscribe();
-    this.filterSubscription = this.filterForm.valueChanges
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(
-          (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-        )
-      )
-      .subscribe(() => {
-        // Don't auto-apply for relationship filters (they have their own apply)
-        const hasRelationshipChanges = Object.keys(
-          this.filterForm.controls
-        ).some((key) => {
-          const filterDef = this.filters.find((f) => f.name === key);
-          return (
-            filterDef?.type === 'relationship' &&
-            JSON.stringify(this.filterForm.get(key)?.value) !==
-              JSON.stringify(this.activeFilters[key])
-          );
-        });
 
-        if (!hasRelationshipChanges) {
-          this.applyFilters();
-        }
-      });
+    // Create individual subjects for each filter to handle debounce separately
+    const filterSubjects = new Map<string, Subject<any>>();
+
+    // Setup value changes for all filters with individual debounce
+    this.filters.forEach((filter) => {
+      const control = this.filterForm.get(filter.name);
+      if (control) {
+        const subject = new Subject<any>();
+        filterSubjects.set(filter.name, subject);
+
+        // Subscribe to the debounced subject
+        subject
+          .pipe(
+            debounceTime(300),
+            distinctUntilChanged(
+              (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
+            )
+          )
+          .subscribe((value) => {
+            this.applyFilterChange(filter.name, value, filter.type);
+          });
+
+        // Listen to control changes and push to subject
+        control.valueChanges.subscribe((value) => {
+          subject.next(value);
+        });
+      }
+    });
+
+    // Store subjects for cleanup
+    this.filterSubjects = filterSubjects;
+  }
+
+  private applyFilterChange(
+    filterName: string,
+    value: any,
+    filterType: string
+  ) {
+    if (this.hasFilterValue(value)) {
+      this.activeFilters[filterName] = value;
+    } else {
+      delete this.activeFilters[filterName];
+    }
+
+    this.updateActiveFilterCount();
+    this.loadPage(0);
+    this.updateUrl();
   }
 
   private initializeAdvancedQuery() {
@@ -406,22 +433,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.showSortOrder = !!initialSortAttr;
   }
 
-  private setupSearchDebounce() {
-    this.searchSubscription?.unsubscribe();
-    this.searchSubscription = this.searchTerms
-      .pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((searchTerm) => {
-        this.searchTerm = searchTerm;
-
-        this.loadPage(0);
-        this.updateUrl();
-      });
-
-    this.searchControl.valueChanges.subscribe((value) => {
-      this.searchTerms.next(value || '');
-    });
-  }
-
   applyFilters() {
     this.activeFilters = {};
 
@@ -437,11 +448,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       const filterDef = this.filters.find((f) => f.name === key);
 
       if (control && this.hasFilterValue(control.value)) {
-        if (filterDef?.type === 'relationship') {
-          if (Array.isArray(control.value) && control.value.length > 0) {
-            this.activeFilters[key] = control.value;
-          }
-        } else {
+        // For relationship filters, they're already handled by individual subscriptions
+        if (filterDef?.type !== 'relationship') {
           this.activeFilters[key] = control.value;
         }
       }
@@ -449,11 +457,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
     this.updateActiveFilterCount();
     this.loadPage(0);
-
-    // Ensure URL is updated after filters are applied
-    setTimeout(() => {
-      this.updateUrl();
-    });
+    this.updateUrl();
   }
 
   clearFilters() {
@@ -720,25 +724,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  private buildWhereClause(skipSearch: boolean = false): string {
+  private buildWhereClause(): string {
     const conditions: string[] = [];
-
-    // Search condition (only for basic search)
-    if (this.searchTerm && !skipSearch) {
-      const searchableColumns = this.columns
-        .filter((col) => col.filterable !== false)
-        .map((col) => col.name);
-
-      if (searchableColumns.length > 0) {
-        const searchConditions = searchableColumns
-          .map(
-            (col) =>
-              `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`
-          )
-          .join(' OR ');
-        conditions.push(`(${searchConditions})`);
-      }
-    }
 
     // Fixed filters
     if (this.fixedFilters.length > 0) {
@@ -860,13 +847,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return `ORDER BY n.${this.sortBy.attribute} ${this.sortBy.direction}`;
   }
 
-  private buildParameters(skipSearch: boolean = false): any {
+  private buildParameters(): any {
     const params: any = {};
-
-    // Search parameter (only for basic search)
-    if (this.searchTerm && !skipSearch) {
-      params.searchTerm = this.searchTerm;
-    }
 
     // Fixed filter parameters
     this.fixedFilters.forEach((filter, index) => {
@@ -1137,23 +1119,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.loadPage(0);
   }
 
-  // UI Event Handlers
-  onSearchChange(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchControl.setValue(value);
-  }
-
-  clearSearch() {
-    this.searchControl.setValue('');
-    this.searchTerm = '';
-    this.loadPage(0);
-
-    // Ensure URL is updated even when search is cleared
-    setTimeout(() => {
-      this.updateUrl();
-    });
-  }
-
   onSortChange() {
     const newAttribute = this.sortControl.value;
     if (!newAttribute || newAttribute === 'none') {
@@ -1250,10 +1215,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }));
   }
 
-  hasSearchTerm(): boolean {
-    return !!this.searchTerm;
-  }
-
   getNodeDisplayName(node: any): string {
     return (
       node.name || node.title || node.label || node.iroko_uuid || 'Unnamed'
@@ -1274,20 +1235,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     // Update the form control with the selected IDs
     this.filterForm.get(filterName)?.setValue(filterValue);
 
-    // Update activeFilters
-    if (
-      filterValue &&
-      (filterValue.ids.length > 0 || filterValue.attributeValue)
-    ) {
-      this.activeFilters[filterName] = filterValue;
-    } else {
-      delete this.activeFilters[filterName];
-    }
-
-    Promise.resolve().then(() => {
-      this.loadPage(0);
-      this.updateUrl();
-    });
+    // The relationship filter's valueChanges subscription will handle the rest
   }
 
   private readFromUrl(): void {
@@ -1299,12 +1247,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       if (!isNaN(page) && page >= 0) {
         this.currentPage = page;
       }
-    }
-
-    // Read search term
-    if (params['search']) {
-      this.searchTerm = params['search'];
-      this.searchControl.setValue(this.searchTerm);
     }
 
     // Read sort
@@ -1401,13 +1343,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       queryParams.page = this.currentPage;
     } else {
       queryParams.page = null;
-    }
-
-    // Add search term (only if exists)
-    if (this.searchTerm) {
-      queryParams.search = this.searchTerm;
-    } else {
-      queryParams.search = null;
     }
 
     // Add sort (only if exists)
