@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import { GenericListComponent } from '../../components/generic-list/generic-list.component';
@@ -12,12 +12,11 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
   templateUrl: './vocabularies.component.html',
   styleUrls: ['./vocabularies.component.scss'],
   imports: [
-    CommonModule,
     GenericListComponent,
     RouterModule,
     MatTabsModule,
-    MatCardModule,
-  ],
+    MatCardModule
+],
 })
 export class VocabulariesComponent implements OnInit {
   // Common columns for all term types

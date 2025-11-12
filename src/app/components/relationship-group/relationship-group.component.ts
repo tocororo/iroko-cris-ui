@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -13,14 +13,13 @@ import { RelationshipPaginationComponent } from '../relationship-pagination/rela
   templateUrl: './relationship-group.component.html',
   styleUrls: ['./relationship-group.component.scss'],
   imports: [
-    CommonModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
     RelationshipSearchComponent,
     RelationshipListComponent,
-    RelationshipPaginationComponent,
-  ],
+    RelationshipPaginationComponent
+],
 })
 export class RelationshipGroupComponent {
   @Input() group!: RelationshipGroup;

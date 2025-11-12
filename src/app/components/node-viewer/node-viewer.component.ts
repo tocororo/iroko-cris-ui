@@ -8,7 +8,7 @@ import {
   OnDestroy,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -40,7 +40,6 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
   templateUrl: './node-viewer.component.html',
   styleUrls: ['./node-viewer.component.scss'],
   imports: [
-    CommonModule,
     MatTabsModule,
     MatCardModule,
     MatChipsModule,
@@ -53,8 +52,8 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
     NodePropertiesComponent,
     RelationshipGroupComponent,
     NodeRelationshipsAsPropertiesComponent,
-    MatExpansionModule,
-  ],
+    MatExpansionModule
+],
 })
 export class NodeViewerComponent implements OnInit, OnDestroy {
   @Input() nodeId!: string;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -26,7 +26,6 @@ import {
   templateUrl: './evaluation.component.html',
   styleUrls: ['./evaluation.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -36,8 +35,8 @@ import {
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    GenericListComponent,
-  ],
+    GenericListComponent
+],
 })
 export class EvaluationComponent implements OnInit {
   methodologyId: string = '';

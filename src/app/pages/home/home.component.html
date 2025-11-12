@@ -8,23 +8,23 @@
         investigación cubanos
       </p>
       <!-- <div class="hero-actions">
-        <button mat-raised-button color="primary" routerLink="/search">
-          <mat-icon>search</mat-icon>
-          Comenzar a Explorar
-        </button>
-        <button mat-stroked-button color="primary" routerLink="/query">
-          <mat-icon>code</mat-icon>
-          Consulta Avanzada
-        </button>
-      </div> -->
-    </div>
-  </section>
+      <button mat-raised-button color="primary" routerLink="/search">
+        <mat-icon>search</mat-icon>
+        Comenzar a Explorar
+      </button>
+      <button mat-stroked-button color="primary" routerLink="/query">
+        <mat-icon>code</mat-icon>
+        Consulta Avanzada
+      </button>
+    </div> -->
+  </div>
+</section>
 
-  <!-- Statistics Section -->
-  <section class="stats-section">
-    <!-- <h2 class="section-title">Estadísticas</h2> -->
+<!-- Statistics Section -->
+<section class="stats-section">
+  <!-- <h2 class="section-title">Estadísticas</h2> -->
 
-    @if (isLoading) {
+  @if (isLoading) {
     <div class="loading-container">
       <mat-progress-spinner
         diameter="40"
@@ -32,90 +32,92 @@
       ></mat-progress-spinner>
       <p>Cargando estadísticas...</p>
     </div>
-    } @else {
+  } @else {
     <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
-      <mat-grid-tile *ngFor="let stat of stats" [colspan]="1" [rowspan]="1">
-        <mat-card
-          class="stat-card"
-          [class]="stat.color"
-          [routerLink]="stat.route"
-        >
-          <mat-card-content>
-            <div class="stat-content">
-              <div class="stat-icon">
-                <app-icon-helper [iconName]="stat.icon"> </app-icon-helper>
+      @for (stat of stats; track stat) {
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-card
+            class="stat-card"
+            [class]="stat.color"
+            [routerLink]="stat.route"
+            >
+            <mat-card-content>
+              <div class="stat-content">
+                <div class="stat-icon">
+                  <app-icon-helper [iconName]="stat.icon"> </app-icon-helper>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-count">{{ formatCount(stat.count) }}</div>
+                  <div class="stat-label">{{ stat.label }}</div>
+                </div>
               </div>
-              <div class="stat-info">
-                <div class="stat-count">{{ formatCount(stat.count) }}</div>
-                <div class="stat-label">{{ stat.label }}</div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+      }
     </mat-grid-list>
-    }
-  </section>
+  }
+</section>
 
-  <!-- Acciones Rápidas -->
-  <!-- <section class="actions-section">
-    <h2 class="section-title">Acciones Rápidas</h2>
-    <div class="actions-grid">
-      <mat-card
-        *ngFor="let action of quickActions"
-        class="action-card"
-        [routerLink]="action.route"
-      >
-        <mat-card-content>
-          <div class="action-content">
-            <mat-icon class="action-icon">{{ action.icon }}</mat-icon>
-            <div class="action-text">
-              <h3>{{ action.label }}</h3>
-              <p>{{ action.description }}</p>
-            </div>
-            <mat-icon class="action-arrow">arrow_forward</mat-icon>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </section> -->
+<!-- Acciones Rápidas -->
+<!-- <section class="actions-section">
+<h2 class="section-title">Acciones Rápidas</h2>
+<div class="actions-grid">
+  <mat-card
+    *ngFor="let action of quickActions"
+    class="action-card"
+    [routerLink]="action.route"
+    >
+    <mat-card-content>
+      <div class="action-content">
+        <mat-icon class="action-icon">{{ action.icon }}</mat-icon>
+        <div class="action-text">
+          <h3>{{ action.label }}</h3>
+          <p>{{ action.description }}</p>
+        </div>
+        <mat-icon class="action-arrow">arrow_forward</mat-icon>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+</section> -->
 
-  <!-- Features Section -->
-  <!-- <section class="features-section">
-    <h2 class="section-title">Explorar Datos de Investigación</h2>
-    <div class="features-grid">
-      <div class="feature-item">
-        <mat-icon>account_tree</mat-icon>
-        <h3>Navegación en Grafo</h3>
-        <p>
-          Navigate through relationships between researchers, organizations, and
-          publications
-        </p>
-      </div>
-      <div class="feature-item">
-        <mat-icon>search</mat-icon>
-        <h3>Búsqueda Avanzada</h3>
-        <p>
-          Buscar across all entities with filters and full-text search
-          capabilities
-        </p>
-      </div>
-      <div class="feature-item">
-        <mat-icon>schema</mat-icon>
-        <h3>Cypher Queries</h3>
-        <p>
-          Ejecute consultas personalizadas en el grafo para explorar relaciones
-          y patrones complejos
-        </p>
-      </div>
-      <div class="feature-item">
-        <mat-icon>download</mat-icon>
-        <h3>Exportar Datos</h3>
-        <p>
-          Exporte resultados de búsqueda y datos de entidades en múltiples
-          formatos para análisis
-        </p>
-      </div>
-    </div>
-  </section> -->
+<!-- Features Section -->
+<!-- <section class="features-section">
+<h2 class="section-title">Explorar Datos de Investigación</h2>
+<div class="features-grid">
+  <div class="feature-item">
+    <mat-icon>account_tree</mat-icon>
+    <h3>Navegación en Grafo</h3>
+    <p>
+      Navigate through relationships between researchers, organizations, and
+      publications
+    </p>
+  </div>
+  <div class="feature-item">
+    <mat-icon>search</mat-icon>
+    <h3>Búsqueda Avanzada</h3>
+    <p>
+      Buscar across all entities with filters and full-text search
+      capabilities
+    </p>
+  </div>
+  <div class="feature-item">
+    <mat-icon>schema</mat-icon>
+    <h3>Cypher Queries</h3>
+    <p>
+      Ejecute consultas personalizadas en el grafo para explorar relaciones
+      y patrones complejos
+    </p>
+  </div>
+  <div class="feature-item">
+    <mat-icon>download</mat-icon>
+    <h3>Exportar Datos</h3>
+    <p>
+      Exporte resultados de búsqueda y datos de entidades en múltiples
+      formatos para análisis
+    </p>
+  </div>
+</div>
+</section> -->
 </div>

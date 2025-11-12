@@ -5,7 +5,7 @@ import { QueryExecutorComponent } from '../../components/query-executor/query-ex
 import { ResultsDisplayComponent } from '../../components/results-display/results-display.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MetadataService } from '../../services/metadata.service';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,14 +16,13 @@ import { AuthService } from '../../services/auth.service'; // Add this import
   templateUrl: './query-page.component.html',
   styleUrls: ['./query-page.component.scss'],
   imports: [
-    CommonModule,
     QueryExecutorComponent,
     ResultsDisplayComponent,
     MatProgressBarModule,
     MatCardModule,
     MatExpansionModule,
-    MatIconModule,
-  ],
+    MatIconModule
+],
 })
 export class QueryPageComponent {
   @ViewChild(QueryExecutorComponent) queryExecutor!: QueryExecutorComponent;

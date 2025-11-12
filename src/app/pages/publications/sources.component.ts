@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import { GenericListComponent } from '../../components/generic-list/generic-list.component';
@@ -13,7 +13,7 @@ import {
   selector: 'app-publications',
   templateUrl: './publications.component.html',
   styleUrls: ['./publications.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  imports: [GenericListComponent, RouterModule],
 })
 export class PublicationsComponent {
   sourceColumns: ListColumn[] = [];

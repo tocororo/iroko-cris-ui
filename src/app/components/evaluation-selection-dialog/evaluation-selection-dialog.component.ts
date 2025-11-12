@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import {
   MatDialogRef,
@@ -25,14 +25,13 @@ export interface EvaluationSelectionDialogData {
   selector: 'app-evaluation-selection-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     MatDialogModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule,
-  ],
+    MatSnackBarModule
+],
   templateUrl: './evaluation-selection-dialog.component.html',
   styleUrls: ['./evaluation-selection-dialog.component.scss'],
 })

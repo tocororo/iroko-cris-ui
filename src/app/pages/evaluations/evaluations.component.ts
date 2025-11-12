@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,14 +16,13 @@ import { MetadataService } from '../../services/metadata.service';
   templateUrl: './evaluations.component.html',
   styleUrls: ['./evaluations.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule,
-  ],
+    MatSnackBarModule
+],
 })
 export class EvaluationsComponent implements OnInit {
   methodologies: EvaluationMethodology[] = [];

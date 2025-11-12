@@ -1,6 +1,6 @@
 // src/app/pages/node-view/node-view.component.ts
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,6 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-node-view',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatButtonModule,
@@ -31,8 +30,8 @@ import { AuthService } from '../../services/auth.service';
     NodeViewerComponent,
     MatTabsModule,
     NodeEvaluationsComponent,
-    MatChipsModule,
-  ],
+    MatChipsModule
+],
   templateUrl: './node-view.component.html',
   styleUrls: ['./node-view.component.scss'],
 })

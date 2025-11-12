@@ -1,6 +1,6 @@
 // src/app/pages/node-edit/node-edit.component.ts
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -19,14 +19,13 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './node-edit.component.html',
   styleUrls: ['./node-edit.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     NodeEditFormComponent,
-    MatIconModule,
-  ],
+    MatIconModule
+],
 })
 export class NodeEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

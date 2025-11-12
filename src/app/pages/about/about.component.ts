@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import {
@@ -15,13 +15,12 @@ import { MatIcon } from '@angular/material/icon';
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     MarkdownViewerComponent,
     MatCardModule,
     MatProgressSpinnerModule,
-    MatIcon,
-  ],
+    MatIcon
+],
 })
 export class AboutComponent implements OnInit {
   isLoading = true;

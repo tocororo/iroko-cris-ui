@@ -12,61 +12,66 @@
       (blur)="onBlur()"
       (keyup.enter)="onSearchSubmit()"
       placeholder="Buscar organizations, people, publications..."
-    />
+      />
 
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="searchTerm"
-      (click)="clearSearch()"
-    >
-      <mat-icon>clear</mat-icon>
-    </button>
+    @if (searchTerm) {
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="clearSearch()"
+        >
+        <mat-icon>clear</mat-icon>
+      </button>
+    }
 
-    <button
-      mat-icon-button
-      matSuffix
-      *ngIf="!searchTerm"
-      (click)="searchInput.focus()"
-    >
-      <mat-icon>search</mat-icon>
-    </button>
+    @if (!searchTerm) {
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="searchInput.focus()"
+        >
+        <mat-icon>search</mat-icon>
+      </button>
+    }
 
-    <mat-progress-spinner
-      *ngIf="isLoading"
-      matSuffix
-      diameter="20"
-      mode="indeterminate"
-    >
-    </mat-progress-spinner>
+    @if (isLoading) {
+      <mat-progress-spinner
+        matSuffix
+        diameter="20"
+        mode="indeterminate"
+        >
+      </mat-progress-spinner>
+    }
   </mat-form-field>
 
-  <div class="search-results" *ngIf="showResults && searchResults.length > 0">
-    <div class="results-header">
-      <span>Resultados de Búsqueda</span>
-      <small>{{ searchResults.length }} found</small>
-    </div>
-
-    <div class="result-list">
-      <div
-        *ngFor="let result of searchResults"
-        class="result-item"
-        (click)="onResultSelect(result)"
-      >
-        <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
-          {{ result.type }}
-        </mat-chip>
-
-        <div class="result-content">
-          <div class="result-title">{{ result.label }}</div>
-          <div *ngIf="result.description" class="result-description">
-            {{ result.description | slice : 0 : 100
-            }}{{ result.description.length > 100 ? "..." : "" }}
+  @if (showResults && searchResults.length > 0) {
+    <div class="search-results">
+      <div class="results-header">
+        <span>Resultados de Búsqueda</span>
+        <small>{{ searchResults.length }} found</small>
+      </div>
+      <div class="result-list">
+        @for (result of searchResults; track result) {
+          <div
+            class="result-item"
+            (click)="onResultSelect(result)"
+            >
+            <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
+              {{ result.type }}
+            </mat-chip>
+            <div class="result-content">
+              <div class="result-title">{{ result.label }}</div>
+              @if (result.description) {
+                <div class="result-description">
+                  {{ result.description | slice : 0 : 100
+                  }}{{ result.description.length > 100 ? "..." : "" }}
+                </div>
+              }
+            </div>
+            <mat-icon class="result-arrow">arrow_forward</mat-icon>
           </div>
-        </div>
-
-        <mat-icon class="result-arrow">arrow_forward</mat-icon>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>

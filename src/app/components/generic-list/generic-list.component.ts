@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ChangeDetectorRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -83,7 +83,6 @@ export interface AdvancedQueryOptions {
   templateUrl: './generic-list.component.html',
   styleUrls: ['./generic-list.component.scss'],
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -100,8 +99,8 @@ export interface AdvancedQueryOptions {
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    RelationshipFilterComponent,
-  ],
+    RelationshipFilterComponent
+],
 })
 export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() entityType!: string;

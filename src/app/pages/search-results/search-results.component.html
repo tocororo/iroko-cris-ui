@@ -4,92 +4,104 @@
     <!-- Buscar Header -->
     <div class="search-header mb-6">
       <h1 class="text-2xl font-bold mb-2">Resultados de Búsqueda</h1>
-      <p class="text-gray-600" *ngIf="searchTerm">
-        Mostrando resultados de: <strong>"{{ searchTerm }}"</strong>
-      </p>
+      @if (searchTerm) {
+        <p class="text-gray-600">
+          Mostrando resultados de: <strong>"{{ searchTerm }}"</strong>
+        </p>
+      }
     </div>
 
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-progress-spinner
-        diameter="40"
-        mode="indeterminate"
-      ></mat-progress-spinner>
-      <p class="mt-4">Searching...</p>
-    </div>
+    @if (isLoading) {
+      <div class="loading-container">
+        <mat-progress-spinner
+          diameter="40"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <p class="mt-4">Searching...</p>
+      </div>
+    }
 
     <!-- No Results -->
-    <div
-      *ngIf="!isLoading && hasSearched && results.length === 0"
-      class="no-results"
-    >
-      <mat-icon class="no-results-icon">search_off</mat-icon>
-      <h2>No se encontraron resultados</h2>
-      <p>
-        Intente ajustar sus términos de búsqueda o realice una búsqueda
-        diferente.
-      </p>
-    </div>
+    @if (!isLoading && hasSearched && results.length === 0) {
+      <div
+        class="no-results"
+        >
+        <mat-icon class="no-results-icon">search_off</mat-icon>
+        <h2>No se encontraron resultados</h2>
+        <p>
+          Intente ajustar sus términos de búsqueda o realice una búsqueda
+          diferente.
+        </p>
+      </div>
+    }
 
     <!-- Results -->
-    <div *ngIf="!isLoading && results.length > 0" class="results-container">
-      <!-- Results Summary -->
-      <div class="results-summary mb-6">
-        <p class="text-sm text-gray-600">
-          Found {{ results.length }} result{{ results.length === 1 ? "" : "s" }}
-          <span *ngIf="getUniqueTypes().length > 0">
-            across {{ getUniqueTypes().length }} type{{
-              getUniqueTypes().length === 1 ? "" : "s"
-            }}
-          </span>
-        </p>
-
-        <!-- Type Filters -->
-        <div class="type-filters mt-2">
-          <mat-chip
-            *ngFor="let type of getUniqueTypes()"
-            [class]="type.toLowerCase()"
-            class="mr-2 mb-2"
-          >
-            {{ type }} ({{ getResultCountByType(type) }})
-          </mat-chip>
+    @if (!isLoading && results.length > 0) {
+      <div class="results-container">
+        <!-- Results Summary -->
+        <div class="results-summary mb-6">
+          <p class="text-sm text-gray-600">
+            Found {{ results.length }} result{{ results.length === 1 ? "" : "s" }}
+            @if (getUniqueTypes().length > 0) {
+              <span>
+                across {{ getUniqueTypes().length }} type{{
+                getUniqueTypes().length === 1 ? "" : "s"
+                }}
+              </span>
+            }
+          </p>
+          <!-- Type Filters -->
+          <div class="type-filters mt-2">
+            @for (type of getUniqueTypes(); track type) {
+              <mat-chip
+                [class]="type.toLowerCase()"
+                class="mr-2 mb-2"
+                >
+                {{ type }} ({{ getResultCountByType(type) }})
+              </mat-chip>
+            }
+          </div>
+        </div>
+        <!-- Results Lista -->
+        <div class="results-grid">
+          @for (result of results; track result) {
+            <mat-card class="result-card">
+              <mat-card-header>
+                <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
+                  {{ result.type }}
+                </mat-chip>
+                <mat-card-title class="result-title">
+                  {{ result.label }}
+                </mat-card-title>
+                @if (result.score) {
+                  <mat-card-subtitle class="score">
+                    Relevancia: {{ (result.score * 100).toFixed(1) }}%
+                  </mat-card-subtitle>
+                }
+              </mat-card-header>
+              @if (result.description) {
+                <mat-card-content>
+                  <p class="result-description">
+                    {{ result.description | slice : 0 : 200
+                    }}{{ result.description.length > 200 ? "..." : "" }}
+                  </p>
+                </mat-card-content>
+              }
+              <mat-card-actions align="end">
+                <button
+                  mat-button
+                  color="primary"
+                  (click)="navigateToResult(result)"
+                  >
+                  Ver Detalles
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          }
         </div>
       </div>
-
-      <!-- Results Lista -->
-      <div class="results-grid">
-        <mat-card *ngFor="let result of results" class="result-card">
-          <mat-card-header>
-            <mat-chip class="type-chip" [class]="result.type.toLowerCase()">
-              {{ result.type }}
-            </mat-chip>
-            <mat-card-title class="result-title">
-              {{ result.label }}
-            </mat-card-title>
-            <mat-card-subtitle *ngIf="result.score" class="score">
-              Relevancia: {{ (result.score * 100).toFixed(1) }}%
-            </mat-card-subtitle>
-          </mat-card-header>
-
-          <mat-card-content *ngIf="result.description">
-            <p class="result-description">
-              {{ result.description | slice : 0 : 200
-              }}{{ result.description.length > 200 ? "..." : "" }}
-            </p>
-          </mat-card-content>
-
-          <mat-card-actions align="end">
-            <button
-              mat-button
-              color="primary"
-              (click)="navigateToResult(result)"
-            >
-              Ver Detalles
-              <mat-icon>arrow_forward</mat-icon>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </div>
+    }
   </div>
 </div>

@@ -5,7 +5,7 @@ import {
   EventEmitter,
   OnDestroy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { RelationshipGroupComponent } from '../relationship-group/relationship-group.component';
 import { RelationshipGroup } from '../../api/models/relationship.models';
@@ -15,7 +15,7 @@ import { LabelsService } from '../../services/labels.service';
   selector: 'app-node-relationships',
   templateUrl: './node-relationships.component.html',
   styleUrls: ['./node-relationships.component.scss'],
-  imports: [CommonModule, MatIconModule, RelationshipGroupComponent],
+  imports: [MatIconModule, RelationshipGroupComponent],
 })
 export class NodeRelationshipsComponent implements OnDestroy {
   @Input() relationshipGroups: RelationshipGroup[] = [];

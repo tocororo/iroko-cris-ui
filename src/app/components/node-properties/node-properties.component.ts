@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-node-properties',
   templateUrl: './node-properties.component.html',
   styleUrls: ['./node-properties.component.scss'],
-  imports: [CommonModule, NgxJsonViewerModule],
+  imports: [NgxJsonViewerModule],
 })
 export class NodePropertiesComponent {
   @Input() node: any;

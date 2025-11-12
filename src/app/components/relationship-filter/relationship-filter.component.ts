@@ -8,7 +8,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormArray,
   FormBuilder,
@@ -55,7 +55,6 @@ interface AttributeControls {
   styleUrls: ['./relationship-filter.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -67,8 +66,8 @@ interface AttributeControls {
     MatSelectModule,
     MatTooltipModule,
     MatDatepickerModule,
-    MatNativeDateModule,
-  ],
+    MatNativeDateModule
+],
 })
 export class RelationshipFilterComponent implements OnInit, OnChanges {
   @Input() filter!: ListFilter;

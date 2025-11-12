@@ -7,7 +7,7 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
   FormGroup,
@@ -48,7 +48,6 @@ interface RelationshipProperty {
   templateUrl: './node-edit-form.component.html',
   styleUrls: ['./node-edit-form.component.scss'],
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -60,8 +59,8 @@ interface RelationshipProperty {
     MatExpansionModule,
     MatSelectModule,
     MatChipsModule,
-    MatAutocompleteModule,
-  ],
+    MatAutocompleteModule
+],
 })
 export class NodeEditFormComponent implements OnInit {
   @Input() node: any;

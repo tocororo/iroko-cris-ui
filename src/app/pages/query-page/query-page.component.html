@@ -12,161 +12,162 @@
 
   <!-- Main Content -->
   @if (!hasQueryAccess) {
-  <div class="access-denied-message">
-    <mat-card>
-      <mat-card-content>
-        <div class="error-content">
-          <mat-icon color="warn">block</mat-icon>
-          <h3>Acceso denegado</h3>
-          <p>
-            {{
+    <div class="access-denied-message">
+      <mat-card>
+        <mat-card-content>
+          <div class="error-content">
+            <mat-icon color="warn">block</mat-icon>
+            <h3>Acceso denegado</h3>
+            <p>
+              {{
               error?.message ||
-                "No tienes permiso para acceder a esta funcionalidad."
-            }}
-          </p>
-          <p class="subtext">
-            Por favor, contacta a tu administrador si crees que esto es un
-            error.
-          </p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+              "No tienes permiso para acceder a esta funcionalidad."
+              }}
+            </p>
+            <p class="subtext">
+              Por favor, contacta a tu administrador si crees que esto es un
+              error.
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   } @else {
-  <div class="query-layout">
-    <!-- Query Input Section -->
-    <div class="query-input-section">
-      <mat-card class="query-card">
-        <mat-card-header>
-          <mat-card-title>
-            <mat-icon>code</mat-icon>
-            Editor de Consultas
-          </mat-card-title>
-          <mat-card-subtitle
-            >Escriba y ejecute consultas Cypher</mat-card-subtitle
-          >
-        </mat-card-header>
-        <mat-card-content>
-          <app-query-executor
-            (queryExecuted)="onQueryExecuted($event)"
-            #queryExecutor
-          >
-          </app-query-executor>
-        </mat-card-content>
-      </mat-card>
+    <div class="query-layout">
+      <!-- Query Input Section -->
+      <div class="query-input-section">
+        <mat-card class="query-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>code</mat-icon>
+              Editor de Consultas
+            </mat-card-title>
+            <mat-card-subtitle
+              >Escriba y ejecute consultas Cypher</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <app-query-executor
+                (queryExecuted)="onQueryExecuted($event)"
+                #queryExecutor
+                >
+              </app-query-executor>
+            </mat-card-content>
+          </mat-card>
 
-      <!-- Ejemplos Rápidos -->
-      <mat-expansion-panel class="examples-panel">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon>playlist_add_check</mat-icon>
-            Ejemplos Rápidos
-          </mat-panel-title>
-          <mat-panel-description>
-            Consultas de ejemplo para comenzar
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+          <!-- Ejemplos Rápidos -->
+          <mat-expansion-panel class="examples-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>playlist_add_check</mat-icon>
+                Ejemplos Rápidos
+              </mat-panel-title>
+              <mat-panel-description>
+                Consultas de ejemplo para comenzar
+              </mat-panel-description>
+            </mat-expansion-panel-header>
 
-        <div class="examples-grid">
-          <div
-            *ngFor="let example of quickExamples"
-            class="example-item"
-            (click)="loadExample(example.id)"
-          >
-            <mat-icon>{{ example.icon }}</mat-icon>
-            <div class="example-content">
-              <strong>{{ example.title }}</strong>
-              <span>{{ example.description }}</span>
+            <div class="examples-grid">
+              @for (example of quickExamples; track example) {
+                <div
+                  class="example-item"
+                  (click)="loadExample(example.id)"
+                  >
+                  <mat-icon>{{ example.icon }}</mat-icon>
+                  <div class="example-content">
+                    <strong>{{ example.title }}</strong>
+                    <span>{{ example.description }}</span>
+                  </div>
+                </div>
+              }
             </div>
-          </div>
+          </mat-expansion-panel>
         </div>
-      </mat-expansion-panel>
-    </div>
 
-    <!-- Results Section -->
-    <div class="results-section" [class.has-results]="hasResults || error">
-      <!-- Loading State -->
-      @if (isLoading) {
-      <div class="loading-state">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <div class="loading-content">
-          <mat-icon>query_stats</mat-icon>
-          <h3>Executing Query</h3>
-          <p>Espere mientras procesamos su consulta...</p>
+        <!-- Results Section -->
+        <div class="results-section" [class.has-results]="hasResults || error">
+          <!-- Loading State -->
+          @if (isLoading) {
+            <div class="loading-state">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <div class="loading-content">
+                <mat-icon>query_stats</mat-icon>
+                <h3>Executing Query</h3>
+                <p>Espere mientras procesamos su consulta...</p>
+              </div>
+            </div>
+          }
+
+          <!-- Results -->
+          @if (hasResults && !isLoading) {
+            <div class="results-header">
+              <div class="results-info">
+                <h2>
+                  <mat-icon>check_circle</mat-icon>
+                  Resultados de la Consulta
+                </h2>
+                <div class="results-stats">
+                  <span class="stat-item">
+                    <mat-icon>schedule</mat-icon>
+                    {{ queryTime?.toFixed(0) }} ms
+                  </span>
+                  <span class="stat-item">
+                    <mat-icon>list_alt</mat-icon>
+                    {{ resultCount }} result{{ resultCount !== 1 ? "s" : "" }}
+                  </span>
+                </div>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="clearResults()"
+                  [disabled]="!hasResults && !error"
+                  class="clear-btn"
+                  >
+                  <mat-icon>clear_all</mat-icon>
+                  Limpiar Resultados
+                </button>
+              </div>
+            </div>
+
+            <mat-card class="results-card">
+              <mat-card-content>
+                <app-results-display [queryResult]="queryResult" [error]="error">
+                </app-results-display>
+              </mat-card-content>
+            </mat-card>
+          }
+
+          <!-- Error State -->
+          @if (error && !isLoading) {
+            <div class="error-state">
+              <div class="error-header">
+                <mat-icon color="warn">error_outline</mat-icon>
+                <h2>Error en la Consulta</h2>
+              </div>
+              <mat-card class="error-card">
+                <mat-card-content>
+                  <app-results-display [queryResult]="queryResult" [error]="error">
+                  </app-results-display>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          }
+
+          <!-- Empty State -->
+          @if (!hasResults && !error && !isLoading) {
+            <div class="empty-state">
+              <div class="empty-content">
+                <mat-icon>code_off</mat-icon>
+                <h3>No se ejecutó ninguna consulta</h3>
+                <p>
+                  Write a Cypher query in the editor and click "Ejecutar Consulta" to
+                  see results here.
+                </p>
+                <p class="hint">¡Pruebe uno de los ejemplos rápidos para comenzar!</p>
+              </div>
+            </div>
+          }
         </div>
       </div>
-      }
-
-      <!-- Results -->
-      @if (hasResults && !isLoading) {
-      <div class="results-header">
-        <div class="results-info">
-          <h2>
-            <mat-icon>check_circle</mat-icon>
-            Resultados de la Consulta
-          </h2>
-          <div class="results-stats">
-            <span class="stat-item">
-              <mat-icon>schedule</mat-icon>
-              {{ queryTime?.toFixed(0) }} ms
-            </span>
-            <span class="stat-item">
-              <mat-icon>list_alt</mat-icon>
-              {{ resultCount }} result{{ resultCount !== 1 ? "s" : "" }}
-            </span>
-          </div>
-          <button
-            mat-raised-button
-            color="warn"
-            (click)="clearResults()"
-            [disabled]="!hasResults && !error"
-            class="clear-btn"
-          >
-            <mat-icon>clear_all</mat-icon>
-            Limpiar Resultados
-          </button>
-        </div>
-      </div>
-
-      <mat-card class="results-card">
-        <mat-card-content>
-          <app-results-display [queryResult]="queryResult" [error]="error">
-          </app-results-display>
-        </mat-card-content>
-      </mat-card>
-      }
-
-      <!-- Error State -->
-      @if (error && !isLoading) {
-      <div class="error-state">
-        <div class="error-header">
-          <mat-icon color="warn">error_outline</mat-icon>
-          <h2>Error en la Consulta</h2>
-        </div>
-        <mat-card class="error-card">
-          <mat-card-content>
-            <app-results-display [queryResult]="queryResult" [error]="error">
-            </app-results-display>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      }
-
-      <!-- Empty State -->
-      @if (!hasResults && !error && !isLoading) {
-      <div class="empty-state">
-        <div class="empty-content">
-          <mat-icon>code_off</mat-icon>
-          <h3>No se ejecutó ninguna consulta</h3>
-          <p>
-            Write a Cypher query in the editor and click "Ejecutar Consulta" to
-            see results here.
-          </p>
-          <p class="hint">¡Pruebe uno de los ejemplos rápidos para comenzar!</p>
-        </div>
-      </div>
-      }
-    </div>
+    }
   </div>
-  }
-</div>

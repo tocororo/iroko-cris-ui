@@ -8,14 +8,16 @@
       (click)="onExport()"
       [disabled]="isExporting || group.relationships.length === 0"
       class="export-button"
-    >
-      <mat-icon *ngIf="!isExporting">download</mat-icon>
+      >
+      @if (!isExporting) {
+        <mat-icon>download</mat-icon>
+      }
       @if (isExporting){
-      <mat-progress-spinner
-        diameter="16"
-        mode="indeterminate"
-        class="export-spinner"
-      ></mat-progress-spinner>
+        <mat-progress-spinner
+          diameter="16"
+          mode="indeterminate"
+          class="export-spinner"
+        ></mat-progress-spinner>
       }
       {{ isExporting ? "Exportando..." : "Exportar CSV" }}
     </button>
@@ -41,12 +43,12 @@
 
   <!-- Pagination -->
   @if (shouldShowPagination()) {
-  <app-relationship-pagination
-    [currentPage]="group.currentPage"
-    [pageSize]="group.pageSize"
-    [totalItems]="group.totalCount"
-    [isLoading]="group.isLoading"
-    (pageChange)="onPageChange($event)"
-  ></app-relationship-pagination>
+    <app-relationship-pagination
+      [currentPage]="group.currentPage"
+      [pageSize]="group.pageSize"
+      [totalItems]="group.totalCount"
+      [isLoading]="group.isLoading"
+      (pageChange)="onPageChange($event)"
+    ></app-relationship-pagination>
   }
 </div>

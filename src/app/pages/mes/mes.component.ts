@@ -1,6 +1,6 @@
 // src/app/pages/mes/mes.component.ts
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import {
@@ -17,7 +17,7 @@ import {
   selector: 'app-mes',
   templateUrl: './mes.component.html',
   styleUrls: ['./mes.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  imports: [GenericListComponent, RouterModule],
 })
 export class MesComponent {
   mesColumns: ListColumn[] = [];

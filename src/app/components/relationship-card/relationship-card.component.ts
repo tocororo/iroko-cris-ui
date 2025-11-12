@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -14,14 +14,13 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './relationship-card.component.html',
   styleUrls: ['./relationship-card.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatChipsModule,
     MatButtonModule,
     MatIconModule,
-    NgxJsonViewerModule,
-  ],
+    NgxJsonViewerModule
+],
 })
 export class RelationshipCardComponent {
   @Input() node: any;

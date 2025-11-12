@@ -7,25 +7,25 @@
   <mat-card>
     <mat-card-content>
       <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-        <mat-tab
-          *ngFor="let termType of termTypes; let i = index"
-          [label]="termType.label"
-        >
-          <div class="tab-content">
-            <div class="tab-description">
-              <p>{{ termType.description }}</p>
-            </div>
-
-            <app-generic-list
-              [entityType]="termType.type"
-              [columns]="termColumns"
-              [pageSize]="10"
-              [detaillsText]="'Ver detalles'"
-              (nodeSelected)="onNodeSelected($event)"
+        @for (termType of termTypes; track termType; let i = $index) {
+          <mat-tab
+            [label]="termType.label"
             >
-            </app-generic-list>
-          </div>
-        </mat-tab>
+            <div class="tab-content">
+              <div class="tab-description">
+                <p>{{ termType.description }}</p>
+              </div>
+              <app-generic-list
+                [entityType]="termType.type"
+                [columns]="termColumns"
+                [pageSize]="10"
+                [detaillsText]="'Ver detalles'"
+                (nodeSelected)="onNodeSelected($event)"
+                >
+              </app-generic-list>
+            </div>
+          </mat-tab>
+        }
       </mat-tab-group>
     </mat-card-content>
   </mat-card>

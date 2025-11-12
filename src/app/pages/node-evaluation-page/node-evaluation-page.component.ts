@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,6 @@ import { NodeEvaluationViewerComponent } from '../../components/node-evaluation-
   selector: 'app-node-evaluation-page',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatButtonModule,
@@ -31,8 +30,8 @@ import { NodeEvaluationViewerComponent } from '../../components/node-evaluation-
     MatProgressSpinnerModule,
     MatSnackBarModule,
     NodeEvaluationFormComponent,
-    NodeEvaluationViewerComponent,
-  ],
+    NodeEvaluationViewerComponent
+],
   templateUrl: './node-evaluation-page.component.html',
   styleUrls: ['./node-evaluation-page.component.scss'],
 })

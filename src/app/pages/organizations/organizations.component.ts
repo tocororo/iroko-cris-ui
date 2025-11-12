@@ -1,6 +1,6 @@
 // src/app/pages/organizations/organizations.component.ts
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import { GenericListComponent } from '../../components/generic-list/generic-list.component';
@@ -14,7 +14,7 @@ import {
   selector: 'app-organizations',
   templateUrl: './organizations.component.html',
   styleUrls: ['./organizations.component.scss'],
-  imports: [CommonModule, GenericListComponent, RouterModule],
+  imports: [GenericListComponent, RouterModule],
 })
 export class OrganizationsComponent {
   organizationColumns: ListColumn[] = [];

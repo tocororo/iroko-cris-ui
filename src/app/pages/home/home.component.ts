@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import { CypherApiService } from '../../services/cypher-api.service';
@@ -16,15 +16,14 @@ import { forkJoin } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   imports: [
-    CommonModule,
     RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    IconHelperComponent,
-  ],
+    IconHelperComponent
+],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   stats = [

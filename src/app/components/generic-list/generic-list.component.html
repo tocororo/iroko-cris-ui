@@ -7,7 +7,7 @@
       [expanded]="showFilters"
       (opened)="showFilters = true"
       (closed)="showFilters = false"
-    >
+      >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon>filter_list</mat-icon>
@@ -15,15 +15,15 @@
           <mat-chip class="active-filter-chip">
             {{ activeFilterCount }}
           </mat-chip>
-          }
-        </mat-panel-title>
-        <mat-panel-description>
-          @if (hasActiveFilters()) {
+        }
+      </mat-panel-title>
+      <mat-panel-description>
+        @if (hasActiveFilters()) {
           <span class="active-filters-text"
             >{{ activeFilterCount }} filtro(s) activo(s)</span
-          >
+            >
           } @else {
-          <span>Configurar filtros de búsqueda</span>
+            <span>Configurar filtros de búsqueda</span>
           }
         </mat-panel-description>
       </mat-expansion-panel-header>
@@ -31,170 +31,170 @@
       <div class="filters-panel-content">
         <div class="filters-header-actions">
           @if (hasActiveFilters()) {
-          <button
-            mat-button
-            color="warn"
-            (click)="clearFilters()"
-            class="clear-filters-btn"
-          >
-            <mat-icon>clear</mat-icon>
-            Limpiar Valores
-          </button>
+            <button
+              mat-button
+              color="warn"
+              (click)="clearFilters()"
+              class="clear-filters-btn"
+              >
+              <mat-icon>clear</mat-icon>
+              Limpiar Valores
+            </button>
           }
 
           <button
             mat-button
             (click)="openFilterDialog()"
             class="manage-filters-btn"
-          >
+            >
             <mat-icon>tune</mat-icon>
             Gestionar Filtros
           </button>
         </div>
 
         @if (filters && filters.length > 0) {
-        <div class="filters-content">
-          <form [formGroup]="filterForm" class="filters-form">
-            <div class="filters-grid">
-              @for (filter of filters; track filter.name) {
-              <div class="filter-field-with-remove">
-                <!-- Filter Component with Remove Button -->
-                <div class="filter-control-wrapper">
-                  <!-- Text Filter -->
-                  @if (filter.type === 'text') {
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ filter.label }}</mat-label>
-                    <input
-                      title="text"
-                      matInput
-                      [formControlName]="filter.name"
-                      [placeholder]="filter.placeholder || filter.label"
-                    />
-                  </mat-form-field>
-                  }
-
-                  <!-- Select Filter -->
-                  @if (filter.type === 'select') {
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ filter.label }}</mat-label>
-                    <mat-select [formControlName]="filter.name">
-                      <mat-option value="">Todos</mat-option>
-                      @for (option of filter.options; track option) {
-                      <mat-option [value]="option">{{ option }}</mat-option>
+          <div class="filters-content">
+            <form [formGroup]="filterForm" class="filters-form">
+              <div class="filters-grid">
+                @for (filter of filters; track filter.name) {
+                  <div class="filter-field-with-remove">
+                    <!-- Filter Component with Remove Button -->
+                    <div class="filter-control-wrapper">
+                      <!-- Text Filter -->
+                      @if (filter.type === 'text') {
+                        <mat-form-field appearance="outline" class="full-width">
+                          <mat-label>{{ filter.label }}</mat-label>
+                          <input
+                            title="text"
+                            matInput
+                            [formControlName]="filter.name"
+                            [placeholder]="filter.placeholder || filter.label"
+                            />
+                        </mat-form-field>
                       }
-                    </mat-select>
-                  </mat-form-field>
-                  }
 
-                  <!-- Multi-Select Filter -->
-                  @if (filter.type === 'multiselect') {
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ filter.label }}</mat-label>
-                    <mat-select [formControlName]="filter.name" multiple>
-                      @for (option of filter.options; track option) {
-                      <mat-option [value]="option">{{ option }}</mat-option>
+                      <!-- Select Filter -->
+                      @if (filter.type === 'select') {
+                        <mat-form-field appearance="outline" class="full-width">
+                          <mat-label>{{ filter.label }}</mat-label>
+                          <mat-select [formControlName]="filter.name">
+                            <mat-option value="">Todos</mat-option>
+                            @for (option of filter.options; track option) {
+                              <mat-option [value]="option">{{ option }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
                       }
-                    </mat-select>
-                  </mat-form-field>
-                  }
 
-                  <!-- Date Filter -->
-                  @if (filter.type === 'date') {
-                  <mat-form-field appearance="outline" class="full-width">
-                    <input
-                      matInput
-                      title="date"
-                      [formControlName]="filter.name"
-                      [matDatepicker]="picker"
-                      [placeholder]="filter.placeholder || 'Seleccionar fecha'"
-                    />
-                    <mat-datepicker-toggle
-                      matSuffix
-                      [for]="picker"
-                    ></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                  }
+                      <!-- Multi-Select Filter -->
+                      @if (filter.type === 'multiselect') {
+                        <mat-form-field appearance="outline" class="full-width">
+                          <mat-label>{{ filter.label }}</mat-label>
+                          <mat-select [formControlName]="filter.name" multiple>
+                            @for (option of filter.options; track option) {
+                              <mat-option [value]="option">{{ option }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
 
-                  <!-- Boolean Filter -->
-                  @if (filter.type === 'boolean') {
-                  <div class="boolean-filter-wrapper">
-                    <mat-checkbox
-                      [formControlName]="filter.name"
-                      color="primary"
-                    >
-                      {{ filter.label }}
-                    </mat-checkbox>
-                  </div>
-                  }
+                      <!-- Date Filter -->
+                      @if (filter.type === 'date') {
+                        <mat-form-field appearance="outline" class="full-width">
+                          <input
+                            matInput
+                            title="date"
+                            [formControlName]="filter.name"
+                            [matDatepicker]="picker"
+                            [placeholder]="filter.placeholder || 'Seleccionar fecha'"
+                            />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      }
 
-                  <!-- Relationship Filter -->
-                  @if (filter.type === 'relationship') {
-                  <app-relationship-filter
-                    [filter]="filter"
+                      <!-- Boolean Filter -->
+                      @if (filter.type === 'boolean') {
+                        <div class="boolean-filter-wrapper">
+                          <mat-checkbox
+                            [formControlName]="filter.name"
+                            color="primary"
+                            >
+                            {{ filter.label }}
+                          </mat-checkbox>
+                        </div>
+                      }
+
+                      <!-- Relationship Filter -->
+                      @if (filter.type === 'relationship') {
+                        <app-relationship-filter
+                          [filter]="filter"
                     [initialValue]="
                       getRelationshipFilterInitialValue(filter.name)
                     "
                     (selectionChange)="
                       onRelationshipFilterChange(filter.name, $event)
                     "
-                  >
-                  </app-relationship-filter>
-                  }
+                          >
+                        </app-relationship-filter>
+                      }
 
-                  <!-- Remove Filter Button -->
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    class="remove-filter-btn"
-                    (click)="removeFilter(filter.name)"
-                    matTooltip="Eliminar filtro"
-                  >
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
+                      <!-- Remove Filter Button -->
+                      <button
+                        mat-icon-button
+                        color="warn"
+                        class="remove-filter-btn"
+                        (click)="removeFilter(filter.name)"
+                        matTooltip="Eliminar filtro"
+                        >
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                }
               </div>
-              }
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
         } @else {
-        <div class="no-filters-content">
-          <mat-icon>filter_alt_off</mat-icon>
-          <h3>No hay filtros activos</h3>
-          <p>Agrega filtros para refinar tu búsqueda</p>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="openFilterDialog()"
-          >
-            <mat-icon>tune</mat-icon>
-            Gestionar Filtros
-          </button>
-        </div>
+          <div class="no-filters-content">
+            <mat-icon>filter_alt_off</mat-icon>
+            <h3>No hay filtros activos</h3>
+            <p>Agrega filtros para refinar tu búsqueda</p>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="openFilterDialog()"
+              >
+              <mat-icon>tune</mat-icon>
+              Gestionar Filtros
+            </button>
+          </div>
         }
       </div>
     </mat-expansion-panel>
 
     <!-- Advanced Query Accordion -->
     @if (isLoading) {
-    <mat-expansion-panel
-      [expanded]="showAdvancedQuery"
-      (opened)="showAdvancedQuery = true"
-      (closed)="showAdvancedQuery = false"
-    >
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon>code</mat-icon>
-          Consulta Avanzada @if (hasAdvancedQuery()) {
-          <mat-chip class="active-chip">Activa</mat-chip>
+      <mat-expansion-panel
+        [expanded]="showAdvancedQuery"
+        (opened)="showAdvancedQuery = true"
+        (closed)="showAdvancedQuery = false"
+        >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>code</mat-icon>
+            Consulta Avanzada @if (hasAdvancedQuery()) {
+            <mat-chip class="active-chip">Activa</mat-chip>
           }
         </mat-panel-title>
         <mat-panel-description>
           @if (hasAdvancedQuery()) {
-          <span>Consulta personalizada activa</span>
+            <span>Consulta personalizada activa</span>
           } @else {
-          <span>Configurar consulta Cypher personalizada</span>
+            <span>Configurar consulta Cypher personalizada</span>
           }
         </mat-panel-description>
       </mat-expansion-panel-header>
@@ -227,30 +227,30 @@
           </div>
 
           @for (param of customParameters; track param; let i = $index) {
-          <div class="parameter-row">
-            <mat-form-field appearance="outline">
-              <mat-label>Key</mat-label>
-              <input
-                matInput
-                [(ngModel)]="param.key"
-                placeholder="nombreParametro"
-              />
-            </mat-form-field>
+            <div class="parameter-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Key</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="param.key"
+                  placeholder="nombreParametro"
+                  />
+              </mat-form-field>
 
-            <mat-form-field appearance="outline">
-              <mat-label>Valor</mat-label>
-              <input matInput [(ngModel)]="param.value" placeholder="valor" />
-            </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Valor</mat-label>
+                <input matInput [(ngModel)]="param.value" placeholder="valor" />
+              </mat-form-field>
 
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="removeCustomParameter(i)"
-              class="remove-param-btn"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="removeCustomParameter(i)"
+                class="remove-param-btn"
+                >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           }
         </div>
 
@@ -264,33 +264,33 @@
             mat-raised-button
             color="primary"
             (click)="applyAdvancedQuery()"
-          >
+            >
             <mat-icon>play_arrow</mat-icon>
             Aplicar Consulta
           </button>
         </div>
       </div>
     </mat-expansion-panel>
-    }
-  </mat-accordion>
+  }
+</mat-accordion>
 
-  <!-- Pagination Info -->
-  <div class="pagination-info">
-    <div class="controls-row">
-      <div appearance="outline" class="search-field">
-        <span>{{ paginationInfoText }}</span>
-      </div>
+<!-- Pagination Info -->
+<div class="pagination-info">
+  <div class="controls-row">
+    <div appearance="outline" class="search-field">
+      <span>{{ paginationInfoText }}</span>
+    </div>
 
-      <!-- Sort Controls -->
-      <div class="sort-controls">
-        <mat-form-field appearance="outline" class="sort-field">
-          <mat-label>Ordenar por</mat-label>
-          <mat-select
-            [formControl]="sortControl"
-            (selectionChange)="onSortChange()"
+    <!-- Sort Controls -->
+    <div class="sort-controls">
+      <mat-form-field appearance="outline" class="sort-field">
+        <mat-label>Ordenar por</mat-label>
+        <mat-select
+          [formControl]="sortControl"
+          (selectionChange)="onSortChange()"
           >
-            <mat-option value="none">Ordenar por...</mat-option>
-            @for (column of columns; track column.name) { @if (column.sortable
+          <mat-option value="none">Ordenar por...</mat-option>
+          @for (column of columns; track column.name) { @if (column.sortable
             !== false) {
             <mat-option [value]="column.name">
               Ordenar por {{ column.label }}
@@ -300,14 +300,14 @@
         </mat-form-field>
 
         @if (showSortOrder) {
-        <button
-          mat-icon-button
-          class="sort-order-btn"
-          (click)="toggleSortOrder()"
-          [matTooltip]="getSortTooltip()"
-        >
-          <mat-icon>{{ getSortIcon() }}</mat-icon>
-        </button>
+          <button
+            mat-icon-button
+            class="sort-order-btn"
+            (click)="toggleSortOrder()"
+            [matTooltip]="getSortTooltip()"
+            >
+            <mat-icon>{{ getSortIcon() }}</mat-icon>
+          </button>
         }
       </div>
 
@@ -319,14 +319,16 @@
           (click)="exportCurrentView()"
           [disabled]="isExporting || totalCount === 0"
           class="export-btn"
-        >
+          >
           <mat-icon>download</mat-icon>
           {{ isExporting ? "Exportando..." : "Exportar CSV" }}
         </button>
 
-        <div class="export-info" *ngIf="totalCount > 0">
-          <small>Exportar los {{ totalCount }} elementos</small>
-        </div>
+        @if (totalCount > 0) {
+          <div class="export-info">
+            <small>Exportar los {{ totalCount }} elementos</small>
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -335,129 +337,129 @@
 
   <!-- Loading State -->
   @if (isLoading) {
-  <div class="loading-container">
-    <mat-progress-spinner
-      diameter="40"
-      mode="indeterminate"
-    ></mat-progress-spinner>
-    <p>Cargando...</p>
-  </div>
+    <div class="loading-container">
+      <mat-progress-spinner
+        diameter="40"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <p>Cargando...</p>
+    </div>
   }
 
   <!-- Error State -->
   @if (hasError && !isLoading) {
-  <mat-card class="error-card">
-    <mat-card-content class="error-content">
-      <mat-icon color="warn">error_outline</mat-icon>
-      <span>{{ errorMessage }}</span>
-      <button mat-button color="primary" (click)="loadPage(currentPage)">
-        <mat-icon>refresh</mat-icon>
-        Reintentar
-      </button>
-    </mat-card-content>
-  </mat-card>
+    <mat-card class="error-card">
+      <mat-card-content class="error-content">
+        <mat-icon color="warn">error_outline</mat-icon>
+        <span>{{ errorMessage }}</span>
+        <button mat-button color="primary" (click)="loadPage(currentPage)">
+          <mat-icon>refresh</mat-icon>
+          Reintentar
+        </button>
+      </mat-card-content>
+    </mat-card>
   }
 
   <!-- Results -->
   @if (!isLoading && !hasError) {
-  <div class="results-container">
-    <!-- No Results -->
-    @if (nodes.length === 0) {
-    <mat-card class="no-results-card">
-      <mat-card-content class="no-results-content">
-        <mat-icon>search_off</mat-icon>
-        <h3>No hay datos disponibles</h3>
-        <p>
-          No se encontraron {{ label.toLowerCase() || "elementos" }} que
-          coincidan con sus criterios.
-        </p>
-      </mat-card-content>
-    </mat-card>
-    }
+    <div class="results-container">
+      <!-- No Results -->
+      @if (nodes.length === 0) {
+        <mat-card class="no-results-card">
+          <mat-card-content class="no-results-content">
+            <mat-icon>search_off</mat-icon>
+            <h3>No hay datos disponibles</h3>
+            <p>
+              No se encontraron {{ label.toLowerCase() || "elementos" }} que
+              coincidan con sus criterios.
+            </p>
+          </mat-card-content>
+        </mat-card>
+      }
 
-    <!-- Node Cards -->
-    @if (nodes.length > 0) {
-    <div class="cards-grid">
-      @for (node of nodes; track node.iroko_uuid || $index) {
-      <mat-card class="node-card" (click)="onNodeSelect(node)">
-        <mat-card-content>
-          <!-- Node Header -->
-          <div class="node-header">
-            <h3 class="node-title">
-              {{ getNodeDisplayName(node) }}
-            </h3>
-            <mat-chip
-              class="entity-type-chip"
-              [class]="entityType.toLowerCase()"
-            >
-              {{ entityTypeDisplay }}
-            </mat-chip>
-          </div>
+      <!-- Node Cards -->
+      @if (nodes.length > 0) {
+        <div class="cards-grid">
+          @for (node of nodes; track node.iroko_uuid || $index) {
+            <mat-card class="node-card" (click)="onNodeSelect(node)">
+              <mat-card-content>
+                <!-- Node Header -->
+                <div class="node-header">
+                  <h3 class="node-title">
+                    {{ getNodeDisplayName(node) }}
+                  </h3>
+                  <mat-chip
+                    class="entity-type-chip"
+                    [class]="entityType.toLowerCase()"
+                    >
+                    {{ entityTypeDisplay }}
+                  </mat-chip>
+                </div>
 
-          <!-- Node Properties -->
-          <div class="node-properties">
-            @for (prop of getNodeProperties(node); track prop.key) { @if
-            (prop.value !== null && prop.value !== undefined && prop.value !==
-            '') {
-            <div class="property-row">
-              <span class="property-label">{{ prop.label }}:</span>
-              <span class="property-value">
-                {{ formatPropertyValue(prop.value, prop.type) }}
-              </span>
-            </div>
-            } }
-          </div>
+                <!-- Node Properties -->
+                <div class="node-properties">
+                  @for (prop of getNodeProperties(node); track prop.key) { @if
+                    (prop.value !== null && prop.value !== undefined && prop.value !==
+                    '') {
+                    <div class="property-row">
+                      <span class="property-label">{{ prop.label }}:</span>
+                      <span class="property-value">
+                        {{ formatPropertyValue(prop.value, prop.type) }}
+                      </span>
+                    </div>
+                    } }
+                  </div>
 
-          <!-- View Details Action -->
-          <!-- <div class="card-actions">
-            <button mat-button color="primary" class="view-details-btn">
-              {{ detaillsText }}
-              <mat-icon>arrow_forward</mat-icon>
-            </button>
-          </div> -->
-        </mat-card-content>
-      </mat-card>
+                  <!-- View Details Action -->
+                  <!-- <div class="card-actions">
+                  <button mat-button color="primary" class="view-details-btn">
+                    {{ detaillsText }}
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                </div> -->
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
       }
     </div>
-    }
-  </div>
   }
 
   <!-- Pagination Controls -->
   @if (totalPages > 1 && !isLoading && !hasError) {
-  <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
 
-  <div class="pagination-controls">
-    <div class="pagination-buttons">
-      <!-- Previous Button -->
-      <button
-        mat-icon-button
-        [disabled]="currentPage === 0"
-        (click)="onPageChange(currentPage - 1)"
-      >
-        <mat-icon>chevron_left</mat-icon>
-      </button>
+    <div class="pagination-controls">
+      <div class="pagination-buttons">
+        <!-- Previous Button -->
+        <button
+          mat-icon-button
+          [disabled]="currentPage === 0"
+          (click)="onPageChange(currentPage - 1)"
+          >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
 
-      <!-- Page Numbers -->
-      @for (page of paginationRange; track page) {
-      <button
-        mat-button
-        [class.active]="page === currentPage"
-        (click)="onPageChange(page)"
-      >
-        {{ page + 1 }}
-      </button>
-      }
+        <!-- Page Numbers -->
+        @for (page of paginationRange; track page) {
+          <button
+            mat-button
+            [class.active]="page === currentPage"
+            (click)="onPageChange(page)"
+            >
+            {{ page + 1 }}
+          </button>
+        }
 
-      <!-- Next Button -->
-      <button
-        mat-icon-button
-        [disabled]="currentPage === totalPages - 1"
-        (click)="onPageChange(currentPage + 1)"
-      >
-        <mat-icon>chevron_right</mat-icon>
-      </button>
+        <!-- Next Button -->
+        <button
+          mat-icon-button
+          [disabled]="currentPage === totalPages - 1"
+          (click)="onPageChange(currentPage + 1)"
+          >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
     </div>
-  </div>
   }
 </div>

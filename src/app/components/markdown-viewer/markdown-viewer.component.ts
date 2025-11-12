@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MarkdownModule } from 'ngx-markdown';
 
 export interface MarkdownError {
@@ -11,7 +11,7 @@ export interface MarkdownError {
   selector: 'app-markdown-viewer',
   templateUrl: './markdown-viewer.component.html',
   styleUrls: ['./markdown-viewer.component.scss'],
-  imports: [CommonModule, MarkdownModule],
+  imports: [MarkdownModule],
 })
 export class MarkdownViewerComponent {
   @Input() content: string = '';

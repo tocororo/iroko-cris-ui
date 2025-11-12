@@ -26,7 +26,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MetadataService, PageMetadata } from './services/metadata.service';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { filter, map } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
+
 import { LabelsService } from './services/labels.service';
 import { AuthService } from './services/auth.service'; // Add this import
 import { environment } from '../environments/environment';
@@ -64,7 +64,6 @@ export class IconHelperComponent {
 @Component({
   selector: 'app-root',
   imports: [
-    CommonModule,
     RouterOutlet,
     MatToolbarModule,
     MatMenuModule,
@@ -73,9 +72,8 @@ export class IconHelperComponent {
     MatListModule,
     RouterModule,
     MatIconModule,
-    IconHelperComponent,
-    // GlobalSearchComponent,
-  ],
+    IconHelperComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
