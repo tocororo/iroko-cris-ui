@@ -32,6 +32,7 @@ export class RelationshipCardComponent {
   @Input() properties: ListColumn[] = [];
   @Input() direction: 'INCOMING' | 'OUTGOING' = 'OUTGOING';
   @Output() nodeSelected = new EventEmitter<any>();
+  @Output() nodeDelete = new EventEmitter<any>();
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -53,17 +54,19 @@ export class RelationshipCardComponent {
   getRelationshipProperties(): { key: string; value: any }[] {
     if (!this.relationship) return [];
 
-    return Object.entries(this.relationship)
-      .filter(
-        ([key]) =>
-          !key.startsWith('_') &&
-          key !== 'type' &&
-          key !== 'identity' &&
-          key !== 'elementId' &&
-          key !== 'start' &&
-          key !== 'end'
-      )
-      .map(([key, value]) => ({ key, value }));
+    return (
+      Object.entries(this.relationship)
+        // .filter(
+        //   ([key]) =>
+        //     !key.startsWith('_') &&
+        //     key !== 'type' &&
+        //     key !== 'identity' &&
+        //     key !== 'elementId' &&
+        //     key !== 'start' &&
+        //     key !== 'end'
+        // )
+        .map(([key, value]) => ({ key, value }))
+    );
   }
 
   // Check if relationship has properties
@@ -147,6 +150,12 @@ export class RelationshipCardComponent {
   onNodeClick(): void {
     if (this.node && this.node.iroko_uuid) {
       this.nodeSelected.emit(this.node);
+    }
+  }
+
+  onNodeDelete(): void {
+    if (this.node && this.node.iroko_uuid) {
+      this.nodeDelete.emit(this.node);
     }
   }
 

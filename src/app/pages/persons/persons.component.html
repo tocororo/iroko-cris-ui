@@ -9,13 +9,14 @@
   </div>
 
   <app-generic-list
-    entityType="Author"
+    entityType="Person"
     [columns]="personColumns"
     label="Investigadores"
     [defaultSort]="'name'"
     [defaultSortOrder]="'ASC'"
     [pageSize]="10"
     (nodeSelected)="onNodeSelected($event)"
+    [filters]="filters"
   >
   </app-generic-list>
 </div>

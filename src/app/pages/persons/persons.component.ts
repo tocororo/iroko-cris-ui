@@ -4,7 +4,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
 import { GenericListComponent } from '../../components/generic-list/generic-list.component';
-import { LabelsService, ListColumn } from '../../services/labels.service';
+import {
+  LabelsService,
+  ListColumn,
+  ListFilter,
+} from '../../services/labels.service';
 
 @Component({
   selector: 'app-persons',
@@ -14,6 +18,7 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
 })
 export class PersonsComponent {
   personColumns: ListColumn[] = [];
+  filters: ListFilter[] = [];
 
   constructor(
     private metadataService: MetadataService,
@@ -21,14 +26,15 @@ export class PersonsComponent {
   ) {}
   ngOnInit() {
     this.metadataService.updateMetadata({
-      title: 'Autores',
+      title: 'Personas',
       description:
         'Investigadores, científicos y colaboradores de diversas instituciones y disciplinas. ',
       authors: [],
       subjects: [],
     });
     this.labelService.loadData().subscribe((labels) => {
-      this.personColumns = labels.nodes['author'].properties;
+      this.personColumns = labels.nodes['person'].properties;
+      this.filters = labels.nodes['person'].filters;
     });
   }
 

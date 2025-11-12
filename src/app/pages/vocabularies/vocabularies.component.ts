@@ -49,6 +49,12 @@ export class VocabulariesComponent implements OnInit {
       searchIndex: 'licencesSearch',
       description: 'Términos de licencias y derechos',
     },
+    {
+      label: 'Palabras clave',
+      type: 'Keyword',
+      searchIndex: '',
+      description: '',
+    },
   ];
 
   selectedTabIndex = 0;

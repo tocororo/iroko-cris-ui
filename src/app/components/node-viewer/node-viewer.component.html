@@ -12,23 +12,25 @@
           <app-node-properties [node]="node"></app-node-properties>
 
           <mat-accordion multi="true">
-            @for (group of relationshipPropGroups; track group.type; let i = $index) {
-              <mat-expansion-panel expanded="true">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    {{ relationshipLabel(group.type) }}
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-node-relationships-as-properties
-                  [group]="group"
-                ></app-node-relationships-as-properties>
-              </mat-expansion-panel>
+            @for (group of relationshipPropGroups; track group.type; let i =
+            $index) {
+            <mat-expansion-panel expanded="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ relationshipLabel(group.type) }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-node-relationships-as-properties
+                [group]="group"
+              ></app-node-relationships-as-properties>
+            </mat-expansion-panel>
             }
           </mat-accordion>
         </mat-tab>
 
         <!-- Relationships Tabs -->
-        @for (group of relationshipTabsGroups; track group.type; let i = $index) {
+        @for (group of relationshipTabsGroups; track group.type; let i = $index)
+        {
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon class="direction-icon">
@@ -43,6 +45,7 @@
             [group]="group"
             [isExporting]="isExporting"
             (nodeSelected)="onRelatedNodeSelect(group, $event)"
+            (nodeDelete)="onRelatedNodeDelete(group, $event)"
             (pageChange)="onRelationshipPageChange(group, $event)"
             (search)="onRelationshipSearch(group, $event)"
             (export)="onRelationshipExport(group)"

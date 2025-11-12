@@ -26,6 +26,7 @@ export class RelationshipGroupComponent {
   @Input() group!: RelationshipGroup;
   @Input() isExporting = false;
   @Output() nodeSelected = new EventEmitter<any>();
+  @Output() nodeDelete = new EventEmitter<any>();
   @Output() pageChange = new EventEmitter<number>();
   @Output() search = new EventEmitter<string>();
   @Output() export = new EventEmitter<void>();
@@ -49,6 +50,10 @@ export class RelationshipGroupComponent {
 
   onNodeSelected(nodeData: any): void {
     this.nodeSelected.emit(nodeData);
+  }
+
+  onNodeDelete(nodeData: any): void {
+    this.nodeDelete.emit(nodeData);
   }
 
   shouldShowPagination(): boolean {

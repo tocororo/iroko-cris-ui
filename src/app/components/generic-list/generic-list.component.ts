@@ -174,6 +174,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
+    console.trace('ngOnInit() CALLED');
+
     this.labelService.loadData().subscribe((labels) => {
       this.entityTypeDisplay =
         labels.nodes[this.entityType.toLocaleLowerCase()].display;
@@ -184,19 +186,33 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.readFromUrl();
 
       // Ensure URL is synchronized after initialization
-      setTimeout(() => {
-        this.updateUrl();
-      });
+      // setTimeout(() => {
+      //   this.updateUrl();
+      // });
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.trace('ngOnChanges() CALLED', changes);
+
     if (changes['filters'] || changes['columns']) {
       this.initializeFilters();
     }
-    if (changes['advancedQueryOptions'] || changes['fixedFilters']) {
+
+    const advOptsChange = changes['advancedQueryOptions'];
+    const fixedFiltersChange = changes['fixedFilters'];
+    if (advOptsChange || fixedFiltersChange) {
       this.initializeAdvancedQuery();
-      this.loadPage(0);
+
+      // IMPORTANT: Only trigger a reload if this is NOT the initial setup.
+      // The initial load is handled by ngOnInit to ensure URL parameters are respected.
+      // We check that the change object exists and that it's not the first change.
+      if (
+        (advOptsChange && !advOptsChange.isFirstChange()) ||
+        (fixedFiltersChange && !fixedFiltersChange.isFirstChange())
+      ) {
+        this.loadPage(0);
+      }
     }
   }
 
@@ -249,7 +265,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedFilters = initialSelectedFilters;
 
     // Update the filters with the selected ones
-    this.updateSelectedFilters(Array.from(this.selectedFilters));
+    this.updateSelectedFilters(Array.from(this.selectedFilters), false);
   }
 
   private getAutoFilterType(columnType: string): ListFilter['type'] {
@@ -286,7 +302,10 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     return filter?.label || filterName;
   }
 
-  private updateSelectedFilters(selectedFilterNames: string[]): void {
+  private updateSelectedFilters(
+    selectedFilterNames: string[],
+    loadData: boolean = true
+  ): void {
     this.selectedFilters = new Set(selectedFilterNames);
 
     // Update the filters array to only include selected filters
@@ -305,7 +324,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.updateActiveFilterCount();
-    this.loadPage(0);
+    if (loadData) {
+      this.loadPage(0);
+    }
   }
 
   removeFilter(filterName: string): void {
@@ -601,12 +622,13 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async loadPage(page: number) {
+    console.trace(`loadPage(${page}) CALLED`);
     this.currentPage = page;
     this.isLoading = true;
     this.hasError = false;
 
     try {
-      if (page === 0) {
+      if (page === 0 || this.totalCount === 0) {
         this.totalCount = await this.fetchTotalCount();
       }
 
@@ -614,7 +636,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.updatePagination();
 
       // Update URL after successful load
-      this.updateUrl();
+      // this.updateUrl();
     } catch (error) {
       console.error('Error loading page:', error);
       this.hasError = true;
@@ -626,6 +648,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   private async fetchNodes(offset: number, limit: number): Promise<any[]> {
     const { query, parameters } = this.buildCompleteQuery(offset, limit);
+
+    console.trace('fetchNodes', query, parameters);
 
     const result = await this.irokoApiService
       .executeQuery({
@@ -642,6 +666,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   private async fetchTotalCount(): Promise<number> {
     const { query, parameters } = this.buildCompleteQuery(0, 0, true);
+
+    console.log('totalCount', query, parameters);
 
     const result = await this.irokoApiService
       .executeQuery({
@@ -690,7 +716,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
-    console.log(params);
 
     return params;
   }
@@ -957,7 +982,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       ${orderClause}
       ${paginationClause}
     `.trim();
-    console.log(query);
 
     const parameters = {
       ...this.buildParameters(),
@@ -1120,6 +1144,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onSortChange() {
+    console.trace('onSortChange() CALLED');
     const newAttribute = this.sortControl.value;
     if (!newAttribute || newAttribute === 'none') {
       this.sortBy = { attribute: '', direction: 'ASC' };
@@ -1239,8 +1264,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private readFromUrl(): void {
+    console.trace('readFromUrl() CALLED');
     const params = this.route.snapshot.queryParams;
-
     // Read page
     if (params['page'] !== undefined) {
       const page = parseInt(params['page'], 10);
@@ -1248,7 +1273,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         this.currentPage = page;
       }
     }
-
     // Read sort
     if (params['sort']) {
       const sortParts = params['sort'].split(':');
@@ -1310,7 +1334,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
         if (filterValue.ids.length > 0) {
           this.activeFilters[filter.name] = filterValue;
-          this.filterForm.get(filter.name)?.setValue(filterValue);
+          this.filterForm
+            .get(filter.name)
+            ?.setValue(filterValue, { emitEvent: false });
         }
       } else {
         const paramName = `filter_${filter.name}`;
@@ -1325,7 +1351,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           }
 
           if (value && (!Array.isArray(value) || value.length > 0)) {
-            this.filterForm.get(filter.name)?.setValue(value);
+            this.filterForm
+              .get(filter.name)
+              ?.setValue(value, { emitEvent: false });
             this.activeFilters[filter.name] = value;
           }
         }
@@ -1336,14 +1364,16 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateUrl(): void {
+    console.trace('updateUrl() CALLED');
     const queryParams: any = {};
 
     // Add page (only if not first page)
-    if (this.currentPage > 0) {
-      queryParams.page = this.currentPage;
-    } else {
-      queryParams.page = null;
-    }
+    // if (this.currentPage > 0) {
+    //   queryParams.page = this.currentPage;
+    // } else {
+    //   queryParams.page = null;
+    // }
+    queryParams.page = this.currentPage;
 
     // Add sort (only if exists)
     if (this.sortBy.attribute) {

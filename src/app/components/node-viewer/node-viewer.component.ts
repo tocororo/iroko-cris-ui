@@ -175,11 +175,13 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       }
     });
     relationshipMap.forEach((value: RelationshipGroup, key: string) => {
-      if (value.type in this.labelsData.relationshipsAsTabs) {
-        this.relationshipTabsGroups.push(value);
-      }
       if (value.type in this.labelsData.relationshipsAsProp) {
         this.relationshipPropGroups.push(value);
+      } else {
+        // if (value.type in this.labelsData.relationshipsAsTabs) {
+
+        // }
+        this.relationshipTabsGroups.push(value);
       }
     });
 
@@ -365,10 +367,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     });
   }
 
-  onRelatedNodeSelect(group: RelationshipGroup, node: any): void {
-    console.warn(node);
-    console.warn('AAAAAAAAAAAAAAAAA');
-
+  onRelatedNodeSelect(group: RelationshipGroup, node: any): void {}
+  onRelatedNodeDelete(group: RelationshipGroup, node: any): void {
     if (node && node.iroko_uuid && group.type) {
       const nodeName = node.name || node.iroko_uuid;
       const relationshipType = group.type;

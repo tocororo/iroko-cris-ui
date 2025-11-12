@@ -23,7 +23,8 @@
 </div>
 } @else {
 <div class="relationships-grid">
-  @for (rel of getDisplayedRelationships(); track rel.node.iroko_uuid || $index) {
+  @for (rel of getDisplayedRelationships(); track rel.node.iroko_uuid || $index)
+  {
   <app-relationship-card
     [node]="rel.node"
     [relationship]="rel.relationship"
@@ -33,6 +34,7 @@
     [properties]="rel.properties"
     [direction]="group.direction"
     (nodeSelected)="onNodeSelected($event)"
+    (nodeDelete)="onNodeDelete($event)"
   ></app-relationship-card>
   }
 </div>

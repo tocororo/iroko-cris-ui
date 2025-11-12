@@ -67,8 +67,15 @@
           "type": "string"
         },
         {
-          "name": "last_name",
-          "label": "Apellido",
+          "name": "given_name",
+          "label": "Nombre",
+          "sortable": true,
+          "filterable": true,
+          "type": "string"
+        },
+        {
+          "name": "family_name",
+          "label": "Apellidos",
           "sortable": true,
           "filterable": true,
           "type": "string"
@@ -79,89 +86,19 @@
           "sortable": false,
           "filterable": true,
           "type": "array"
-        },
-        {
-          "name": "research_interests",
-          "label": "Intereses de Investigación",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "academic_titles",
-          "label": "Títulos Académicos",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "affiliations",
-          "label": "Afiliaciones",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "gender",
-          "label": "Género",
-          "sortable": true,
-          "filterable": true,
-          "type": "string"
         }
-      ]
-    },
-    "author": {
-      "label": "Autor",
-      "display": "Investigador",
-      "properties": [
+      ],
+      "filters": [
         {
-          "name": "name",
-          "label": "Nombre Completo",
-          "sortable": true,
-          "filterable": true,
-          "type": "string"
-        },
-        {
-          "name": "last_name",
-          "label": "Apellido",
-          "sortable": true,
-          "filterable": true,
-          "type": "string"
-        },
-        {
-          "name": "email_addresses",
-          "label": "Direcciones de Correo",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "research_interests",
-          "label": "Intereses de Investigación",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "academic_titles",
-          "label": "Títulos Académicos",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "affiliations",
-          "label": "Afiliaciones",
-          "sortable": false,
-          "filterable": true,
-          "type": "array"
-        },
-        {
-          "name": "gender",
-          "label": "Género",
-          "sortable": true,
-          "filterable": true,
-          "type": "string"
+          "name": "relatedCountries",
+          "label": "País",
+          "type": "relationship",
+          "relationshipConfig": {
+            "relationshipType": "IN_COUNTRY",
+            "relationshipDirection": "OUT",
+            "targetLabel": "Country",
+            "placeholder": "País"
+          }
         }
       ]
     },
@@ -529,6 +466,11 @@
       "label": "Language",
       "display": "Idioma",
       "properties": []
+    },
+    "keyword": {
+      "label": "Keyword",
+      "display": "Palabra clave",
+      "properties": []
     }
   },
   "relationshipsAsTabs": {
@@ -538,11 +480,20 @@
     "SOURCE_CREATED_IN": "Organización",
     "RELATED_ORGANIZATION": "Organizaciones Relacionadas",
     "HAS_LANGUAGE": "Idiomas",
-    "REDIRECTED_ORGANIZATION": "Redireccionadas"
+    "REDIRECTED_ORGANIZATION": "Redireccionadas",
+    "EDUCATIONS_IN": "Formación Académica",
+    "EMPLOYMENTS_IN": "Empleos",
+    "QUALIFICATIONS_IN": "Cualificaciones",
+    "INVITED_POSITIONS_IN": "Cargos por Invitación",
+    "DISTINCTIONS_IN": "Distinciones",
+    "MEMBERSHIPS_IN": "Membresías",
+    "SERVICES_IN": "Servicios",
+    "FUNDINGS_IN": "Financiamientos"
   },
   "relationshipsAsProp": {
     "HAS_IDENTIFIER": "Identificadores",
-    "HAS_LICENCE": "Licencias"
+    "HAS_LICENCE": "Licencias",
+    "IN_COUNTRY": "País"
   },
   "searchIndices": {
     "COLLECTED_FROM": "outputSearch",

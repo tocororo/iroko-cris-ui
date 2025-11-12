@@ -45,12 +45,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       type: 'Organization',
     },
     {
-      label: 'Autores',
+      label: 'Personas',
       count: 0,
       icon: 'people',
       route: '/persons',
       color: 'accent',
-      type: 'Author',
+      type: 'Person',
     },
     {
       label: 'Resultados de Investigación',

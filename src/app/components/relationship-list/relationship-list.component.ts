@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class RelationshipListComponent {
   @Input() group!: RelationshipGroup;
   @Output() nodeSelected = new EventEmitter<any>();
+  @Output() nodeDelete = new EventEmitter<any>();
 
   getDisplayedRelationships() {
     return this.group.relationships;
@@ -26,5 +27,8 @@ export class RelationshipListComponent {
 
   onNodeSelected(nodeData: any): void {
     this.nodeSelected.emit(nodeData);
+  }
+  onNodeDelete(nodeData: any): void {
+    this.nodeDelete.emit(nodeData);
   }
 }
