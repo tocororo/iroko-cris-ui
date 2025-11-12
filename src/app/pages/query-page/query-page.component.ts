@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { CypherApiService } from '../../services/cypher-api.service';
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
@@ -25,6 +25,10 @@ import { AuthService } from '../../services/auth.service'; // Add this import
 ],
 })
 export class QueryPageComponent {
+  private apiService = inject(CypherApiService);
+  private metadataService = inject(MetadataService);
+  private authService = inject(AuthService);
+
   @ViewChild(QueryExecutorComponent) queryExecutor!: QueryExecutorComponent;
 
   queryResult: any;
@@ -64,12 +68,6 @@ export class QueryPageComponent {
       icon: 'account_tree',
     },
   ];
-
-  constructor(
-    private apiService: CypherApiService,
-    private metadataService: MetadataService,
-    private authService: AuthService // Add this
-  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

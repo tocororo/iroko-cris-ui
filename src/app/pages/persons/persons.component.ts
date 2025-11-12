@@ -1,5 +1,5 @@
 // src/app/pages/persons/persons.component.ts
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -17,13 +17,11 @@ import {
   imports: [GenericListComponent, RouterModule],
 })
 export class PersonsComponent {
+  private metadataService = inject(MetadataService);
+  private labelService = inject(LabelsService);
+
   personColumns: ListColumn[] = [];
   filters: ListFilter[] = [];
-
-  constructor(
-    private metadataService: MetadataService,
-    private labelService: LabelsService
-  ) {}
   ngOnInit() {
     this.metadataService.updateMetadata({
       title: 'Personas',

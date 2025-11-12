@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -34,6 +28,8 @@ import { MatButtonModule } from '@angular/material/button';
   ],
 })
 export class QueryExecutorComponent {
+  private fb = inject(FormBuilder);
+
   @Output() queryExecuted = new EventEmitter<CypherQuery>();
   @ViewChild('queryTextarea') queryTextarea!: ElementRef;
 
@@ -41,7 +37,7 @@ export class QueryExecutorComponent {
   parameters: { key: string; value: any }[] = [];
   showParameters = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.queryForm = this.fb.group({
       query: ['', Validators.required],
       readonly: [true],

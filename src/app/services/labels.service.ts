@@ -1,5 +1,5 @@
 // src/app/services/label.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -72,6 +72,8 @@ export interface LabelsData {
   providedIn: 'root',
 })
 export class LabelsService {
+  private http = inject(HttpClient);
+
   private labelsData: LabelsData = {
     nodes: {},
     relationshipsAsTabs: {},
@@ -80,8 +82,6 @@ export class LabelsService {
   };
 
   private labelsLoaded = new BehaviorSubject<boolean>(false);
-
-  constructor(private http: HttpClient) {}
 
   loadData(): Observable<LabelsData> {
     return this.http.get('/labels.json').pipe(

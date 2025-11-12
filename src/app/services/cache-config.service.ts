@@ -1,5 +1,5 @@
 // src/app/services/cache-config.service.ts
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 export interface CacheConfig {
   // API Caching
@@ -39,9 +39,9 @@ export const DEFAULT_CACHE_CONFIG: CacheConfig = {
 export class CacheConfigService {
   private config: CacheConfig;
 
-  constructor(
-    @Optional() @Inject('CACHE_CONFIG') customConfig?: Partial<CacheConfig>
-  ) {
+  constructor() {
+    const customConfig = inject<Partial<CacheConfig>>('CACHE_CONFIG' as any, { optional: true });
+
     this.config = { ...DEFAULT_CACHE_CONFIG, ...customConfig };
   }
 

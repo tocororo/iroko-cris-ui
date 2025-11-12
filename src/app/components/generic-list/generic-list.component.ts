@@ -1,14 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-  OnChanges,
-  SimpleChanges,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject } from '@angular/core';
 
 import {
   FormsModule,
@@ -103,6 +93,16 @@ export interface AdvancedQueryOptions {
 ],
 })
 export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
+  private irokoApiService = inject(CypherApiService);
+  private cypherBuilder = inject(CypherBuilderService);
+  private exportService = inject(ExportService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
+  private labelService = inject(LabelsService);
+  private cdr = inject(ChangeDetectorRef);
+  dialog = inject(MatDialog);
+
   @Input() entityType!: string;
   @Input() columns: ListColumn[] = [];
   @Input() filters: ListFilter[] = [];
@@ -157,17 +157,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   availableFilters: ListFilter[] = [];
   selectedFilters: Set<string> = new Set();
 
-  constructor(
-    private irokoApiService: CypherApiService,
-    private cypherBuilder: CypherBuilderService,
-    private exportService: ExportService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private labelService: LabelsService,
-    private cdr: ChangeDetectorRef,
-    public dialog: MatDialog
-  ) {
+  constructor() {
     this.sortControl = this.fb.control('');
     this.filterForm = this.fb.group({});
   }

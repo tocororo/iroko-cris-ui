@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -12,9 +12,9 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class CypherApiService {
-  private apiUrl = `${environment.apiUrl}/${environment.apiVersion}/cypher`;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  private apiUrl = `${environment.apiUrl}/${environment.apiVersion}/cypher`;
 
   executeQuery(queryData: CypherQuery): Observable<any> {
     return this.http

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { Router } from '@angular/router';
 import {
@@ -36,6 +36,9 @@ export interface EvaluationSelectionDialogData {
   styleUrls: ['./evaluation-selection-dialog.component.scss'],
 })
 export class EvaluationSelectionDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<EvaluationSelectionDialogComponent>>(MatDialogRef);
+  data = inject<EvaluationSelectionDialogData>(MAT_DIALOG_DATA);
+
   private evaluationService = inject(EvaluationService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
@@ -43,11 +46,6 @@ export class EvaluationSelectionDialogComponent implements OnInit {
   availableEvaluations: EvaluationMethodology[] = [];
   isLoading = false;
   selectedEvaluation: EvaluationMethodology | null = null;
-
-  constructor(
-    public dialogRef: MatDialogRef<EvaluationSelectionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: EvaluationSelectionDialogData
-  ) {}
 
   ngOnInit() {
     this.loadAvailableEvaluations();

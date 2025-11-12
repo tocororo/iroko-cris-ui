@@ -1,5 +1,5 @@
 // filter-dialog.component.ts
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -25,12 +25,10 @@ export interface FilterDialogData {
   imports: [MatDialogModule, MatCheckboxModule, MatIconModule],
 })
 export class FilterDialogComponent implements OnInit {
-  selectedFilters: Set<string> = new Set();
+  dialogRef = inject<MatDialogRef<FilterDialogComponent>>(MatDialogRef);
+  data = inject<FilterDialogData>(MAT_DIALOG_DATA);
 
-  constructor(
-    public dialogRef: MatDialogRef<FilterDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: FilterDialogData
-  ) {}
+  selectedFilters: Set<string> = new Set();
 
   ngOnInit() {
     // Initialize with the provided selected filters (default filters)

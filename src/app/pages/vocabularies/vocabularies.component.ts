@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -19,6 +19,9 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
 ],
 })
 export class VocabulariesComponent implements OnInit {
+  private metadataService = inject(MetadataService);
+  private labelService = inject(LabelsService);
+
   // Common columns for all term types
   termColumns: ListColumn[] = [];
 
@@ -57,11 +60,6 @@ export class VocabulariesComponent implements OnInit {
   ];
 
   selectedTabIndex = 0;
-
-  constructor(
-    private metadataService: MetadataService,
-    private labelService: LabelsService
-  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

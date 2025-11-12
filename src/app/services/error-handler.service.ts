@@ -1,5 +1,5 @@
 // src/app/services/error-handler.service.ts
-import { Injectable, ErrorHandler, Injector } from '@angular/core';
+import { Injectable, ErrorHandler, Injector, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -7,9 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class ErrorHandlerService implements ErrorHandler {
-  private snackBar: MatSnackBar | null = null;
+  private injector = inject(Injector);
 
-  constructor(private injector: Injector) {}
+  private snackBar: MatSnackBar | null = null;
 
   handleError(error: any): void {
     console.error('Error occurred:', error);

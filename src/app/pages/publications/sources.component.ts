@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -16,13 +16,11 @@ import {
   imports: [GenericListComponent, RouterModule],
 })
 export class PublicationsComponent {
+  private metadataService = inject(MetadataService);
+  private labelService = inject(LabelsService);
+
   sourceColumns: ListColumn[] = [];
   filters: ListFilter[] = [];
-
-  constructor(
-    private metadataService: MetadataService,
-    private labelService: LabelsService
-  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

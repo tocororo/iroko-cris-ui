@@ -1,5 +1,5 @@
 // src/app/components/global-search/global-search.component.ts
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,6 +33,9 @@ import { SearchResult, SearchService } from '../../services/search.service';
   ],
 })
 export class GlobalSearchComponent implements OnInit {
+  private searchService = inject(SearchService);
+  private router = inject(Router);
+
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   searchTerm = '';
@@ -41,8 +44,6 @@ export class GlobalSearchComponent implements OnInit {
   showResults = false;
 
   private searchTerms = new Subject<string>();
-
-  constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit() {
     this.searchTerms

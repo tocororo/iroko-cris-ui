@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -34,17 +34,17 @@ import { MatIconModule } from '@angular/material/icon';
 ],
 })
 export class LoginComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
+
   loginForm: FormGroup;
   loading = false;
   returnUrl = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar
-  ) {
+  constructor() {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],

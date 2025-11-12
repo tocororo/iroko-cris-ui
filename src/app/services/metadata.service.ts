@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 
@@ -16,6 +16,9 @@ export interface PageMetadata {
   providedIn: 'root',
 })
 export class MetadataService {
+  private meta = inject(Meta);
+  private title = inject(Title);
+
   private defaultMetadata: PageMetadata = {
     title: '',
     abstract: '',
@@ -28,8 +31,6 @@ export class MetadataService {
     this.defaultMetadata
   );
   currentMetadata = this.metadataSource.asObservable();
-
-  constructor(private meta: Meta, private title: Title) {}
 
   resetMetadata() {
     this.metadataSource.next(this.defaultMetadata);

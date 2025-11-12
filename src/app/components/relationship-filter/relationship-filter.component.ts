@@ -1,13 +1,5 @@
 // src/app/components/relationship-filter/relationship-filter.component.ts
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 
 import {
   FormArray,
@@ -70,6 +62,8 @@ interface AttributeControls {
 ],
 })
 export class RelationshipFilterComponent implements OnInit, OnChanges {
+  private cypherApiService = inject(CypherApiService);
+
   @Input() filter!: ListFilter;
   label: string = 'Filtrar por relación';
   @Input() initialValue: FilterValue = { ids: [] };
@@ -95,8 +89,6 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
 
   // Safe accessor for template
   attributeConfigs: RelationshipAttributeConfig[] = [];
-
-  constructor(private cypherApiService: CypherApiService) {}
 
   ngOnInit() {
     this.label = this.filter.label;

@@ -11,21 +11,19 @@
         <mat-tab label="Propiedades">
           <app-node-properties [node]="node"></app-node-properties>
 
-          <mat-accordion multi="true">
-            @for (group of relationshipPropGroups; track group.type; let i =
-            $index) {
-            <mat-expansion-panel expanded="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{ relationshipLabel(group.type) }}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <app-node-relationships-as-properties
-                [group]="group"
-              ></app-node-relationships-as-properties>
-            </mat-expansion-panel>
-            }
-          </mat-accordion>
+          @for (group of relationshipPropGroups; track group.type; let i =
+          $index) {
+          <mat-card expanded="true">
+            <mat-card-header>
+              <mat-card-title>
+                {{ relationshipLabel(group.type) }}
+              </mat-card-title>
+            </mat-card-header>
+            <app-node-relationships-as-properties
+              [group]="group"
+            ></app-node-relationships-as-properties>
+          </mat-card>
+          }
         </mat-tab>
 
         <!-- Relationships Tabs -->

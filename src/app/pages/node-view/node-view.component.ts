@@ -36,6 +36,11 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./node-view.component.scss'],
 })
 export class NodeViewComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private labelService = inject(LabelsService);
+  private metadataService = inject(MetadataService);
+
   nodeType: string = '';
   nodeDisplayType: string = '';
   nodeId: string = '';
@@ -48,13 +53,6 @@ export class NodeViewComponent implements OnInit {
 
   private routeSub!: Subscription;
   private authService = inject(AuthService);
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private labelService: LabelsService,
-    private metadataService: MetadataService
-  ) {}
 
   ngOnInit() {
     this.labelService.loadData().subscribe((labels) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -39,6 +39,14 @@ import {
 ],
 })
 export class EvaluationComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private evaluationService = inject(EvaluationService);
+  private metadataService = inject(MetadataService);
+  private snackBar = inject(MatSnackBar);
+  private fb = inject(FormBuilder);
+  private labelService = inject(LabelsService);
+
   methodologyId: string = '';
   methodology: EvaluationMethodology = {
     id: '',
@@ -59,15 +67,7 @@ export class EvaluationComponent implements OnInit {
 
   filters: ListFilter[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private evaluationService: EvaluationService,
-    private metadataService: MetadataService,
-    private snackBar: MatSnackBar,
-    private fb: FormBuilder,
-    private labelService: LabelsService
-  ) {
+  constructor() {
     this.searchForm = this.fb.group({
       searchTerm: [''],
     });

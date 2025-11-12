@@ -1,5 +1,5 @@
 // src/app/services/cache.service.ts
-import { Injectable, OnDestroy, Inject } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Observable, of, from } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { CacheConfigService, CacheConfig } from './cache-config.service';
@@ -15,11 +15,13 @@ interface CacheItem {
   providedIn: 'root',
 })
 export class CacheService implements OnDestroy {
+  private configService = inject(CacheConfigService);
+
   private cache = new Map<string, CacheItem>();
   private ongoingRequests = new Map<string, Observable<any>>();
   private cleanupInterval: any;
 
-  constructor(private configService: CacheConfigService) {
+  constructor() {
     this.startCleanup();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -25,15 +25,13 @@ import { MetadataService } from '../../services/metadata.service';
 ],
 })
 export class EvaluationsComponent implements OnInit {
+  private evaluationService = inject(EvaluationService);
+  private metadataService = inject(MetadataService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
   methodologies: EvaluationMethodology[] = [];
   isLoading = false;
-
-  constructor(
-    private evaluationService: EvaluationService,
-    private metadataService: MetadataService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

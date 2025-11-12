@@ -1,5 +1,5 @@
 // src/app/pages/mes/mes.component.ts
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -20,6 +20,9 @@ import {
   imports: [GenericListComponent, RouterModule],
 })
 export class MesComponent {
+  private metadataService = inject(MetadataService);
+  private labelService = inject(LabelsService);
+
   mesColumns: ListColumn[] = [];
 
   filters: ListFilter[] = [];
@@ -28,11 +31,6 @@ export class MesComponent {
     customWhereClause:
       "EXISTS((n)-[:SOURCE_CREATED_IN]->(:Organization {iroko_uuid: '11514c12-3d6a-43d0-ba3b-3b992aa96295'}))",
   };
-
-  constructor(
-    private metadataService: MetadataService,
-    private labelService: LabelsService
-  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

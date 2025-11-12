@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  inject,
+  SimpleChanges,
+} from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -19,8 +26,8 @@ import { AuthService } from '../../services/auth.service';
     MatChipsModule,
     MatButtonModule,
     MatIconModule,
-    NgxJsonViewerModule
-],
+    NgxJsonViewerModule,
+  ],
 })
 export class RelationshipCardComponent {
   @Input() node: any;
@@ -36,6 +43,17 @@ export class RelationshipCardComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  public calculatedRelationshipProperties: { key: string; value: any }[] = [];
+  public calculatedNodeProperties: { key: string; value: any }[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['relationship'] || changes['node']) {
+      this.calculatedRelationshipProperties =
+        this._calculateRelationshipProperties();
+      this.calculatedNodeProperties = this._calculateNodeProperties();
+    }
+  }
+
   // Allowed node types for view details
   private readonly allowedNodeTypes = [
     'Publication',
@@ -49,34 +67,16 @@ export class RelationshipCardComponent {
     'Licence',
   ];
 
-  // Get relationship properties
-  getRelationshipProperties(): { key: string; value: any }[] {
+  private _calculateRelationshipProperties(): { key: string; value: any }[] {
     if (!this.relationship) return [];
 
     return (
       Object.entries(this.relationship)
-        // .filter(
-        //   ([key]) =>
-        //     !key.startsWith('_') &&
-        //     key !== 'type' &&
-        //     key !== 'identity' &&
-        //     key !== 'elementId' &&
-        //     key !== 'start' &&
-        //     key !== 'end'
-        // )
+        // .filter(...) // Apply your filters here
         .map(([key, value]) => ({ key, value }))
     );
   }
-
-  // Check if relationship has properties
-  hasRelationshipProperties(): boolean {
-    return this.getRelationshipProperties().length > 0;
-  }
-
-  hasNodeProperties() {
-    return this.getNodeProperties().length > 0;
-  }
-  getNodeProperties(): { key: string; value: any }[] {
+  private _calculateNodeProperties(): { key: string; value: any }[] {
     if (!this.node) return [];
     const props = Array.isArray(this.properties) ? this.properties : [];
 
@@ -102,6 +102,23 @@ export class RelationshipCardComponent {
         )
         .map(([key, value]) => ({ key, value }));
     }
+  }
+
+  // Get relationship properties
+  getRelationshipProperties(): { key: string; value: any }[] {
+    return this.calculatedRelationshipProperties;
+  }
+
+  // Check if relationship has properties
+  hasRelationshipProperties(): boolean {
+    return this.calculatedRelationshipProperties.length > 0;
+  }
+
+  hasNodeProperties() {
+    return this.calculatedNodeProperties.length > 0;
+  }
+  getNodeProperties(): { key: string; value: any }[] {
+    return this.calculatedNodeProperties;
   }
 
   isArray(value: any): boolean {

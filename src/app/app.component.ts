@@ -78,6 +78,14 @@ export class IconHelperComponent {
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  private menuService = inject(ConfigService);
+  private matIconRegistry = inject(MatIconRegistry);
+  private domSanitizer = inject(DomSanitizer);
+  private metadataService = inject(MetadataService);
+  private labelService = inject(LabelsService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   protected readonly isMobile = signal(true);
   private readonly _mobileQuery: MediaQueryList;
   private readonly _mobileQueryListener: () => void;
@@ -97,15 +105,7 @@ export class AppComponent implements OnInit {
   currentUser: any = null; // Add this
   isLoggedIn = false; // Add this
 
-  constructor(
-    private menuService: ConfigService,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metadataService: MetadataService,
-    private labelService: LabelsService,
-    private authService: AuthService, // Add this
-    private router: Router
-  ) {
+  constructor() {
     this.appVersion = environment.appVersion;
     this.matIconRegistry.addSvgIcon(
       'sceiba',

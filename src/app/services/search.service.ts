@@ -1,5 +1,5 @@
 // src/app/services/search.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   Observable,
@@ -29,6 +29,9 @@ export interface SearchResponse {
   providedIn: 'root',
 })
 export class SearchService {
+  private irokoApiService = inject(CypherApiService);
+  private http = inject(HttpClient);
+
   private searchTerm = new BehaviorSubject<string>('');
   private searchResults = new BehaviorSubject<SearchResponse>({
     results: [],
@@ -39,11 +42,6 @@ export class SearchService {
   searchTerm$ = this.searchTerm.asObservable();
   searchResults$ = this.searchResults.asObservable();
   isLoading$ = this.isLoading.asObservable();
-
-  constructor(
-    private irokoApiService: CypherApiService,
-    private http: HttpClient
-  ) {}
 
   // Global search across all entity types
   globalSearch(term: string, limit: number = 50): Observable<any> {

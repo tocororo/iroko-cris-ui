@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -26,6 +26,9 @@ import { forkJoin } from 'rxjs';
 ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  private metadataService = inject(MetadataService);
+  private irokoApiService = inject(CypherApiService);
+
   stats = [
     {
       label: 'Revistas del MES',
@@ -99,11 +102,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   isLoading = true;
-
-  constructor(
-    private metadataService: MetadataService,
-    private irokoApiService: CypherApiService
-  ) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

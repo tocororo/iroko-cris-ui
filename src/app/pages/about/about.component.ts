@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -23,11 +23,11 @@ import { MatIcon } from '@angular/material/icon';
 ],
 })
 export class AboutComponent implements OnInit {
+  private metadataService = inject(MetadataService);
+
   isLoading = true;
   loadError = false;
   errorMessage = '';
-
-  constructor(private metadataService: MetadataService) {}
 
   ngOnInit() {
     this.metadataService.updateMetadata({

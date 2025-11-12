@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -35,6 +35,12 @@ import { MatIconModule } from '@angular/material/icon';
 ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private cdRef = inject(ChangeDetectorRef);
+
   registerForm: FormGroup;
   loading = false;
   captchaLoading = false;
@@ -42,13 +48,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   imageLoading = false;
   private captchaSubscription: Subscription | null = null;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private cdRef: ChangeDetectorRef
-  ) {
+  constructor() {
     this.registerForm = this.formBuilder.group(
       {
         username: [

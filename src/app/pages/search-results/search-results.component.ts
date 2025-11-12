@@ -1,5 +1,5 @@
 // src/app/pages/search-results/search-results.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -25,17 +25,15 @@ import { MetadataService } from '../../services/metadata.service';
   ],
 })
 export class SearchResultsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private searchService = inject(SearchService);
+  private metadataService = inject(MetadataService);
+
   searchTerm = '';
   results: SearchResult[] = [];
   isLoading = false;
   hasSearched = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private searchService: SearchService,
-    private metadataService: MetadataService
-  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {

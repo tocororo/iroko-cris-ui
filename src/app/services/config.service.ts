@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatMenuItem } from '@angular/material/menu';
 import { Observable } from 'rxjs';
 
@@ -21,7 +21,8 @@ export interface Config {
   providedIn: 'root',
 })
 export class ConfigService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   getConfig(): Observable<Config> {
     return this.http.get<Config>('/config.json');

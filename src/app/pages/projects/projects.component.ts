@@ -1,5 +1,5 @@
 // src/app/pages/projects/projects.component.ts
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
@@ -13,12 +13,10 @@ import { LabelsService, ListColumn } from '../../services/labels.service';
   imports: [GenericListComponent, RouterModule],
 })
 export class ProjectsComponent {
-  projectColumns: ListColumn[] = [];
+  private metadataService = inject(MetadataService);
+  private labelService = inject(LabelsService);
 
-  constructor(
-    private metadataService: MetadataService,
-    private labelService: LabelsService
-  ) {}
+  projectColumns: ListColumn[] = [];
   ngOnInit() {
     this.metadataService.updateMetadata({
       title: 'Proyectos de Investigación',
