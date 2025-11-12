@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,14 +22,14 @@ import { RelationshipPaginationComponent } from '../relationship-pagination/rela
 ],
 })
 export class RelationshipGroupComponent {
-  @Input() group!: RelationshipGroup;
-  @Input() isExporting = false;
-  @Output() nodeSelected = new EventEmitter<any>();
-  @Output() nodeDelete = new EventEmitter<any>();
-  @Output() pageChange = new EventEmitter<number>();
-  @Output() search = new EventEmitter<string>();
-  @Output() export = new EventEmitter<void>();
-  @Output() searchClear = new EventEmitter<void>();
+  readonly group = input.required<RelationshipGroup>();
+  readonly isExporting = input(false);
+  readonly nodeSelected = output<any>();
+  readonly nodeDelete = output<any>();
+  readonly pageChange = output<number>();
+  readonly search = output<string>();
+  readonly export = output<void>();
+  readonly searchClear = output<void>();
 
   onPageChange(page: number): void {
     this.pageChange.emit(page);
@@ -40,10 +40,12 @@ export class RelationshipGroupComponent {
   }
 
   onExport(): void {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.export.emit();
   }
 
   onSearchClear(): void {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.searchClear.emit();
   }
 
@@ -56,6 +58,6 @@ export class RelationshipGroupComponent {
   }
 
   shouldShowPagination(): boolean {
-    return this.group.totalCount > this.group.pageSize;
+    return this.group().totalCount > this.group().pageSize;
   }
 }

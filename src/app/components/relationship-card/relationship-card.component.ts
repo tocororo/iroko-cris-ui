@@ -1,10 +1,9 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   inject,
   SimpleChanges,
+  input,
+  output
 } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
@@ -30,15 +29,15 @@ import { AuthService } from '../../services/auth.service';
   ],
 })
 export class RelationshipCardComponent {
-  @Input() node: any;
-  @Input() relationship: any;
-  @Input() nodeLabels: string[] = [];
-  @Input() nodeLabelsDisplay: string[] = [];
-  @Input() relationshipType: string = '';
-  @Input() properties: ListColumn[] = [];
-  @Input() direction: 'INCOMING' | 'OUTGOING' = 'OUTGOING';
-  @Output() nodeSelected = new EventEmitter<any>();
-  @Output() nodeDelete = new EventEmitter<any>();
+  readonly node = input<any>();
+  readonly relationship = input<any>();
+  readonly nodeLabels = input<string[]>([]);
+  readonly nodeLabelsDisplay = input<string[]>([]);
+  readonly relationshipType = input<string>('');
+  readonly properties = input<ListColumn[]>([]);
+  readonly direction = input<'INCOMING' | 'OUTGOING'>('OUTGOING');
+  readonly nodeSelected = output<any>();
+  readonly nodeDelete = output<any>();
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -68,31 +67,35 @@ export class RelationshipCardComponent {
   ];
 
   private _calculateRelationshipProperties(): { key: string; value: any }[] {
-    if (!this.relationship) return [];
+    const relationship = this.relationship();
+    if (!relationship) return [];
 
     return (
-      Object.entries(this.relationship)
+      Object.entries(relationship)
         // .filter(...) // Apply your filters here
         .map(([key, value]) => ({ key, value }))
     );
   }
   private _calculateNodeProperties(): { key: string; value: any }[] {
-    if (!this.node) return [];
-    const props = Array.isArray(this.properties) ? this.properties : [];
+    const node = this.node();
+    if (!node) return [];
+    const properties = this.properties();
+    const props = Array.isArray(properties) ? properties : [];
 
     if (props.length > 0) {
       const result: { key: string; value: any }[] = [];
-      this.properties.forEach((element) => {
-        if (element.name in this.node) {
+      this.properties().forEach((element) => {
+        const nodeValue = this.node();
+        if (element.name in nodeValue) {
           result.push({
             key: element.label,
-            value: this.node[element.name],
+            value: nodeValue[element.name],
           });
         }
       });
       return result;
     } else {
-      return Object.entries(this.node)
+      return Object.entries(node)
         .filter(
           ([key]) =>
             !key.startsWith('_') &&
@@ -130,69 +133,74 @@ export class RelationshipCardComponent {
   }
 
   getNodeDisplayName(): string {
-    if (!this.node) return 'Unknown';
+    const node = this.node();
+    if (!node) return 'Unknown';
 
     return (
-      this.node.name ||
-      this.node.title ||
-      this.node.label ||
-      this.node.iroko_uuid ||
+      node.name ||
+      node.title ||
+      node.label ||
+      node.iroko_uuid ||
       'Unnamed'
     );
   }
 
   getNodeType(): string {
-    if (this.nodeLabelsDisplay && this.nodeLabelsDisplay.length > 0) {
-      return this.nodeLabelsDisplay.join(', ');
+    const nodeLabelsDisplay = this.nodeLabelsDisplay();
+    if (nodeLabelsDisplay && nodeLabelsDisplay.length > 0) {
+      return nodeLabelsDisplay.join(', ');
     }
 
-    if (this.node?.labels && Array.isArray(this.node.labels)) {
-      return this.node.labels.join(', ');
+    const node = this.node();
+    if (node?.labels && Array.isArray(node.labels)) {
+      return node.labels.join(', ');
     }
 
-    if (this.node?.type) {
-      return this.node.type;
+    if (node?.type) {
+      return node.type;
     }
 
     return 'Node';
   }
 
   shouldShowViewDetails(): boolean {
-    const primaryType = this.nodeLabels[0];
+    const primaryType = this.nodeLabels()[0];
 
     return this.allowedNodeTypes.includes(primaryType);
   }
 
   onNodeClick(): void {
-    if (this.node && this.node.iroko_uuid) {
-      this.nodeSelected.emit(this.node);
+    const node = this.node();
+    if (node && node.iroko_uuid) {
+      this.nodeSelected.emit(node);
     }
   }
 
   onNodeDelete(): void {
-    if (this.node && this.node.iroko_uuid) {
-      this.nodeDelete.emit(this.node);
+    const node = this.node();
+    if (node && node.iroko_uuid) {
+      this.nodeDelete.emit(node);
     }
   }
 
   onViewDetails(event: Event): void {
     event.stopPropagation();
 
-    const primaryType = this.nodeLabels[0].toLowerCase();
-    const nodeId = this.node.iroko_uuid;
+    const primaryType = this.nodeLabels()[0].toLowerCase();
+    const nodeId = this.node().iroko_uuid;
 
     if (nodeId && primaryType) {
       this.router.navigate(['/view', primaryType, nodeId]);
-      this.nodeSelected.emit(this.node);
+      this.nodeSelected.emit(this.node());
     }
   }
 
   getDirectionIcon(): string {
-    return this.direction === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
+    return this.direction() === 'INCOMING' ? 'arrow_back' : 'arrow_forward';
   }
 
   getDirectionLabel(): string {
-    return this.direction === 'INCOMING' ? 'Incoming' : 'Outgoing';
+    return this.direction() === 'INCOMING' ? 'Incoming' : 'Outgoing';
   }
 
   // Helper to format property values for display

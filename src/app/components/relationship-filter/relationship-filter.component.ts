@@ -1,5 +1,5 @@
 // src/app/components/relationship-filter/relationship-filter.component.ts
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, inject, input, output } from '@angular/core';
 
 import {
   FormArray,
@@ -64,10 +64,10 @@ interface AttributeControls {
 export class RelationshipFilterComponent implements OnInit, OnChanges {
   private cypherApiService = inject(CypherApiService);
 
-  @Input() filter!: ListFilter;
+  readonly filter = input.required<ListFilter>();
   label: string = 'Filtrar por relación';
-  @Input() initialValue: FilterValue = { ids: [] };
-  @Output() selectionChange = new EventEmitter<FilterValue>();
+  readonly initialValue = input<FilterValue>({ ids: [] });
+  readonly selectionChange = output<FilterValue>();
 
   searchControl = new FormControl('');
   selectedIds: string[] = [];
@@ -91,17 +91,18 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
   attributeConfigs: RelationshipAttributeConfig[] = [];
 
   ngOnInit() {
-    this.label = this.filter.label;
+    this.label = this.filter().label;
     this.setupSearch();
     this.initializeAttributeControls();
 
-    if (this.initialValue?.ids?.length > 0) {
-      this.selectedIds = [...this.initialValue.ids];
-      this.fetchNamesForIds(this.initialValue.ids);
+    const initialValue = this.initialValue();
+    if (initialValue?.ids?.length > 0) {
+      this.selectedIds = [...initialValue.ids];
+      this.fetchNamesForIds(initialValue.ids);
     }
 
-    if (this.initialValue?.attributeValues) {
-      this.setAttributeValues(this.initialValue.attributeValues);
+    if (initialValue?.attributeValues) {
+      this.setAttributeValues(initialValue.attributeValues);
     }
 
     // Listen for attribute changes
@@ -138,12 +139,13 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
     this.attributeControls.clear();
     this.attributeConfigs = [];
 
-    if (this.filter.relationshipConfig?.attributeConfig) {
+    const filter = this.filter();
+    if (filter.relationshipConfig?.attributeConfig) {
       this.attributeConfigs = [
-        ...this.filter.relationshipConfig.attributeConfig,
+        ...filter.relationshipConfig.attributeConfig,
       ];
 
-      this.filter.relationshipConfig.attributeConfig.forEach((config) => {
+      filter.relationshipConfig.attributeConfig.forEach((config) => {
         // Set appropriate default value based on type
         let defaultValue: any;
         switch (config.type) {
@@ -242,8 +244,9 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
     this.isLoading = true;
     this.hasError = false;
 
-    const targetLabel = this.filter.relationshipConfig?.targetLabel
-      ? `:${this.filter.relationshipConfig.targetLabel}`
+    const filter = this.filter();
+    const targetLabel = filter.relationshipConfig?.targetLabel
+      ? `:${filter.relationshipConfig.targetLabel}`
       : '';
     const query = `
       MATCH (node${targetLabel})
@@ -281,7 +284,7 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
     }
 
     const query = `
-      MATCH (node:${this.filter.relationshipConfig?.targetLabel})
+      MATCH (node:${this.filter().relationshipConfig?.targetLabel})
       WHERE node.iroko_uuid IN $ids
       RETURN node.iroko_uuid AS iroko_uuid, node.name AS name
       ORDER BY node.name
@@ -438,10 +441,11 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
   }
 
   hasAttributeConfig(): boolean {
+    const filter = this.filter();
     return (
       this.selectedIds.length > 0 &&
-      !!this.filter.relationshipConfig?.attributeConfig &&
-      this.filter.relationshipConfig.attributeConfig.length > 0
+      !!filter.relationshipConfig?.attributeConfig &&
+      filter.relationshipConfig.attributeConfig.length > 0
     );
   }
 
@@ -476,9 +480,10 @@ export class RelationshipFilterComponent implements OnInit, OnChanges {
   }
 
   get placeholder(): string {
+    const filter = this.filter();
     return (
-      this.filter.placeholder ||
-      `Buscar ${this.filter.relationshipConfig?.targetLabel.toLowerCase()}...`
+      filter.placeholder ||
+      `Buscar ${filter.relationshipConfig?.targetLabel.toLowerCase()}...`
     );
   }
 

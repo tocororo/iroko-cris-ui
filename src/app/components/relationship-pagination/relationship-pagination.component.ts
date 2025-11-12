@@ -1,10 +1,9 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   OnChanges,
   SimpleChanges,
+  input,
+  output
 } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -22,11 +21,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 ],
 })
 export class RelationshipPaginationComponent implements OnChanges {
-  @Input() currentPage: number = 0;
-  @Input() pageSize: number = 10;
-  @Input() totalItems: number = 0;
-  @Input() isLoading: boolean = false;
-  @Output() pageChange = new EventEmitter<number>();
+  readonly currentPage = input<number>(0);
+  readonly pageSize = input<number>(10);
+  readonly totalItems = input<number>(0);
+  readonly isLoading = input<boolean>(false);
+  readonly pageChange = output<number>();
 
   totalPages: number = 0;
   pages: number[] = [];
@@ -38,7 +37,7 @@ export class RelationshipPaginationComponent implements OnChanges {
   }
 
   private updatePagination(): void {
-    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+    this.totalPages = Math.ceil(this.totalItems() / this.pageSize());
     this.pages = this.generatePageNumbers();
   }
 
@@ -48,7 +47,7 @@ export class RelationshipPaginationComponent implements OnChanges {
 
     let startPage = Math.max(
       0,
-      this.currentPage - Math.floor(maxVisiblePages / 2)
+      this.currentPage() - Math.floor(maxVisiblePages / 2)
     );
     let endPage = Math.min(this.totalPages, startPage + maxVisiblePages);
 
@@ -64,29 +63,29 @@ export class RelationshipPaginationComponent implements OnChanges {
   }
 
   goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages && page !== this.currentPage) {
+    if (page >= 0 && page < this.totalPages && page !== this.currentPage()) {
       this.pageChange.emit(page);
     }
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages - 1) {
-      this.goToPage(this.currentPage + 1);
+    if (this.currentPage() < this.totalPages - 1) {
+      this.goToPage(this.currentPage() + 1);
     }
   }
 
   previousPage(): void {
-    if (this.currentPage > 0) {
-      this.goToPage(this.currentPage - 1);
+    if (this.currentPage() > 0) {
+      this.goToPage(this.currentPage() - 1);
     }
   }
 
   getDisplayedRange(): string {
-    const start = this.currentPage * this.pageSize + 1;
+    const start = this.currentPage() * this.pageSize() + 1;
     const end = Math.min(
-      (this.currentPage + 1) * this.pageSize,
-      this.totalItems
+      (this.currentPage() + 1) * this.pageSize(),
+      this.totalItems()
     );
-    return `Mostrando ${start}-${end} de ${this.totalItems}`;
+    return `Mostrando ${start}-${end} de ${this.totalItems()}`;
   }
 }

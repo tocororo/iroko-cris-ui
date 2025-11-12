@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 
 import { RelationshipCardComponent } from '../relationship-card/relationship-card.component';
 import { RelationshipGroup } from '../../api/models/relationship.models';
@@ -16,9 +16,18 @@ import { MatIconModule } from '@angular/material/icon';
 ],
 })
 export class RelationshipListComponent {
+  // TODO: Skipped for migration because:
+  //  This input is used in a control flow expression (e.g. `@if` or `*ngIf`)
+  //  and migrating would break narrowing currently.
+  // TODO: Skipped for migration because:
+  //  This input is used in a control flow expression (e.g. `@if` or `*ngIf`)
+  //  and migrating would break narrowing currently.
+  // TODO: Skipped for migration because:
+  //  This input is used in a control flow expression (e.g. `@if` or `*ngIf`)
+  //  and migrating would break narrowing currently.
   @Input() group!: RelationshipGroup;
-  @Output() nodeSelected = new EventEmitter<any>();
-  @Output() nodeDelete = new EventEmitter<any>();
+  readonly nodeSelected = output<any>();
+  readonly nodeDelete = output<any>();
 
   getDisplayedRelationships() {
     return this.group.relationships;

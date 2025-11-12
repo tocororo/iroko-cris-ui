@@ -1,5 +1,5 @@
 // node-evaluations.component.ts
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -40,10 +40,10 @@ export class NodeEvaluationsComponent implements OnInit, OnDestroy {
   private evaluationService = inject(EvaluationService);
   private snackBar = inject(MatSnackBar);
 
-  @Input({ required: true }) nodeId!: string;
-  @Input({ required: true }) nodeType!: string;
-  @Input() methodologyId?: string;
-  @Input({ required: true }) node: any;
+  readonly nodeId = input.required<string>();
+  readonly nodeType = input.required<string>();
+  readonly methodologyId = input<string>();
+  readonly node = input.required<any>();
 
   // Evaluation data
   evaluationHistory: StoredEvaluation[] = [];
@@ -69,7 +69,7 @@ export class NodeEvaluationsComponent implements OnInit, OnDestroy {
   loadEvaluationHistory() {
     this.isLoadingHistory = true;
     const sub = this.evaluationService
-      .getEvaluationHistory(this.nodeId)
+      .getEvaluationHistory(this.nodeId())
       .subscribe({
         next: (history) => {
           // Filter history for the selected methodology

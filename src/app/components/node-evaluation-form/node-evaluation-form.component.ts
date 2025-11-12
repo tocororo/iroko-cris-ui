@@ -1,13 +1,12 @@
 // node-evaluation-form.component.ts
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   OnInit,
   OnChanges,
   SimpleChanges,
   inject,
+  input,
+  output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -72,12 +71,12 @@ import { MatChipsModule } from '@angular/material/chips';
 export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
 
-  @Input({ required: true }) evaluation!: EvaluationResult;
-  @Input({ required: true }) nodeId!: string;
-  @Input() isLoading = false;
-  @Input() isFinalizing = false;
-  @Output() evaluationSubmit = new EventEmitter<EvaluationResult>();
-  @Output() evaluationFinalize = new EventEmitter<EvaluationResult>();
+  readonly evaluation = input.required<EvaluationResult>();
+  readonly nodeId = input.required<string>();
+  readonly isLoading = input(false);
+  readonly isFinalizing = input(false);
+  readonly evaluationSubmit = output<EvaluationResult>();
+  readonly evaluationFinalize = output<EvaluationResult>();
 
   evaluationForm!: FormGroup;
   panelOpenState: { [key: string]: boolean } = {};
@@ -89,13 +88,13 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.buildForm();
-    this.user_id = this.evaluation.user_id;
+    this.user_id = this.evaluation().user_id;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // Rebuild form when evaluation input changes (after reload)
     if (changes['evaluation'] && !changes['evaluation'].firstChange) {
-      this.user_id = this.evaluation.user_id;
+      this.user_id = this.evaluation().user_id;
       this.buildForm();
     }
   }
@@ -117,12 +116,12 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   private buildForm() {
     const formControls: { [key: string]: [any, any[]?] } = {};
 
-    this.evaluation.methodology.sections.forEach(
+    this.evaluation().methodology.sections.forEach(
       (section: EvaluationSection) => {
         section.categories.forEach((category: EvaluationCategory) => {
           category.questions.forEach((question_id: string) => {
             const question: EvaluationQuestion =
-              this.evaluation.question_data[question_id];
+              this.evaluation().question_data[question_id];
             // Only create controls for questions that don't have pre-filled results
             // After submission, all user answers will be pre-filled, so no controls will be created
             if (
@@ -161,7 +160,7 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
     this.evaluationForm = this.fb.group(formControls);
 
     // Initialize panel states - open first section by default
-    this.evaluation.methodology.sections.forEach(
+    this.evaluation().methodology.sections.forEach(
       (section: EvaluationSection, index: number) => {
         this.panelOpenState[section.id] = index === 0; // Open first section
         section.categories.forEach(
@@ -203,8 +202,8 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
     if (this.evaluationForm.valid) {
       // Create a deep copy of the evaluation to avoid mutation
       const updatedEvaluation: EvaluationResult = {
-        ...this.evaluation,
-        question_data: { ...this.evaluation.question_data },
+        ...this.evaluation(),
+        question_data: { ...this.evaluation().question_data },
       };
 
       // Update question answers from form
@@ -243,8 +242,8 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   onFinalize() {
     // For finalize, we use the current evaluation data (which includes user answers after submission)
     const finalizedEvaluation: EvaluationResult = {
-      ...this.evaluation,
-      question_data: { ...this.evaluation.question_data },
+      ...this.evaluation(),
+      question_data: { ...this.evaluation().question_data },
     };
 
     // Mark as complete and finalized
@@ -267,7 +266,7 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
 
   isQuestionAnswered(questionId: string): boolean {
     const question: EvaluationQuestion =
-      this.evaluation.question_data[questionId];
+      this.evaluation().question_data[questionId];
 
     // Check if question has a pre-filled answer
     if (
@@ -316,7 +315,7 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
     let totalQuestions = 0;
     let answeredQuestions = 0;
 
-    this.evaluation.methodology.sections.forEach(
+    this.evaluation().methodology.sections.forEach(
       (section: EvaluationSection) => {
         section.categories.forEach((category: EvaluationCategory) => {
           category.questions.forEach((questionId: string) => {
@@ -350,12 +349,12 @@ export class NodeEvaluationFormComponent implements OnInit, OnChanges {
   hasUnansweredQuestions(): boolean {
     let hasUnanswered = false;
 
-    this.evaluation.methodology.sections.forEach(
+    this.evaluation().methodology.sections.forEach(
       (section: EvaluationSection) => {
         section.categories.forEach((category: EvaluationCategory) => {
           category.questions.forEach((questionId: string) => {
             const question: EvaluationQuestion =
-              this.evaluation.question_data[questionId];
+              this.evaluation().question_data[questionId];
             if (
               question.answer?.result === undefined ||
               question.answer?.result === null

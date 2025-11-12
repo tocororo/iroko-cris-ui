@@ -1,5 +1,5 @@
 <div class="pagination-container">
-  @if (totalItems > 0) {
+  @if (totalItems() > 0) {
     <div class="pagination-info">
       <span class="info-text">{{ getDisplayedRange() }}</span>
     </div>
@@ -11,7 +11,7 @@
         <!-- Previous Button -->
         <button
           mat-icon-button
-          [disabled]="currentPage === 0 || isLoading"
+          [disabled]="currentPage() === 0 || isLoading()"
           (click)="previousPage()"
           class="nav-button"
           >
@@ -21,8 +21,8 @@
         @for (page of pages; track page) {
           <button
             mat-button
-            [class.active]="page === currentPage"
-            [disabled]="isLoading"
+            [class.active]="page === currentPage()"
+            [disabled]="isLoading()"
             (click)="goToPage(page)"
             class="page-button"
             >
@@ -32,7 +32,7 @@
         <!-- Next Button -->
         <button
           mat-icon-button
-          [disabled]="currentPage === totalPages - 1 || isLoading"
+          [disabled]="currentPage() === totalPages - 1 || isLoading()"
           (click)="nextPage()"
           class="nav-button"
           >
@@ -43,7 +43,7 @@
   }
 
   <!-- Loading Spinner -->
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="loading-spinner">
       <mat-progress-spinner
         diameter="24"

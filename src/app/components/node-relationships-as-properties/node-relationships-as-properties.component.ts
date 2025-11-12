@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RelationshipGroup } from '../../api/models/relationship.models';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +10,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './node-relationships-as-properties.component.scss',
 })
 export class NodeRelationshipsAsPropertiesComponent {
-  @Input() group!: RelationshipGroup;
+  readonly group = input.required<RelationshipGroup>();
 
   getDisplayedRelationships(group: RelationshipGroup) {
     return group.relationships;

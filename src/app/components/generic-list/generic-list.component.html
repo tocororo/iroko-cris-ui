@@ -290,7 +290,7 @@
           (selectionChange)="onSortChange()"
           >
           <mat-option value="none">Ordenar por...</mat-option>
-          @for (column of columns; track column.name) { @if (column.sortable
+          @for (column of columns(); track column.name) { @if (column.sortable
             !== false) {
             <mat-option [value]="column.name">
               Ordenar por {{ column.label }}
@@ -370,7 +370,7 @@
             <mat-icon>search_off</mat-icon>
             <h3>No hay datos disponibles</h3>
             <p>
-              No se encontraron {{ label.toLowerCase() || "elementos" }} que
+              No se encontraron {{ label().toLowerCase() || "elementos" }} que
               coincidan con sus criterios.
             </p>
           </mat-card-content>
@@ -390,7 +390,7 @@
                   </h3>
                   <mat-chip
                     class="entity-type-chip"
-                    [class]="entityType.toLowerCase()"
+                    [class]="entityType().toLowerCase()"
                     >
                     {{ entityTypeDisplay }}
                   </mat-chip>

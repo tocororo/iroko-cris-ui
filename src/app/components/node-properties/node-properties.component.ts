@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
@@ -9,11 +9,12 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
   imports: [NgxJsonViewerModule],
 })
 export class NodePropertiesComponent {
-  @Input() node: any;
+  readonly node = input<any>();
 
   getNodeProperties(): { key: string; value: any }[] {
-    if (!this.node) return [];
-    return Object.entries(this.node)
+    const node = this.node();
+    if (!node) return [];
+    return Object.entries(node)
       .filter(([key]) => !key.startsWith('_'))
       .map(([key, value]) => ({ key, value }));
   }

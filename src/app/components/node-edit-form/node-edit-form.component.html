@@ -4,10 +4,10 @@
     <mat-card-header>
       <mat-card-title>
         <mat-icon>edit</mat-icon>
-        Editar Nodo: {{ getNodeDisplayName(node) }}
+        Editar Nodo: {{ getNodeDisplayName(node()) }}
       </mat-card-title>
       <mat-card-subtitle>
-        Tipo: {{ nodeType }} | UUID: {{ node.iroko_uuid }}
+        Tipo: {{ nodeType() }} | UUID: {{ node().iroko_uuid }}
       </mat-card-subtitle>
     </mat-card-header>
 

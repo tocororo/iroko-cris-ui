@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, ElementRef, inject, output, viewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -30,8 +30,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class QueryExecutorComponent {
   private fb = inject(FormBuilder);
 
-  @Output() queryExecuted = new EventEmitter<CypherQuery>();
-  @ViewChild('queryTextarea') queryTextarea!: ElementRef;
+  readonly queryExecuted = output<CypherQuery>();
+  readonly queryTextarea = viewChild.required<ElementRef>('queryTextarea');
 
   queryForm: FormGroup;
   parameters: { key: string; value: any }[] = [];
@@ -90,8 +90,9 @@ export class QueryExecutorComponent {
       });
 
       // Focus the textarea
-      if (this.queryTextarea) {
-        this.queryTextarea.nativeElement.focus();
+      const queryTextarea = this.queryTextarea();
+      if (queryTextarea) {
+        queryTextarea.nativeElement.focus();
       }
     }
   }

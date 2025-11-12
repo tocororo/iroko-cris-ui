@@ -4,13 +4,13 @@
     <mat-card-header>
       <mat-card-title>
         <mat-icon>assessment</mat-icon>
-        {{ title }}
+        {{ title() }}
       </mat-card-title>
       <mat-card-subtitle>
         <p>{{ result.methodology.name }} v{{ result.methodology.version }}</p>
         <p class="user-info">
-          Evaluado por: {{ evaluation.user?.full_name }} ({{
-            evaluation.user?.email
+          Evaluado por: {{ evaluation().user?.full_name }} ({{
+            evaluation().user?.email
           }})
         </p>
         <p>Fecha: {{ result.timestamp | date : "medium" }}</p>

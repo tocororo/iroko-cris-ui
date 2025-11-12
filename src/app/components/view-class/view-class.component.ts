@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 /**
  * Visualizar una clase significa:
@@ -16,5 +16,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './view-class.component.scss',
 })
 export class ViewClassComponent {
-  @Input() className: string = '';
+  readonly className = input<string>('');
 }

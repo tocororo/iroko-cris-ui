@@ -1,12 +1,11 @@
 import {
   Component,
-  Input,
   OnInit,
-  Output,
-  EventEmitter,
   SimpleChanges,
   OnDestroy,
   inject,
+  input,
+  output
 } from '@angular/core';
 
 import { MatTabsModule } from '@angular/material/tabs';
@@ -56,10 +55,10 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 ],
 })
 export class NodeViewerComponent implements OnInit, OnDestroy {
-  @Input() nodeId!: string;
-  @Input() nodeType!: string;
-  @Output() nodeLoaded = new EventEmitter<any>();
-  @Output() nodeSelected = new EventEmitter<any>();
+  readonly nodeId = input.required<string>();
+  readonly nodeType = input.required<string>();
+  readonly nodeLoaded = output<any>();
+  readonly nodeSelected = output<any>();
 
   node: any;
   relationshipTabsGroups: RelationshipGroup[] = [];
@@ -99,7 +98,9 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
 
   loadNode() {
     this.activeTab = 0;
-    if (!this.nodeId || !this.nodeType) {
+    const nodeId = this.nodeId();
+    const nodeType = this.nodeType();
+    if (!nodeId || !nodeType) {
       console.warn('EnhancedNodeViewerComponent - Missing nodeId or nodeType');
       return;
     }
@@ -107,8 +108,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     const queryData = this.cypherBuilder.buildNodeWithRelationshipsQuery(
-      this.nodeId,
-      [this.nodeType]
+      nodeId,
+      [nodeType]
     );
 
     this.irokoApiService.executeQuery(queryData).subscribe({
@@ -220,12 +221,12 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       if (group.searchTerm) {
         if (group.searchIndex) {
           countQuery = this.cypherBuilder.buildRelationshipCountQueryWithSearch(
-            this.nodeId,
+            this.nodeId(),
             group.type,
             group.searchIndex,
             group.searchTerm,
             group.direction,
-            [this.nodeType]
+            [this.nodeType()]
           );
           this.irokoApiService.executeFullTextQuery(countQuery).subscribe({
             next: (countResult) => {
@@ -242,11 +243,11 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
         } else {
           countQuery =
             this.cypherBuilder.buildRelationshipCountQueryWithRegularSearch(
-              this.nodeId,
+              this.nodeId(),
               group.type,
               group.searchTerm,
               group.direction,
-              [this.nodeType]
+              [this.nodeType()]
             );
           this.irokoApiService.executeQuery(countQuery).subscribe({
             next: (countResult) => {
@@ -263,10 +264,10 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
         }
       } else {
         countQuery = this.cypherBuilder.buildRelationshipCountQuery(
-          this.nodeId,
+          this.nodeId(),
           group.type,
           group.direction,
-          [this.nodeType]
+          [this.nodeType()]
         );
         this.irokoApiService.executeQuery(countQuery).subscribe({
           next: (countResult) => {
@@ -295,11 +296,11 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       if (group.searchTerm && group.showSearch) {
         relationshipsQuery =
           this.cypherBuilder.buildPaginatedRelationshipsQueryWithRegularSearch(
-            this.nodeId,
+            this.nodeId(),
             group.type,
             group.searchTerm,
             group.direction,
-            [this.nodeType],
+            [this.nodeType()],
             page,
             group.pageSize
           );
@@ -321,11 +322,11 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
 
         let countQuery =
           this.cypherBuilder.buildRelationshipCountQueryWithRegularSearch(
-            this.nodeId,
+            this.nodeId(),
             group.type,
             group.searchTerm,
             group.direction,
-            [this.nodeType]
+            [this.nodeType()]
           );
         this.irokoApiService.executeQuery(countQuery).subscribe({
           next: (countResult) => {
@@ -340,10 +341,10 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       } else {
         relationshipsQuery =
           this.cypherBuilder.buildPaginatedRelationshipsQuery(
-            this.nodeId,
+            this.nodeId(),
             group.type,
             group.direction,
-            [this.nodeType],
+            [this.nodeType()],
             page,
             group.pageSize
           );
@@ -386,7 +387,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           const relationship: RelationshipDeleteRequest = {
-            from_uuid: this.nodeId,
+            from_uuid: this.nodeId(),
             to_uuid: node.iroko_uuid,
             relation_type: group.type,
           };
@@ -504,7 +505,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             link.href = url;
 
             const timestamp = new Date().toISOString().slice(0, 10);
-            const fileName = `relaciones_${group.type}_${this.nodeId}_${timestamp}.csv`;
+            const fileName = `relaciones_${group.type}_${this.nodeId()}_${timestamp}.csv`;
             link.download = fileName;
 
             document.body.appendChild(link);
@@ -541,7 +542,8 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
   }
 
   private buildExportQuery(group: RelationshipGroup): string {
-    const mainNodeLabelClause = this.nodeType ? `:${this.nodeType}` : '';
+    const nodeType = this.nodeType();
+    const mainNodeLabelClause = nodeType ? `:${nodeType}` : '';
 
     let relationshipPattern: string;
     if (group.direction === 'OUTGOING') {
@@ -581,7 +583,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     }
 
     if (group.searchIndex && group.searchTerm) {
-      conditions.push(`n:${this.nodeType}`);
+      conditions.push(`n:${this.nodeType()}`);
     }
 
     return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -602,7 +604,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     skipSearch: boolean = false
   ): any {
     const params: any = {
-      nodeId: this.nodeId,
+      nodeId: this.nodeId(),
     };
 
     if (group.searchTerm && !skipSearch && !group.searchIndex) {

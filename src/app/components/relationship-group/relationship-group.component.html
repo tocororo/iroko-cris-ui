@@ -6,37 +6,37 @@
       mat-raised-button
       color="primary"
       (click)="onExport()"
-      [disabled]="isExporting || group.relationships.length === 0"
+      [disabled]="isExporting() || group().relationships.length === 0"
       class="export-button"
       >
-      @if (!isExporting) {
+      @if (!isExporting()) {
         <mat-icon>download</mat-icon>
       }
-      @if (isExporting){
+      @if (isExporting()){
         <mat-progress-spinner
           diameter="16"
           mode="indeterminate"
           class="export-spinner"
         ></mat-progress-spinner>
       }
-      {{ isExporting ? "Exportando..." : "Exportar CSV" }}
+      {{ isExporting() ? "Exportando..." : "Exportar CSV" }}
     </button>
   </div>
 
   <!-- Search Component -->
   <app-relationship-search
-    [groupType]="group.type"
-    [searchTerm]="group.searchTerm || ''"
-    [isLoading]="group.isLoading"
-    [isSearching]="group.isSearching || false"
-    [showSearch]="group.showSearch || false"
+    [groupType]="group().type"
+    [searchTerm]="group().searchTerm || ''"
+    [isLoading]="group().isLoading"
+    [isSearching]="group().isSearching || false"
+    [showSearch]="group().showSearch || false"
     (search)="onSearch($event)"
     (searchClear)="onSearchClear()"
   ></app-relationship-search>
 
   <!-- List Component -->
   <app-relationship-list
-    [group]="group"
+    [group]="group()"
     (nodeSelected)="onNodeSelected($event)"
     (nodeDelete)="onNodeDelete($event)"
   ></app-relationship-list>
@@ -44,10 +44,10 @@
   <!-- Pagination -->
   @if (shouldShowPagination()) {
     <app-relationship-pagination
-      [currentPage]="group.currentPage"
-      [pageSize]="group.pageSize"
-      [totalItems]="group.totalCount"
-      [isLoading]="group.isLoading"
+      [currentPage]="group().currentPage"
+      [pageSize]="group().pageSize"
+      [totalItems]="group().totalCount"
+      [isLoading]="group().isLoading"
       (pageChange)="onPageChange($event)"
     ></app-relationship-pagination>
   }

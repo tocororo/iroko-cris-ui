@@ -1,5 +1,5 @@
 // node-evaluation-viewer.component.ts
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Angular Material Imports
@@ -42,16 +42,22 @@ import {
 export class NodeEvaluationViewerComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
-  @Input({ required: true }) evaluation!: StoredEvaluation;
+  readonly evaluation = input.required<StoredEvaluation>();
+  // TODO: Skipped for migration because:
+  //  Your application code writes to the input. This prevents migration.
+  // TODO: Skipped for migration because:
+  //  Your application code writes to the input. This prevents migration.
+  // TODO: Skipped for migration because:
+  //  Your application code writes to the input. This prevents migration.
   @Input({ required: true }) result!: EvaluationResult;
 
-  @Input({ required: true }) nodeData: any;
-  @Input() showDetails = true;
-  @Input() title = 'Resultados de Evaluación';
+  readonly nodeData = input.required<any>();
+  readonly showDetails = input(true);
+  readonly title = input('Resultados de Evaluación');
 
   panelOpenState: { [key: string]: boolean } = {};
   ngOnInit() {
-    this.result = this.evaluation.evaluation_data;
+    this.result = this.evaluation().evaluation_data;
     this.initializePanelStates();
   }
 
@@ -260,8 +266,8 @@ export class NodeEvaluationViewerComponent implements OnInit {
             this.result.methodology.description
           }</p>
           <p><strong>Evaluado por:</strong> ${
-            this.evaluation?.user?.full_name || '—'
-          } (${this.evaluation?.user?.email || '—'})</p>
+            this.evaluation()?.user?.full_name || '—'
+          } (${this.evaluation()?.user?.email || '—'})</p>
           <p><strong>Fecha:</strong> ${formatDate(this.result?.timestamp)}</p>
           <p><strong>Entidad:</strong> ${this.result.methodology.entity}</p>
           <p><strong>Estructura:</strong> ${
@@ -363,26 +369,29 @@ export class NodeEvaluationViewerComponent implements OnInit {
   }
 
   getNodeDisplayName(): string {
-    if (this.nodeData) {
+    const nodeData = this.nodeData();
+    if (nodeData) {
       return (
-        this.nodeData.name ||
-        this.nodeData.title ||
-        this.nodeData.label ||
-        this.nodeData.iroko_uuid
+        nodeData.name ||
+        nodeData.title ||
+        nodeData.label ||
+        nodeData.iroko_uuid
       );
     }
     return this.result.node_id;
   }
 
   getNodeDescription(): string {
-    if (this.nodeData?.description) {
-      return this.nodeData.description;
+    const nodeData = this.nodeData();
+    if (nodeData?.description) {
+      return nodeData.description;
     }
     return 'Nodo ' + this.result.node_id;
   }
 
   getNodeProperties(): { key: string; value: any }[] {
-    if (!this.nodeData) return [];
+    const nodeData = this.nodeData();
+    if (!nodeData) return [];
 
     const excludedKeys = [
       '_',
@@ -392,7 +401,7 @@ export class NodeEvaluationViewerComponent implements OnInit {
       'identity',
       'description',
     ];
-    return Object.entries(this.nodeData)
+    return Object.entries(nodeData)
       .filter(
         ([key]) => key.includes('identifier')
         // ([key]) => !excludedKeys.some((excluded) => key.startsWith(excluded))

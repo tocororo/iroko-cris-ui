@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { CypherApiService } from '../../services/cypher-api.service';
 import { CypherQuery } from '../../api/models/cypher-query.model';
 import { QueryExecutorComponent } from '../../components/query-executor/query-executor.component';
@@ -29,7 +29,7 @@ export class QueryPageComponent {
   private metadataService = inject(MetadataService);
   private authService = inject(AuthService);
 
-  @ViewChild(QueryExecutorComponent) queryExecutor!: QueryExecutorComponent;
+  readonly queryExecutor = viewChild.required(QueryExecutorComponent);
 
   queryResult: any;
   error: any;
@@ -135,8 +135,9 @@ export class QueryPageComponent {
 
   // Method to load examples
   loadExample(exampleId: string) {
-    if (this.queryExecutor) {
-      this.queryExecutor.loadExample(exampleId);
+    const queryExecutor = this.queryExecutor();
+    if (queryExecutor) {
+      queryExecutor.loadExample(exampleId);
     }
   }
 }

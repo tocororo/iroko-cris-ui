@@ -8,7 +8,7 @@
   </markdown>
   } @else {
   <markdown
-    [data]="content"
+    [data]="content()"
     (load)="onMarkdownLoad()"
     (error)="onMarkdownError($event)"
   >

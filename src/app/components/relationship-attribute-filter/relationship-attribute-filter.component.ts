@@ -1,5 +1,5 @@
 // src/app/components/relationship-attribute-filter/relationship-attribute-filter.component.ts
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit, input, output } from '@angular/core';
 
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,9 +27,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 ],
 })
 export class RelationshipAttributeFilterComponent implements OnInit {
-  @Input() config!: any;
-  @Input() label: string = 'Filtrar por atributo de relación';
-  @Output() valueChange = new EventEmitter<any>();
+  readonly config = input.required<any>();
+  readonly label = input<string>('Filtrar por atributo de relación');
+  readonly valueChange = output<any>();
 
   valueControl = new FormControl('');
   operatorControl = new FormControl('EQUALS');
@@ -56,7 +56,7 @@ export class RelationshipAttributeFilterComponent implements OnInit {
       this.valueChange.emit({
         value: value,
         operator: operator,
-        attribute: this.config.attribute,
+        attribute: this.config().attribute,
       });
     } else {
       this.valueChange.emit(null);
@@ -70,6 +70,7 @@ export class RelationshipAttributeFilterComponent implements OnInit {
   }
 
   get placeholder(): string {
-    return this.config.placeholder || `Valor para ${this.config.attribute}`;
+    const config = this.config();
+    return config.placeholder || `Valor para ${config.attribute}`;
   }
 }

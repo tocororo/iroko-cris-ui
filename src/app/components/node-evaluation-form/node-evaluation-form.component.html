@@ -4,21 +4,26 @@
     <mat-card-header>
       <mat-card-title>
         <mat-icon>assessment</mat-icon>
-        Evaluación: {{ evaluation.methodology.name }} v{{
-          evaluation.methodology.version
+        Evaluación: {{ evaluation().methodology.name }} v{{
+          evaluation().methodology.version
         }}
       </mat-card-title>
       <mat-card-subtitle>
-        <p>{{ evaluation.methodology.description }}</p>
+        <p>{{ evaluation().methodology.description }}</p>
         <div class="methodology-stats">
           <div class="stat">
             <mat-icon>view_list</mat-icon>
-            <span>{{ evaluation.methodology.sections.length }} secciones</span>
+            <span
+              >{{ evaluation().methodology.sections.length }} secciones</span
+            >
           </div>
           <div class="stat">
             <mat-icon>category</mat-icon>
             <span
-              >{{ getTotalCategories(evaluation.methodology) }} categorías</span
+              >{{
+                getTotalCategories(evaluation().methodology)
+              }}
+              categorías</span
             >
           </div>
         </div>
@@ -33,7 +38,7 @@
             >Progreso general:
             {{ getOverallCompletion() | number : "1.0-0" }}%</span
           >
-          <span class="node-info">Nodo: {{ nodeId }}</span>
+          <span class="node-info">Nodo: {{ nodeId() }}</span>
         </div>
         <mat-progress-bar
           mode="determinate"
@@ -60,7 +65,7 @@
 
         <!-- Sections Accordion -->
         <mat-accordion multi class="sections-accordion">
-          @for (section of evaluation.methodology.sections; track
+          @for (section of evaluation().methodology.sections; track
           trackBySection($index, section)) {
           <mat-expansion-panel
             [expanded]="panelOpenState[section.id]"
@@ -120,7 +125,7 @@
                 <div class="questions-container">
                   @for (questionId of category.questions; track
                   trackByQuestion($index, questionId)) { @let question =
-                  evaluation.question_data[questionId];
+                  evaluation().question_data[questionId];
                   <div
                     class="question-item"
                     [class.answered]="isQuestionAnswered(questionId)"
@@ -308,10 +313,10 @@
               mat-raised-button
               color="primary"
               type="submit"
-              [disabled]="!evaluationForm.valid || isLoading"
+              [disabled]="!evaluationForm.valid || isLoading()"
               class="submit-button"
             >
-              @if (isLoading) {
+              @if (isLoading()) {
               <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
               <span>Procesando...</span>
               } @else {
@@ -328,10 +333,10 @@
               color="accent"
               type="button"
               (click)="onFinalize()"
-              [disabled]="isFinalizing || hasUnansweredQuestions()"
+              [disabled]="isFinalizing() || hasUnansweredQuestions()"
               class="finalize-button"
             >
-              @if (isFinalizing) {
+              @if (isFinalizing()) {
               <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
               <span>Finalizando...</span>
               } @else {

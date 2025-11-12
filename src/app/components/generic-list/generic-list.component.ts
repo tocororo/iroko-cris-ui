@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, input, output } from '@angular/core';
 
 import {
   FormsModule,
@@ -103,17 +103,23 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   private cdr = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
 
-  @Input() entityType!: string;
-  @Input() columns: ListColumn[] = [];
+  readonly entityType = input.required<string>();
+  readonly columns = input<ListColumn[]>([]);
+  // TODO: Skipped for migration because:
+  //  Your application code writes to the input. This prevents migration.
+  // TODO: Skipped for migration because:
+  //  Your application code writes to the input. This prevents migration.
+  // TODO: Skipped for migration because:
+  //  Your application code writes to the input. This prevents migration.
   @Input() filters: ListFilter[] = [];
-  @Input() label: string = '';
-  @Input() pageSize: number = 10;
-  @Input() defaultSort?: string;
-  @Input() defaultSortOrder: 'ASC' | 'DESC' = 'ASC';
-  @Input() advancedQueryOptions?: AdvancedQueryOptions;
-  @Input() fixedFilters: QueryFilter[] = [];
-  @Output() nodeSelected = new EventEmitter<any>();
-  @Input() detaillsText: string = 'Ver detalles';
+  readonly label = input<string>('');
+  readonly pageSize = input<number>(10);
+  readonly defaultSort = input<string>();
+  readonly defaultSortOrder = input<'ASC' | 'DESC'>('ASC');
+  readonly advancedQueryOptions = input<AdvancedQueryOptions>();
+  readonly fixedFilters = input<QueryFilter[]>([]);
+  readonly nodeSelected = output<any>();
+  readonly detaillsText = input<string>('Ver detalles');
 
   entityTypeDisplay = '';
 
@@ -167,7 +173,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
     this.labelService.loadData().subscribe((labels) => {
       this.entityTypeDisplay =
-        labels.nodes[this.entityType.toLocaleLowerCase()].display;
+        labels.nodes[this.entityType().toLocaleLowerCase()].display;
       this.initializeSorting();
       this.generateAutomaticFilters();
       this.initializeFilters();
@@ -221,7 +227,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const explicitFilters = [...(this.filters || [])];
 
     // Generate filters for columns that don't have explicit filters
-    this.columns.forEach((column) => {
+    this.columns().forEach((column) => {
       if (
         column.filterable !== false &&
         !explicitFilters.some((f) => f.name === column.name) &&
@@ -275,7 +281,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       data: {
         availableFilters: this.availableFilters,
         selectedFilters: Array.from(this.selectedFilters),
-        columns: this.columns,
+        columns: this.columns(),
       },
     });
 
@@ -413,30 +419,32 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private initializeAdvancedQuery() {
-    if (this.advancedQueryOptions) {
+    const advancedQueryOptions = this.advancedQueryOptions();
+    if (advancedQueryOptions) {
       this.customWhereClause =
-        this.advancedQueryOptions.customWhereClause || '';
+        advancedQueryOptions.customWhereClause || '';
 
-      if (this.advancedQueryOptions.customParameters) {
+      if (advancedQueryOptions.customParameters) {
         this.customParameters = Object.entries(
-          this.advancedQueryOptions.customParameters
+          advancedQueryOptions.customParameters
         ).map(([key, value]) => ({ key, value }));
       }
     }
   }
 
   private initializeSorting() {
-    const sortableColumns = this.columns
+    const sortableColumns = this.columns()
       .filter((col) => col.sortable)
       .map((col) => col.name);
+    const defaultSort = this.defaultSort();
     const initialSortAttr =
-      this.defaultSort && sortableColumns.includes(this.defaultSort)
-        ? this.defaultSort
+      defaultSort && sortableColumns.includes(defaultSort)
+        ? defaultSort
         : sortableColumns[0] || 'iroko_uuid';
 
     this.sortBy = {
       attribute: initialSortAttr,
-      direction: this.defaultSortOrder,
+      direction: this.defaultSortOrder(),
     };
 
     this.sortControl.setValue(initialSortAttr);
@@ -539,7 +547,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     // Prepare data for export
     const exportData = this.nodes.map((node) => {
       const row: any = {};
-      this.columns.forEach((column) => {
+      this.columns().forEach((column) => {
         row[column.label] = this.formatPropertyValue(
           node[column.name],
           column.type
@@ -548,7 +556,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       return row;
     });
 
-    const filename = `${this.entityType.toLowerCase()}-export-${
+    const filename = `${this.entityType().toLowerCase()}-export-${
       new Date().toISOString().split('T')[0]
     }.csv`;
     this.exportService.exportToCSV(exportData, filename);
@@ -577,7 +585,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
             const link = document.createElement('a');
             link.href = url;
             const timestamp = new Date().toISOString().slice(0, 10);
-            link.download = `${this.entityType.toLowerCase()}_export_${timestamp}.csv`;
+            link.download = `${this.entityType().toLowerCase()}_export_${timestamp}.csv`;
 
             document.body.appendChild(link);
             link.click();
@@ -621,7 +629,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         this.totalCount = await this.fetchTotalCount();
       }
 
-      this.nodes = await this.fetchNodes(page * this.pageSize, this.pageSize);
+      this.nodes = await this.fetchNodes(page * this.pageSize(), this.pageSize());
       this.updatePagination();
 
       // Update URL after successful load
@@ -742,8 +750,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const conditions: string[] = [];
 
     // Fixed filters
-    if (this.fixedFilters.length > 0) {
-      this.fixedFilters.forEach((filter, index) => {
+    if (this.fixedFilters().length > 0) {
+      this.fixedFilters().forEach((filter, index) => {
         const paramName = `fixedFilter${index}`;
         switch (filter.operator) {
           case 'CONTAINS':
@@ -795,7 +803,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
       if (Array.isArray(filterValue) && filterValue.length > 0) {
         // Multi-select filter
-        const column = this.columns.find((col) => col.name === filterName);
+        const column = this.columns().find((col) => col.name === filterName);
 
         if (column && column.type === 'array') {
           // For array properties, check if any selected value exists in the array
@@ -811,7 +819,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         conditions.push(`date(n.${filterName}) = date($${paramName})`);
       } else if (filterValue) {
         // Text filter
-        const column = this.columns.find((col) => col.name === filterName);
+        const column = this.columns().find((col) => col.name === filterName);
 
         if (column && column.type === 'array') {
           // Text search within array elements
@@ -833,8 +841,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     // Relationships from advanced query options
-    if (this.advancedQueryOptions?.relationships) {
-      this.advancedQueryOptions.relationships.forEach((rel, index) => {
+    const advancedQueryOptions = this.advancedQueryOptions();
+    if (advancedQueryOptions?.relationships) {
+      advancedQueryOptions.relationships.forEach((rel, index) => {
         const alias = rel.alias || `related${index}`;
         const direction = rel.direction === 'IN' ? '<' : '';
         const arrow = rel.direction === 'OUT' ? '>' : '';
@@ -850,8 +859,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private buildReturnClause(): string {
-    if (this.advancedQueryOptions?.customReturn) {
-      return this.advancedQueryOptions.customReturn;
+    const advancedQueryOptions = this.advancedQueryOptions();
+    if (advancedQueryOptions?.customReturn) {
+      return advancedQueryOptions.customReturn;
     }
     return 'RETURN n';
   }
@@ -865,7 +875,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     const params: any = {};
 
     // Fixed filter parameters
-    this.fixedFilters.forEach((filter, index) => {
+    this.fixedFilters().forEach((filter, index) => {
       params[`fixedFilter${index}`] = filter.value;
     });
 
@@ -915,8 +925,9 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     // Advanced query parameters
-    if (this.advancedQueryOptions?.customParameters) {
-      Object.entries(this.advancedQueryOptions.customParameters).forEach(
+    const advancedQueryOptions = this.advancedQueryOptions();
+    if (advancedQueryOptions?.customParameters) {
+      Object.entries(advancedQueryOptions.customParameters).forEach(
         ([key, value]) => {
           if (value !== undefined && value !== null && value !== '') {
             params[key] = value;
@@ -964,7 +975,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       allConditions.length > 0 ? `WHERE ${allConditions.join(' AND ')}` : '';
 
     const query = `
-      MATCH (n:${this.entityType})
+      MATCH (n:${this.entityType()})
       ${relationshipMatches}
       ${finalWhereClause}
       ${returnClause}
@@ -1094,7 +1105,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updatePagination() {
-    const calculatedPages = Math.ceil(this.totalCount / this.pageSize);
+    const calculatedPages = Math.ceil(this.totalCount / this.pageSize());
     this.totalPages = Math.max(1, calculatedPages) || 1; // Ensure at least 1 page
 
     if (this.currentPage >= this.totalPages) {
@@ -1177,7 +1188,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.paginationInfoText = 'No se encontraron resultados.';
     }
 
-    const startIdx = this.currentPage * this.pageSize + 1;
+    const startIdx = this.currentPage * this.pageSize() + 1;
     const endIdx = Math.min(startIdx + this.nodes.length - 1, this.totalCount);
     const totalPages = this.totalPages;
 
@@ -1194,7 +1205,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   onNodeSelect(node: any) {
     this.router.navigate([
       '/view',
-      this.entityType.toLowerCase(),
+      this.entityType().toLowerCase(),
       node.iroko_uuid,
     ]);
     this.nodeSelected.emit(node);
@@ -1221,7 +1232,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   getNodeProperties(
     node: any
   ): { key: string; value: any; label: string; type?: string }[] {
-    return this.columns.map((col) => ({
+    return this.columns().map((col) => ({
       key: col.name,
       value: node[col.name],
       label: col.label,
@@ -1269,7 +1280,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         const attribute = sortParts[0];
         const direction = sortParts[1].toUpperCase();
         if (direction === 'ASC' || direction === 'DESC') {
-          const columnExists = this.columns.some(
+          const columnExists = this.columns().some(
             (col) => col.name === attribute
           );
           if (columnExists) {

@@ -1,5 +1,5 @@
 // src/app/components/global-search/global-search.component.ts
-import { Component, ElementRef, ViewChild, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -36,7 +36,7 @@ export class GlobalSearchComponent implements OnInit {
   private searchService = inject(SearchService);
   private router = inject(Router);
 
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   searchTerm = '';
   searchResults: SearchResult[] = [];
@@ -92,7 +92,7 @@ export class GlobalSearchComponent implements OnInit {
         queryParams: { q: this.searchTerm },
       });
       this.showResults = false;
-      this.searchInput.nativeElement.blur();
+      this.searchInput().nativeElement.blur();
     }
   }
 

@@ -1,7 +1,7 @@
-@if (showSearch) {
+@if (showSearch()) {
 <div class="relationship-search-container">
   <mat-form-field appearance="outline" class="relationship-search-field">
-    <mat-label>Buscar en {{ groupType }}</mat-label>
+    <mat-label>Buscar en {{ groupType() }}</mat-label>
     <input
       matInput
       [formControl]="searchControl"
@@ -15,7 +15,7 @@
     <mat-icon matSuffix>search</mat-icon>
 
     <!-- Loading indicator -->
-    @if (isLoading && isSearching) {
+    @if (isLoading() && isSearching()) {
     <mat-progress-spinner
       matSuffix
       diameter="16"

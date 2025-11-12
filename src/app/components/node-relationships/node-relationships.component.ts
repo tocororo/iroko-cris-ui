@@ -1,9 +1,8 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   OnDestroy,
+  input,
+  output
 } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
@@ -18,21 +17,21 @@ import { LabelsService } from '../../services/labels.service';
   imports: [MatIconModule, RelationshipGroupComponent],
 })
 export class NodeRelationshipsComponent implements OnDestroy {
-  @Input() relationshipGroups: RelationshipGroup[] = [];
-  @Input() isExporting = false;
-  @Input() labelNameFn: (name: string) => string = (name) => name;
+  readonly relationshipGroups = input<RelationshipGroup[]>([]);
+  readonly isExporting = input(false);
+  readonly labelNameFn = input<(name: string) => string>((name) => name);
 
-  @Output() nodeSelected = new EventEmitter<any>();
-  @Output() relationshipPageChange = new EventEmitter<{
+  readonly nodeSelected = output<any>();
+  readonly relationshipPageChange = output<{
     group: RelationshipGroup;
     page: number;
-  }>();
-  @Output() relationshipSearch = new EventEmitter<{
+}>();
+  readonly relationshipSearch = output<{
     group: RelationshipGroup;
     searchTerm: string;
-  }>();
-  @Output() relationshipExport = new EventEmitter<RelationshipGroup>();
-  @Output() searchClear = new EventEmitter<RelationshipGroup>();
+}>();
+  readonly relationshipExport = output<RelationshipGroup>();
+  readonly searchClear = output<RelationshipGroup>();
 
   onNodeSelected(group: RelationshipGroup, nodeData: any): void {
     let a = { node: nodeData, group: group };

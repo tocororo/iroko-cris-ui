@@ -1,11 +1,10 @@
 // src/app/components/node-edit-form/node-edit-form.component.ts
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   OnInit,
   inject,
+  input,
+  output
 } from '@angular/core';
 
 import {
@@ -63,10 +62,10 @@ interface RelationshipProperty {
 ],
 })
 export class NodeEditFormComponent implements OnInit {
-  @Input() node: any;
-  @Input() nodeType: string = '';
-  @Output() saved = new EventEmitter<void>();
-  @Output() cancelled = new EventEmitter<void>();
+  readonly node = input<any>();
+  readonly nodeType = input<string>('');
+  readonly saved = output<void>();
+  readonly cancelled = output<void>();
 
   private editService = inject(NodeEditService);
   private cypherService = inject(CypherApiService);
@@ -114,10 +113,11 @@ export class NodeEditFormComponent implements OnInit {
     // Main properties form
     const propertyControls: { [key: string]: any } = {};
 
-    if (this.node) {
-      Object.keys(this.node).forEach((key) => {
+    const node = this.node();
+    if (node) {
+      Object.keys(node).forEach((key) => {
         if (!this.protectedProperties.includes(key) && !key.startsWith('_')) {
-          const value = this.node[key];
+          const value = this.node()[key];
           propertyControls[key] = [
             value,
             this.getValidatorsForProperty(key, value),
@@ -258,7 +258,7 @@ export class NodeEditFormComponent implements OnInit {
     this.isSubmitting = true;
 
     const updateData: NodePropertyUpdate = {
-      iroko_uuid: this.node.iroko_uuid,
+      iroko_uuid: this.node().iroko_uuid,
       properties: this.editForm.value,
     };
 
@@ -273,6 +273,7 @@ export class NodeEditFormComponent implements OnInit {
               duration: 5000,
             }
           );
+          // TODO: The 'emit' function requires a mandatory void argument
           this.saved.emit();
         } else {
           this.snackBar.open(`Error: ${response.message}`, 'Cerrar', {
@@ -304,7 +305,7 @@ export class NodeEditFormComponent implements OnInit {
 
     const formValue = this.relationshipsForm.value;
     const relationship: RelationshipUpdate = {
-      from_uuid: this.node.iroko_uuid,
+      from_uuid: this.node().iroko_uuid,
       to_uuid: formValue.targetNode.iroko_uuid,
       relation_type: formValue.relationshipType,
       properties: this.convertPropertiesArrayToObject(),
@@ -321,6 +322,7 @@ export class NodeEditFormComponent implements OnInit {
           });
           this.relationshipsForm.reset();
           this.relationshipPropertiesArray.clear();
+          // TODO: The 'emit' function requires a mandatory void argument
           this.saved.emit();
         } else {
           this.snackBar.open(`Error: ${response.message}`, 'Cerrar', {
@@ -361,6 +363,7 @@ export class NodeEditFormComponent implements OnInit {
   }
 
   onCancel() {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.cancelled.emit();
   }
 

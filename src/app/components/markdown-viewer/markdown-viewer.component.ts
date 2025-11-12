@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 
 import { MarkdownModule } from 'ngx-markdown';
 
@@ -14,12 +14,22 @@ export interface MarkdownError {
   imports: [MarkdownModule],
 })
 export class MarkdownViewerComponent {
-  @Input() content: string = '';
+  readonly content = input<string>('');
+  // TODO: Skipped for migration because:
+  //  This input is used in a control flow expression (e.g. `@if` or `*ngIf`)
+  //  and migrating would break narrowing currently.
+  // TODO: Skipped for migration because:
+  //  This input is used in a control flow expression (e.g. `@if` or `*ngIf`)
+  //  and migrating would break narrowing currently.
+  // TODO: Skipped for migration because:
+  //  This input is used in a control flow expression (e.g. `@if` or `*ngIf`)
+  //  and migrating would break narrowing currently.
   @Input() src?: string;
-  @Output() load = new EventEmitter<void>();
-  @Output() error = new EventEmitter<MarkdownError>();
+  readonly load = output<void>();
+  readonly error = output<MarkdownError>();
 
   onMarkdownLoad() {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.load.emit();
   }
 

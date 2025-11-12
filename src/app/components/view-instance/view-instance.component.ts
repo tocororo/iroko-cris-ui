@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 /**
  * Visualizar una instancia significa:
@@ -21,9 +21,9 @@ import { Component, Input } from '@angular/core';
   styleUrl: './view-instance.component.scss',
 })
 export class ViewInstanceComponent {
-  @Input() instancePID: string = '';
+  readonly instancePID = input<string>('');
 
   // las collecciones de instancias relacionadas que sean mayor que este numero,
   // aparecen en un tab nuevo a partir de esta candidad.
-  @Input() relationsCountInMain: number = 3;
+  readonly relationsCountInMain = input<number>(3);
 }
