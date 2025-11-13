@@ -1,12 +1,7 @@
 // src/app/api/services/cypher-builder.service.ts
 import { Injectable } from '@angular/core';
 import { FullTextCypherQuery } from '../api/models/cypher-query.model';
-
-export interface QueryFilter {
-  property: string;
-  operator: '=' | 'CONTAINS' | 'STARTS WITH' | 'ENDS WITH' | '>' | '<' | '>=';
-  value: any;
-}
+import { ListFilter } from './labels.service';
 
 export interface QueryOptions {
   labels?: string[];
@@ -16,6 +11,53 @@ export interface QueryOptions {
   skip?: number;
   orderBy?: { property: string; direction: 'ASC' | 'DESC' };
   relationships?: { type: string; direction: 'IN' | 'OUT' }[];
+}
+
+export interface QueryFilter {
+  property: string;
+  operator: '=' | 'CONTAINS' | 'STARTS WITH' | 'ENDS WITH' | '>' | '<' | '>=';
+  value: any;
+}
+
+export interface SortOption {
+  attribute: string;
+  direction: 'ASC' | 'DESC';
+}
+
+export interface AdvancedQueryOptions {
+  customWhereClause?: string;
+  customParameters?: { [key: string]: any };
+  relationships?: {
+    type: string;
+    direction?: 'IN' | 'OUT';
+    targetLabel?: string;
+    alias?: string;
+  }[];
+  customReturn?: string;
+}
+
+export interface RelationshipExportOptions {
+  nodeId: string;
+  nodeType: string;
+  relationshipType: string;
+  direction: 'INCOMING' | 'OUTGOING';
+  searchTerm?: string;
+  searchIndex?: string;
+}
+
+export interface GenericListQueryOptions {
+  entityType: string;
+  fixedFilters: QueryFilter[];
+  activeFilters: { [key: string]: any };
+  filterDefinitions: ListFilter[];
+  customWhereClause?: string;
+  customParameters?: { [key: string]: any }; // Changed to object/map
+  advancedQueryOptions?: AdvancedQueryOptions;
+  sortBy?: SortOption;
+  offset?: number;
+  limit?: number;
+  isCount?: boolean;
+  forExport?: boolean;
 }
 
 @Injectable({
@@ -86,6 +128,369 @@ export class CypherBuilderService {
     return { query, parameters: params };
   }
 
+  buildGenericListQuery(options: GenericListQueryOptions): {
+    query: string;
+    parameters: any;
+  } {
+    const baseWhereClause = this.buildWhereClause(options);
+    const orderClause = options.isCount ? '' : this.buildOrderClause(options);
+    const returnClause = options.isCount
+      ? 'RETURN count(n) AS count'
+      : this.buildReturnClause(options);
+    const paginationClause =
+      options.isCount || options.forExport ? '' : `SKIP $offset LIMIT $limit`;
+
+    // Build relationship patterns and conditions ONLY if there are active relationship filters
+    const { relationshipMatches, relationshipConditions } =
+      this.buildRelationshipFilters(options);
+
+    // Combine all conditions
+    const allConditions: string[] = [];
+
+    // Add base WHERE conditions (excluding relationship placeholder conditions)
+    const baseConditions = baseWhereClause.replace('WHERE ', '').trim();
+    if (baseConditions) {
+      allConditions.push(baseConditions);
+    }
+
+    // Add relationship conditions if any
+    if (relationshipConditions.length > 0) {
+      allConditions.push(...relationshipConditions);
+    }
+
+    const finalWhereClause =
+      allConditions.length > 0 ? `WHERE ${allConditions.join(' AND ')}` : '';
+
+    const query = `
+      MATCH (n:${options.entityType})
+      ${relationshipMatches}
+      ${finalWhereClause}
+      ${returnClause}
+      ${orderClause}
+      ${paginationClause}
+    `.trim();
+
+    const parameters = {
+      ...this.buildParameters(options),
+      ...this.buildRelationshipFilterParameters(options),
+    };
+
+    if (!options.isCount && !options.forExport) {
+      parameters.offset = options.offset || 0;
+      parameters.limit = options.limit || 10;
+    }
+
+    return { query, parameters };
+  }
+
+  private buildWhereClause(options: GenericListQueryOptions): string {
+    const conditions: string[] = [];
+
+    // Fixed filters
+    if (options.fixedFilters.length > 0) {
+      options.fixedFilters.forEach((filter, index) => {
+        const paramName = `fixedFilter${index}`;
+        switch (filter.operator) {
+          case 'CONTAINS':
+            conditions.push(
+              `toLower(n.${filter.property}) CONTAINS toLower($${paramName})`
+            );
+            break;
+          case 'STARTS WITH':
+            conditions.push(
+              `toLower(n.${filter.property}) STARTS WITH toLower($${paramName})`
+            );
+            break;
+          case 'ENDS WITH':
+            conditions.push(
+              `toLower(n.${filter.property}) ENDS WITH toLower($${paramName})`
+            );
+            break;
+          default:
+            conditions.push(
+              `n.${filter.property} ${filter.operator} $${paramName}`
+            );
+        }
+      });
+    }
+
+    // Custom filters from filter form (EXCLUDE relationship filters)
+    Object.keys(options.activeFilters).forEach((filterName, index) => {
+      const filterValue = options.activeFilters[filterName];
+      const paramName = `filter${index}`;
+      const filterDef = options.filterDefinitions.find(
+        (f) => f.name === filterName
+      );
+
+      // Skip relationship filters - they are handled separately
+      if (filterDef?.type === 'relationship') {
+        return;
+      }
+
+      // Skip empty values
+      if (Array.isArray(filterValue) && filterValue.length === 0) {
+        return;
+      }
+
+      if (
+        filterValue === '' ||
+        filterValue === null ||
+        filterValue === undefined
+      ) {
+        return;
+      }
+
+      if (Array.isArray(filterValue) && filterValue.length > 0) {
+        // Multi-select filter
+        conditions.push(`n.${filterName} IN $${paramName}`);
+      } else if (typeof filterValue === 'boolean') {
+        conditions.push(`n.${filterName} = $${paramName}`);
+      } else if (filterValue instanceof Date) {
+        conditions.push(`date(n.${filterName}) = date($${paramName})`);
+      } else if (filterValue) {
+        // Text filter
+        conditions.push(
+          `toLower(COALESCE(toString(n.${filterName}), '')) CONTAINS toLower($${paramName})`
+        );
+      }
+    });
+
+    // Custom WHERE clause from advanced query
+    if (options.customWhereClause) {
+      conditions.push(`(${options.customWhereClause})`);
+    }
+
+    // Relationships from advanced query options
+    const advancedQueryOptions = options.advancedQueryOptions;
+    if (advancedQueryOptions?.relationships) {
+      advancedQueryOptions.relationships.forEach((rel, index) => {
+        const alias = rel.alias || `related${index}`;
+        const direction = rel.direction === 'IN' ? '<' : '';
+        const arrow = rel.direction === 'OUT' ? '>' : '';
+        const targetLabel = rel.targetLabel ? `:${rel.targetLabel}` : '';
+
+        conditions.push(
+          `EXISTS((n)${direction}-[:${rel.type}]-${arrow}(${alias}${targetLabel}))`
+        );
+      });
+    }
+
+    return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+  }
+
+  private buildReturnClause(options: GenericListQueryOptions): string {
+    const advancedQueryOptions = options.advancedQueryOptions;
+    if (advancedQueryOptions?.customReturn) {
+      return advancedQueryOptions.customReturn;
+    }
+    return 'RETURN n';
+  }
+
+  private buildOrderClause(options: GenericListQueryOptions): string {
+    if (!options.sortBy?.attribute) return '';
+    return `ORDER BY n.${options.sortBy.attribute} ${options.sortBy.direction}`;
+  }
+
+  private buildParameters(options: GenericListQueryOptions): any {
+    const params: any = {};
+
+    // Fixed filter parameters
+    options.fixedFilters.forEach((filter, index) => {
+      params[`fixedFilter${index}`] = filter.value;
+    });
+
+    // Custom filter parameters - ONLY include non-empty values
+    Object.keys(options.activeFilters).forEach((filterName, index) => {
+      const filterValue = options.activeFilters[filterName];
+      const filterDef = options.filterDefinitions.find(
+        (f) => f.name === filterName
+      );
+
+      // Skip relationship filters (they are handled separately)
+      if (filterDef?.type === 'relationship') {
+        return;
+      }
+
+      // Skip empty arrays
+      if (Array.isArray(filterValue) && filterValue.length === 0) {
+        return;
+      }
+
+      // Skip empty strings, null, undefined
+      if (
+        filterValue === '' ||
+        filterValue === null ||
+        filterValue === undefined
+      ) {
+        return;
+      }
+
+      const paramName = `filter${index}`;
+
+      if (filterValue instanceof Date) {
+        params[paramName] = filterValue.toISOString();
+      } else {
+        params[paramName] = filterValue;
+      }
+    });
+
+    // Custom parameters - fixed to handle object/map correctly
+    if (options.customParameters) {
+      Object.entries(options.customParameters).forEach(([key, value]) => {
+        if (key && value !== undefined && value !== null && value !== '') {
+          params[key] = value;
+        }
+      });
+    }
+
+    // Advanced query parameters
+    const advancedQueryOptions = options.advancedQueryOptions;
+    if (advancedQueryOptions?.customParameters) {
+      Object.entries(advancedQueryOptions.customParameters).forEach(
+        ([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            params[key] = value;
+          }
+        }
+      );
+    }
+
+    return params;
+  }
+
+  private buildRelationshipFilters(options: GenericListQueryOptions): {
+    relationshipMatches: string;
+    relationshipConditions: string[];
+  } {
+    let relationshipMatches = '';
+    const relationshipConditions: string[] = [];
+
+    Object.keys(options.activeFilters).forEach((filterName, index) => {
+      const filterValue = options.activeFilters[filterName];
+      const filterDef = options.filterDefinitions.find(
+        (f) => f.name === filterName
+      );
+
+      if (
+        filterDef?.type === 'relationship' &&
+        filterValue &&
+        filterValue.ids &&
+        filterValue.ids.length > 0
+      ) {
+        const relationshipConfig = (filterDef as any).relationshipConfig;
+        if (relationshipConfig) {
+          const direction =
+            relationshipConfig.relationshipDirection === 'IN' ? '<' : '';
+          const arrow =
+            relationshipConfig.relationshipDirection === 'OUT' ? '>' : '';
+          const targetLabel = relationshipConfig.targetLabel
+            ? `:${relationshipConfig.targetLabel}`
+            : '';
+          const alias = relationshipConfig.alias || `related${index}`;
+          const relAlias = `rel${index}`;
+
+          // Add MATCH pattern with relationship alias
+          relationshipMatches += `\nMATCH (n)${direction}-[${relAlias}:${relationshipConfig.relationshipType}]-${arrow}(${alias}${targetLabel})`;
+
+          // Add WHERE conditions for the specific related nodes
+          const relConditions = filterValue.ids
+            .map((rel: string, relIndex: number) => {
+              const relParamName = `${alias}Id${relIndex}`;
+              return `${alias}.iroko_uuid = $${relParamName}`;
+            })
+            .join(' OR ');
+
+          relationshipConditions.push(`(${relConditions})`);
+
+          // Add relationship attribute conditions if present
+          if (filterValue.attributeValues) {
+            Object.entries(filterValue.attributeValues).forEach(
+              ([attribute, attrConfig]: [string, any]) => {
+                const attrParamName = `relAttr${index}_${attribute}`;
+                const attrCondition = this.buildRelationshipAttributeCondition(
+                  relAlias,
+                  attribute,
+                  attrConfig.operator || 'EQUALS',
+                  attrParamName
+                );
+                relationshipConditions.push(`(${attrCondition})`);
+              }
+            );
+          }
+        }
+      }
+    });
+
+    return { relationshipMatches, relationshipConditions };
+  }
+
+  private buildRelationshipAttributeCondition(
+    relAlias: string,
+    attribute: string,
+    operator: string,
+    paramName: string
+  ): string {
+    switch (operator) {
+      case 'EQUALS':
+        return `${relAlias}.${attribute} = $${paramName}`;
+      case 'GREATER_THAN':
+        return `${relAlias}.${attribute} > $${paramName}`;
+      case 'LESS_THAN':
+        return `${relAlias}.${attribute} < $${paramName}`;
+      case 'GREATER_EQUAL':
+        return `${relAlias}.${attribute} >= $${paramName}`;
+      case 'LESS_EQUAL':
+        return `${relAlias}.${attribute} <= $${paramName}`;
+      default:
+        return `${relAlias}.${attribute} = $${paramName}`;
+    }
+  }
+
+  private buildRelationshipFilterParameters(
+    options: GenericListQueryOptions
+  ): any {
+    const params: any = {};
+
+    Object.keys(options.activeFilters).forEach((filterName, index) => {
+      const filterValue = options.activeFilters[filterName];
+      const filterDef = options.filterDefinitions.find(
+        (f) => f.name === filterName
+      );
+
+      if (
+        filterDef?.type === 'relationship' &&
+        filterValue &&
+        filterValue.ids &&
+        filterValue.ids.length > 0
+      ) {
+        const relationshipConfig = (filterDef as any).relationshipConfig;
+        if (relationshipConfig) {
+          const alias = relationshipConfig.alias || `related${index}`;
+
+          // Add node ID parameters
+          filterValue.ids.forEach((rel: string, relIndex: number) => {
+            const relParamName = `${alias}Id${relIndex}`;
+            params[relParamName] = rel;
+          });
+
+          // Add relationship attribute parameter if present
+          if (filterValue.attributeValues) {
+            Object.entries(filterValue.attributeValues).forEach(
+              ([attribute, attrConfig]: [string, any]) => {
+                const attrParamName = `relAttr${index}_${attribute}`;
+                const value = attrConfig.value;
+                params[attrParamName] = value;
+              }
+            );
+          }
+        }
+      }
+    });
+
+    return params;
+  }
+
+  // ... (rest of the existing methods remain unchanged)
   buildNodeQuery(
     nodeId: string,
     labels?: string[]
@@ -124,6 +529,7 @@ export class CypherBuilderService {
       parameters: { iroko_uuid: nodeId },
     };
   }
+
   buildSearchQuery(
     entityType: string,
     searchTerm: string,
@@ -278,31 +684,6 @@ export class CypherBuilderService {
       } {iroko_uuid: $iroko_uuid})<-[r:${relationshipType}]-(related)`;
     }
 
-    // let query = '';
-
-    // if (searchIndex && searchTerm) {
-    //   // Use full-text search
-    //   query = `
-    //     CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
-    //     YIELD node, score
-    //     WITH node, score
-    //     ${matchClause}
-    //     WHERE node = related
-    //     RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score
-    //     ORDER BY score DESC, related.name
-    //     SKIP $skip
-    //     LIMIT $limit
-    //   `;
-    // } else {
-    //   // Regular query
-    //   query = `
-    //     ${matchClause}
-    //     RETURN related, r, labels(related) as relatedLabels
-    //     ORDER BY related.name, related.iroko_uuid
-    //     SKIP $skip
-    //     LIMIT $limit
-    //   `;
-    // }
     let whereClause = `${matchClause} WHERE n = related`;
     let returnClause =
       'RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score';
@@ -314,7 +695,7 @@ export class CypherBuilderService {
     };
 
     if (searchTerm) {
-      parameters.searchTerm = `${searchTerm}*`; // Add wildcard for partial matching
+      parameters.searchTerm = `${searchTerm}*`;
     }
 
     return {
@@ -349,24 +730,6 @@ export class CypherBuilderService {
       } {iroko_uuid: $iroko_uuid})<-[r:${relationshipType}]-(related)`;
     }
 
-    // let query = '';
-
-    // if (searchIndex && searchTerm) {
-    //   query = `
-    //     CALL db.index.fulltext.queryNodes("${searchIndex}", $searchTerm)
-    //     YIELD node, score
-    //     WITH node, score
-    //     ${matchClause}
-    //     WHERE node = related
-    //     RETURN count(node) as count
-    //   `;
-    // } else {
-    //   query = `
-    //     ${matchClause}
-    //     RETURN count(related) as count
-    //   `;
-    // }
-
     let whereClause = `${matchClause} WHERE n = related`;
     let returnClause =
       'RETURN related, r,properties(r) as relationProperties, labels(related) as relatedLabels, score';
@@ -390,18 +753,6 @@ export class CypherBuilderService {
     };
   }
 
-  /**
-   * Builds a paginated relationships query with regular search (toLower + CONTAINS)
-   * @param nodeId The ID of the main node
-   * @param relationshipType The type of relationship to follow
-   * @param searchTerm The search term to filter related nodes
-   * @param direction The direction of the relationship
-   * @param nodeLabels The labels of the main node
-   * @param page The page number (0-based)
-   * @param pageSize The number of items per page
-   * @param searchProperties The properties to search in (defaults to common properties)
-   * @returns CypherQuery object
-   */
   buildPaginatedRelationshipsQueryWithRegularSearch(
     nodeId: string,
     relationshipType: string,
@@ -415,11 +766,9 @@ export class CypherBuilderService {
     const skip = page * pageSize;
     const limit = pageSize;
 
-    // Build the main node match with labels
     const mainNodeLabelClause =
       nodeLabels.length > 0 ? `:${nodeLabels.join(':')}` : '';
 
-    // Build relationship pattern based on direction
     let relationshipPattern: string;
     if (direction === 'OUTGOING') {
       relationshipPattern = `(n)-[r:${relationshipType}]->(related)`;
@@ -427,7 +776,6 @@ export class CypherBuilderService {
       relationshipPattern = `(n)<-[r:${relationshipType}]-(related)`;
     }
 
-    // Build search conditions for each property
     const searchConditions = searchProperties
       .map(
         (prop) =>
@@ -461,16 +809,6 @@ export class CypherBuilderService {
     };
   }
 
-  /**
-   * Builds a count query for relationships with regular search
-   * @param nodeId The ID of the main node
-   * @param relationshipType The type of relationship to follow
-   * @param searchTerm The search term to filter related nodes
-   * @param direction The direction of the relationship
-   * @param nodeLabels The labels of the main node
-   * @param searchProperties The properties to search in
-   * @returns CypherQuery object
-   */
   buildRelationshipCountQueryWithRegularSearch(
     nodeId: string,
     relationshipType: string,
@@ -479,11 +817,9 @@ export class CypherBuilderService {
     nodeLabels: string[] = [],
     searchProperties: string[] = ['name', 'description', 'iroko_uuid']
   ): { query: string; parameters: any } {
-    // Build the main node match with labels
     const mainNodeLabelClause =
       nodeLabels.length > 0 ? `:${nodeLabels.join(':')}` : '';
 
-    // Build relationship pattern based on direction
     let relationshipPattern: string;
     if (direction === 'OUTGOING') {
       relationshipPattern = `(n)-[r:${relationshipType}]->(related)`;
@@ -491,7 +827,6 @@ export class CypherBuilderService {
       relationshipPattern = `(n)<-[r:${relationshipType}]-(related)`;
     }
 
-    // Build search conditions for each property
     const searchConditions = searchProperties
       .map(
         (prop) =>
@@ -552,6 +887,110 @@ export class CypherBuilderService {
         searchTerm,
         limit,
       },
+    };
+  }
+
+  // Node Viewer specific methods
+  buildRelationshipExportQuery(
+    options: RelationshipExportOptions
+  ): { query: string; parameters: any } | FullTextCypherQuery {
+    const {
+      nodeId,
+      nodeType,
+      relationshipType,
+      direction,
+      searchTerm,
+      searchIndex,
+    } = options;
+
+    if (searchIndex && searchTerm) {
+      // Full-text search query
+      const mainNodeLabelClause = nodeType ? `:${nodeType}` : '';
+
+      let relationshipPattern: string;
+      if (direction === 'OUTGOING') {
+        relationshipPattern = `(parent)-[r:${relationshipType}]->(n)`;
+      } else {
+        relationshipPattern = `(parent)<-[r:${relationshipType}]-(n)`;
+      }
+
+      const whereClause = `MATCH (parent${mainNodeLabelClause} {iroko_uuid: $nodeId}) MATCH ${relationshipPattern} WHERE n = related`;
+      const returnClause = 'RETURN n';
+      const orderClause = 'ORDER BY n.name, n.title, n.iroko_uuid';
+
+      const parameters: any = { nodeId };
+      if (searchTerm) {
+        parameters.searchTerm = `${searchTerm}*`;
+      }
+
+      return {
+        searchIndex,
+        searchTerm,
+        whereClause,
+        returnClause,
+        orderClause,
+        parameters,
+      };
+    } else {
+      // Regular query
+      const mainNodeLabelClause = nodeType ? `:${nodeType}` : '';
+
+      let relationshipPattern: string;
+      if (direction === 'OUTGOING') {
+        relationshipPattern = `(parent)-[r:${relationshipType}]->(n)`;
+      } else {
+        relationshipPattern = `(parent)<-[r:${relationshipType}]-(n)`;
+      }
+
+      const conditions: string[] = [];
+
+      if (searchTerm) {
+        const searchProperties = ['name', 'description', 'iroko_uuid'];
+        const searchConditions = searchProperties
+          .map(
+            (prop) =>
+              `toLower(COALESCE(toString(n.${prop}), '')) CONTAINS toLower($searchTerm)`
+          )
+          .join(' OR ');
+        conditions.push(`(${searchConditions})`);
+      }
+
+      const whereClause =
+        conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+      const orderClause = `ORDER BY n.name, n.title, n.iroko_uuid`;
+      const returnClause = `RETURN n`;
+
+      const query = `
+          MATCH (parent${mainNodeLabelClause} {iroko_uuid: $nodeId})
+          MATCH ${relationshipPattern}
+          ${whereClause}
+          ${returnClause}
+          ${orderClause}
+        `.trim();
+
+      const parameters: any = { nodeId };
+      if (searchTerm) {
+        parameters.searchTerm = searchTerm;
+      }
+
+      return { query, parameters };
+    }
+  }
+
+  buildNodeExportQuery(
+    nodeId: string,
+    nodeType: string
+  ): { query: string; parameters: any } {
+    const mainNodeLabelClause = nodeType ? `:${nodeType}` : '';
+
+    const query = `
+        MATCH (n${mainNodeLabelClause} {iroko_uuid: $nodeId})
+        RETURN n
+      `.trim();
+
+    return {
+      query,
+      parameters: { nodeId },
     };
   }
 }

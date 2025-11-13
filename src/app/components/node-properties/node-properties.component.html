@@ -1,9 +1,10 @@
 <div class="properties-grid">
-  @for (prop of getNodeProperties(); track prop.key) {
+  @for (prop of getNodeProperties(); track prop.key) { @if
+  (!isObject(prop.value)) {
   <div class="property-item">
-    <strong class="property-label">{{ prop.key }}:</strong>
     <div class="property-value-container">
       @if (isArray(prop.value)) {
+      <strong class="property-label">{{ prop.key }}:</strong>
       <div class="array-container">
         <ul class="array-list">
           @for (item of prop.value; track item) {
@@ -13,19 +14,19 @@
           }
         </ul>
       </div>
-      } @else if (isObject(prop.value)) {
+      } @else if (!isObject(prop.value)) {
+      <span class="property-value">
+        <strong class="property-label">{{ prop.key }}:</strong> {{ prop.value }}
+      </span>
+      }
+      <!-- } @else if (isObject(prop.value)) {
       <div class="json-container">
         <ngx-json-viewer
           [json]="prop.value"
           [expanded]="false"
         ></ngx-json-viewer>
-      </div>
-      } @else {
-      <span class="property-value">
-        {{ prop.value }}
-      </span>
-      }
+      </div> -->
     </div>
   </div>
-  }
+  } }
 </div>

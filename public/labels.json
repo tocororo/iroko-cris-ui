@@ -488,12 +488,14 @@
     "DISTINCTIONS_IN": "Distinciones",
     "MEMBERSHIPS_IN": "Membresías",
     "SERVICES_IN": "Servicios",
-    "FUNDINGS_IN": "Financiamientos"
+    "FUNDINGS_IN": "Financiamientos",
+    "REVIEWER_IN": "Revisor en"
   },
   "relationshipsAsProp": {
     "HAS_IDENTIFIER": "Identificadores",
     "HAS_LICENCE": "Licencias",
-    "IN_COUNTRY": "País"
+    "IN_COUNTRY": "País",
+    "HAS_KEYWORD": "Palabras clave"
   },
   "searchIndices": {
     "COLLECTED_FROM": "outputSearch",

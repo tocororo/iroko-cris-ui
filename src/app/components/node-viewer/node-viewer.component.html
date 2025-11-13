@@ -6,26 +6,19 @@
 <div class="node-viewer">
   <mat-card>
     <mat-card-content>
+      <h2>Propiedades</h2>
+      <app-node-properties [node]="node"></app-node-properties>
+      <mat-divider></mat-divider>
+      @for (group of relationshipPropGroups; track group.type; let i = $index) {
+      <h2>{{ relationshipLabel(group.type) }}</h2>
+      <app-node-relationships-as-properties
+        [group]="group"
+      ></app-node-relationships-as-properties>
+      <mat-divider></mat-divider>
+      }
+
+      <h2>Relaciones</h2>
       <mat-tab-group [(selectedIndex)]="activeTab">
-        <!-- Properties Tab -->
-        <mat-tab label="Propiedades">
-          <app-node-properties [node]="node"></app-node-properties>
-
-          @for (group of relationshipPropGroups; track group.type; let i =
-          $index) {
-          <mat-card expanded="true">
-            <mat-card-header>
-              <mat-card-title>
-                {{ relationshipLabel(group.type) }}
-              </mat-card-title>
-            </mat-card-header>
-            <app-node-relationships-as-properties
-              [group]="group"
-            ></app-node-relationships-as-properties>
-          </mat-card>
-          }
-        </mat-tab>
-
         <!-- Relationships Tabs -->
         @for (group of relationshipTabsGroups; track group.type; let i = $index)
         {
@@ -36,7 +29,7 @@
                 group.direction === "INCOMING" ? "arrow_back" : "arrow_forward"
               }}
             </mat-icon>
-            {{ relationshipLabel(group.type) }} ({{ group.totalCount }})
+            {{ group.displayLabel }} ({{ group.totalCount }})
           </ng-template>
 
           <app-relationship-group

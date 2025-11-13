@@ -5,7 +5,7 @@ import {
   OnDestroy,
   inject,
   input,
-  output
+  output,
 } from '@angular/core';
 
 import { MatTabsModule } from '@angular/material/tabs';
@@ -19,7 +19,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { CypherApiService } from '../../services/cypher-api.service';
-import { CypherBuilderService } from '../../services/cypher-builder.service';
+import {
+  CypherBuilderService,
+  RelationshipExportOptions,
+} from '../../services/cypher-builder.service';
 import {
   LabelsData,
   LabelsService,
@@ -51,8 +54,8 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
     NodePropertiesComponent,
     RelationshipGroupComponent,
     NodeRelationshipsAsPropertiesComponent,
-    MatExpansionModule
-],
+    MatExpansionModule,
+  ],
 })
 export class NodeViewerComponent implements OnInit, OnDestroy {
   readonly nodeId = input.required<string>();
@@ -148,6 +151,9 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
         if (!relationshipMap.has(key)) {
           relationshipMap.set(key, {
             type: row.relationshipType,
+            displayLabel: this.labelService.getRelationshipLabel(
+              row.relationshipType
+            ),
             relationships: [],
             direction: direction,
             totalCount: 0,
@@ -178,9 +184,6 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       if (value.type in this.labelsData.relationshipsAsProp) {
         this.relationshipPropGroups.push(value);
       } else {
-        // if (value.type in this.labelsData.relationshipsAsTabs) {
-
-        // }
         this.relationshipTabsGroups.push(value);
       }
     });
@@ -450,49 +453,36 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
     return this.labelService.getRelationshipLabel(name);
   }
 
-  // Export functionality (keep existing implementation)
+  // Export functionality - simplified using CypherBuilderService
   exportCurrentView(group: RelationshipGroup): void {
     if (this.isExporting) return;
 
     this.isExporting = true;
 
     try {
+      const exportOptions: RelationshipExportOptions = {
+        nodeId: this.nodeId(),
+        nodeType: this.nodeType(),
+        relationshipType: group.type,
+        direction: group.direction,
+        searchTerm: group.searchTerm,
+        searchIndex: group.searchIndex,
+      };
+
+      const queryData =
+        this.cypherBuilder.buildRelationshipExportQuery(exportOptions);
+
       let exportObservable;
 
-      if (group.searchTerm) {
-        if (group.searchIndex) {
-          const searchIndex = group.searchIndex;
-          const searchTerm = group.searchTerm;
-          const whereClause = this.buildExportWhereClause(group, true);
-          const returnClause = this.buildExportReturnClause();
-          const orderClause = this.buildExportOrderClause();
-          const parameters = this.buildExportParameters(group, true);
-
-          exportObservable = this.irokoApiService.exportFullTextQueryToCsv({
-            searchIndex,
-            searchTerm,
-            whereClause,
-            returnClause,
-            orderClause,
-            parameters,
-          });
-        } else {
-          const query = this.buildExportQuery(group);
-          const parameters = this.buildExportParameters(group, false);
-
-          exportObservable = this.irokoApiService.exportQueryToCsv({
-            query,
-            parameters,
-            readonly: true,
-          });
-        }
+      if ('searchIndex' in queryData) {
+        // Full-text search query
+        exportObservable =
+          this.irokoApiService.exportFullTextQueryToCsv(queryData);
       } else {
-        const query = this.buildExportQuery(group);
-        const parameters = this.buildExportParameters(group, false);
-
+        // Regular query
         exportObservable = this.irokoApiService.exportQueryToCsv({
-          query,
-          parameters,
+          query: queryData.query,
+          parameters: queryData.parameters,
           readonly: true,
         });
       }
@@ -505,7 +495,9 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             link.href = url;
 
             const timestamp = new Date().toISOString().slice(0, 10);
-            const fileName = `relaciones_${group.type}_${this.nodeId()}_${timestamp}.csv`;
+            const fileName = `relaciones_${
+              group.type
+            }_${this.nodeId()}_${timestamp}.csv`;
             link.download = fileName;
 
             document.body.appendChild(link);
@@ -539,78 +531,5 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       });
       this.isExporting = false;
     }
-  }
-
-  private buildExportQuery(group: RelationshipGroup): string {
-    const nodeType = this.nodeType();
-    const mainNodeLabelClause = nodeType ? `:${nodeType}` : '';
-
-    let relationshipPattern: string;
-    if (group.direction === 'OUTGOING') {
-      relationshipPattern = `(parent)-[r:${group.type}]->(n)`;
-    } else {
-      relationshipPattern = `(parent)<-[r:${group.type}]-(n)`;
-    }
-
-    const whereClause = this.buildExportWhereClause(group, false);
-    const orderClause = this.buildExportOrderClause();
-    const returnClause = this.buildExportReturnClause();
-
-    return `
-      MATCH (parent${mainNodeLabelClause} {iroko_uuid: $nodeId})
-      MATCH ${relationshipPattern}
-      ${whereClause}
-      ${returnClause}
-      ${orderClause}
-    `;
-  }
-
-  private buildExportWhereClause(
-    group: RelationshipGroup,
-    skipSearch: boolean = false
-  ): string {
-    const conditions: string[] = [];
-
-    if (group.searchTerm && !skipSearch && !group.searchIndex) {
-      const searchProperties = ['name', 'description', 'iroko_uuid'];
-      const searchConditions = searchProperties
-        .map(
-          (prop) =>
-            `toLower(COALESCE(toString(n.${prop}), '')) CONTAINS toLower($searchTerm)`
-        )
-        .join(' OR ');
-      conditions.push(`(${searchConditions})`);
-    }
-
-    if (group.searchIndex && group.searchTerm) {
-      conditions.push(`n:${this.nodeType()}`);
-    }
-
-    return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-  }
-
-  private buildExportReturnClause(): string {
-    return `
-      RETURN n
-    `;
-  }
-
-  private buildExportOrderClause(): string {
-    return `ORDER BY n.name, n.title, n.iroko_uuid`;
-  }
-
-  private buildExportParameters(
-    group: RelationshipGroup,
-    skipSearch: boolean = false
-  ): any {
-    const params: any = {
-      nodeId: this.nodeId(),
-    };
-
-    if (group.searchTerm && !skipSearch && !group.searchIndex) {
-      params.searchTerm = group.searchTerm;
-    }
-
-    return params;
   }
 }

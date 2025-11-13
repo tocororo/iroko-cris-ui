@@ -2,6 +2,7 @@ import { ListColumn } from '../../services/labels.service';
 
 export interface RelationshipGroup {
   type: string;
+  displayLabel: string;
   relationships: RelationshipData[];
   direction: 'INCOMING' | 'OUTGOING';
   totalCount: number;

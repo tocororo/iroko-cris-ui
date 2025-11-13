@@ -3,15 +3,13 @@ import { Component, inject } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetadataService } from '../../services/metadata.service';
-import {
-  AdvancedQueryOptions,
-  GenericListComponent,
-} from '../../components/generic-list/generic-list.component';
+import { GenericListComponent } from '../../components/generic-list/generic-list.component';
 import {
   LabelsService,
   ListColumn,
   ListFilter,
 } from '../../services/labels.service';
+import { AdvancedQueryOptions } from '../../services/cypher-builder.service';
 
 @Component({
   selector: 'app-mes',
