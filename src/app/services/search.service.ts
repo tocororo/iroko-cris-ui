@@ -13,7 +13,7 @@ import { CypherApiService } from './cypher-api.service';
 export interface SearchResult {
   iroko_uuid: string;
   type: string;
-  label: string;
+  name: string;
   description?: string;
   properties: any;
   score?: number;
@@ -63,20 +63,26 @@ export class SearchService {
     });
   }
 
-  // Entity-specific search
-  searchByType(
-    entityType: string,
-    term: string,
-    properties: string[] = ['name', 'title', 'description']
-  ): Observable<any> {
-    const conditions = properties
-      .map((prop) => `toLower(n.${prop}) CONTAINS toLower($term)`)
-      .join(' OR ');
-
+  globalSearchByUUID(iroko_uuid: string): Observable<any> {
     const query = `
-      MATCH (n:${entityType})
-      WHERE ${conditions}
-      RETURN n, labels(n) as type
+      MATCH (n)
+      WHERE n.iroko_uuid = $iroko_uuid
+      RETURN n.iroko_uuid as iroko_uuid, labels(n) as type, n.name as name
+    `;
+
+    return this.irokoApiService.executeQuery({
+      query,
+      parameters: { iroko_uuid },
+      readonly: true,
+    });
+  }
+
+  // Entity-specific search
+  globalSearchByName(term: string): Observable<any> {
+    const query = `
+      MATCH (n)
+      WHERE n.name IS NOT NULL AND toLower(n.name) CONTAINS toLower($term)
+      RETURN n.iroko_uuid as iroko_uuid, labels(n) as type, n.name as name
       ORDER BY n.name
       LIMIT 50
     `;

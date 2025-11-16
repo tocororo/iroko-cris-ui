@@ -160,8 +160,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    console.trace('ngOnInit() CALLED');
-
     this.labelService.loadData().subscribe((labels) => {
       this.entityTypeDisplay =
         labels.nodes[this.entityType().toLocaleLowerCase()].display;
@@ -174,8 +172,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.trace('ngOnChanges() CALLED', changes);
-
     if (changes['filters'] || changes['columns']) {
       this.initializeFilters();
     }
@@ -602,7 +598,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async loadPage(page: number) {
-    console.trace(`loadPage(${page}) CALLED`);
     this.currentPage = page;
     this.isLoading = true;
     this.hasError = false;
@@ -628,8 +623,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   private async fetchNodes(offset: number, limit: number): Promise<any[]> {
     const { query, parameters } = this.buildCompleteQuery(offset, limit);
-
-    console.trace('fetchNodes', query, parameters);
 
     const result = await this.irokoApiService
       .executeQuery({
@@ -769,7 +762,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onSortChange() {
-    console.trace('onSortChange() CALLED');
     const newAttribute = this.sortControl.value;
     if (!newAttribute || newAttribute === 'none') {
       this.sortBy = { attribute: '', direction: 'ASC' };
@@ -889,7 +881,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private readFromUrl(): void {
-    console.trace('readFromUrl() CALLED');
     const params = this.route.snapshot.queryParams;
     // Read page
     if (params['page'] !== undefined) {
@@ -989,7 +980,6 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateUrl(): void {
-    console.trace('updateUrl() CALLED');
     const queryParams: any = {};
 
     queryParams.page = this.currentPage;

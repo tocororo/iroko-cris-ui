@@ -12,7 +12,7 @@ export class ErrorHandlerService implements ErrorHandler {
   private snackBar: MatSnackBar | null = null;
 
   handleError(error: any): void {
-    console.error('Error occurred:', error);
+    console.trace('Error occurred:', error);
 
     // Lazy load snackbar to avoid circular dependency
     if (!this.snackBar) {
