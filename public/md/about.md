@@ -69,6 +69,3 @@ Las evaluaciones soportadas por el sistema son extensibles, lo que significa que
 - **Diseño Responsivo**: Enfoque orientado a dispositivos móviles
 
 ---
-
-**Versión**: 0.2.0  
-**Última actualización**: Octubre de 2027
