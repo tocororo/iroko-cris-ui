@@ -8,8 +8,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { SearchService, SearchResult } from '../../services/search.service';
+import { SearchService } from '../../services/search.service';
 import { MetadataService } from '../../services/metadata.service';
+import { SearchResult } from '../../models';
 
 @Component({
   selector: 'app-search-results',

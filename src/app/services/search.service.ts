@@ -1,29 +1,9 @@
 // src/app/services/search.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  Observable,
-  BehaviorSubject,
-  debounceTime,
-  distinctUntilChanged,
-  switchMap,
-} from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CypherApiService } from './cypher-api.service';
-
-export interface SearchResult {
-  iroko_uuid: string;
-  type: string;
-  name: string;
-  description?: string;
-  properties: any;
-  score?: number;
-}
-
-export interface SearchResponse {
-  results: SearchResult[];
-  total: number;
-  facets?: any;
-}
+import { SearchResponse } from '../models/search.model';
 
 @Injectable({
   providedIn: 'root',
@@ -119,7 +99,7 @@ export class SearchService {
         if (value) {
           params[`prop${index}`] = value;
           conditions.push(
-            `toLower(n.${key}) CONTAINS toLower($${`prop${index}`})`
+            `toLower(n.${key}) CONTAINS toLower($${`prop${index}`})`,
           );
         }
       });

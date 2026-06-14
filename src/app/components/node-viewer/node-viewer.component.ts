@@ -19,10 +19,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { CypherApiService } from '../../services/cypher-api.service';
-import {
-  CypherBuilderService,
-  RelationshipExportOptions,
-} from '../../services/cypher-builder.service';
+import { CypherBuilderService } from '../../services/cypher-builder.service';
 import {
   LabelsData,
   LabelsService,
@@ -36,6 +33,7 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { NodeEditService } from '../../services/node-edit.service';
 import { RelationshipDeleteRequest } from '../../api/models/node-edit.model';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { RelationshipExportOptions } from '../../models/query.model';
 
 @Component({
   selector: 'app-node-viewer',
@@ -112,7 +110,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
 
     const queryData = this.cypherBuilder.buildNodeWithRelationshipsQuery(
       nodeId,
-      [nodeType]
+      [nodeType],
     );
 
     this.irokoApiService.executeQuery(queryData).subscribe({
@@ -129,7 +127,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error(
           'EnhancedNodeViewerComponent - Error loading node:',
-          error
+          error,
         );
         this.loading = false;
       },
@@ -152,7 +150,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
           relationshipMap.set(key, {
             type: row.relationshipType,
             displayLabel: this.labelService.getRelationshipLabel(
-              row.relationshipType
+              row.relationshipType,
             ),
             relationships: [],
             direction: direction,
@@ -229,7 +227,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             group.searchIndex,
             group.searchTerm,
             group.direction,
-            [this.nodeType()]
+            [this.nodeType()],
           );
           this.irokoApiService.executeFullTextQuery(countQuery).subscribe({
             next: (countResult) => {
@@ -250,7 +248,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
               group.type,
               group.searchTerm,
               group.direction,
-              [this.nodeType()]
+              [this.nodeType()],
             );
           this.irokoApiService.executeQuery(countQuery).subscribe({
             next: (countResult) => {
@@ -270,7 +268,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
           this.nodeId(),
           group.type,
           group.direction,
-          [this.nodeType()]
+          [this.nodeType()],
         );
         this.irokoApiService.executeQuery(countQuery).subscribe({
           next: (countResult) => {
@@ -305,7 +303,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             group.direction,
             [this.nodeType()],
             page,
-            group.pageSize
+            group.pageSize,
           );
         this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
           next: (result) => {
@@ -329,7 +327,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             group.type,
             group.searchTerm,
             group.direction,
-            [this.nodeType()]
+            [this.nodeType()],
           );
         this.irokoApiService.executeQuery(countQuery).subscribe({
           next: (countResult) => {
@@ -349,7 +347,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
             group.direction,
             [this.nodeType()],
             page,
-            group.pageSize
+            group.pageSize,
           );
         this.irokoApiService.executeQuery(relationshipsQuery).subscribe({
           next: (result) => {
@@ -510,7 +508,7 @@ export class NodeViewerComponent implements OnInit, OnDestroy {
               'Cerrar',
               {
                 duration: 5000,
-              }
+              },
             );
           } finally {
             this.isExporting = false;

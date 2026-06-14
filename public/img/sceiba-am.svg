@@ -1,0 +1,71 @@
+<svg width="450" height="450" viewBox="0 0 450 450" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .trunk {
+      fill: #332c29;
+      opacity: 0;
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+    .leaf-cluster {
+      transform-origin: center;
+      opacity: 0;
+      animation: growAndRotate 1.5s ease-out forwards;
+    }
+    .leaf-green { animation-delay: 0.5s; }
+    .leaf-teal { animation-delay: 1.0s; }
+    .leaf-blue { animation-delay: 1.5s; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes growAndRotate {
+      from { opacity: 0; transform: scale(0) rotate(-30deg); }
+      to { opacity: 1; transform: scale(1) rotate(0); }
+    }
+  </style>
+
+  <path class="trunk" d="M189.5 267.5 C192.5 279.5 200.5 289.5 212.5 295.5 C212.5 311.5 204.5 319.5 184.5 335.5 C176.5 351.5 176.5 371.5 184.5 395.5 C188.5 411.5 196.5 423.5 204.5 431.5 L296.5 431.5 C304.5 423.5 308.5 411.5 308.5 395.5 C308.5 363.5 300.5 343.5 272.5 315.5 C264.5 307.5 260.5 303.5 264.5 291.5 C276.5 287.5 284.5 279.5 292.5 271.5 C296.5 279.5 304.5 287.5 316.5 291.5 C304.5 299.5 300.5 307.5 308.5 319.5 C288.5 335.5 280.5 343.5 280.5 359.5 L244.5 335.5 C236.5 323.5 236.5 315.5 240.5 303.5 C248.5 299.5 256.5 291.5 260.5 283.5 C240.5 279.5 224.5 271.5 216.5 267.5 C212.5 279.5 204.5 287.5 196.5 291.5 C184.5 287.5 176.5 279.5 172.5 267.5 C180.5 263.5 184.5 263.5 189.5 267.5 Z"/>
+
+  <g class="leaf-cluster leaf-teal" transform="translate(230, 125)">
+    <circle cx="0" cy="0" r="116" fill="#008F7A"/>
+    <circle cx="0" cy="0" r="108" fill="white"/>
+    <circle cx="0" cy="0" r="100" fill="#008F7A"/>
+    <circle cx="0" cy="0" r="72" fill="white"/>
+    <circle cx="0" cy="0" r="64" fill="#008F7A"/>
+    <circle cx="0" cy="0" r="36" fill="white"/>
+    <circle cx="0" cy="0" r="28" fill="#008F7A"/>
+    <line x1="-90" y1="-60" x2="80" y2="50" stroke="white" stroke-width="12"/>
+    <circle cx="0" cy="0" r="20" fill="white"/>
+    <circle cx="40" cy="25" r="12" fill="white"/>
+    <circle cx="70" cy="45" r="12" fill="white"/>
+  </g>
+
+  <g class="leaf-cluster leaf-green" transform="translate(95, 215)">
+    <circle cx="0" cy="0" r="92" fill="#007F3F"/>
+    <circle cx="0" cy="0" r="84" fill="white"/>
+    <circle cx="0" cy="0" r="76" fill="#007F3F"/>
+    <circle cx="0" cy="0" r="56" fill="white"/>
+    <circle cx="0" cy="0" r="48" fill="#007F3F"/>
+    <circle cx="0" cy="0" r="28" fill="white"/>
+    <circle cx="0" cy="0" r="20" fill="#007F3F"/>
+    <line x1="60" y1="-50" x2="-60" y2="50" stroke="white" stroke-width="12"/>
+    <circle cx="0" cy="0" r="18" fill="white"/>
+    <circle cx="-30" cy="25" r="10" fill="white"/>
+    <circle cx="-50" cy="40" r="10" fill="white"/>
+  </g>
+
+  <g class="leaf-cluster leaf-blue" transform="translate(375, 215)">
+    <circle cx="0" cy="0" r="68" fill="#005F8F"/>
+    <circle cx="0" cy="0" r="60" fill="white"/>
+    <circle cx="0" cy="0" r="52" fill="#005F8F"/>
+    <circle cx="0" cy="0" r="36" fill="white"/>
+    <circle cx="0" cy="0" r="28" fill="#005F8F"/>
+    <circle cx="0" cy="0" r="16" fill="white"/>
+    <circle cx="0" cy="0" r="8" fill="#005F8F"/>
+    <line x1="-50" y1="-30" x2="40" y2="30" stroke="white" stroke-width="10"/>
+    <circle cx="0" cy="0" r="14" fill="white"/>
+    <circle cx="25" cy="15" r="8" fill="white"/>
+    <circle cx="40" cy="25" r="8" fill="white"/>
+  </g>
+
+</svg>

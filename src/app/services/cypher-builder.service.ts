@@ -1,64 +1,11 @@
 // src/app/api/services/cypher-builder.service.ts
 import { Injectable } from '@angular/core';
 import { FullTextCypherQuery } from '../api/models/cypher-query.model';
-import { ListFilter } from './labels.service';
-
-export interface QueryOptions {
-  labels?: string[];
-  properties?: string[];
-  filters?: QueryFilter[];
-  limit?: number;
-  skip?: number;
-  orderBy?: { property: string; direction: 'ASC' | 'DESC' };
-  relationships?: { type: string; direction: 'IN' | 'OUT' }[];
-}
-
-export interface QueryFilter {
-  property: string;
-  operator: '=' | 'CONTAINS' | 'STARTS WITH' | 'ENDS WITH' | '>' | '<' | '>=';
-  value: any;
-}
-
-export interface SortOption {
-  attribute: string;
-  direction: 'ASC' | 'DESC';
-}
-
-export interface AdvancedQueryOptions {
-  customWhereClause?: string;
-  customParameters?: { [key: string]: any };
-  relationships?: {
-    type: string;
-    direction?: 'IN' | 'OUT';
-    targetLabel?: string;
-    alias?: string;
-  }[];
-  customReturn?: string;
-}
-
-export interface RelationshipExportOptions {
-  nodeId: string;
-  nodeType: string;
-  relationshipType: string;
-  direction: 'INCOMING' | 'OUTGOING';
-  searchTerm?: string;
-  searchIndex?: string;
-}
-
-export interface GenericListQueryOptions {
-  entityType: string;
-  fixedFilters: QueryFilter[];
-  activeFilters: { [key: string]: any };
-  filterDefinitions: ListFilter[];
-  customWhereClause?: string;
-  customParameters?: { [key: string]: any }; // Changed to object/map
-  advancedQueryOptions?: AdvancedQueryOptions;
-  sortBy?: SortOption;
-  offset?: number;
-  limit?: number;
-  isCount?: boolean;
-  forExport?: boolean;
-}
+import {
+  QueryOptions,
+  RelationshipExportOptions,
+  GenericListQueryOptions,
+} from '../models/query.model';
 
 @Injectable({
   providedIn: 'root',
@@ -80,22 +27,22 @@ export class CypherBuilderService {
       switch (filter.operator) {
         case 'CONTAINS':
           whereClauses.push(
-            `toLower(${alias}.${filter.property}) CONTAINS toLower($${paramName})`
+            `toLower(${alias}.${filter.property}) CONTAINS toLower($${paramName})`,
           );
           break;
         case 'STARTS WITH':
           whereClauses.push(
-            `toLower(${alias}.${filter.property}) STARTS WITH toLower($${paramName})`
+            `toLower(${alias}.${filter.property}) STARTS WITH toLower($${paramName})`,
           );
           break;
         case 'ENDS WITH':
           whereClauses.push(
-            `toLower(${alias}.${filter.property}) ENDS WITH toLower($${paramName})`
+            `toLower(${alias}.${filter.property}) ENDS WITH toLower($${paramName})`,
           );
           break;
         default:
           whereClauses.push(
-            `${alias}.${filter.property} ${filter.operator} $${paramName}`
+            `${alias}.${filter.property} ${filter.operator} $${paramName}`,
           );
       }
     });
@@ -193,22 +140,22 @@ export class CypherBuilderService {
         switch (filter.operator) {
           case 'CONTAINS':
             conditions.push(
-              `toLower(n.${filter.property}) CONTAINS toLower($${paramName})`
+              `toLower(n.${filter.property}) CONTAINS toLower($${paramName})`,
             );
             break;
           case 'STARTS WITH':
             conditions.push(
-              `toLower(n.${filter.property}) STARTS WITH toLower($${paramName})`
+              `toLower(n.${filter.property}) STARTS WITH toLower($${paramName})`,
             );
             break;
           case 'ENDS WITH':
             conditions.push(
-              `toLower(n.${filter.property}) ENDS WITH toLower($${paramName})`
+              `toLower(n.${filter.property}) ENDS WITH toLower($${paramName})`,
             );
             break;
           default:
             conditions.push(
-              `n.${filter.property} ${filter.operator} $${paramName}`
+              `n.${filter.property} ${filter.operator} $${paramName}`,
             );
         }
       });
@@ -219,7 +166,7 @@ export class CypherBuilderService {
       const filterValue = options.activeFilters[filterName];
       const paramName = `filter${index}`;
       const filterDef = options.filterDefinitions.find(
-        (f) => f.name === filterName
+        (f) => f.name === filterName,
       );
 
       // Skip relationship filters - they are handled separately
@@ -250,7 +197,7 @@ export class CypherBuilderService {
       } else if (filterValue) {
         // Text filter
         conditions.push(
-          `toLower(COALESCE(toString(n.${filterName}), '')) CONTAINS toLower($${paramName})`
+          `toLower(COALESCE(toString(n.${filterName}), '')) CONTAINS toLower($${paramName})`,
         );
       }
     });
@@ -270,7 +217,7 @@ export class CypherBuilderService {
         const targetLabel = rel.targetLabel ? `:${rel.targetLabel}` : '';
 
         conditions.push(
-          `EXISTS((n)${direction}-[:${rel.type}]-${arrow}(${alias}${targetLabel}))`
+          `EXISTS((n)${direction}-[:${rel.type}]-${arrow}(${alias}${targetLabel}))`,
         );
       });
     }
@@ -303,7 +250,7 @@ export class CypherBuilderService {
     Object.keys(options.activeFilters).forEach((filterName, index) => {
       const filterValue = options.activeFilters[filterName];
       const filterDef = options.filterDefinitions.find(
-        (f) => f.name === filterName
+        (f) => f.name === filterName,
       );
 
       // Skip relationship filters (they are handled separately)
@@ -351,7 +298,7 @@ export class CypherBuilderService {
           if (value !== undefined && value !== null && value !== '') {
             params[key] = value;
           }
-        }
+        },
       );
     }
 
@@ -368,7 +315,7 @@ export class CypherBuilderService {
     Object.keys(options.activeFilters).forEach((filterName, index) => {
       const filterValue = options.activeFilters[filterName];
       const filterDef = options.filterDefinitions.find(
-        (f) => f.name === filterName
+        (f) => f.name === filterName,
       );
 
       if (
@@ -411,10 +358,10 @@ export class CypherBuilderService {
                   relAlias,
                   attribute,
                   attrConfig.operator || 'EQUALS',
-                  attrParamName
+                  attrParamName,
                 );
                 relationshipConditions.push(`(${attrCondition})`);
-              }
+              },
             );
           }
         }
@@ -428,7 +375,7 @@ export class CypherBuilderService {
     relAlias: string,
     attribute: string,
     operator: string,
-    paramName: string
+    paramName: string,
   ): string {
     switch (operator) {
       case 'EQUALS':
@@ -447,14 +394,14 @@ export class CypherBuilderService {
   }
 
   private buildRelationshipFilterParameters(
-    options: GenericListQueryOptions
+    options: GenericListQueryOptions,
   ): any {
     const params: any = {};
 
     Object.keys(options.activeFilters).forEach((filterName, index) => {
       const filterValue = options.activeFilters[filterName];
       const filterDef = options.filterDefinitions.find(
-        (f) => f.name === filterName
+        (f) => f.name === filterName,
       );
 
       if (
@@ -480,7 +427,7 @@ export class CypherBuilderService {
                 const attrParamName = `relAttr${index}_${attribute}`;
                 const value = attrConfig.value;
                 params[attrParamName] = value;
-              }
+              },
             );
           }
         }
@@ -493,15 +440,15 @@ export class CypherBuilderService {
   // ... (rest of the existing methods remain unchanged)
   buildNodeQuery(
     nodeId: string,
-    labels?: string[]
+    labels?: string[],
   ): { query: string; parameters: any } {
     const labelString = labels?.join(':') || '';
     const alias = 'n';
 
     const query = `
       MATCH (${alias}${
-      labelString ? ':' + labelString : ''
-    } {iroko_uuid: $iroko_uuid})
+        labelString ? ':' + labelString : ''
+      } {iroko_uuid: $iroko_uuid})
       OPTIONAL MATCH (${alias})-[r]-(related)
       RETURN ${alias}, type(r) as relationshipType, collect(related) as relatedNodes
     `;
@@ -514,7 +461,7 @@ export class CypherBuilderService {
 
   buildRelationshipQuery(
     nodeId: string,
-    relationshipType?: string
+    relationshipType?: string,
   ): { query: string; parameters: any } {
     let query = `
       MATCH (n {iroko_uuid: $iroko_uuid})-[r${
@@ -533,7 +480,7 @@ export class CypherBuilderService {
   buildSearchQuery(
     entityType: string,
     searchTerm: string,
-    searchableColumns: string[]
+    searchableColumns: string[],
   ): { query: string; parameters: any } {
     if (!searchTerm || searchableColumns.length === 0) {
       return {
@@ -545,7 +492,7 @@ export class CypherBuilderService {
     const searchConditions = searchableColumns
       .map(
         (col) =>
-          `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`
+          `toLower(COALESCE(toString(n.${col}), '')) CONTAINS toLower($searchTerm)`,
       )
       .join(' OR ');
 
@@ -563,15 +510,15 @@ export class CypherBuilderService {
 
   buildNodeWithRelationshipsQuery(
     nodeId: string,
-    labels?: string[]
+    labels?: string[],
   ): { query: string; parameters: any } {
     const labelString = labels?.join(':') || '';
     const alias = 'n';
 
     const query = `
       MATCH (${alias}${
-      labelString ? ':' + labelString : ''
-    } {iroko_uuid: $iroko_uuid})
+        labelString ? ':' + labelString : ''
+      } {iroko_uuid: $iroko_uuid})
       OPTIONAL MATCH (${alias})-[r]-(related)
       RETURN ${alias},
              type(r) as relationshipType,
@@ -593,7 +540,7 @@ export class CypherBuilderService {
     nodeId: string,
     relationshipType: string,
     direction: 'INCOMING' | 'OUTGOING',
-    labels?: string[]
+    labels?: string[],
   ): { query: string; parameters: any } {
     const labelString = labels?.join(':') || '';
     const alias = 'n';
@@ -626,7 +573,7 @@ export class CypherBuilderService {
     direction: 'INCOMING' | 'OUTGOING',
     labels?: string[],
     page: number = 0,
-    pageSize: number = 10
+    pageSize: number = 10,
   ): { query: string; parameters: any } {
     const labelString = labels?.join(':') || '';
     const alias = 'n';
@@ -668,7 +615,7 @@ export class CypherBuilderService {
     direction: 'INCOMING' | 'OUTGOING',
     labels?: string[],
     page: number = 0,
-    pageSize: number = 10
+    pageSize: number = 10,
   ): FullTextCypherQuery {
     const labelString = labels?.join(':') || '';
     const alias = 'nrel';
@@ -714,7 +661,7 @@ export class CypherBuilderService {
     searchIndex: string,
     searchTerm: string,
     direction: 'INCOMING' | 'OUTGOING',
-    labels?: string[]
+    labels?: string[],
   ): FullTextCypherQuery {
     const labelString = labels?.join(':') || '';
     const alias = 'nrel';
@@ -761,7 +708,7 @@ export class CypherBuilderService {
     nodeLabels: string[] = [],
     page: number = 0,
     pageSize: number = 10,
-    searchProperties: string[] = ['name', 'description', 'iroko_uuid']
+    searchProperties: string[] = ['name', 'description', 'iroko_uuid'],
   ): { query: string; parameters: any } {
     const skip = page * pageSize;
     const limit = pageSize;
@@ -779,7 +726,7 @@ export class CypherBuilderService {
     const searchConditions = searchProperties
       .map(
         (prop) =>
-          `toLower(COALESCE(toString(related.${prop}), '')) CONTAINS toLower($searchTerm)`
+          `toLower(COALESCE(toString(related.${prop}), '')) CONTAINS toLower($searchTerm)`,
       )
       .join(' OR ');
 
@@ -815,7 +762,7 @@ export class CypherBuilderService {
     searchTerm: string,
     direction: 'INCOMING' | 'OUTGOING',
     nodeLabels: string[] = [],
-    searchProperties: string[] = ['name', 'description', 'iroko_uuid']
+    searchProperties: string[] = ['name', 'description', 'iroko_uuid'],
   ): { query: string; parameters: any } {
     const mainNodeLabelClause =
       nodeLabels.length > 0 ? `:${nodeLabels.join(':')}` : '';
@@ -830,7 +777,7 @@ export class CypherBuilderService {
     const searchConditions = searchProperties
       .map(
         (prop) =>
-          `toLower(COALESCE(toString(related.${prop}), '')) CONTAINS toLower($searchTerm)`
+          `toLower(COALESCE(toString(related.${prop}), '')) CONTAINS toLower($searchTerm)`,
       )
       .join(' OR ');
 
@@ -863,7 +810,7 @@ export class CypherBuilderService {
       alias?: string;
     },
     searchTerm: string,
-    limit: number = 10
+    limit: number = 10,
   ): { query: string; parameters: any } {
     const direction =
       relationshipConfig.relationshipDirection === 'IN' ? '<' : '';
@@ -892,7 +839,7 @@ export class CypherBuilderService {
 
   // Node Viewer specific methods
   buildRelationshipExportQuery(
-    options: RelationshipExportOptions
+    options: RelationshipExportOptions,
   ): { query: string; parameters: any } | FullTextCypherQuery {
     const {
       nodeId,
@@ -949,7 +896,7 @@ export class CypherBuilderService {
         const searchConditions = searchProperties
           .map(
             (prop) =>
-              `toLower(COALESCE(toString(n.${prop}), '')) CONTAINS toLower($searchTerm)`
+              `toLower(COALESCE(toString(n.${prop}), '')) CONTAINS toLower($searchTerm)`,
           )
           .join(' OR ');
         conditions.push(`(${searchConditions})`);
@@ -979,7 +926,7 @@ export class CypherBuilderService {
 
   buildNodeExportQuery(
     nodeId: string,
-    nodeType: string
+    nodeType: string,
   ): { query: string; parameters: any } {
     const mainNodeLabelClause = nodeType ? `:${nodeType}` : '';
 

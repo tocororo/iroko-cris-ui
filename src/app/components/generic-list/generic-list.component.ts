@@ -46,13 +46,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { map, forkJoin } from 'rxjs';
 
 import { CypherApiService } from '../../services/cypher-api.service';
-import {
-  CypherBuilderService,
-  QueryFilter,
-  GenericListQueryOptions,
-  SortOption,
-  AdvancedQueryOptions,
-} from '../../services/cypher-builder.service';
+import { CypherBuilderService } from '../../services/cypher-builder.service';
 import { ExportService } from '../../services/export.service';
 import {
   FilterValue,
@@ -64,6 +58,12 @@ import { RelationshipFilterComponent } from '../relationship-filter/relationship
 
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
+import {
+  AdvancedQueryOptions,
+  QueryFilter,
+  SortOption,
+  GenericListQueryOptions,
+} from '../../models';
 
 @Component({
   selector: 'app-generic-list',
@@ -278,13 +278,13 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
   private updateSelectedFilters(
     selectedFilterNames: string[],
-    loadData: boolean = true
+    loadData: boolean = true,
   ): void {
     this.selectedFilters = new Set(selectedFilterNames);
 
     // Update the filters array to only include selected filters
     this.filters = this.availableFilters.filter((filter) =>
-      this.selectedFilters.has(filter.name)
+      this.selectedFilters.has(filter.name),
     );
 
     // Reinitialize filters and clear any active filters for removed filters
@@ -363,8 +363,8 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
           .pipe(
             debounceTime(300),
             distinctUntilChanged(
-              (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-            )
+              (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr),
+            ),
           )
           .subscribe((value) => {
             this.applyFilterChange(filter.name, value, filter.type);
@@ -384,7 +384,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   private applyFilterChange(
     filterName: string,
     value: any,
-    filterType: string
+    filterType: string,
   ) {
     if (this.hasFilterValue(value)) {
       this.activeFilters[filterName] = value;
@@ -405,7 +405,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       if (advancedQueryOptions.customParameters) {
         // Convert the object to array for the UI form
         this.customParameters = Object.entries(
-          advancedQueryOptions.customParameters
+          advancedQueryOptions.customParameters,
         ).map(([key, value]) => ({ key, value }));
       }
     }
@@ -529,7 +529,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       this.columns().forEach((column) => {
         row[column.label] = this.formatPropertyValue(
           node[column.name],
-          column.type
+          column.type,
         );
       });
       return row;
@@ -609,7 +609,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
 
       this.nodes = await this.fetchNodes(
         page * this.pageSize(),
-        this.pageSize()
+        this.pageSize(),
       );
       this.updatePagination();
     } catch (error) {
@@ -633,7 +633,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
       .toPromise();
 
     return (result || []).map((item: any) =>
-      this.extractNodeData(item.n || item)
+      this.extractNodeData(item.n || item),
     );
   }
 
@@ -657,7 +657,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     offset: number,
     limit: number,
     isCount: boolean = false,
-    forExport: boolean = false
+    forExport: boolean = false,
   ): { query: string; parameters: any } {
     // Convert customParameters array back to object for the service
     const customParametersObj: { [key: string]: any } = {};
@@ -847,7 +847,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getNodeProperties(
-    node: any
+    node: any,
   ): { key: string; value: any; label: string; type?: string }[] {
     return this.columns().map((col) => ({
       key: col.name,
@@ -871,7 +871,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
     console.log(
       'Selection relationship filter changed',
       filterName,
-      filterValue
+      filterValue,
     );
 
     // Update the form control with the selected IDs
@@ -897,7 +897,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
         const direction = sortParts[1].toUpperCase();
         if (direction === 'ASC' || direction === 'DESC') {
           const columnExists = this.columns().some(
-            (col) => col.name === attribute
+            (col) => col.name === attribute,
           );
           if (columnExists) {
             this.sortBy = { attribute, direction: direction as 'ASC' | 'DESC' };
@@ -1013,7 +1013,7 @@ export class GenericListComponent implements OnInit, OnDestroy, OnChanges {
                   queryParams[`filter_${key}_attr_${attribute}_value`] = value;
                   queryParams[`filter_${key}_attr_${attribute}_operator`] =
                     operator;
-                }
+                },
               );
             }
           }

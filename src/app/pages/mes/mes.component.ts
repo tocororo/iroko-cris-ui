@@ -9,7 +9,7 @@ import {
   ListColumn,
   ListFilter,
 } from '../../services/labels.service';
-import { AdvancedQueryOptions } from '../../services/cypher-builder.service';
+import { AdvancedQueryOptions } from '../../models/query.model';
 
 @Component({
   selector: 'app-mes',

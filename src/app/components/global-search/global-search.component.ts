@@ -1,5 +1,11 @@
 // src/app/components/global-search/global-search.component.ts
-import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  inject,
+  viewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,7 +19,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { SearchResult, SearchService } from '../../services/search.service';
+import { SearchService } from '../../services/search.service';
+import { SearchResult } from '../../models';
 
 @Component({
   selector: 'app-global-search',
@@ -36,7 +43,8 @@ export class GlobalSearchComponent implements OnInit {
   private searchService = inject(SearchService);
   private router = inject(Router);
 
-  readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
+  readonly searchInput =
+    viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   searchTerm = '';
   searchResults: SearchResult[] = [];
@@ -57,7 +65,7 @@ export class GlobalSearchComponent implements OnInit {
           }
           this.isLoading = true;
           return this.searchService.globalSearch(term);
-        })
+        }),
       )
       .subscribe({
         next: (results) => {

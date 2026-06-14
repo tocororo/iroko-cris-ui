@@ -2,71 +2,18 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { LabelsData } from '../models/list.model';
 
-export interface ListColumn {
-  name: string;
-  label: string;
-  sortable?: boolean;
-  filterable?: boolean;
-  type?: 'string' | 'number' | 'date' | 'array';
-}
-
-export interface RelationshipFilterConfig {
-  relationshipType: string;
-  relationshipDirection: 'IN' | 'OUT';
-  targetLabel: string;
-  alias?: string;
-  placeholder?: string;
-  attributeConfig?: RelationshipAttributeConfig[];
-}
-
-export interface RelationshipAttributeConfig {
-  label: string;
-  attribute: string;
-  operator:
-    | 'EQUALS'
-    | 'GREATER_THAN'
-    | 'LESS_THAN'
-    | 'GREATER_EQUAL'
-    | 'LESS_EQUAL';
-  placeholder?: string;
-  default: any;
-  type: 'text' | 'number' | 'date';
-}
-
-export interface DisplayItem {
-  iroko_uuid: string;
-  name: string;
-}
-
-export interface FilterValue {
-  ids: string[];
-  attributeValues?: { [key: string]: { value: any; operator: string } };
-}
-
-export interface ListFilter {
-  name: string;
-  label: string;
-  type: 'text' | 'select' | 'multiselect' | 'date' | 'boolean' | 'relationship';
-  placeholder?: string;
-  options?: string[]; // For select/multiselect types
-  relationshipConfig?: RelationshipFilterConfig;
-}
-
-export interface LabelsData {
-  nodes: {
-    [key: string]: {
-      label: string;
-      display: string;
-      properties: ListColumn[];
-      filters: ListFilter[];
-    };
-  };
-  relationshipsAsTabs: { [key: string]: string };
-  relationshipsAsProp: { [key: string]: string };
-  searchIndices: { [key: string]: string };
-}
+export type {
+  ListColumn,
+  DisplayItem,
+  FilterValue,
+  LabelsData,
+  ListFilter,
+  RelationshipFilterConfig,
+  RelationshipAttributeConfig,
+} from '../models/list.model';
 
 @Injectable({
   providedIn: 'root',
@@ -91,7 +38,7 @@ export class LabelsService {
         this.labelsData.relationshipsAsProp = data.relationshipsAsProp;
         this.labelsData.searchIndices = data.searchIndices;
         this.labelsLoaded.next(true);
-      })
+      }),
     );
   }
   getLabelsData() {
